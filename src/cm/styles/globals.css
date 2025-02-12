@@ -1,0 +1,534 @@
+@charset "UTF-8";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*:not([class]):not([id]):not([style]) > svg:not([id]) {
+  @apply w-5;
+}
+
+* {
+  @apply border-gray-400;
+}
+
+.rounded-shadow {
+  @apply rounded-lg bg-white shadow-sm;
+}
+
+.position-x-center {
+  @apply left-1/2  transform -translate-x-1/2;
+}
+
+.position-y-center {
+  @apply top-1/2 transform -translate-y-1/2;
+}
+
+.position-center {
+  @apply position-x-center position-y-center;
+}
+
+.absolute-center {
+  @apply absolute   position-center;
+}
+
+.showOnly {
+  @apply opacity-50 pointer-events-none;
+}
+
+@layer base {
+  .center-x {
+    @apply left-1/2  transform -translate-x-1/2;
+  }
+  .center-y {
+    @apply top-1/2 transform -translate-y-1/2;
+  }
+  .modal-overlay {
+    @apply fixed  min-h-screen bg-black opacity-80 [width:100vw] [height:100vh];
+  }
+  .t-paper {
+    @apply rounded-lg p-1 shadow-sm bg-white;
+  }
+  .col-stack {
+    @apply flex flex-col gap-2;
+  }
+  .row-stack {
+    @apply flex flex-row items-center flex-wrap gap-3;
+  }
+  .row-stack.breadcrumbs span:not(:last-child)::after {
+    content: " >";
+  }
+  .columns-responsive {
+    @apply columns-1 sm:columns-2 md:columns-3 xl:columns-4;
+  }
+  .text-responsive {
+    @apply text-[11px] lg:text-[12px]  xl:text-[15px];
+  }
+  .w-responsive {
+    @apply w-full sm:w-1/2 md:w-1/3 lg:w-1/4;
+  }
+  .AlignJustCenter {
+    @apply flex  justify-center  items-center;
+  }
+  .t-heading {
+    @apply font-bold  my-1 text-lg;
+  }
+  .t-bg-heading {
+    @apply text-2xl font-bold bg-primary-main  p-2 my-2 text-center;
+  }
+  .disabled {
+    @apply cursor-not-allowed opacity-70 pointer-events-none;
+  }
+  button:disabled {
+    @apply cursor-not-allowed opacity-30;
+  }
+  .t-btn {
+    @apply px-2 py-0.5  text-white bg-sub-main  rounded-md w-fit  cursor-pointer onHover;
+  }
+  .t-btn:disabled {
+    @apply cursor-not-allowed opacity-30;
+  }
+  .t-btn:hover {
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), 0 0 50px rgba(128, 128, 128, 0.1);
+    border-color: transparent;
+  }
+  .icon-btn {
+    @apply AlignJustCenter p-0.5 px-1  cursor-pointer bg-gray-100 text-sm text-sub-main rounded-sm font-bold shadow-md;
+  }
+  .t-badge {
+    @apply rounded-sm p-1 text-[8px] bg-sub-light font-bold shadow;
+  }
+  .t-badge-rounded {
+    @apply AlignJustCenter h-5 w-5 rounded-full  bg-sub-main text-white text-xs shadow mx-auto;
+  }
+  .t-alert {
+    @apply p-1  rounded border-red-400 bg-red-100   shadow;
+  }
+  .t-alert-primary {
+    @apply t-alert bg-primary-light border-primary-main;
+  }
+  .t-alert-success {
+    @apply t-alert bg-success-light border-success-main;
+  }
+  .t-alert-warning {
+    @apply t-alert  bg-warning-light border-warning-main;
+  }
+  .t-alert-blue {
+    @apply t-alert  bg-blue-50 border-blue-main;
+  }
+  .t-alert-sub {
+    @apply t-alert  bg-gray-100 border-sub-main;
+  }
+  .t-link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: rgb(36, 142, 255);
+    cursor: pointer;
+  }
+  .detectHover {
+    @apply onHover;
+  }
+  .detectHover:hover {
+    box-shadow: 0 1px 10px rgba(64, 64, 64, 0.4);
+    border-color: transparent;
+  }
+  .onHover {
+    @apply cursor-pointer  ease-out  duration-200 transition-all hover:opacity-50;
+  }
+  .formBackGround {
+    @apply cursor-pointer;
+    @apply rounded-sm  hover:ring-2;
+  }
+  .formBackGround.disabled {
+    @apply cursor-not-allowed pointer-events-none bg-white;
+  }
+  .formBackGround:not(.disabled) {
+    @apply bg-[#ededed];
+  }
+  .ring-blue {
+    @apply border-gray-300 border-2  focus:border-blue-500   hover:border-blue-500 focus:bg-blue-main/10  hover:bg-blue-main/10;
+  }
+  .myFormControl {
+    @apply w-full  px-2  rounded  outline-none transition-all ring-blue;
+    font-size: 18px !important;
+  }
+  .myFormControl.errorFormControl {
+    @apply bg-error-main/20 border-error-main;
+  }
+  .myFormControl[disabled] {
+    @apply bg-[#ededed] cursor-not-allowed;
+  }
+}
+.controlBorderClass {
+  @apply border-primary-light;
+}
+
+.overlay {
+  @apply fixed inset-0 bg-black opacity-70;
+}
+
+.scaleOnHover {
+  @apply duration-200;
+}
+.scaleOnHover:hover {
+  @apply opacity-100 scale-[150%] z-10;
+}
+
+.custom-datepicker {
+  border: 2px solid #ddd;
+  padding: 2px;
+  font-size: 16px;
+  max-width: 160px !important;
+  z-index: 2147483647;
+  @apply myFormControl;
+}
+
+.react-datepicker-popper .react-datepicker__month {
+  @apply m-0 w-full;
+}
+.react-datepicker-popper .react-datepicker__month .react-datepicker__week {
+  @apply flex justify-around;
+}
+.react-datepicker-popper .react-datepicker__month-container {
+  @apply w-[200px];
+}
+.react-datepicker-popper .react-datepicker__header {
+  @apply bg-sub-light;
+}
+.react-datepicker-popper .react-datepicker__time-list {
+  height: 200px !important;
+}
+
+.qr-sheet table {
+  @apply border-[1px] border-sub-main;
+  white-space: normal;
+}
+.qr-sheet table td:nth-child(odd) {
+  @apply bg-sub-light;
+}
+.react-markdown h1 {
+  @apply text-2xl font-bold;
+}
+.react-markdown h2 {
+  @apply text-xl font-bold;
+}
+.react-markdown h3 {
+  @apply text-lg font-bold;
+}
+.react-markdown ol li {
+  list-style-type: decimal;
+}
+.react-markdown ul li {
+  list-style-type: disc;
+}
+.react-markdown li {
+  margin-left: 40px;
+}
+.react-markdown a {
+  @apply t-link;
+}
+
+.recharts-tooltip-wrapper {
+  @apply shadow-lg t-paper bg-gray-50;
+}
+
+.drawer {
+  position: fixed;
+  left: -100%;
+  top: 0;
+  width: 80vw;
+  max-width: 300px;
+  height: 100vh;
+  overflow-x: hidden;
+  transition: left 0.2s ease-in-out;
+  z-index: 9999;
+}
+.drawer.open {
+  left: 0;
+}
+
+.table-border-style {
+  @apply border-[1px] border-solid border-gray-400;
+}
+
+.simple-table td,
+.simple-table th {
+  @apply p-0.5  align-top table-border-style;
+}
+
+.sticky-table-wrapper {
+  @apply p-0 rounded-lg;
+  overflow: auto;
+  white-space: normal;
+}
+.sticky-table-wrapper table {
+  height: 100%;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px;
+}
+.sticky-table-wrapper table td {
+  height: 100%;
+}
+.sticky-table-wrapper table td .stretching-in-td {
+  height: 100%;
+}
+.sticky-table-wrapper table thead,
+.sticky-table-wrapper table tfoot {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+}
+.sticky-table-wrapper table thead tr:first-child th:first-child,
+.sticky-table-wrapper table tfoot tr:first-child th:first-child {
+  position: sticky;
+  z-index: 140;
+  left: 0;
+}
+.sticky-table-wrapper table thead tr,
+.sticky-table-wrapper table tfoot tr {
+  z-index: 0;
+}
+.sticky-table-wrapper table thead th,
+.sticky-table-wrapper table thead td {
+  @apply bg-gray-300 text-gray-600 font-medium;
+}
+.sticky-table-wrapper table tbody tr th:first-child {
+  position: sticky;
+  z-index: 100;
+  left: 0;
+  z-index: 10;
+}
+.sticky-table-wrapper table tbody tr th,
+.sticky-table-wrapper table tbody tr td {
+  @apply border-b;
+}
+.sticky-table-wrapper table tfoot {
+  z-index: 100;
+  position: sticky;
+  bottom: 0;
+}
+.sticky-table-wrapper table th,
+.sticky-table-wrapper table td {
+  @apply p-2;
+}
+.sticky-table-wrapper table th {
+  @apply text-gray-600 font-normal text-start;
+}
+
+.align-td-width th {
+  width: 40px;
+}
+
+.no-padding-x td,
+.no-padding-x th {
+  padding-left: 0.5;
+  padding-right: 0.5;
+}
+
+.no-padding-y td,
+.no-padding-y th {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.borderedTable td,
+.borderedTable th {
+  border-width: 1.5px;
+  border-style: solid dashed;
+}
+
+.no-border * {
+  border: none;
+}
+
+.vertical {
+  writing-mode: vertical-lr;
+  text-align: center;
+}
+
+.roundedTr {
+  @apply shadow-md;
+  border-width: 1px;
+  border-radius: 10px;
+}
+.roundedTr td:first-child,
+.roundedTr th:first-child {
+  border-radius: 5px 0 0 5px;
+  border-left-width: 1px;
+}
+.roundedTr td:last-child,
+.roundedTr th:last-child {
+  border-radius: 0 5px 5px 0;
+  border-right-width: 1px;
+}
+.roundedTr th,
+.roundedTr td {
+  border-top-width: 1px;
+}
+
+/* デフォルトでスピナーを非表示 */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* withSpin クラスがある場合はスピナーを表示 */
+input[type=number].withSpin::-webkit-inner-spin-button,
+input[type=number].withSpin::-webkit-outer-spin-button {
+  -webkit-appearance: auto;
+}
+
+input[type=number].withSpin {
+  -moz-appearance: number-input;
+}
+
+@media print {
+  .page-break {
+    page-break-before: always;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-target {
+    margin: 10px auto;
+    padding: 10px;
+  }
+  .print-target,
+  .print-target * {
+    @apply shadow-none;
+    visibility: visible;
+    page-break-inside: avoid;
+  }
+  .print-target {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+canvas {
+  touch-action: none; /* タッチジェスチャーを無効化して独自処理を優先 */
+  cursor: grab; /* デフォルトのパンカーソル */
+}
+
+canvas:active {
+  cursor: grabbing; /* パン中のカーソル */
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+h1,
+h2,
+h3 {
+  @apply t-heading;
+}
+
+h4,
+h5,
+h6 {
+  @apply font-bold;
+}
+
+strong {
+  @apply text-[18px];
+}
+
+small {
+  @apply text-gray-600  inline-block leading-[16px];
+}
+
+* {
+  @apply break-words;
+  box-sizing: border-box;
+  outline: none;
+}
+*:not(input, select) {
+  @apply focus:ring-2;
+}
+
+body,
+table {
+  overscroll-behavior-y: none;
+}
+
+hr {
+  @apply border-sub-main;
+  margin-bottom: 10px;
+}
+
+input,
+　select {
+  background-color: inherit;
+  font-size: 16px !important;
+}
+
+input[type=checkbox] {
+  @apply accent-primary-main;
+}
+
+.bg-gold {
+  background-color: gold;
+}
+
+.bg-silver {
+  background-color: silver;
+}
+
+.bg-bronze {
+  background-color: brown;
+}
+
+.bg-image body::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background-size: contain;
+  content: "";
+}
+
+.myRadio label {
+  cursor: pointer;
+  position: relative;
+  margin-left: 10px;
+  padding-left: 50px;
+}
+.myRadio label::before,
+.myRadio label::after {
+  background-color: #ddd;
+  border-radius: 50%;
+  transition: 0.3s;
+  transform: translateY(-50%);
+  top: 50%;
+  left: 0px;
+}
+.myRadio label::before {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  height: 20px;
+  width: 40px;
+  left: 5px;
+}
+.myRadio label::after {
+  background-color: #ddd;
+  border-radius: 50%;
+  opacity: 1;
+  height: 22px;
+  width: 22px;
+  left: 0px;
+}
+.myRadio input:checked + label::before {
+  background-color: #73e600;
+}
+.myRadio input:checked + label::after {
+  left: 27px;
+}/*# sourceMappingURL=globals.css.map */

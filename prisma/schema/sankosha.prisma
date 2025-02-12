@@ -1,0 +1,174 @@
+model SankoshaClientA {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+ name      String?
+
+ relatedClientIds String[]
+ SankoshaProcess  SankoshaProcess[]
+
+ SankoshaClientB SankoshaClientB[]
+ SankoshaClientC SankoshaClientC[]
+ SankoshaClientD SankoshaClientD[]
+ SankoshaClientE SankoshaClientE[]
+}
+
+model SankoshaClientB {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name              String?
+ SankoshaProcess   SankoshaProcess[]
+ SankoshaClientA   SankoshaClientA   @relation(fields: [sankoshaClientAId], references: [id], onDelete: Cascade)
+ sankoshaClientAId Int
+}
+
+model SankoshaClientC {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name              String?
+ SankoshaProcess   SankoshaProcess[]
+ SankoshaClientA   SankoshaClientA   @relation(fields: [sankoshaClientAId], references: [id], onDelete: Cascade)
+ sankoshaClientAId Int
+}
+
+model SankoshaClientD {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name              String?
+ SankoshaProcess   SankoshaProcess[]
+ SankoshaClientA   SankoshaClientA   @relation(fields: [sankoshaClientAId], references: [id], onDelete: Cascade)
+ sankoshaClientAId Int
+}
+
+model SankoshaClientE {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name              String?
+ SankoshaProcess   SankoshaProcess[]
+ SankoshaClientA   SankoshaClientA   @relation(fields: [sankoshaClientAId], references: [id], onDelete: Cascade)
+ sankoshaClientAId Int
+}
+
+model SankoshaProductMaster {
+ id              Int               @id @default(autoincrement())
+ createdAt       DateTime          @default(now())
+ updatedAt       DateTime?         @updatedAt()
+ sortOrder       Float             @default(0)
+ name            String?
+ color           String?
+ SankoshaProcess SankoshaProcess[]
+}
+
+model SankoshaSizeMaster {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name            String?
+ color           String?
+ SankoshaProcess SankoshaProcess[]
+}
+
+model SankoshaProcess {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ photo String?
+
+ quantity            Int?
+ requestPresence     Boolean?
+ requestFormNumber   String?
+ plannedDeliveryDate DateTime?
+ isTestProduct       Boolean?
+
+ inspectionOk Boolean? //検品完了
+
+ estimateIssueDate           DateTime?
+ estimateIssueDateIsEmpty    Boolean? //見積書発行日が空かどうか
+ orderFormArrivalDate        DateTime?
+ orderFormArrivalDateisEmpty Boolean? //注文書到着日が空かどうか
+
+ orderFormNumber String?
+
+ processStartedAt       DateTime?
+ confirmationDate       DateTime?
+ notes                  String?
+ completionDate         DateTime?
+ shipmentCompletionDate DateTime?
+ faxInvoice             Boolean?
+
+ SankoshaProductMaster   SankoshaProductMaster? @relation(fields: [sankoshaProductMasterId], references: [id], onDelete: Cascade)
+ SankoshaSizeMaster      SankoshaSizeMaster?    @relation(fields: [sankoshaSizeMasterId], references: [id], onDelete: Cascade)
+ sankoshaProductMasterId Int?
+ sankoshaSizeMasterId    Int?
+
+ SankoshaClientA SankoshaClientA? @relation(fields: [sankoshaClientAId], references: [id], onDelete: Cascade)
+
+ sankoshaClientAId Int?
+ sankoshaClientBId Int?
+ sankoshaClientCId Int?
+ sankoshaClientDId Int?
+ sankoshaClientEId Int?
+
+ SankoshaClientB                  SankoshaClientB?                   @relation(fields: [sankoshaClientBId], references: [id])
+ SankoshaClientC                  SankoshaClientC?                   @relation(fields: [sankoshaClientCId], references: [id])
+ SankoshaClientD                  SankoshaClientD?                   @relation(fields: [sankoshaClientDId], references: [id])
+ SankoshaClientE                  SankoshaClientE?                   @relation(fields: [sankoshaClientEId], references: [id], onDelete: Cascade)
+ SankoShaEstimatePriceMasterTable SankoShaEstimatePriceMasterTable[]
+ SankoshaProductImage             SankoshaProductImage[]
+}
+
+model SankoshaProductImage {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ url               String?
+ SankoshaProcess   SankoshaProcess? @relation(fields: [sankoshaProcessId], references: [id])
+ sankoshaProcessId Int?
+}
+
+model SankoshaPriceMaster {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name                             String?
+ price                            Float?
+ color                            String?
+ SankoShaEstimatePriceMasterTable SankoShaEstimatePriceMasterTable[]
+}
+
+//中間テーブル
+model SankoShaEstimatePriceMasterTable {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ quantity    Float?
+ priceAdjust Float?
+
+ SankoshaProcess       SankoshaProcess     @relation(fields: [sankoshaProcessId], references: [id], onDelete: Cascade)
+ sankoshaProcessId     Int
+ SankoshaPriceMaster   SankoshaPriceMaster @relation(fields: [sankoshaPriceMasterId], references: [id], onDelete: Cascade)
+ sankoshaPriceMasterId Int
+}

@@ -1,0 +1,30 @@
+.react-markdown {
+ h1 {
+  @apply text-2xl font-bold;
+ }
+ h2 {
+  @apply text-xl font-bold;
+ }
+
+ h3 {
+  @apply text-lg font-bold;
+ }
+
+ ol {
+  li {
+   list-style-type: decimal;
+  }
+ }
+ ul {
+  li {
+   list-style-type: disc;
+  }
+ }
+
+ li {
+  margin-left: 40px;
+ }
+ a {
+  @apply t-link;
+ }
+}

@@ -1,0 +1,30 @@
+'use client'
+
+import * as Popover from '@radix-ui/react-popover'
+import React from 'react'
+import {Z_INDEX} from '@lib/constants/constants'
+
+export default function ShadPopover(props: {
+  PopoverTrigger?: JSX.Element | string
+  open?: boolean
+  onOpenChange?: any
+  onOpenAutoFocus?: any
+  children: JSX.Element
+}) {
+  const {PopoverTrigger, open, onOpenChange, children, onOpenAutoFocus = e => e.preventDefault()} = props
+  return (
+    <Popover.Root {...{open, onOpenChange}}>
+      <Popover.Trigger>{PopoverTrigger}</Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content
+          onOpenAutoFocus={onOpenAutoFocus}
+          className="PopoverContent  !rounded-lg border  bg-white p-0.5 shadow-sm"
+          sideOffset={5}
+          style={{zIndex: Z_INDEX.max}}
+        >
+          <div style={{zIndex: Z_INDEX.max}}>{children}</div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  )
+}

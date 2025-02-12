@@ -1,0 +1,111 @@
+model DemoUser {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name  String?
+ email String? @unique
+
+ DemoUserDepartment DemoUserDepartment[]
+ DemoTask           DemoTask[]
+}
+
+model DemoDepartment {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name               String?
+ DemoUserDepartment DemoUserDepartment[]
+ DemoTask           DemoTask[]
+ DemoStock          DemoStock[]
+}
+
+model DemoUserDepartment {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ demoUserId       Int
+ demoDepartmentId Int
+ DemoUser         DemoUser       @relation(fields: [demoUserId], references: [id], onDelete: Cascade)
+ DemoDepartment   DemoDepartment @relation(fields: [demoDepartmentId], references: [id], onDelete: Cascade)
+
+ @@unique([demoUserId, demoDepartmentId], name: "unique_demoUserId_demoDepartmentId")
+}
+
+model DemoStock {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name     String?
+ quantity Int?
+
+ DemoDepartment   DemoDepartment? @relation(fields: [demoDepartmentId], references: [id], onDelete: Cascade)
+ demoDepartmentId Int?
+ DemoItem         DemoItem?       @relation(fields: [demoItemId], references: [id], onDelete: Cascade)
+ demoItemId       Int?
+
+ @@unique([demoDepartmentId, demoItemId], name: "unique_demoDepartmentId_demoItemId")
+}
+
+model DemoItem {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name      String?
+ imageUrl  String?
+ DemoStock DemoStock[]
+}
+
+model DemoTask {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name        String?
+ description String?
+ status      String?
+
+ taskType     String?
+ goal         Float?
+ ratio        Float?
+ startedAt    DateTime?
+ finishedAt   DateTime?
+ requestType  String?
+ category1    String?
+ cateogry2    String?
+ priority     String?
+ requiredTime Float?
+ detail       String?
+ url          String?
+ imageUrl     String?
+ remarks      String?
+
+ DemoUser         DemoUser?       @relation(fields: [demoUserId], references: [id], onDelete: Cascade)
+ demoUserId       Int?
+ DemoDepartment   DemoDepartment? @relation(fields: [demoDepartmentId], references: [id], onDelete: Cascade)
+ demoDepartmentId Int?
+ DemoResult       DemoResult[]
+}
+
+model DemoResult {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date       DateTime
+ status     Boolean?
+ kpi        Float?
+ DemoTask   DemoTask @relation(fields: [demoTaskId], references: [id], onDelete: Cascade)
+ demoTaskId Int
+}

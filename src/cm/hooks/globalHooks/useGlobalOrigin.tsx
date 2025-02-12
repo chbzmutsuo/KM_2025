@@ -1,0 +1,52 @@
+'use client'
+import useMySession from '@hooks/globalHooks/useMySession'
+import useMyNavigation from 'src/cm/hooks/globalHooks/useMyNavigation'
+import {RecoilEnv} from 'recoil'
+
+import useLoader from 'src/cm/hooks/globalHooks/useLoader'
+import useWindowSize from 'src/cm/hooks/useWindowSize'
+import {sleep} from '@lib/methods/common'
+
+RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false
+
+export type useGlobalPropType = ReturnType<typeof useGlobalOrigin>
+
+export default function useGlobalOrigin(place?: any) {
+  type useMyNavigationHookType = ReturnType<typeof useMyNavigation>
+  type useMySessionHookType = ReturnType<typeof useMySession>
+  type loadingHookType = ReturnType<typeof useLoader>
+  type useWindowSizeHookType = ReturnType<typeof useWindowSize>
+  const useMyNavigationHook: useMyNavigationHookType = useMyNavigation() ?? {}
+  const useMySessionHook: useMySessionHookType = useMySession() ?? {}
+  const loading: loadingHookType = useLoader()
+  const useWindowSizeHook: useWindowSizeHookType = useWindowSize() ?? {}
+
+  const result = {
+    ...useWindowSizeHook,
+    ...useMyNavigationHook,
+    ...useMySessionHook,
+    ...loading,
+    navigateRefresh: (href, sleepMilliSeconds = 500) => {
+      useMyNavigationHook.router.push(href)
+      useMyNavigationHook.router.refresh()
+
+      loading.toggleLoad(async () => {
+        await sleep(sleepMilliSeconds)
+      })
+    },
+  }
+
+  const {width, globalLoaderAtom, status, session, device} = result
+
+  const waitRendering =
+    useMySessionHook.roles === undefined ||
+    useMySessionHook.sessionLoading ||
+    useMyNavigationHook.query === null ||
+    useMyNavigationHook.query === undefined
+  typeof window === `undefined` || width === 0 || !session || !device || status === `loading`
+  const showLoader = waitRendering || globalLoaderAtom
+
+  const useGlobalDeps = [waitRendering, showLoader]
+
+  return {...result, waitRendering, showLoader, useGlobalDeps}
+}

@@ -1,0 +1,169 @@
+model TbmBase {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name              String              @unique
+ TbmRouteGroup     TbmRouteGroup[]
+ TbmOperationGroup TbmOperationGroup[]
+}
+
+model TbmVehicle {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name  String
+ plate String @unique
+
+ TbmOperationGroup TbmOperationGroup[]
+ TbmRefuelHistory  TbmRefuelHistory[]
+}
+
+model TbmRouteGroup {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name         String
+ TbmRoute     TbmRoute[]
+ TbmBase      TbmBase        @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId    Int
+ TbmOperation TbmOperation[]
+}
+
+model TbmBillingAddress {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name     String
+ TbmRoute TbmRoute[]
+}
+
+model TbmRoute {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ departure           String
+ destination         String
+ farePrice           Float?
+ tollPrice           Float?
+ driverSalary        Float?
+ TbmBillingAddress   TbmBillingAddress @relation(fields: [tbmBillingAddressId], references: [id], onDelete: Cascade)
+ tbmBillingAddressId Int
+
+ TbmRouteGroup   TbmRouteGroup? @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)
+ tbmRouteGroupId Int?
+}
+
+model TbmOperationGroup {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ fuelOwn   Float?
+ fuelOther Float?
+ confirmed Boolean @default(false)
+
+ TbmVehicle   TbmVehicle     @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
+ User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+ TbmBase      TbmBase        @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ TbmOperation TbmOperation[]
+
+ tbmVehicleId     Int
+ userId           Int
+ tbmBaseId        Int
+ TbmRefuelHistory TbmRefuelHistory[]
+}
+
+model TbmOperation {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date          DateTime
+ distanceKm    Float?
+ TbmRouteGroup TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)
+
+ TbmOperationGroup TbmOperationGroup @relation(fields: [tbmOperationGroupId], references: [id], onDelete: Cascade)
+ User              User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+ TbmInvoiceDetail TbmInvoiceDetail[]
+
+ tbmRouteGroupId     Int
+ tbmOperationGroupId Int
+ userId              Int?
+ type                String
+
+ @@unique([tbmRouteGroupId, type], name: "unique_tbmRouteGroup_type")
+}
+
+model TbmInvoice {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ TbmCustomer    TbmCustomer        @relation(fields: [tbmcustomerId], references: [id], onDelete: Cascade)
+ tbmcustomerId  Int
+ invoiceMonth   DateTime
+ totalAmount    Float
+ invoiceDetails TbmInvoiceDetail[]
+}
+
+model TbmInvoiceDetail {
+ id              Int          @id @default(autoincrement())
+ createdAt       DateTime     @default(now())
+ updatedAt       DateTime?    @default(now()) @updatedAt()
+ sortOrder       Float        @default(0)
+ TbmInvoice      TbmInvoice   @relation(fields: [tbminvoiceId], references: [id], onDelete: Cascade)
+ tbminvoiceId    Int
+ TbmOperation    TbmOperation @relation(fields: [tbmOperationId], references: [id], onDelete: Cascade)
+ tbmOperationId  Int
+ numberOfTrips   Int
+ fare            Float
+ toll            Float
+ specialAddition Float? // 特別付加金
+}
+
+model TbmCustomer {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ customerName    String
+ address         String?
+ phoneNumber     String?
+ faxNumber       String?
+ bankInformation String?
+ TbmInvoice      TbmInvoice[]
+}
+
+model TbmRefuelHistory {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date     DateTime
+ amount   Float
+ odometer Float
+ type     String
+
+ TbmOperationGroup TbmOperationGroup? @relation(fields: [tbmOperationGroupId], references: [id], onDelete: Cascade)
+
+ TbmVehicle TbmVehicle @relation(fields: [tbmVehicleId], references: [id])
+
+ tbmOperationGroupId Int?
+ tbmVehicleId        Int
+}

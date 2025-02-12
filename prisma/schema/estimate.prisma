@@ -1,0 +1,107 @@
+model Vehicle {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name           String // 車両名
+ basePrice      Float // ベース金額
+ fuelEfficiency Float // 燃費
+ memo           String? // メモ欄
+
+ CarCost  CarCost[] // 諸費用
+ Estimate Estimate[]
+}
+
+model CarCost {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name  String
+ price Float // 諸費用の金額
+
+ Vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+ vehicleId Int
+}
+
+model CommonCost {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name  String
+ price Float // 諸費用の金額
+}
+
+model GasolinePrice {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date       DateTime? // 更新日
+ prefecture String? // 都道府県名
+ price      Float // ガソリン単価
+}
+
+model Estimate {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+ key       String?
+ email     String?
+
+ departureTime String
+ origin        String
+ destination   String
+ useHighway    String
+
+ waypoint1 String?
+ waypoint2 String?
+ waypoint3 String?
+
+ gasolinePrice Float // ガソリン単価
+ vehiclePrice  Float // 車両価格 + 車両諸費用
+ commonCost    Float // 共通諸費用
+ distance      Float // 距離
+ time          Float // 所要時間
+
+ totalAmount Float // 計算結果の合計金額
+
+ Vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+ vehicleId Int
+}
+
+model TabitakuMarkDown {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ active    Boolean   @default(true)
+ sortOrder Float     @default(0)
+
+ notesOnModal String?
+ introduction String?
+
+ date           String?
+ time           String?
+ numberOfPeople String?
+ vehicle        String?
+ origin         String?
+ destination    String?
+ useHighway     String?
+ peopleCount    String?
+ request        String?
+
+ name               String?
+ tel                String?
+ email              String?
+ email_confirmation String?
+
+ resultNotification String?
+
+ confirmation String?
+}

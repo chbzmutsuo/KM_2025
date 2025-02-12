@@ -1,0 +1,91 @@
+model MasterKeyClientGroup {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name            String            @unique
+ MasterKeyClient MasterKeyClient[]
+ User            User[]
+}
+
+model MasterKeyClient {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ name  String?
+ email String  @unique
+
+ MasterKeyJob           MasterKeyJob[]
+ MasterKeyApplicant     MasterKeyApplicant[]
+ MasterKeyClientGroup   MasterKeyClientGroup @relation(fields: [masterKeyClientGroupId], references: [id])
+ masterKeyClientGroupId Int
+}
+
+model MasterKeyJob {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ MasterKeyClient   MasterKeyClient? @relation(fields: [masterKeyClientId], references: [id])
+ masterKeyClientId Int?
+
+ // 案件№ 案件名 取引企業名	職種名	勤務地	応募用メールアドレス
+ projectNumber      String?
+ projectName        String?
+ jobTitle           String?
+ workLocation       String?
+ MasterKeyApplicant MasterKeyApplicant[]
+
+ @@unique([projectName, jobTitle, workLocation, masterKeyClientId], name: "unique_projectName_jobTitle_workLocation_masterKeyClientId")
+}
+
+model MasterKeyApplicant {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ MasterKeyClient   MasterKeyClient? @relation(fields: [masterKeyClientId], references: [id])
+ masterKeyClientId Int?
+
+ //案件名 案件No 求人名	勤務地	担当者	進捗状況	進捗詳細（面接日など）	勤務開始日	氏名	ふりがな	TEL	Mail	住所	性別	生年月日	年齢	備考・メッセージ・職歴など
+ projectName     String?
+ projectNumber   String?
+ jobTitle        String?
+ workLocation    String?
+ personInCharge  String?
+ progressStatus  String?
+ progressDetails String?
+ startDate       DateTime?
+ name            String?
+ kana            String?
+ tel             String?
+ email           String?
+ address         String?
+ gender          String?
+ birthDate       DateTime?
+ age             Int?
+ remarks         String?
+
+ // KPI関係
+ // 有効応募数	不在	通電	面談確定	着席数	不採用	内定	内定後辞退	入社	退職
+ validApplications  Boolean? @default(false)
+ absent             Boolean? @default(false)
+ connected          Boolean? @default(false)
+ interviewConfirmed Boolean? @default(false)
+ seated             Boolean? @default(false)
+ rejected           Boolean? @default(false)
+ offer              Boolean? @default(false)
+ offerDeclined      Boolean? @default(false)
+ joined             Boolean? @default(false)
+ resigned           Boolean? @default(false)
+
+ MasterKeyJob   MasterKeyJob @relation(fields: [masterKeyJobId], references: [id])
+ masterKeyJobId Int
+
+ @@unique([projectName, jobTitle, workLocation, masterKeyClientId], name: "unique_projectName_jobTitle_workLocation_masterKeyClientId")
+}

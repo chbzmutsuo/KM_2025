@@ -1,0 +1,173 @@
+.table-border-style {
+ @apply border-[1px] border-solid border-gray-400;
+}
+.simple-table {
+ td,
+ th {
+  @apply p-0.5  align-top table-border-style;
+ }
+}
+
+.sticky-table-wrapper {
+ @apply p-0 rounded-lg;
+
+ // min-height: 150px;
+ overflow: auto;
+ white-space: normal;
+
+ @mixin sticky-style {
+  position: sticky;
+  // background-color: #ffffff;
+ }
+
+ @mixin theadIndex {
+  @include sticky-style();
+  z-index: 100;
+ }
+ @mixin kadoIndex {
+  @include sticky-style();
+  z-index: 140;
+ }
+
+ table {
+  height: 100%;
+  td {
+   height: 100%;
+   // 最初のdiv
+   .stretching-in-td {
+    height: 100%;
+   }
+  }
+
+  // @apply borderForTable border-solid table-border-style;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px;
+
+  //z-index / leftの設定
+  thead,
+  tfoot {
+   @include theadIndex();
+   top: 0;
+   //最初のtrの最初のth
+   tr:first-child {
+    th:first-child {
+     @include kadoIndex;
+     left: 0;
+    }
+   }
+   tr {
+    z-index: 0;
+   }
+  }
+
+  thead {
+   th,
+   td {
+    @apply bg-gray-300 text-gray-600 font-medium;
+   }
+  }
+
+  tbody {
+   tr {
+    // 気数行目はグレー
+    // &:nth-child(odd) {
+    //  @apply bg-gray-100;
+    // }
+
+    // 最初のtd
+
+    th:first-child {
+     @include theadIndex;
+     left: 0;
+     z-index: 10;
+    }
+
+    th,
+    td {
+     @apply border-b;
+    }
+   }
+  }
+
+  tfoot {
+   z-index: 100;
+   position: sticky;
+   bottom: 0;
+  }
+
+  th,
+  td {
+   @apply p-2;
+  }
+
+  th {
+   @apply text-gray-600 font-normal text-start;
+  }
+ }
+}
+
+.align-td-width {
+ th {
+  width: 40px;
+ }
+}
+
+.no-padding-x {
+ td,
+ th {
+  padding-left: 0.5;
+  padding-right: 0.5;
+ }
+}
+.no-padding-y {
+ td,
+ th {
+  padding-top: 0;
+  padding-bottom: 0;
+ }
+}
+
+.borderedTable {
+ td,
+ th {
+  border-width: 1.5px;
+  border-style: solid dashed;
+ }
+}
+.no-border {
+ * {
+  border: none;
+ }
+}
+
+.vertical {
+ writing-mode: vertical-lr;
+ text-align: center;
+ // width: 20px;
+}
+
+.roundedTr {
+ // Set border-radius on the top-left and bottom-left of the first table data on the table row
+ td:first-child,
+ th:first-child {
+  border-radius: 5px 0 0 5px;
+  border-left-width: 1px;
+ }
+
+ // Set border-radius on the top-right and bottom-right of the last table data on the table row
+ td:last-child,
+ th:last-child {
+  border-radius: 0 5px 5px 0;
+  border-right-width: 1px;
+ }
+
+ th,
+ td {
+  border-top-width: 1px;
+ }
+
+ @apply shadow-md;
+ border-width: 1px;
+ border-radius: 10px;
+}

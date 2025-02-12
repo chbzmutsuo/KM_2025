@@ -1,0 +1,147 @@
+@use "./tailwind/tailwind" as tail;
+@use "./datepicker" as datepicker;
+@use "./qrsheet" as qrsheet;
+@use "./react-markdown" as react-markdown;
+@use "./_recharts.scss" as _recharts;
+@use "./_animation.scss" as _animation;
+@use "./_tables.scss" as _tables;
+@use "./_scroll-bar.scss" as _scroll-bar;
+@use "./_inputTag.scss" as _inputTag;
+@use "../../non-common/styles/_importToGlobal.scss" as _importToGlobal;
+
+// html {
+// 	scroll-behavior: smooth !important;
+// }
+
+canvas {
+	touch-action: none; /* タッチジェスチャーを無効化して独自処理を優先 */
+	cursor: grab; /* デフォルトのパンカーソル */
+}
+canvas:active {
+	cursor: grabbing; /* パン中のカーソル */
+}
+
+@media print {
+	.no-print {
+		display: none;
+	}
+}
+
+h1,
+h2,
+h3 {
+	@apply t-heading;
+}
+
+h4,
+h5,
+h6 {
+	@apply font-bold;
+}
+
+strong {
+	@apply text-[18px];
+}
+small {
+	@apply text-gray-600  inline-block leading-[16px];
+}
+
+* {
+	@apply break-words;
+	&:not(input, select) {
+		@apply focus:ring-2;
+	}
+	box-sizing: border-box;
+	outline: none;
+}
+body,
+table {
+	overscroll-behavior-y: none;
+}
+
+hr {
+	@apply border-sub-main;
+	margin-bottom: 10px;
+}
+
+input,
+　select {
+	background-color: inherit;
+	font-size: 16px !important;
+}
+
+input[type="checkbox"] {
+	@apply accent-primary-main;
+}
+
+.bg-gold {
+	background-color: gold;
+}
+
+.bg-silver {
+	background-color: silver;
+}
+
+.bg-bronze {
+	background-color: brown;
+}
+
+.bg-image {
+	body::before {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		width: 100vw;
+		height: 100vh;
+
+		-webkit-background-size: contain;
+		background-size: contain;
+		content: "";
+	}
+}
+
+.myRadio {
+	label {
+		cursor: pointer;
+		position: relative;
+		margin-left: 10px;
+		padding-left: 50px;
+	}
+
+	label::before,
+	label::after {
+		background-color: #ddd;
+		border-radius: 50%;
+		transition: 0.3s;
+		transform: translateY(-50%);
+		top: 50%;
+		left: 0px;
+	}
+
+	label::before {
+		background-color: #fff;
+		border-radius: 10px;
+		border: 1px solid #ddd;
+		height: 20px;
+		width: 40px;
+		left: 5px;
+	}
+
+	label::after {
+		background-color: #ddd;
+		border-radius: 50%;
+		opacity: 1;
+		height: 22px;
+		width: 22px;
+		left: 0px;
+	}
+
+	input:checked + label::before {
+		background-color: #73e600;
+	}
+
+	input:checked + label::after {
+		left: 27px;
+	}
+}

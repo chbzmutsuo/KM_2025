@@ -1,0 +1,28 @@
+model AppLog {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  active    Boolean   @default(true)
+  sortOrder Float     @default(0)
+
+  diffTime Int? // 前回のアクションからの経過時間（ミリ秒）（省略可能）
+
+  userAgent           String? // ユーザーのブラウザやデバイスの情報（省略可能）
+  referrerUrl         String? // リファラーURL（省略可能）
+  timestamp           DateTime @default(now()) // アクションが発生した日時
+  pageName            String? // ページの名称（タイトル）
+  pageUrl             String? // ページのURL
+  pageParams          Json? // ページのパラメータ
+  dataLogComponent    Json? // DOMツリーのdata-Log-Sectionを階層構造で示した配列
+  functionName        String? // 関数名
+  functionArgs        Json? // 関数の引数
+  functionReturnValue Json? // 関数の返り値（省略可能）
+  consoleInfo         String[] // console.infoで示された内容（省略可能）
+  actionType          String? // アクションタイプ（クリック、スクロールなど）（省略可能）
+  pageLoadTime        Int? // ページ読み込み時間（ミリ秒）（省略可能）
+  errorMessage        String? // エラーログ（スタックトレースなど）（省略可能）
+  sessionDuration     Int? // セッションの継続時間（秒）（省略可能）
+
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}

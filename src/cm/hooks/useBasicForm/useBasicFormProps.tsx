@@ -1,0 +1,198 @@
+'use client'
+
+import {FieldValues, RegisterOptions, useForm, UseFormReturn} from 'react-hook-form'
+import React, {useCallback, useEffect, useId, useMemo, useRef, useState} from 'react'
+
+import {anyObject, colType, extraFormStateType, onFormItemBlurType} from '@cm/types/types'
+
+import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
+import BasicForm from 'src/cm/hooks/useBasicForm/BaiscForm'
+import {getLatestFormData, initColumns, makeDefaultValues} from 'src/cm/hooks/useBasicForm/hookformMethods'
+import useCacheSelectOptions, {useCacheSelectOptionReturnType} from 'src/cm/hooks/useCacheSelectOptions/useCacheSelectOptions'
+
+import {ControlOptionType} from '@cm/types/form-control-type'
+import {funcOrVar} from '@lib/methods/common'
+import {DH} from '@class/DH'
+
+export type useAdditionalBasicFormPropType = {
+  columns: colType[][]
+  formData?: anyObject
+  values?: anyObject
+  onFormItemBlur?: onFormItemBlurType
+  focusOnMount?: boolean
+  autoApplyProps?: {
+    form?: any
+  }
+}
+
+const useBasicFormProps = (props: useAdditionalBasicFormPropType) => {
+  const [startFetchingOptions, setstartFetchingOptions] = useState(true)
+
+  const useGlobalProps = useGlobal()
+  const {onFormItemBlur, autoApplyProps = {}, values = undefined} = props
+  const [formData, setformData] = useState(props.formData)
+  const columns = useMemo(() => initColumns({autoApplyProps, columns: props.columns}), [props.columns])
+
+  const extraFormSateDefaultValues = Object.fromEntries(
+    columns.flat().map((col: colType) => {
+      if (col.multipleSelect) {
+        const midTableRecords = formData?.[DH.capitalizeFirstLetter(col.multipleSelect.models.mid)] ?? []
+        const selectedValues = Object.fromEntries(
+          midTableRecords.map(d => {
+            const optionId = col?.multipleSelect?.models?.option + `Id`
+            return [d[optionId], true]
+          })
+        )
+
+        return [col.id, selectedValues]
+      }
+      const value = undefined
+
+      return [col.id, value]
+    })
+  )
+  const [extraFormState, setextraFormState] = useState<extraFormStateType>(extraFormSateDefaultValues)
+
+  const {defaultValues} = makeDefaultValues({columns, formData})
+
+  const ReactHookForm: UseFormReturn = useForm({defaultValues: {...defaultValues}, mode: `all`})
+
+  const latestFormData = getLatestFormData({formData, ReactHookForm})
+
+  const Cached_Option_Props: useCacheSelectOptionReturnType = useCacheSelectOptions({
+    columns,
+    latestFormData,
+    startFetchingOptions,
+  })
+
+  const formId = useId() //onSubmit時に他
+  const formRef = useRef<HTMLFormElement>(null)
+  useEffect(() => {
+    if (props.focusOnMount !== false) {
+      ReactHookForm.setFocus(columns?.[0]?.[0]?.id)
+    }
+  }, [])
+
+  const useResetValue = useCallback(
+    ({col, field}) => {
+      if (confirm(`値をクリアしますか？`) === false) return
+
+      const convertedType = DH.switchColType({type: col.type})
+
+      let nullvalue
+      switch (convertedType) {
+        case 'text':
+        case 'color':
+        case 'time': {
+          nullvalue = ''
+          break
+        }
+
+        default: {
+          nullvalue = null
+          break
+        }
+      }
+      ReactHookForm.setValue(col.id, nullvalue)
+
+      field.onBlur()
+    },
+    [ReactHookForm]
+  )
+  const useRegister = useCallback(
+    ({newestRecord, col}) => {
+      const disabeld = col?.form?.disabled
+
+      const shownButDisabled = typeof disabeld === `function` ? disabeld?.({record: newestRecord, col}) : disabeld
+
+      const currentValue = ReactHookForm.watch(col?.id)
+      const registerProps: RegisterOptions = funcOrVar(col?.form?.register, {latestFormData, col, ReactHookForm})
+
+      return {
+        currentValue: currentValue,
+        shownButDisabled,
+        Register: ReactHookForm.register(col?.id, {
+          ...registerProps,
+
+          onBlur: async e => {
+            const {target} = e
+            const {id, value, name} = target
+
+            if (onFormItemBlur) {
+              const validate = col?.form?.register?.validate
+              if (validate) {
+                const message = await validate?.(value, formData)
+                if (message) {
+                  ReactHookForm.setValue(col.id, null)
+
+                  return alert(message)
+                }
+              }
+
+              const newlatestFormData = {...latestFormData, [name]: value}
+              await onFormItemBlur({id, value, name, e, newlatestFormData, ReactHookForm})
+            }
+          },
+
+          setValueAs: value => {
+            const result = DH.convertDataType(value ?? null, col?.type, `server`)
+            return result
+          },
+        }),
+      }
+    },
+    [latestFormData, formData, values, onFormItemBlur, ReactHookForm, columns, Cached_Option_Props.valueHasChanged]
+  )
+  const newestRecord = {...latestFormData, ...formData, ...values}
+  /**Basic Form */
+  const BasicFormCallback = useCallback(
+    (AdditionalBasicFormProp: AdditionalBasicFormPropType) => {
+      return (
+        <BasicForm
+          {...{
+            useResetValue,
+            useRegister,
+            values,
+            formData,
+            setformData,
+            formRef,
+            formId,
+            onFormItemBlur,
+            columns,
+            ReactHookForm,
+            latestFormData,
+            extraFormState,
+            setextraFormState,
+            useGlobalProps,
+            Cached_Option_Props,
+            newestRecord,
+            ...AdditionalBasicFormProp,
+          }}
+        />
+      )
+    },
+
+    [Cached_Option_Props.valueHasChanged, useGlobalProps.query, columns.flat().length, formData, values]
+  )
+
+  return {
+    formRef,
+    Cached_Option_Props,
+    ReactHookForm,
+    latestFormData,
+    BasicForm: BasicFormCallback,
+    extraFormState,
+    setextraFormState,
+  }
+}
+
+export default useBasicFormProps
+
+export type AdditionalBasicFormPropType = {
+  onSubmit?: (data: FieldValues, event?: React.BaseSyntheticEvent) => void
+  wrapperClass?: string | ((props: anyObject) => string)
+  ControlOptions?: ControlOptionType
+  children?: any
+  alignMode?: 'row' | 'col'
+  style?: any
+}

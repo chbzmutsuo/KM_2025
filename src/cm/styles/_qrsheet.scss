@@ -1,0 +1,23 @@
+.qr-sheet {
+ table {
+  @apply border-[1px] border-sub-main;
+
+  white-space: normal;
+
+  // td {
+  //  // height: 30px;
+  //  // text-align: center;
+  //  // vertical-align: middle;
+  //  // width: fit-content;
+  //  // padding: 4px !important;
+  //  // font-size: 12px !important;
+  //  @apply border-[1px] border-sub-main p-2;
+  // }
+
+  td:nth-child(odd) {
+   @apply bg-sub-light;
+  }
+  td:nth-child(even) {
+  }
+ }
+}

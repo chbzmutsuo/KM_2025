@@ -1,0 +1,41 @@
+.drawer {
+ position: fixed;
+ left: -100%; // 初期状態では左に隠れている
+ top: 0;
+ width: 80vw; // 画面の幅から5vw引いた幅
+ max-width: 300px;
+ height: 100vh;
+ overflow-x: hidden;
+ transition: left 0.2s ease-in-out; // 0.5秒で左からスライドインするアニメーション
+ z-index: 9999;
+ &.open {
+  left: 0; // アクティブクラスが付与されたとき、leftを0にして表示
+ }
+}
+
+// @keyframes progressBar {
+//  0% {
+//   transform: translateX(-100%);
+//  }
+//  100% {
+//   transform: translateX(100%);
+//  }
+// }
+
+// .progress-container {
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//  right: 0;
+//  height: 4px;
+//  background-color: #ccc;
+//  overflow: hidden;
+// }
+
+// .progress-bar {
+//  width: 100%;
+//  height: 100%;
+
+//  background-color: #007acc;
+//  animation: progressBar 3s linear infinite;
+// }

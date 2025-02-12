@@ -1,0 +1,37 @@
+model LmLocation {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ active    Boolean   @default(true)
+ sortOrder Float     @default(0)
+ name      String // レイアウトの名前
+
+ Pdf Pdf[]
+}
+
+model Pdf {
+ id           Int         @id @default(autoincrement())
+ createdAt    DateTime    @default(now())
+ updatedAt    DateTime?   @default(now()) @updatedAt()
+ active       Boolean     @default(true)
+ sortOrder    Float       @default(0)
+ name         String // アップロードされたPDFの名前
+ url          String // S3に保存されたPDFのURL
+ json         Json? // PDFのデータ（JSON形式）
+ PdfLayer     PdfLayer[] // レイヤーとの関連付け
+ LmLocation   LmLocation? @relation(fields: [lmLocationId], references: [id])
+ lmLocationId Int?
+}
+
+model PdfLayer {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ active    Boolean   @default(true)
+ sortOrder Float     @default(0)
+ layerType String // レイヤーの種類
+ pdfId     String // 関連するPDFのID
+ Pdf       Pdf       @relation(fields: [pDFId], references: [id])
+ data      Json // レイヤーのデータ（JSON形式）
+ pDFId     Int
+}

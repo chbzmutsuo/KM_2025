@@ -1,0 +1,174 @@
+model YsWorkRecord {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date      DateTime?
+ from      DateTime?
+ to        DateTime?
+ breakTime Float?
+
+ User            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId          Int
+ TimeCardHistory TimeCardHistory[]
+
+ @@unique([date, userId], name: "unique_date_userId")
+}
+
+model YsHoliday {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date DateTime @unique
+}
+
+model YsCalendarHoliday {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ date    DateTime
+ remarks String?
+ type    String?
+
+ WorkType   WorkType? @relation(fields: [workTypeId], references: [id], onDelete: Cascade)
+ workTypeId Int?
+
+ @@unique([date, workTypeId], name: "unique_date_workTypeId")
+}
+
+model WorkType {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+ name      String    @unique
+
+ legalHoliday         String?
+ work_startTime       String  @default("08:30")
+ work_endTime         String  @default("17:00")
+ lunchBreak_startTime String  @default("12:00")
+ lunchBreak_endTime   String  @default("13:00")
+ workMins             Int     @default(450)
+ fixedOvertime        String  @default("19:10")
+
+ YsCalendarHoliday           YsCalendarHoliday[]
+ UserWorkTimeHistoryMidTable UserWorkTimeHistoryMidTable[]
+}
+
+model UserWorkTimeHistoryMidTable {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ from DateTime
+ // to   DateTime?
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
+
+ WorkType   WorkType @relation(fields: [workTypeId], references: [id], onDelete: Cascade)
+ workTypeId Int
+
+ @@unique([from, userId], name: "unique_from_userId")
+}
+
+model UserPayedLeaveTypeMidTable {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ from DateTime
+ // to   DateTime?
+
+ User   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int?
+
+ PayedLeaveType   PayedLeaveType @relation(fields: [payedLeaveTypeId], references: [id], onDelete: Cascade)
+ payedLeaveTypeId Int
+}
+
+model PaidLeaveGrant {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ grantedAt DateTime
+ mins      Int // 有給の量を分単位で管理
+ remarks   String?
+
+ User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId    Int
+ expiresAt DateTime?
+
+ @@unique([grantedAt, userId], name: "unique_grantedAt_userId")
+}
+
+model PayedLeaveType {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ name                       String                       @unique //社員など
+ PayedLeaveAssignmentCount  PayedLeaveAssignmentCount[]
+ UserPayedLeaveTypeMidTable UserPayedLeaveTypeMidTable[]
+}
+
+model PayedLeaveAssignmentCount {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @updatedAt
+ sortOrder Float     @default(0)
+
+ monthsAfter      Int
+ payedLeaveCount  Int
+ PayedLeaveType   PayedLeaveType @relation(fields: [payedLeaveTypeId], references: [id], onDelete: Cascade)
+ payedLeaveTypeId Int
+}
+
+model YsManualUserRow {
+ id                     Int       @id @default(autoincrement())
+ createdAt              DateTime  @default(now())
+ updatedAt              DateTime? @updatedAt
+ sortOrder              Float     @default(0)
+ uuid                   String?   @unique @default(uuid())
+ code                   String
+ name                   String?   @unique
+ prescribedWorkingDays  Float?    @default(0)
+ workingDays            Float?    @default(0)
+ holidayWorkDays        Float?    @default(0)
+ furikyu                Float?    @default(0)
+ absentDays             Float?    @default(0)
+ prescribedHolidays     Float?    @default(0)
+ Sum_payedLeaveUsed     Float?    @default(0)
+ totalRemainingMinutes  Float?    @default(0)
+ substituteHolidayOwned Float?    @default(0)
+ privateCarUsageKm      Float?    @default(0)
+ overTime               Float?    @default(0)
+ month                  DateTime
+
+ @@unique([month, code], name: "unique_month_code")
+}
+
+model TimeCardHistory {
+ id             Int          @id @default(autoincrement())
+ createdAt      DateTime     @default(now())
+ updatedAt      DateTime?    @updatedAt
+ sortOrder      Float        @default(0)
+ date           DateTime?
+ from           DateTime?
+ to             DateTime?
+ breakTime      Float?
+ lat            Float?
+ lng            Float?
+ YsWorkRecord   YsWorkRecord @relation(fields: [ysWorkRecordId], references: [id], onDelete: Cascade)
+ ysWorkRecordId Int
+}

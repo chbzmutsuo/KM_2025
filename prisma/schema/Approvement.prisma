@@ -1,0 +1,95 @@
+model ApRequestTypeMaster {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  name          String
+  color         String?
+  description   String?
+  ApCustomField ApCustomField[]
+  ApRequest     ApRequest[]
+}
+
+model ApCustomField {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  name     String // フィールド名
+  type     String // データ型
+  required Boolean @default(false)
+  // 必須かどうか
+  remarks  String? // 備考
+
+  ApCustomFieldValue    ApCustomFieldValue[]
+  ApRequestTypeMaster   ApRequestTypeMaster? @relation(fields: [apRequestTypeMasterId], references: [id], onDelete: Cascade)
+  apRequestTypeMasterId Int?
+}
+
+model ApRequest {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  status              String? // 申請ステータス
+  withdrawn           Boolean?
+  forceApproved       Boolean?
+  ApRequestTypeMaster ApRequestTypeMaster @relation(fields: [approvalRequestTypeMasterId], references: [id], onDelete: Cascade)
+
+  ApSender           ApSender             @relation(fields: [apSenderId], references: [id], onDelete: Cascade)
+  ApReceiver         ApReceiver[]
+  ApCustomFieldValue ApCustomFieldValue[]
+
+  apSenderId                  Int
+  approvalRequestTypeMasterId Int
+}
+
+model ApSender {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  ApRequest ApRequest[]
+}
+
+model ApReceiver {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  status  String? // 承認ステータス
+  comment String? // コメント
+
+  User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  ApRequest   ApRequest @relation(fields: [apRequestId], references: [id], onDelete: Cascade)
+  apRequestId Int
+}
+
+model ApCustomFieldValue {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  string String? // 文字列の場合
+  number Float? // 数値の場合
+  date   DateTime? // 日付の場合
+
+  ApRequest     ApRequest     @relation(fields: [approvalRequestId], references: [id], onDelete: Cascade)
+  ApCustomField ApCustomField @relation(fields: [customFieldId], references: [id], onDelete: Cascade)
+
+  approvalRequestId     Int
+  customFieldId         Int
+  apRequestTypeMasterId Int?
+
+  @@unique([approvalRequestId, customFieldId], name: "unique_approvalRequestId_customFieldId")
+}

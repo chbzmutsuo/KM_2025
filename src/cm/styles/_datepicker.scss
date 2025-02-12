@@ -1,0 +1,30 @@
+.custom-datepicker {
+ border: 2px solid #ddd;
+ padding: 2px;
+ font-size: 16px;
+
+ max-width: 160px !important;
+ z-index: 2147483647;
+
+ @apply myFormControl;
+}
+
+.react-datepicker-popper {
+ .react-datepicker__month {
+  @apply m-0 w-full;
+  .react-datepicker__week {
+   @apply flex justify-around;
+  }
+ }
+ .react-datepicker__month-container {
+  @apply w-[200px];
+ }
+
+ .react-datepicker__header {
+  @apply bg-sub-light;
+ }
+
+ .react-datepicker__time-list {
+  height: 200px !important;
+ }
+}
