@@ -1,5 +1,5 @@
 import {ColBuilder} from '@app/(apps)/aquapot/(class)/colBuilder/ColBuilder'
-import {CUSTOMER_MODEL_CONST} from '@app/(apps)/aquapot/(constants)/options'
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
@@ -52,7 +52,7 @@ export const aqCustomerRecordCol = (props: columnGetterType) => {
         form: {},
         td: {style: {width: 80}},
         forSelect: {
-          optionsOrOptionFetcher: CUSTOMER_MODEL_CONST.AQCUSTOMER_RECORD_STATUS_LIST,
+          optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_STATUS_LIST,
         },
       },
       {
@@ -61,7 +61,7 @@ export const aqCustomerRecordCol = (props: columnGetterType) => {
         form: {},
         td: {style: {width: 80}},
         forSelect: {
-          optionsOrOptionFetcher: CUSTOMER_MODEL_CONST.AQCUSTOMER_RECORD_TYPE_LIST,
+          optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_TYPE_LIST,
         },
       },
       {

@@ -1,7 +1,7 @@
 import {Fields} from '@class/Fields/Fields'
 import {Alert} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
-import { R_Stack} from '@components/styles/common-components/common-components'
+import {R_Stack} from '@components/styles/common-components/common-components'
 import Accordion from '@components/utils/Accordions/Accordion'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
@@ -39,7 +39,7 @@ export default function ApprovementForm({
   ]).transposeColumns()
 
   if (session.id == theApReceiver.userId || isSuperUser) {
-    const {BasicForm} = useBasicFormProps({columns})
+    const {BasicForm, latestFormData} = useBasicFormProps({columns})
     const onSubmit = async data => {
       const args: Prisma.ApRequestUpdateArgs = {
         where: {id: theApRequest.id},
@@ -72,7 +72,7 @@ export default function ApprovementForm({
             <ApRequestForm {...{ApRequestList: history, ApRequestType, ApRequestTypeConfigs, theApRequest}} />
           </Accordion>
           <Accordion {...{label: `承認入力`, defaultOpen: true}}>
-            <BasicForm onSubmit={onSubmit}>
+            <BasicForm onSubmit={onSubmit} {...{latestFormData}}>
               <Button>確定</Button>
             </BasicForm>
           </Accordion>

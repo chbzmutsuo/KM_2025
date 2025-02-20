@@ -96,7 +96,7 @@ const BulkNotificationClient = ({students}) => {
   }
   return (
     <C_Stack className={` mx-auto  w-fit items-start`}>
-      <BasicForm onSubmit={sendBuklNotification}>
+      <BasicForm onSubmit={sendBuklNotification} latestFormData={latestFormData}>
         <Button>送信</Button>
       </BasicForm>
 

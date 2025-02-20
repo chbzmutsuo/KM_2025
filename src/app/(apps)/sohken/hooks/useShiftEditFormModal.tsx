@@ -1,13 +1,17 @@
 import MultipleUserSelector from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/MultipleUserSelector'
-import SingleAddForm from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/SingleAddForm'
 import {DH} from '@class/DH'
 
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {Paper} from '@components/styles/common-components/paper'
 
-import {useGlobalModalForm} from '@components/utils/modal/useGlobalModalForm'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {atomTypes} from '@hooks/useJotai'
+import {Z_INDEX} from '@lib/constants/constants'
+import {atomTypes, useJotaiByKey} from '@hooks/useJotai'
+
+import {C_Stack} from '@components/styles/common-components/common-components'
+import useFloatingDiv from '@hooks/useFloatingDiv/useFloatingDiv'
+import {useMemo} from 'react'
+import MultipleCarSelector from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/MultipleCarSelector'
 
 export type shiftEditProps = {
   selectedData
@@ -17,42 +21,55 @@ export type shiftEditProps = {
 } | null
 
 export const useShiftEditFormModal = () => {
-  return useGlobalModalForm<atomTypes[`shiftEditPropsGMF`]>(`shiftEditPropsGMF`, null, {
-    mainJsx: props => {
-      const {RelationalModel, GenbaDay, selectedData, baseModelName} = props.GMF_OPEN
+  const [shiftEditPropsGMF, setshiftEditPropsGMF] = useJotaiByKey<atomTypes[`shiftEditPropsGMF`] | null>(
+    `shiftEditPropsGMF`,
+    null
+  )
+  const useGlobalProps = useGlobal()
+  const setGMF_OPEN = (v: shiftEditProps) => {
+    setshiftEditPropsGMF(v)
+  }
+  const GMF_OPEN = shiftEditPropsGMF
 
-      const useGlobalProps = useGlobal()
+  const Modal = () => {
+    if (GMF_OPEN) {
+      const {DraggableDiv, DragButton} = useFloatingDiv({defaultPosition: {x: 70, y: 70}})
+      const {RelationalModel, GenbaDay, selectedData, baseModelName} = GMF_OPEN
       const currentRelationalModelRecords = GenbaDay[DH.capitalizeFirstLetter(RelationalModel)]
-
-      const handleClose = () => props.close()
+      const handleClose = () => setGMF_OPEN(null)
       const commonProps = {
         GenbaDay,
         handleClose,
         useGlobalProps,
       }
 
-      return (
-        <div className={` fixed bottom-[400px] left-4  `}>
-          <Paper className={`bg-white p-4`}>
-            {baseModelName === `user` ? (
-              <MultipleUserSelector
-                {...{
-                  ...commonProps,
-                  currentRelationalModelRecords,
-                }}
-              />
-            ) : (
-              <SingleAddForm
-                {...{
-                  ...commonProps,
-                  RelationalModel,
-                  selectedData,
-                }}
-              />
-            )}
+      const OverLay = () => {
+        return <div onClick={handleClose} className={`fixed inset-0 bg-black/50`} style={{zIndex: Z_INDEX.overlay}}></div>
+      }
+
+      const Memo = useMemo(() => {
+        return (
+          <Paper className={`rounded-lg  bg-white`}>
+            <C_Stack>
+              {baseModelName === `user` ? (
+                <MultipleUserSelector {...commonProps} {...{currentRelationalModelRecords}} />
+              ) : (
+                <MultipleCarSelector {...commonProps} {...{currentRelationalModelRecords}} />
+              )}
+            </C_Stack>
           </Paper>
+        )
+      }, [GMF_OPEN])
+
+      return (
+        <div>
+          <OverLay />
+          <DraggableDiv>{Memo}</DraggableDiv>
         </div>
       )
-    },
-  })
+    }
+    return <></>
+  }
+
+  return {Modal, GMF_OPEN, setGMF_OPEN}
 }

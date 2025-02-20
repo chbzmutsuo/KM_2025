@@ -7,7 +7,7 @@ import React from 'react'
 
 export default function Filter_MyPage() {
   const {query} = useGlobal()
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     formData: {month: query},
     columns: new Fields([
       //
@@ -16,7 +16,7 @@ export default function Filter_MyPage() {
   })
 
   return (
-    <BasicForm {...{alignMode: `row`}}>
+    <BasicForm {...{alignMode: `row`, latestFormData}}>
       <Button>検索</Button>
     </BasicForm>
   )

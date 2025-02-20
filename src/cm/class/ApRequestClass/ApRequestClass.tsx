@@ -91,7 +91,14 @@ export class ApRequestClass {
   }
 
   static filterOnlyApproved = (apRequests: MappeadApRequest[]) => {
-    return apRequests.filter(d => new ApRequestClass(d).isApproved())
+    return apRequests.filter(d => {
+      const approved = new ApRequestClass(d).isApproved()
+
+      // Object.keys(d.cf).forEach(key => {
+      //   console.debug(key, d.cf[key].value)
+      // })
+      return approved
+    })
   }
 
   static colorsByStatus = {

@@ -24,7 +24,7 @@ export const ApRequestForm = (props: {
 }) => {
   const {ApRequestType, ApRequestTypeConfigs, maxReceiver = 3, theApRequest, editable = false, formData, defaultDate} = props
 
-  const {onSubmit, Form} = useApRequestForm({
+  const {onSubmit, Form, latestFormData} = useApRequestForm({
     defaultDate,
     ApRequestTypeConfigs,
     ApRequestType,
@@ -40,7 +40,7 @@ export const ApRequestForm = (props: {
     <C_Stack>
       {disabled && <Alert color={`red`}>起案後の稟議は変更できません。</Alert>}
       <div className={disabled ? 'disabled opacity-70' : ''}>
-        <Form onSubmit={async data => await onSubmit({data})}>
+        <Form latestFormData={latestFormData} onSubmit={async data => await onSubmit({data})}>
           <Button>確定</Button>
         </Form>
       </div>

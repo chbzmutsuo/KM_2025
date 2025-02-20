@@ -2,12 +2,11 @@
 
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 
-
 import {QueryBuilder} from '@app/(apps)/sohken/class/QueryBuilder'
 import {addDays} from 'date-fns'
 import {Days, formatDate, toUtc} from '@class/Days'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary'
+import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 import {C_Stack, Circle, Padding, R_Stack} from '@components/styles/common-components/common-components'
 import {Paper} from '@components/styles/common-components/paper'
 export default async function DynamicMasterPage(props) {
@@ -59,10 +58,10 @@ export default async function DynamicMasterPage(props) {
 
   return (
     <Padding>
-      <R_Stack className={` mx-auto w-fit items-start justify-between gap-10 `}>
+      <R_Stack className={` mx-auto w-full  max-w-[1500px]  items-start  justify-center   gap-10   lg:justify-end`}>
         <div>
           <strong>{formatDate(today)}</strong>
-          <C_Stack className={` gap-8 p-2`}>
+          <C_Stack className={` gap-8    p-2`}>
             {todayRecords.map((GenbaDay, i) => {
               return (
                 <div key={GenbaDay.id}>

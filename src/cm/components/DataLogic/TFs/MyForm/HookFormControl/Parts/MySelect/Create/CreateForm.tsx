@@ -48,16 +48,13 @@ export default function CreateForm(props: {SearchFormHook: SearchFormHookType; c
   return (
     <div className={`mx-auto w-fit `}>
       <useCreateForm.BasicForm
+        latestFormData={useCreateForm.latestFormData}
         onSubmit={async data => {
           if (confirm(`新規にマスタデータを作成しますか?`) === false) return
           const modelName = controlContextValue.col.id.replace('Id', '') as PrismaModelNames
-
           const res = await fetchUniversalAPI(modelName, 'create', data)
 
-          res.result = {
-            id: res.result.id,
-            name: res.result.name,
-          }
+          res.result = {id: res.result.id, name: res.result.name}
 
           await createSeldctItem(res)
         }}

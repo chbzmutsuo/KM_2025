@@ -16,10 +16,11 @@ export const POST = async (req: NextRequest) => {
         id: id_pw?.id ?? 'email',
         pw: id_pw?.pw ?? 'password',
       }
+      const PrismaClient = prisma?.[name] as any
       return {
         name,
         authKey,
-        userData: await prisma?.[name]?.findUnique({
+        userData: await PrismaClient?.findUnique({
           where: {[authKey.id]: authId},
         }),
       }

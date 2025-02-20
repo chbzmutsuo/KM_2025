@@ -19,13 +19,14 @@ export const useCopyNippoModal = () => {
   const {pathname, addQuery, toggleLoad, router, query} = useGlobal()
   const [openCopyModal, setopenCopyModal] = useState<{sourceNippo: any} | null>(null)
 
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     columns: new Fields([{id: `date`, label: `コピー先の日付`, type: `date`, form: {}}]).transposeColumns(),
   })
   const Modal = () => {
     return (
       <BasicModal {...{open: openCopyModal, handleClose: () => setopenCopyModal(null)}}>
         <BasicForm
+          latestFormData={latestFormData}
           onSubmit={async data => {
             const tsConstructionId = openCopyModal?.sourceNippo?.tsConstructionId
             const date = data.date

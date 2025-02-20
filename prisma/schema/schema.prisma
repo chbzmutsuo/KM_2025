@@ -80,6 +80,9 @@ model User {
   TbmOperation                     TbmOperation[]
   TbmOperationGroup                TbmOperationGroup[]
   AqCustomer                       AqCustomer[]
+  TbmBase                          TbmBase?                           @relation(fields: [tbmBaseId], references: [id])
+  tbmBaseId                        Int?
+  TbmDriveSchedule                 TbmDriveSchedule[]
 }
 
 model ReleaseNotes {
@@ -101,13 +104,14 @@ model GoogleAccessToken {
   updatedAt DateTime? @default(now()) @updatedAt()
   sortOrder Float     @default(0)
 
-  email         String @unique
+  email         String  @unique
   access_token  String
   refresh_token String
   scope         String
   token_type    String
   id_token      String
   expiry_date   BigInt
+  tokenJSON     String?
 }
 
 model RoleMaster {
@@ -142,4 +146,15 @@ model ChainMethodLock {
   isLocked  Boolean   @default(false)
   expiresAt DateTime?
   updatedAt DateTime  @updatedAt
+}
+
+model Calendar {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  date DateTime @unique
+
+  holidayType String @default("出勤")
 }

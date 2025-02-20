@@ -18,6 +18,7 @@ export default function Searcher({dataModelName, col, useGlobalProps}) {
   return (
     <div>
       <FormHook.BasicForm
+        latestFormData={FormHook.latestFormData}
         onSubmit={data => {
           confirmSearch({
             toggleLoad,

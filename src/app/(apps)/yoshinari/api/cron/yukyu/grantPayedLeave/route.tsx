@@ -46,7 +46,7 @@ async function grantPaidLeave() {
         },
       },
     }
-    const users: P_User[] = await prisma.user.findMany(args)
+    const users = await prisma.user.findMany(args)
 
     const currentDate = new Date()
 
@@ -64,6 +64,7 @@ async function grantPaidLeave() {
       }
       console.info(`====${user.name} (ID:${user.id})====`)
       const {id: userId, hiredAt} = user
+      if (!hiredAt) continue
 
       // 勤続年数を計算
       const yearsSinceHire = differenceInYears(currentDate, hiredAt)

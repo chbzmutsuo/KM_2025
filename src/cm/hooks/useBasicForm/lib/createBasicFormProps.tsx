@@ -1,3 +1,5 @@
+import {useRegisterOrigin} from '@hooks/useBasicForm/lib/useRegisterOrigin'
+
 export const adjustBasicFormProps = props => {
   const {alignMode = `col`, ControlOptions = {}, ...restProps} = props
 
@@ -13,8 +15,24 @@ export const adjustBasicFormProps = props => {
     ControlOptions.direction = 'horizontal'
   }
 
+  const {latestFormData, ReactHookForm, onFormItemBlur, formData} = restProps
+  const columns = props.columns.map(cols => {
+    return cols.map(col => {
+      const {shownButDisabled, Register} = useRegisterOrigin({
+        col,
+        newestRecord: latestFormData,
+        ReactHookForm,
+        onFormItemBlur,
+        formData,
+        latestFormData,
+      })
+      return {...col, shownButDisabled, Register}
+    })
+  })
+
   return {
     ...restProps,
+    columns,
     alignMode,
     wrapperClass,
     ControlOptions,

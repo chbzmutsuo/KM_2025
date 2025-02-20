@@ -456,8 +456,8 @@ export class Days {
   }
 
   static getYearDatum(year: number) {
-    const firstDateOfYear = new Date(year, 0, 1)
-    const lastDateOfYear = new Date(year, 11, 31)
+    const firstDateOfYear = toUtc(year, 0, 1)
+    const lastDateOfYear = toUtc(year, 11, 31)
 
     const getSpecifiedMonthOnThisYear = month => {
       return {first: toUtc(year, month - 1, 1), last: addDays(toUtc(year, month, 1), -1)}

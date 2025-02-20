@@ -10,8 +10,8 @@ import {C_Stack} from '@components/styles/common-components/common-components'
 
 registerLocale('ja', ja)
 
-const MainDatePicker = React.forwardRef((props: anyObject, ref) => {
-  const {ControlStyle, col, formProps, setIsOpen, field, useResetValue, selectedDate, setSelectedDate, handleDateChange} = props
+const MainDatePicker = (props: anyObject) => {
+  const {col, formProps, setIsOpen, field, useResetValue, selectedDate, handleDateChange} = props
 
   let varingProps: anyObject = {
     placeholderText: '日付を入力',
@@ -125,6 +125,6 @@ const MainDatePicker = React.forwardRef((props: anyObject, ref) => {
       )}
     </C_Stack>
   )
-})
+}
 
 export default MainDatePicker

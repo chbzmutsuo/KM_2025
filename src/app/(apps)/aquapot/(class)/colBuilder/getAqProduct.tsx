@@ -1,21 +1,16 @@
 'use client'
 
-import {aqCustomerRecordCol} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomerRecordCol'
 import {ColBuilder} from '@app/(apps)/aquapot/(class)/colBuilder/ColBuilder'
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 
-import {AQCUSTOMER_STATUS_LIST, CUSTOMER_MODEL_CONST, TAX_TYPE} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
-import {DH} from '@class/DH'
 
-import {defaultMultipleSelectFormat} from '@class/Fields/lib/defaultFormat'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
-import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 import {Paper} from '@components/styles/common-components/paper'
-import {KeyValue} from '@components/styles/common-components/ParameterCard'
 
 import GlobalModal from '@components/utils/modal/GlobalModal'
 import MyPopover from '@components/utils/popover/MyPopover'
@@ -31,8 +26,24 @@ export const getAqProduct = (props: columnGetterType) => {
         id: 'taxRate',
         label: '消費税（％）',
         type: `float`,
-        forSelect: {optionsOrOptionFetcher: TAX_TYPE},
+        forSelect: {optionsOrOptionFetcher: AQ_CONST.TAX_TYPE},
         form: {defaultValue: 10},
+      },
+      {
+        id: 'aqDefaultShiireAqCustomerId',
+        label: '仕入れ先',
+        type: `float`,
+        forSelect: {config: {modelName: `aqCustomer`}},
+        form: {},
+        format: (value, aqProduct) => {
+          return aqProduct.AqDefaultShiireAqCustomer?.name
+        },
+      },
+      {
+        id: `inInventoryManagement`,
+        label: '在庫管理',
+        type: `boolean`,
+        form: {},
       },
     ]).buildFormGroup({groupName: `基本情報`}).plain,
 
@@ -92,6 +103,7 @@ export const getAqProduct = (props: columnGetterType) => {
         )
       },
     },
+
     {
       id: `AqInventory`,
       label: `在庫`,

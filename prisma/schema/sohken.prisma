@@ -138,6 +138,8 @@ model GenbaDaySoukenCar {
 
  Genba   Genba @relation(fields: [genbaId], references: [id], onDelete: Cascade)
  genbaId Int
+
+ @@unique([genbaDayId, sohkenCarId], name: "unique_genbaDayId_sohkenCarId")
 }
 
 model GenbaDayShift {
@@ -146,11 +148,13 @@ model GenbaDayShift {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- date         DateTime?
- from         String? // 08:00
- to           String? // 08:00
- important    Boolean?  @default(false)
- directReturn Boolean?  @default(false)
+ date      DateTime?
+ from      String? // 08:00
+ to        String? // 08:00
+ important Boolean?  @default(false)
+
+ directGo     Boolean? @default(false)
+ directReturn Boolean? @default(false)
 
  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId Int

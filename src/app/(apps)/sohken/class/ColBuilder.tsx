@@ -1,7 +1,7 @@
 'use client'
 
 import {userForSelect} from '@app/(apps)/sohken/class/sohken-constants'
-import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary'
+import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 
 import {Fields} from '@cm/class/Fields/Fields'
 
@@ -41,6 +41,9 @@ export class ColBuilder {
           label: 'いつから',
           type: `date`,
           form: {style: {minWidth: 120}, ...defaultRegister},
+          format: (value, row) => {
+            return formatDate(row[`from`], `short`)
+          },
         },
         {
           id: 'to',
@@ -52,19 +55,20 @@ export class ColBuilder {
             if (Days.isSameDate(row[`from`], row[`to`])) {
               return '〃'
             } else if (row[`to`]) {
-              return formatDate(row[`to`], `YYYY-MM-DD(ddd)`)
+              return formatDate(row[`to`], `short`)
             } else {
               return `未指定`
             }
           },
         },
-      ]).aggregateOnSingleTd().plain,
+      ]).plain,
       ...new Fields([
         {id: 'requiredNinku', label: '必要人工', type: `float`, form: {...defaultRegister}},
         {
           id: 'status',
           label: '状況',
           type: `float`,
+          form: {hidden: true},
           forSelect: {
             optionsOrOptionFetcher: [
               {value: '未完了', color: 'red'},
@@ -72,7 +76,7 @@ export class ColBuilder {
             ],
           },
         },
-      ]).aggregateOnSingleTd().plain,
+      ]).plain,
 
       {
         id: `updateBtn`,

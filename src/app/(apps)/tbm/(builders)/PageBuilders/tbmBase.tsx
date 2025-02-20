@@ -7,9 +7,9 @@ import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import {ClientPropsType2} from '@components/DataLogic/TFs/PropAdjustor/PropAdjustor'
 import TableForm from '@components/DataLogic/TFs/PropAdjustor/TableForm'
 import {TextBlue} from '@components/styles/common-components/Alert'
-import { R_Stack} from '@components/styles/common-components/common-components'
+import {R_Stack} from '@components/styles/common-components/common-components'
 import {Paper} from '@components/styles/common-components/paper'
-import {ChevronDoubleRightIcon} from '@heroicons/react/20/solid'
+import useGlobal from '@hooks/globalHooks/useGlobal'
 import {Prisma} from '@prisma/client'
 
 const Title = ({children}) => {
@@ -21,7 +21,6 @@ const Title = ({children}) => {
 }
 export const tbmBase = {
   table: (props: DetailPagePropType) => {
-    const {selectedBase, setselectedBase} = useSelectedBase()
     return (
       <Paper className={`p-4 `}>
         <Title>
@@ -31,7 +30,8 @@ export const tbmBase = {
       </Paper>
     )
   },
-  right: (props: DetailPagePropType) => {
+  right: () => {
+    const useGlobalProps = useGlobal()
     const {selectedBase, setselectedBase, selectedRouteGroup, setselectedRouteGroup} = useSelectedBase()
     const gapWidth = `[30px]`
 
@@ -41,7 +41,7 @@ export const tbmBase = {
           {selectedBase && (
             <section className={` ml-${gapWidth}`}>
               <R_Stack className={`gap-${gapWidth} items-start`}>
-                <ChevronDoubleRightIcon className={`mt-[100px] h-[30px]`} />
+                {/* <ChevronDoubleRightIcon className={`mt-[100px] h-[30px]`} /> */}
                 <Paper className={`p-4 `}>
                   <Title>
                     <TextBlue>{selectedBase.name}</TextBlue>のルート一覧
@@ -51,7 +51,7 @@ export const tbmBase = {
                       ParentData: selectedBase,
                       models: {parent: `tbmBase`, children: `tbmRouteGroup`},
                       columns: ColBuilder.tbmRouteGroup({
-                        ...props,
+                        useGlobalProps,
                         ColBuilderExtraProps: {
                           selectedBase,
                           setselectedBase,
@@ -60,7 +60,7 @@ export const tbmBase = {
                         },
                       }),
 
-                      useGlobalProps: props.useGlobalProps,
+                      useGlobalProps,
                     }}
                   />
                 </Paper>
@@ -71,7 +71,7 @@ export const tbmBase = {
           {selectedRouteGroup && (
             <div className={` ml-${gapWidth}`}>
               <R_Stack className={`gap-${gapWidth} items-start`}>
-                <ChevronDoubleRightIcon className={`h-[30px]`} />
+                {/* <ChevronDoubleRightIcon className={`h-[30px]`} /> */}
                 <Paper className={`p-4 `}>
                   <Title>
                     <TextBlue>{selectedRouteGroup.name}</TextBlue>
@@ -92,7 +92,7 @@ export const tbmBase = {
                           } as Prisma.TbmRouteFindManyArgs[`include`] as any,
                         },
                         columns: ColBuilder.tbmRoute({
-                          ...props,
+                          useGlobalProps,
                           ColBuilderExtraProps: {
                             selectedBase,
                             setselectedBase,
@@ -100,7 +100,7 @@ export const tbmBase = {
                             setselectedRouteGroup,
                           },
                         }),
-                        useGlobalProps: props.useGlobalProps,
+                        useGlobalProps,
                       }}
                     />
                   </div>
@@ -111,5 +111,6 @@ export const tbmBase = {
         </>
       )
     }
+    return <></>
   },
 }

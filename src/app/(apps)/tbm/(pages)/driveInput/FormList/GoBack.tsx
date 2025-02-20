@@ -3,7 +3,7 @@ import {goBackAdoptor} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmOperation
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import React from 'react'
-import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
+import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
 import {Button} from '@components/styles/common-components/Button'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 
@@ -16,13 +16,14 @@ export default function GoBack(props: FormProps) {
     .customAttributes(({col}) => ({...col, id: col.id.replace(`${type}_`, '')}))
     .transposeColumns()
 
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     formData: data ?? {},
     columns,
   })
   return (
     <div>
       <BasicForm
+        latestFormData={latestFormData}
         onSubmit={async data => {
           const tbmOperationGroupId = userInput[`base`]?.id
           const {tbmRouteGroupId, date, distanceKm} = data

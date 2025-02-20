@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
   const tokenData = await prisma.googleAccessToken.findUnique({
     where: {id: tokenId, email},
   })
-  const token = JSON.parse(tokenData.tokenJSON)
+
+  const token = JSON.parse(tokenData?.tokenJSON ?? `{}`)
 
   if (!token.access_token) {
     return NextResponse.json({error: 'Unauthorized'}, {status: 401})

@@ -83,7 +83,11 @@ const useEditableCell = (props: {record; col: colType; dataModelName; mutateReco
     }
   }
 
-  const {BasicForm: EditableForm, ReactHookForm} = useBasicFormProps({
+  const {
+    BasicForm: EditableForm,
+    ReactHookForm,
+    latestFormData,
+  } = useBasicFormProps({
     focusOnMount: false, //trueだとフォームが表示されるとフォーカスがあたり、無限更新が発生
     columns: columns, //col自体を変更するとあらゆるところで変更が反映されてしまう
     formData: record,
@@ -106,6 +110,7 @@ const useEditableCell = (props: {record; col: colType; dataModelName; mutateReco
     >
       <EditableForm
         alignMode="row"
+        latestFormData={latestFormData}
         ControlOptions={{
           controllClassName: CssString.table.editableCellFormControllClassName,
           showLabel: false,

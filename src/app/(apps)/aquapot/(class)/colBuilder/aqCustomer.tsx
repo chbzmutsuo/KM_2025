@@ -1,24 +1,11 @@
 'use client'
 
-import {aqCustomerRecordCol} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomerRecordCol'
-import {aqCustomerSubscription} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomerSubscription'
-import {getAqProduct} from '@app/(apps)/aquapot/(class)/colBuilder/getAqProduct'
-
-import {AQCUSTOMER_STATUS_LIST, CUSTOMER_MODEL_CONST, TAX_TYPE} from '@app/(apps)/aquapot/(constants)/options'
-import {defaultRegister} from '@class/builders/ColBuilderVariables'
-import {DH} from '@class/DH'
-
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultMultipleSelectFormat} from '@class/Fields/lib/defaultFormat'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
-import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 
-import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
-import {Paper} from '@components/styles/common-components/paper'
-
-import GlobalModal from '@components/utils/modal/GlobalModal'
-import MyPopover from '@components/utils/popover/MyPopover'
 
 export const aqCustomer = (props: columnGetterType) => {
   const alignTdWidth = () => ({
@@ -34,6 +21,7 @@ export const aqCustomer = (props: columnGetterType) => {
   return new Fields([
     ...new Fields([
       ...new Fields([
+        {id: 'id', label: `ID`},
         {id: 'customerNumber', label: '顧客番号', type: 'string', form: {}, search: {}},
         {id: 'name', label: '氏名', type: 'string', form: {}, search: {}},
       ])
@@ -65,7 +53,7 @@ export const aqCustomer = (props: columnGetterType) => {
           id: 'defaultPaymentMethod',
           label: '支払方法',
           forSelect: {
-            optionsOrOptionFetcher: CUSTOMER_MODEL_CONST.PAYMENT_METHOD_LIST,
+            optionsOrOptionFetcher: AQ_CONST.PAYMENT_METHOD_LIST,
           },
         },
         {id: `firstVisitDate`, label: `サービス利用開始日`, type: `date`, form: {}},
@@ -96,7 +84,7 @@ export const aqCustomer = (props: columnGetterType) => {
           label: `ステータス`,
           form: {defaultValue: `継続`},
           forSelect: {
-            optionsOrOptionFetcher: AQCUSTOMER_STATUS_LIST,
+            optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_STATUS_LIST,
           },
         },
       ])

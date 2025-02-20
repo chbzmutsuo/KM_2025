@@ -81,7 +81,7 @@ export default function SalesNewCC() {
       <PaperLarge>
         <>
           <C_Stack className={`items-center gap-4`}>
-            <CustomerSelector />
+            <CustomerSelector {...{latestFormData}} />
 
             {customer && (
               <AddFormAndButton {...{formOpen, setformOpen, toggleForm, upsertToCart, aqProducts, aqCustomerPriceOption}} />

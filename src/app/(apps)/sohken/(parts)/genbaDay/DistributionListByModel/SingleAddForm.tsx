@@ -56,7 +56,7 @@ export default function SingleAddForm({RelationalModel, GenbaDay, selectedData, 
 
   return (
     <div>
-      <BasicForm onSubmit={handleSubmit}>
+      <BasicForm onSubmit={handleSubmit} latestFormData={latestFormData}>
         <R_Stack>
           {selectedData && <Button {...{type: `button`, color: `red`, onClick: handleDelete}}>削除</Button>}
 

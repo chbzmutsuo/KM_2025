@@ -6,18 +6,9 @@ import {useState} from 'react'
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '@app/components/ui/accordion'
 
 type ItemType = {
-  trigger: {
-    className?: string
-    style?: React.CSSProperties
-    node: React.ReactNode
-  }
-  children: {
-    className?: string
-    style?: React.CSSProperties
-    node: React.ReactNode
-  }
+  trigger: React.ReactNode
+  children: React.ReactNode
 }
-
 export default function ShadAccordion(props: {
   stateController?: [
     //
@@ -31,20 +22,20 @@ export default function ShadAccordion(props: {
 
   const [openAccodionIndex, setOpenAccodionIndex] = props.stateController ?? useState(defaultOpenIndex)
 
+  const accordionTriggerClass = `rounded bg-primary-main px-2 py-1.5 text-white`
+
   return (
     <Accordion type="single" collapsible={false} value={String(openAccodionIndex)} onValueChange={setOpenAccodionIndex}>
       {items.map((item, idx) => {
         const {trigger, children} = item
         const value = String(idx)
 
-        const accordionTriggerClass = trigger?.className ?? `rounded bg-primary-main px-2 py-1.5 text-white`
-
         return (
           <Fragment key={idx}>
             <AccordionItem value={value} className={`border-none`}>
-              <AccordionTrigger className={accordionTriggerClass}>{item.trigger.node}</AccordionTrigger>
+              <AccordionTrigger className={accordionTriggerClass}>{item.trigger}</AccordionTrigger>
 
-              <AccordionContent>{children.node}</AccordionContent>
+              <AccordionContent>{children}</AccordionContent>
             </AccordionItem>
           </Fragment>
         )

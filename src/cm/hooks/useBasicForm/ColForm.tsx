@@ -2,7 +2,6 @@
 
 import {BasicFormType} from '@hooks/useBasicForm/BaiscForm'
 import {getStyleProps} from '@hooks/useBasicForm/hookformMethods'
-import {cl} from '@lib/methods/common'
 import React, {Fragment} from 'react'
 
 import {Controller} from 'react-hook-form'
@@ -23,7 +22,7 @@ export const ColForm = React.memo((props: ColFormPropType) => {
     setextraFormState,
     Cached_Option_Props,
     useGlobalProps,
-    useRegister,
+    // useRegister,
     useResetValue,
     latestFormData,
     formId,
@@ -34,7 +33,8 @@ export const ColForm = React.memo((props: ColFormPropType) => {
   } = props
 
   const messages = ReactHookForm?.formState?.errors
-  const {Register, shownButDisabled} = useRegister({col, newestRecord: latestFormData})
+  const {Register, shownButDisabled} = col
+
   if (!col?.id && col?.label) {
     return <Fragment>{col?.label}</Fragment>
   } else {
@@ -47,15 +47,7 @@ export const ColForm = React.memo((props: ColFormPropType) => {
 
           const message = messages?.[col.id]?.message?.toString()
           return (
-            <div
-              className={
-                cl()
-                //
-                // `border-b `,
-                // message ? 'rounded bg-red-100 p-0.5 ' : ''
-              }
-              style={{...ControlStyle, padding: '0px 2px', width: `fit-content`}}
-            >
+            <div style={{...ControlStyle, padding: '0px 2px', width: `fit-content`}}>
               <Control
                 {...{
                   errorMessage: message ?? '',

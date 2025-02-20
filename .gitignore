@@ -23,6 +23,7 @@
 *.tsbuildinfo
 next-env.d.ts
 latest.dump
+*.dump
 
 
 

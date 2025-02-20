@@ -40,7 +40,7 @@ const LoginForm = ({stores, currentStore, setcurrentStore}) => {
 
   return (
     <Absolute>
-      <BasicForm onSubmit={onSubmit}>
+      <BasicForm onSubmit={onSubmit} latestFormData={latestFormData}>
         <Button>ログイン</Button>
       </BasicForm>
     </Absolute>

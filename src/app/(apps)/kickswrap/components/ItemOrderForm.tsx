@@ -55,14 +55,7 @@ const ItemOrderForm = ({items, registerdItems, filteredItems, setregisterdItems,
             <option>{cat}</option>
           ))}
         </select>
-        <BasicForm
-          ControlOptions={{
-            ControlStyle: {
-              width: 280,
-            },
-          }}
-          alignMode="row"
-        ></BasicForm>
+        <BasicForm latestFormData={latestFormData} ControlOptions={{ControlStyle: {width: 280}}} alignMode="row"></BasicForm>
         <div className={` mx-auto text-center`}>
           <Button active={latestFormData.item && latestFormData.quantity} type="button" color={`blue`} onClick={() => onSubmit()}>
             追加

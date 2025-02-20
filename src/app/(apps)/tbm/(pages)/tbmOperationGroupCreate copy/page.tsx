@@ -1,5 +1,5 @@
 import {QueryBuilder} from '@app/(apps)/tbm/(builders)/QueryBuilder'
-import Updator from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/Updator'
+import Updator from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/Updator'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 

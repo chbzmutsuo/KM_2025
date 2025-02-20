@@ -9,7 +9,7 @@ export default function useAqCustomerFilter() {
   const {query, addQuery, PC} = useGlobal()
   const columns = new Fields(AqCustomerCl.Filter.aqCustomer.getCols())
   const prismaWhere = AqCustomerCl.Filter.aqCustomer.getPrismaWhereByQuery({query})
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     formData: query,
     columns: new Fields(AqCustomerCl.Filter.aqCustomer.getCols())
       .customAttributes(({col}) => ({
@@ -20,7 +20,13 @@ export default function useAqCustomerFilter() {
   })
 
   const Filter = (
-    <BasicForm {...{onSubmit: data => addQuery(data), alignMode: `row`}}>
+    <BasicForm
+      {...{
+        latestFormData,
+        onSubmit: data => addQuery(data),
+        alignMode: `row`,
+      }}
+    >
       <Button>絞り込み</Button>
     </BasicForm>
   )

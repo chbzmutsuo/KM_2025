@@ -10,7 +10,16 @@ export const getTbm_PAGES = (props: PageGetterType) => {
 
   const publicPaths = []
   const loginPath = [
-    {tabId: 'tbmOperationGroupCreate', label: '運行入力'},
+    {tabId: 'DriveSchedule', label: '運行計画'},
+    {
+      tabId: '',
+      label: 'マイページ',
+      children: [
+        //
+        {tabId: 'driveInput', label: '運行入力'},
+        {tabId: 'driveInput', label: '実績確認'},
+      ],
+    },
     {tabId: 'tbmOperationGroup', label: '運行履歴'},
     {tabId: 'tbmBase', label: '営業所・コース管理'},
 
@@ -18,6 +27,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       tabId: '',
       label: 'マスタ',
       children: [
+        {tabId: 'calendar', label: 'カレンダー'},
         {tabId: 'user', label: 'ドライバー'},
         {tabId: 'tbmVehicle', label: '車両'},
         {tabId: 'tbmBillingAddress', label: '請求先支社'},

@@ -10,7 +10,6 @@ export function makeFormsByColumnObj(columns: any) {
   })
 
   validColumnsForEditForm.forEach((col: colType) => {
-    const {id, form, label: label} = col
     const colIndex = col?.form?.colIndex ?? 0
 
     DH.makeObjectOriginIfUndefined(formsByColumnObj, colIndex, [])

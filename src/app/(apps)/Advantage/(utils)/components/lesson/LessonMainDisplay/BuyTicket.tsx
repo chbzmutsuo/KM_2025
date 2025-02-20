@@ -33,6 +33,7 @@ const BuyTicket = ({LessonLog, settickets}) => {
         {isCoach ? (
           // coachは個別に増やせる
           <BasicForm
+            latestFormData={latestFormData}
             onSubmit={async e => {
               const {payedAt, usedAt} = latestFormData
               const {result} = await fetchUniversalAPI(`ticket`, `create`, {

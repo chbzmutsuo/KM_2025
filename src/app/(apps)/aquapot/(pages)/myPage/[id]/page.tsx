@@ -1,4 +1,3 @@
-import {getAqLoginType} from '@app/(apps)/aquapot/(lib)/customerLoginLib'
 import MyPageCC from '@app/(apps)/aquapot/(pages)/myPage/[id]/MyPageCC'
 import {getCustomerDataWithSales} from '@app/(apps)/aquapot/(pages)/myPage/getCustomerDataWithSales'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
@@ -10,6 +9,7 @@ import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
 
 import React from 'react'
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
+import {getAqLoginType} from 'src/non-common/scope-lib/getScopes'
 
 export default async function page(props: {searchParams: any; params: any}) {
   const query = await props.searchParams

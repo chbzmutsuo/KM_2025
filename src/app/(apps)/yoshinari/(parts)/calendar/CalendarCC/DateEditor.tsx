@@ -20,7 +20,7 @@ export const DateEditor = ({dateEditModalOpen, handleClose, workType}) => {
     },
     {id: `remarks`, label: `備考`, form: {}},
   ]).transposeColumns()
-  const {BasicForm} = useBasicFormProps({columns, formData: calendarRecord})
+  const {BasicForm, latestFormData} = useBasicFormProps({columns, formData: calendarRecord})
   const handleOnSubmit = async data => {
     toggleLoad(async () => {
       await fetchUniversalAPI(`ysCalendarHoliday`, `upsert`, {
@@ -40,7 +40,7 @@ export const DateEditor = ({dateEditModalOpen, handleClose, workType}) => {
   return (
     <div>
       <strong>{formatDate(date)}</strong>
-      <BasicForm onSubmit={handleOnSubmit}>
+      <BasicForm onSubmit={handleOnSubmit} latestFormData={latestFormData}>
         <Button>更新</Button>
       </BasicForm>
     </div>

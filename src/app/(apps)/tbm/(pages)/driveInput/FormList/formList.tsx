@@ -1,9 +1,9 @@
-import Base from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/Base'
-import {InputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/Updator'
-import GoBack from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/GoBack'
+import Base from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/Base'
+import {InputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/Updator'
+import GoBack from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/GoBack'
 import {TbmOperation, TbmOperationGroup} from '@prisma/client'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import Fuel from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/Fuel'
+import Fuel from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/Fuel'
 
 export type UserInputType = {
   base: null | TbmOperationGroup

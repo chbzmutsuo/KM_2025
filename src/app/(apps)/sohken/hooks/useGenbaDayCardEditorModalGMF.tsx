@@ -24,7 +24,7 @@ export const useGenbaDayCardEditorModalGMF = () => {
         where: {genbaId: genbaId ?? 0},
       })
 
-      const {BasicForm} = useBasicFormProps({
+      const {BasicForm, latestFormData} = useBasicFormProps({
         formData: {
           genbaTaskId: Number(taskMidTable?.genbaTaskId),
           requiredNinku: Number(taskMidTable?.GenbaTask?.requiredNinku),
@@ -74,7 +74,7 @@ export const useGenbaDayCardEditorModalGMF = () => {
       }
       return (
         <div>
-          <BasicForm {...{onSubmit}}>
+          <BasicForm {...{onSubmit, latestFormData}}>
             <R_Stack className={` justify-between gap-4 `}>
               <Button
                 color={`red`}

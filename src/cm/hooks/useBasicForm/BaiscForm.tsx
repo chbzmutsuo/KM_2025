@@ -38,13 +38,13 @@ export type BasicFormType = {
   ReactHookForm: UseFormReturn
   formId: string
   formRef: any
-  useRegister: useRegisterType
+  // useRegister: useRegisterType
   useResetValue: useResetValueType
   onFormItemBlur?: onFormItemBlurType
 } & AdditionalBasicFormPropType
 
 const BasicForm = (props: BasicFormType) => {
-  const {formRef, columns, useGlobalProps, formId, alignMode, style, wrapperClass, ControlOptions} = adjustBasicFormProps(props)
+  const {formRef, useGlobalProps, formId, alignMode, style, wrapperClass, ControlOptions, columns} = adjustBasicFormProps(props)
 
   const ReactHookForm: UseFormReturn = props.ReactHookForm
   const handleFormSubmit = props.onSubmit ? ReactHookForm.handleSubmit(props.onSubmit) : undefined
@@ -55,8 +55,8 @@ const BasicForm = (props: BasicFormType) => {
       return await handleFormSubmit(e)
     }
   }
-  const {justifyDirection} = useJustifyDirection({columns, useGlobalProps})
   const {transposedRowsForForm} = makeFormsByColumnObj(columns)
+  const {justifyDirection} = useJustifyDirection({transposedRowsForForm, useGlobalProps})
 
   const ChildComponent = () => {
     if (props.children) {
@@ -97,9 +97,9 @@ const BasicForm = (props: BasicFormType) => {
 
 export default BasicForm
 
-const useJustifyDirection = ({columns, useGlobalProps}) => {
+const useJustifyDirection = ({transposedRowsForForm, useGlobalProps}) => {
   const {width, SP} = useGlobalProps
-  const {transposedRowsForForm} = makeFormsByColumnObj(columns)
+
   const [justifyDirection, setjustifyDirection] = useState(`justify-center`)
   const elems = document?.querySelectorAll(`.formSec`)
   useEffect(() => {

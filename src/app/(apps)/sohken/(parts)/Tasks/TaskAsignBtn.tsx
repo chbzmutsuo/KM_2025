@@ -4,13 +4,13 @@ import React, {useEffect, useState} from 'react'
 
 import {Button} from '@components/styles/common-components/Button'
 import useModal from '@components/utils/modal/useModal'
-import { formatDate, toUtc} from '@class/Days'
+import {formatDate, toUtc} from '@class/Days'
 
 import BasicModal from '@components/utils/modal/BasicModal'
 import {TableBorderedY, TableWrapper} from '@components/styles/common-components/Table'
 import {bodyRecordsType, CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
-import { handleCopyTask, taskObj} from '@app/(apps)/sohken/(parts)/Tasks/HandleBulkUpsertTask'
+import {handleCopyTask, taskObj} from '@app/(apps)/sohken/(parts)/Tasks/HandleBulkUpsertTask'
 
 export const TaskAsignBtn = ({Genba, allTasks, router}) => {
   const {Modal, handleClose, handleOpen, open} = useModal()
@@ -59,7 +59,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
           handleClose,
           btnComponent: (
             <div className={` text-center text-xs`}>
-              <Button onClick={handleOpen}>タスクマスタから一括登録</Button>
+              <Button onClick={handleOpen}>マスタから登録</Button>
             </div>
           ),
         }}

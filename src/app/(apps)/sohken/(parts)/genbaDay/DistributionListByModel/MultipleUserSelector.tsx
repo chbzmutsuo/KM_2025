@@ -21,6 +21,8 @@ type selectedUserObjectType = {
     to: string | undefined
     shiftOnOtherDate: GenbaDayShift[]
     important: boolean
+    directGo: boolean
+    directReturn: boolean
   }
 }
 
@@ -66,10 +68,15 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
             from: string
             to: string
             important: boolean
+            directGo: boolean
+            directReturn: boolean
           }
           const usersToUpsert = Object.entries(selectedUserObject)
             .map(entry => {
-              const [id, {active, from, to, shiftOnOtherDate, important}] = entry as [string, selectedUserObjectType[string]]
+              const [id, {active, from, to, shiftOnOtherDate, important, directGo, directReturn}] = entry as [
+                string,
+                selectedUserObjectType[string]
+              ]
 
               if (active) {
                 return {
@@ -78,6 +85,8 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                   to,
                   shiftOnOtherDate,
                   important,
+                  directGo,
+                  directReturn,
                 }
               }
             })
@@ -108,6 +117,8 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
               from: user.from,
               to: user.to,
               important: user.important,
+              directGo: user.directGo,
+              directReturn: user.directReturn,
             }
 
             const args: Prisma.GenbaDayShiftUpsertArgs = {
@@ -149,12 +160,15 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                       {cellValue: `ユーザー`},
                       {cellValue: `いつから`},
                       {cellValue: `いつまで`},
+                      {cellValue: `直行`},
+                      {cellValue: `直帰`},
                       {cellValue: `強調`},
                     ],
                   },
                 ],
                 bodyRecords: optionList.map(user => {
                   const active = selectedUserObject?.[user.id]
+
                   const {shiftsOnOtherGembaOnSameDate} = user
 
                   const UserNameDisplay = () => {
@@ -162,7 +176,7 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                       <R_Stack className={`items-start leading-3`}>
                         <div>{user.name}</div>
                         <div className={`text-error-main`}>{shiftsOnOtherGembaOnSameDate.length > 0 ? '★' : ''}</div>
-                        {/* <div className={`text-error-main text-[8px]`}>
+                        {/* <div className={`text-error-main text-[.5rem]`}>
                             {shiftsOnOtherGembaOnSameDate.map(shift => formatDate(shift.GenbaDay.date, 'M/D(ddd)')).join(`,`)}
                           </div> */}
                       </R_Stack>
@@ -209,25 +223,44 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                       },
                       {
                         cellValue: (
-                          <input
-                            disabled={!active.active}
-                            className={`h-6 w-6`}
-                            type={`checkbox`}
-                            checked={!!active?.important}
-                            onChange={() => {
-                              setselectedUserObject(prev => {
-                                return {
-                                  ...prev,
-                                  [user.id]: {
-                                    ...prev[user.id],
-                                    important: !prev[user.id]?.important,
-                                  },
-                                }
-                              })
+                          <BooleanInput
+                            {...{
+                              disabled: !active?.active,
+                              user,
+                              checked: !!active?.directGo,
+                              dataKey: `directGo`,
+                              setselectedUserObject,
                             }}
                           />
                         ),
-                        style: {width: 70, padding: 5},
+                      },
+                      {
+                        cellValue: (
+                          <BooleanInput
+                            {...{
+                              disabled: !active?.active,
+                              user,
+                              checked: !!active?.directReturn,
+                              dataKey: `directReturn`,
+                              setselectedUserObject,
+                            }}
+                          />
+                        ),
+                      },
+                      {
+                        cellValue: (
+                          <div>
+                            <BooleanInput
+                              {...{
+                                disabled: !active?.active,
+                                user,
+                                checked: !!active?.important,
+                                dataKey: `important`,
+                                setselectedUserObject,
+                              }}
+                            />
+                          </div>
+                        ),
                       },
                     ],
                   }
@@ -246,6 +279,33 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
   }
 
   return <Main />
+}
+
+const BooleanInput = ({disabled, user, checked, dataKey, setselectedUserObject}) => {
+  return (
+    <input
+      {...{
+        disabled,
+        className: `h-6 w-6`,
+        type: `checkbox`,
+        checked,
+        onChange: () => {
+          setselectedUserObject(prev => {
+            const prevValue = prev[user.id]?.[dataKey]
+            const newValue = {
+              ...prev,
+              [user.id]: {
+                ...prev[user.id],
+                [dataKey]: !prevValue,
+              },
+            }
+
+            return newValue
+          })
+        },
+      }}
+    />
+  )
 }
 
 const Input = ({user, type, dataKey = `from`, setselectedUserObject}) => {
@@ -324,6 +384,8 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
       from,
       to,
       important,
+      directGo: !!shiftOnDate?.directGo,
+      directReturn: !!shiftOnDate?.directReturn,
     }
   })
   // .sort((a, b) => {
@@ -340,6 +402,8 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
           active: user.active,
           from: user.from,
           to: user.to,
+          directGo: user.directGo,
+          directReturn: user.directReturn,
           important: user.important,
         },
       ]

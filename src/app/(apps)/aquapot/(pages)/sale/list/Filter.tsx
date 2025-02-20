@@ -1,5 +1,6 @@
 'use client'
-import {PAYMENT_METHOD_LIST} from '@app/(apps)/aquapot/(constants)/options'
+
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {formatDate} from '@class/Days'
 import {Fields} from '@class/Fields/Fields'
@@ -19,12 +20,12 @@ export default function Filter() {
       to: formatDate(data.to),
     })
   }
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     formData: {...query},
     columns: new Fields([
       {id: `from`, label: `いつから`, type: `date`, form: {...defaultRegister, showResetBtn: false}},
       {id: `to`, label: `いつまで`, type: `date`, form: {...defaultRegister, showResetBtn: false}},
-      {id: `paymentMethod`, label: `支払方法`, forSelect: {optionsOrOptionFetcher: PAYMENT_METHOD_LIST}},
+      {id: `paymentMethod`, label: `支払方法`, forSelect: {optionsOrOptionFetcher: AQ_CONST.PAYMENT_METHOD_LIST}},
       {id: `AqSupportGroupMaster`, label: `支援団体`, forSelect: {}},
       {id: `name`, label: `氏名`},
       {id: `companyName`, label: `会社名`},
@@ -42,7 +43,7 @@ export default function Filter() {
 
   return (
     <R_Stack {...{className: ` justify-center`}}>
-      <BasicForm {...{onSubmit, alignMode: `row`}}>
+      <BasicForm {...{latestFormData, onSubmit, alignMode: `row`}}>
         <Button color={`red`}>条件変更</Button>
       </BasicForm>
     </R_Stack>

@@ -1,4 +1,3 @@
-
 import React from 'react'
 import MyInput from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/Control/MyInput/MyInput'
 
@@ -39,7 +38,6 @@ const VariousInput = ({controlContextValue}) => {
     latestFormData,
     extraFormState,
     setextraFormState,
-
     currentValue,
     field,
     formProps,
@@ -69,14 +67,7 @@ const VariousInput = ({controlContextValue}) => {
     return <MyMdEditor {...props} />
   }
   if (type === 'textarea') {
-    return (
-      <MyTextarea
-        {...{
-          ...props,
-          // style: {...style, height, maxHeight, width},
-        }}
-      />
-    )
+    return <MyTextarea {...props} />
   }
 
   if (type === 'boolean' || type === 'confirm') {
@@ -85,6 +76,7 @@ const VariousInput = ({controlContextValue}) => {
 
   if (type === 'date' || type === 'month' || type === 'datetime' || type === 'year') {
     return <MyDatepicker {...props} />
+    return <></>
   }
 
   if (col.multipleSelect) {

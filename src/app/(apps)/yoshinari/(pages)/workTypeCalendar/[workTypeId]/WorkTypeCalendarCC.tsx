@@ -99,7 +99,7 @@ const Selector = ({workType}) => {
     year: query.from ? toUtc(query.from) : toUtc(new Date()),
     workTypeId: Number(params && params.workTypeId),
   }
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     onFormItemBlur: props => {
       const {year, workTypeId} = props.newlatestFormData
 
@@ -133,7 +133,12 @@ const Selector = ({workType}) => {
 
   return (
     <>
-      <BasicForm {...{alignMode: `col`}} />
+      <BasicForm
+        {...{
+          latestFormData,
+          alignMode: `col`,
+        }}
+      />
     </>
   )
 }

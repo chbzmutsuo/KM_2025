@@ -35,6 +35,7 @@ const NewDateSwitcher = (props: {
   return (
     <FitMargin>
       <BasicForm
+        latestFormData={latestFormData}
         alignMode="row"
         ControlOptions={
           width > 600

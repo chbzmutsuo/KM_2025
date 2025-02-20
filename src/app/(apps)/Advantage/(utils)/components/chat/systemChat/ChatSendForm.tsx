@@ -51,6 +51,7 @@ const ChatSendForm = ({toggleLoad, textareaStyle, chatRoom, session, messages, s
     <>
       <BasicForm
         {...{
+          latestFormData,
           wrapperClass: 'row-stack justify-around  gap-0 items-center  items-stretch ',
           ControlOptions: {
             showLabel: false,

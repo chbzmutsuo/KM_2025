@@ -99,6 +99,7 @@ const TeacherDispChartWrapper = React.memo((props: {GameCtxValue: GameContextTyp
       <section className={`p-2`}>
         <R_Stack>
           <BasicForm
+            latestFormData={latestFormData}
             alignMode="row"
             ControlOptions={{
               ControlStyle: {width: 150},

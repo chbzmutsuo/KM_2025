@@ -1,6 +1,6 @@
 'use client'
 
-import {getFormList, UserInputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
+import {getFormList, UserInputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
 import {TextBlue, TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
 import {colorVariants} from '@components/styles/common-components/colorVariants'

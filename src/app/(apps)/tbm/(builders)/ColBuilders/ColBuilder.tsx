@@ -8,6 +8,7 @@ import {TbmRouteColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRout
 import {TbmBillingAddressColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmBillingAddressColBuilder'
 import {TbmOperationGroupColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmOperationGroupColBuilder'
 import {TbmRefuelHistoryColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRefuelHistoryColBuilder'
+import {TbmDriveScheduleBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmDriveScheduleBuilder'
 
 export class ColBuilder {
   static user = UserColBuilder
@@ -18,4 +19,5 @@ export class ColBuilder {
   static tbmBillingAddress = TbmBillingAddressColBuilder
   static tbmOperationGroup = TbmOperationGroupColBuilder
   static tbmRefuelHistory = TbmRefuelHistoryColBuilder
+  static tbmDriveSchedule = TbmDriveScheduleBuilder
 }

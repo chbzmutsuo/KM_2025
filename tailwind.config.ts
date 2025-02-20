@@ -138,7 +138,7 @@ export const tail_color = {
   },
 
   green: {
-    main: '#306537',
+    main: '#26a237',
     light: '#ecfcde',
   },
   sub: {
@@ -161,7 +161,7 @@ export const tail_color = {
     light: '#fbc9b3',
   },
   yellow: {
-    main: '#fbd46f',
+    main: '#cb9f32',
     light: '#fbe7b3',
   },
   warning: {

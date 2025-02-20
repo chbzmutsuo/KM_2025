@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
   prisma = global.prisma
 }
 
-export default prisma
+export default prisma as PrismaClient
 
 export const createMessage = ({model, method}) => {
   //最初の文字を小文字に

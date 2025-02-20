@@ -1,6 +1,6 @@
 'use client'
 
-import {FieldValues, RegisterOptions, useForm, UseFormReturn} from 'react-hook-form'
+import {FieldValues, useForm, UseFormReturn} from 'react-hook-form'
 import React, {useCallback, useEffect, useId, useMemo, useRef, useState} from 'react'
 
 import {anyObject, colType, extraFormStateType, onFormItemBlurType} from '@cm/types/types'
@@ -11,7 +11,6 @@ import {getLatestFormData, initColumns, makeDefaultValues} from 'src/cm/hooks/us
 import useCacheSelectOptions, {useCacheSelectOptionReturnType} from 'src/cm/hooks/useCacheSelectOptions/useCacheSelectOptions'
 
 import {ControlOptionType} from '@cm/types/form-control-type'
-import {funcOrVar} from '@lib/methods/common'
 import {DH} from '@class/DH'
 
 export type useAdditionalBasicFormPropType = {
@@ -73,77 +72,10 @@ const useBasicFormProps = (props: useAdditionalBasicFormPropType) => {
     }
   }, [])
 
-  const useResetValue = useCallback(
-    ({col, field}) => {
-      if (confirm(`値をクリアしますか？`) === false) return
+  const useResetValue = useCallback(({col, field}) => useResetValueOrigin({col, field, ReactHookForm}), [ReactHookForm])
 
-      const convertedType = DH.switchColType({type: col.type})
-
-      let nullvalue
-      switch (convertedType) {
-        case 'text':
-        case 'color':
-        case 'time': {
-          nullvalue = ''
-          break
-        }
-
-        default: {
-          nullvalue = null
-          break
-        }
-      }
-      ReactHookForm.setValue(col.id, nullvalue)
-
-      field.onBlur()
-    },
-    [ReactHookForm]
-  )
-  const useRegister = useCallback(
-    ({newestRecord, col}) => {
-      const disabeld = col?.form?.disabled
-
-      const shownButDisabled = typeof disabeld === `function` ? disabeld?.({record: newestRecord, col}) : disabeld
-
-      const currentValue = ReactHookForm.watch(col?.id)
-      const registerProps: RegisterOptions = funcOrVar(col?.form?.register, {latestFormData, col, ReactHookForm})
-
-      return {
-        currentValue: currentValue,
-        shownButDisabled,
-        Register: ReactHookForm.register(col?.id, {
-          ...registerProps,
-
-          onBlur: async e => {
-            const {target} = e
-            const {id, value, name} = target
-
-            if (onFormItemBlur) {
-              const validate = col?.form?.register?.validate
-              if (validate) {
-                const message = await validate?.(value, formData)
-                if (message) {
-                  ReactHookForm.setValue(col.id, null)
-
-                  return alert(message)
-                }
-              }
-
-              const newlatestFormData = {...latestFormData, [name]: value}
-              await onFormItemBlur({id, value, name, e, newlatestFormData, ReactHookForm})
-            }
-          },
-
-          setValueAs: value => {
-            const result = DH.convertDataType(value ?? null, col?.type, `server`)
-            return result
-          },
-        }),
-      }
-    },
-    [latestFormData, formData, values, onFormItemBlur, ReactHookForm, columns, Cached_Option_Props.valueHasChanged]
-  )
   const newestRecord = {...latestFormData, ...formData, ...values}
+
   /**Basic Form */
   const BasicFormCallback = useCallback(
     (AdditionalBasicFormProp: AdditionalBasicFormPropType) => {
@@ -151,7 +83,6 @@ const useBasicFormProps = (props: useAdditionalBasicFormPropType) => {
         <BasicForm
           {...{
             useResetValue,
-            useRegister,
             values,
             formData,
             setformData,
@@ -160,7 +91,6 @@ const useBasicFormProps = (props: useAdditionalBasicFormPropType) => {
             onFormItemBlur,
             columns,
             ReactHookForm,
-            latestFormData,
             extraFormState,
             setextraFormState,
             useGlobalProps,
@@ -172,7 +102,15 @@ const useBasicFormProps = (props: useAdditionalBasicFormPropType) => {
       )
     },
 
-    [Cached_Option_Props.valueHasChanged, useGlobalProps.query, columns.flat().length, formData, values]
+    [
+      //
+
+      Cached_Option_Props.valueHasChanged,
+      useGlobalProps.query,
+      columns.flat().length,
+      formData,
+      values,
+    ]
   )
 
   return {
@@ -195,4 +133,29 @@ export type AdditionalBasicFormPropType = {
   children?: any
   alignMode?: 'row' | 'col'
   style?: any
+  latestFormData: any
+}
+
+const useResetValueOrigin = ({col, field, ReactHookForm}) => {
+  if (confirm(`値をクリアしますか？`) === false) return
+
+  const convertedType = DH.switchColType({type: col.type})
+
+  let nullvalue
+  switch (convertedType) {
+    case 'text':
+    case 'color':
+    case 'time': {
+      nullvalue = ''
+      break
+    }
+
+    default: {
+      nullvalue = null
+      break
+    }
+  }
+  ReactHookForm.setValue(col.id, nullvalue)
+
+  field.onBlur()
 }

@@ -1,4 +1,4 @@
-import {AQCUSTOMER_STATUS_LIST, CUSTOMER_MODEL_CONST} from '@app/(apps)/aquapot/(constants)/options'
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {colType} from '@cm/types/types'
 import {Prisma} from '@prisma/client'
 
@@ -42,7 +42,7 @@ export class AqCustomerCl {
             label: `ステータス`,
             form: {},
             forSelect: {
-              optionsOrOptionFetcher: AQCUSTOMER_STATUS_LIST,
+              optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_STATUS_LIST,
             },
           },
           {
@@ -125,7 +125,7 @@ export class AqCustomerCl {
             label: `ステータス`,
             form: {},
             forSelect: {
-              optionsOrOptionFetcher: CUSTOMER_MODEL_CONST.AQCUSTOMER_RECORD_STATUS_LIST,
+              optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_STATUS_LIST,
             },
           },
           {
@@ -133,7 +133,7 @@ export class AqCustomerCl {
             label: `区分`,
             form: {},
             forSelect: {
-              optionsOrOptionFetcher: CUSTOMER_MODEL_CONST.AQCUSTOMER_RECORD_TYPE_LIST,
+              optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_TYPE_LIST,
             },
             search: {},
           },

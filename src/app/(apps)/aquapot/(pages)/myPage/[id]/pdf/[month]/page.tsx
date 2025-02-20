@@ -13,8 +13,7 @@ export default async function page(props: {searchParams: any; params: any}) {
 
   const {customer, salesByMonth} = await getCustomerDataWithSales({
     userId,
-    firstDayOfMonth,
-    lastDayOfMonth,
+    query,
   })
 
   const saleRecordOnThisMonth = salesByMonth[month]

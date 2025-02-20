@@ -68,6 +68,12 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
     return result
   }
 
+  const getTbmScopes = () => {
+    const userId = !admin ? session?.id : Number(query?.g_userId ?? session?.id ?? 0)
+    const tbmBaseId = !admin ? session?.tbmBaseId : Number(query?.g_tbmBaseId ?? session?.tbmBaseId ?? 0)
+    return {userId, tbmBaseId}
+  }
+
   const result = {
     id,
     session,
@@ -77,6 +83,7 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
     getGroupieScopes,
     getAdvantageProps,
 
+    getTbmScopes,
     getYoshinariScopes,
     getTsukurungerScopes,
   }
@@ -96,4 +103,11 @@ const addAdminToRoles: (targetObject: any, session: anyObject) => anyObject = (t
   })
 
   return targetObject
+}
+
+export const getAqLoginType = ({session}) => {
+  const {customerNumber, email} = session
+  const asCustomer = customerNumber && email
+  const asUser = session && !asCustomer
+  return {asCustomer, asUser}
 }

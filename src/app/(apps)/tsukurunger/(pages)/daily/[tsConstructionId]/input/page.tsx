@@ -13,8 +13,8 @@ import {Prisma, TsMachinery, TsMaterial, TsRegularSubcontractor, TsSubcontractor
 import React from 'react'
 
 export default async function Page(props) {
-  const query = await props.searchParams;
-  const params = await props.params;
+  const query = await props.searchParams
+  const params = await props.params
   const tsConstructionId = Number(params.tsConstructionId)
 
   const {redirectPath, whereQuery} = await dateSwitcherTemplate({
@@ -67,7 +67,7 @@ export default async function Page(props) {
   materialGroups.forEach(group => {
     const groupKey = `tsMaterial_${group.name}`
     const options = tsMaterial.filter(material => {
-      return group.keys.includes(material.materialType)
+      return group.keys.includes(material.materialType ?? ``)
     })
     nippoOptions[groupKey] = options
   })

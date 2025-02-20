@@ -3,13 +3,14 @@ import {NextResponse} from 'next/server'
 
 export const POST = async () => {
   try {
-    const gemba = await prisma.Genba.findMany({
+    const gemba = await prisma.genba.findMany({
       orderBy: [{state: `asc`}, {city: `asc`}],
     })
 
     const result = await Promise.all(
       gemba.map(async g => {
         const {state: pref, city} = g
+        if (!pref || !city) return
         const prefCity = await prisma.prefCity.upsert({
           where: {unique_pref_city: {pref, city}},
           update: {pref, city},

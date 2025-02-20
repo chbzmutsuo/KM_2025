@@ -1,5 +1,5 @@
 import {Fields} from '@cm/class/Fields/Fields'
-import { formatDate} from '@cm/class/Days'
+import {formatDate} from '@cm/class/Days'
 
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 
@@ -144,6 +144,7 @@ const ChatSender = ({tickets, settickets, messages, setmessages, additional, scr
     <>
       <BasicForm
         {...{
+          latestFormData,
           onSubmit: async data => {
             await sendChat()
           },

@@ -81,6 +81,7 @@ const RoomChartList = React.memo((props: any) => {
       {/* 選択 */}
       <section className={`p-2`}>
         <BasicForm
+          latestFormData={latestFormData}
           onSubmit={latestFormData => {
             const {dateFrom, dateTo} = latestFormData
             const hourDiff = differenceInHours(new Date(dateTo), new Date(dateFrom))

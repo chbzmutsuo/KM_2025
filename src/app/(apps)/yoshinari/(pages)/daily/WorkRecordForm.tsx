@@ -41,6 +41,7 @@ export const WorkRecordForm = ({selectedRow}) => {
   return (
     <>
       <BasicForm
+        latestFormData={latestFormData}
         onSubmit={async data => {
           const {date, from, to, userId, breakTime} = data
 

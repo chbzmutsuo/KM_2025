@@ -9,7 +9,7 @@ import {CenterScreen, C_Stack, Padding, R_Stack} from '@components/styles/common
 import {T_LINK} from '@components/styles/common-components/links'
 
 const WorkConfirmationPage = async props => {
-  const {uuid} = (await props.params)
+  const {uuid} = await props.params
   const Work = await prisma.kaizenWork.findUnique({
     where: {uuid: String(uuid)},
     include: {
@@ -17,7 +17,7 @@ const WorkConfirmationPage = async props => {
       KaizenClient: {},
     },
   })
-  if (Work.isPublic) {
+  if (Work?.isPublic) {
     return (
       <CenterScreen>
         <C_Stack>
@@ -80,7 +80,7 @@ const WorkConfirmationPage = async props => {
               <C_Stack className={`gap-4`}>
                 <h2>お客様紹介画面</h2>
                 <small>事業者様向けのシステム開発・業務改善のご支援実績として掲載させていただきます</small>
-                <Partner {...{p: Work.KaizenClient, index: 0}}></Partner>
+                <Partner {...{p: Work?.KaizenClient, index: 0}}></Partner>
               </C_Stack>
             </div>
           </C_Stack>

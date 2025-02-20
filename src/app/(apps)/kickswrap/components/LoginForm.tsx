@@ -34,7 +34,7 @@ const LoginForm = ({users}) => {
 
   return (
     <>
-      <BasicForm onSubmit={onSubmit}>
+      <BasicForm latestFormData={latestFormData} onSubmit={onSubmit}>
         <Button>ログイン</Button>
       </BasicForm>
     </>

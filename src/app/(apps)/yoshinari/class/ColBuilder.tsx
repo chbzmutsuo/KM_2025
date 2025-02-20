@@ -187,7 +187,7 @@ export class ColBuilder {
       {...{id: 'name', label: '名称'}, form: {...defaultRegister}},
       {...{id: 'email', label: 'Email'}, form: {...defaultRegister}},
       {...{id: 'password', label: 'パスワード', type: `password`}, form: {}},
-      {...{id: 'hiredAt', label: '入社日', type: `date`}, form: {}},
+      {...{id: 'hiredAt', label: '入社日', type: `date`}, form: {...defaultRegister}},
       admin
         ? {
             id: 'otherInfo',

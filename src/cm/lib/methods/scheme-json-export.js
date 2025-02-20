@@ -737,12 +737,13 @@ model AqProduct {
  AqProductCategoryMaster   AqProductCategoryMaster? @relation(fields: [aqProductCategoryMasterId], references: [id], onDelete: Cascade)
  aqProductCategoryMasterId Int?
 
- price   Float   @default(0)
- cost    Float   @default(0)
- sku     String?
- taxType String?
- taxRate Float   @default(10)
- stock   Int     @default(0)
+ price                 Float   @default(0)
+ cost                  Float   @default(0)
+ sku                   String?
+ taxType               String?
+ taxRate               Float   @default(10)
+ stock                 Int     @default(0)
+ inInventoryManagement Boolean @default(true)
 
  AqPriceOption AqPriceOption[]
  AqSaleRecord  AqSaleRecord[]
@@ -750,6 +751,11 @@ model AqProduct {
  AqCustomerPriceOption  AqCustomerPriceOption[]
  AqInventoryRegister    AqInventoryRegister[]
  AqCustomerSubscription AqCustomerSubscription[]
+
+ AqDefaultShiireAqCustomer   AqCustomer? @relation(fields: [aqDefaultShiireAqCustomerId], references: [id])
+ aqDefaultShiireAqCustomerId Int?
+
+ AqInventoryByMonth AqInventoryByMonth[]
 }
 
 // 商品価格
@@ -813,6 +819,8 @@ model AqCustomer {
  userId                         Int?
  AqInventoryRegister            AqInventoryRegister[]
  AqCustomerSubscription         AqCustomerSubscription[]
+
+ AqProduct AqProduct[]
 }
 
 model AqCustomerSubscription {
@@ -962,8 +970,8 @@ model AqCustomerServiceTypeMidTable {
  AqCustomer   AqCustomer @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
  aqCustomerId Int
 
- AqServiecTypeMaster   AqServiecTypeMaster @relation(fields: [aqServiecTypeMasterId], references: [id], onDelete: Cascade)
- aqServiecTypeMasterId Int
+ AqServiecTypeMaster   AqServiecTypeMaster? @relation(fields: [aqServiecTypeMasterId], references: [id], onDelete: Cascade)
+ aqServiecTypeMasterId Int?
 
  @@unique([aqCustomerId, aqServiecTypeMasterId], name: "unique_aqCustomerId_aqServiecTypeMasterId")
 }
@@ -1009,9 +1017,24 @@ model AqInventoryRegister {
  aqCustomerId Int
  date         DateTime
  quantity     Int
+ remarks      String?
 
  AqProduct  AqProduct  @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
  AqCustomer AqCustomer @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
+}
+
+model AqInventoryByMonth {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ key       String   @unique
+ yearMonth DateTime
+
+ AqProduct   AqProduct @relation(fields: [aqProductId], references: [id])
+ count       Int       @default(0)
+ aqProductId Int
 }
 
  
@@ -1627,6 +1650,9 @@ model User {
   TbmOperation                     TbmOperation[]
   TbmOperationGroup                TbmOperationGroup[]
   AqCustomer                       AqCustomer[]
+  TbmBase                          TbmBase?                           @relation(fields: [tbmBaseId], references: [id])
+  tbmBaseId                        Int?
+  TbmDriveSchedule                 TbmDriveSchedule[]
 }
 
 model ReleaseNotes {
@@ -1689,6 +1715,17 @@ model ChainMethodLock {
   isLocked  Boolean   @default(false)
   expiresAt DateTime?
   updatedAt DateTime  @updatedAt
+}
+
+model Calendar {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  date DateTime @unique
+
+  holidayType String @default("出勤")
 }
 
  
@@ -1832,6 +1869,8 @@ model GenbaDaySoukenCar {
 
  Genba   Genba @relation(fields: [genbaId], references: [id], onDelete: Cascade)
  genbaId Int
+
+ @@unique([genbaDayId, sohkenCarId], name: "unique_genbaDayId_sohkenCarId")
 }
 
 model GenbaDayShift {
@@ -1840,11 +1879,13 @@ model GenbaDayShift {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- date         DateTime?
- from         String? // 08:00
- to           String? // 08:00
- important    Boolean?  @default(false)
- directReturn Boolean?  @default(false)
+ date      DateTime?
+ from      String? // 08:00
+ to        String? // 08:00
+ important Boolean?  @default(false)
+
+ directGo     Boolean? @default(false)
+ directReturn Boolean? @default(false)
 
  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId Int
@@ -1875,7 +1916,10 @@ model TbmBase {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- name              String              @unique
+ name String @unique
+
+ User              User[]
+ TbmVehicle        TbmVehicle[]
  TbmRouteGroup     TbmRouteGroup[]
  TbmOperationGroup TbmOperationGroup[]
 }
@@ -1891,6 +1935,9 @@ model TbmVehicle {
 
  TbmOperationGroup TbmOperationGroup[]
  TbmRefuelHistory  TbmRefuelHistory[]
+ TbmBase           TbmBase?            @relation(fields: [tbmBaseId], references: [id])
+ tbmBaseId         Int?
+ TbmDriveSchedule  TbmDriveSchedule[]
 }
 
 model TbmRouteGroup {
@@ -1899,11 +1946,12 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- name         String
- TbmRoute     TbmRoute[]
- TbmBase      TbmBase        @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId    Int
- TbmOperation TbmOperation[]
+ name             String
+ TbmRoute         TbmRoute[]
+ TbmBase          TbmBase            @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId        Int
+ TbmOperation     TbmOperation[]
+ TbmDriveSchedule TbmDriveSchedule[]
 }
 
 model TbmBillingAddress {
@@ -2037,6 +2085,44 @@ model TbmRefuelHistory {
 
  tbmOperationGroupId Int?
  tbmVehicleId        Int
+}
+
+// model TbmUserDate {
+//  id        Int       @id @default(autoincrement())
+//  createdAt DateTime  @default(now())
+//  updatedAt DateTime? @default(now()) @updatedAt()
+//  sortOrder Float     @default(0)
+
+//  Calendar      Calendar @relation(fields: [tbmCalendarId], references: [id])
+//  tbmCalendarId Int
+
+//  User   User @relation(fields: [userId], references: [id])
+//  userId Int
+
+//  TbmDriveSchedule TbmDriveSchedule[]
+
+//  @@unique([userId, tbmCalendarId], name: "unique_userId_tbmCalendarId")
+// }
+
+model TbmDriveSchedule {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ // TbmUserDate   TbmUserDate @relation(fields: [tbmUserDateId], references: [id])
+ // tbmUserDateId Int
+
+ date DateTime
+
+ User   User @relation(fields: [userId], references: [id])
+ userId Int
+
+ TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id])
+ tbmVehicleId Int
+
+ TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id])
+ tbmRouteGroupId Int
 }
 
  

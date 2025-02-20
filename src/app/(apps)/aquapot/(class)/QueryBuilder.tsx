@@ -7,6 +7,7 @@ export class QueryBuilder {
     const user: Prisma.UserFindManyArgs = {}
     const aqProduct: Prisma.AqProductFindManyArgs = {
       include: {
+        AqDefaultShiireAqCustomer: {},
         AqProductCategoryMaster: {},
         AqPriceOption: {},
         AqInventoryRegister: {},

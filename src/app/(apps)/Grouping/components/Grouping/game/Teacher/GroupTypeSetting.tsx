@@ -17,6 +17,7 @@ export const GroupTypeSetting = React.memo(
     return (
       <C_Stack className={` mx-auto w-fit`}>
         <groupSettingFormHook.GroupConfigForm
+          latestFormData={groupSettingFormHook.groupConfigFormValues}
           ControlOptions={{ControlStyle: {width: 270}}}
           onSubmit={data => {
             if (!rolesHaveBeenSet) {

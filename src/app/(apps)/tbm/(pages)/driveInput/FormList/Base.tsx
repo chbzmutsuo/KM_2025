@@ -6,22 +6,22 @@ import React from 'react'
 
 import {Button} from '@components/styles/common-components/Button'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
+import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
 
 const test = true
 export default function Base(props: FormProps) {
   const {userInput, type, labelAffix} = props
   const data = userInput[type ?? '']
-  console.log(data) //////logs
 
   const {toggleLoad, session} = useGlobal()
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     formData: data ?? {},
     columns: new Fields(getTbmOperationGroupBaseCols({session})).transposeColumns(),
   })
   return (
     <div>
       <BasicForm
+        latestFormData={latestFormData}
         onSubmit={async data => {
           toggleLoad(async () => {
             const res = await fetchUniversalAPI(`tbmOperationGroup`, `upsert`, {

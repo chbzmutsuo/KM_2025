@@ -1,13 +1,12 @@
 'use server'
 
-
 import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
 import prisma from '@lib/prisma'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
-import {Prisma} from '@prisma/client'
 
 type genbaStatusType = '完了' | '不要' | '済' | '未完了'
 type GenbaDayProps = {
+  id: any
   Genba: {
     GenbaDay: Array<{
       GenbaDayTaskMidTable: Array<{genbaTaskId: number}>
@@ -18,32 +17,6 @@ type GenbaDayProps = {
   GenbaDayTaskMidTable: Array<{genbaTaskId: number}>
   date: Date
   finished: boolean
-}
-
-const genbaDayInclude: Prisma.GenbaDayInclude = {
-  Genba: {
-    include: {
-      GenbaDay: {
-        include: {GenbaDayTaskMidTable: {}},
-        orderBy: {date: 'asc'},
-      },
-      GenbaDayShift: {include: {GenbaDay: {include: {GenbaDayTaskMidTable: {}}}}},
-    },
-  },
-  GenbaDayShift: {
-    include: {
-      GenbaDay: {},
-      User: {include: {SohkenCar: {}}},
-    },
-  },
-  GenbaDaySoukenCar: {
-    include: {SohkenCar: {}},
-  },
-  GenbaDayTaskMidTable: {
-    include: {
-      GenbaTask: {},
-    },
-  },
 }
 
 const getGenbaScheduleStatus = (props: {GenbaDay: GenbaDayProps}) => {
@@ -99,15 +72,35 @@ const getAllAssignedNinkuTillThisDay = ({GenbaDay}) => {
 export const genbaDayUpdateChain = async ({genbaId}) => {
   const allGenbaDay = await prisma.genbaDay.findMany({
     where: {genbaId: genbaId},
-    include: genbaDayInclude,
+    include: {
+      Genba: {
+        include: {
+          GenbaDay: {
+            include: {GenbaDayTaskMidTable: {}},
+            orderBy: {date: 'asc'},
+          },
+          GenbaDayShift: {include: {GenbaDay: {include: {GenbaDayTaskMidTable: {}}}}},
+        },
+      },
+      GenbaDayShift: {
+        include: {GenbaDay: {}, User: {include: {SohkenCar: {}}}},
+      },
+      GenbaDaySoukenCar: {include: {SohkenCar: {}}},
+      GenbaDayTaskMidTable: {include: {GenbaTask: {}}},
+    },
   })
 
   console.debug(`${allGenbaDay.length}件のGenbaDayを更新します。`)
 
-  const groupByTask = allGenbaDay.reduce((acc, curr) => {
+  type groupByTaskType = {
+    [key: string]: ({taskName: string} & GenbaDayProps)[]
+  }
+
+  const groupByTask: groupByTaskType = allGenbaDay.reduce((acc, curr) => {
     curr.GenbaDayTaskMidTable.forEach(mid => {
-      const taskId = mid.genbaTaskId
       const taskName = mid.GenbaTask.name
+
+      const taskId = [mid.genbaTaskId, taskName].join(`_`)
       if (!acc[taskId]) {
         acc[taskId] = []
       }
@@ -119,7 +112,7 @@ export const genbaDayUpdateChain = async ({genbaId}) => {
   const transactionQueryList: transactionQuery[] = []
   Object.keys(groupByTask).forEach(taskId => {
     const genbaDays = groupByTask[taskId].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-
+    console.debug(taskId)
     const lastFullfilledGenbaDay = genbaDays.find(GenbaDay => {
       const {allAssignedNinkuTillThisDay, allRequiredNinku} = getAllAssignedNinkuTillThisDay({GenbaDay})
       const ninkuFullfilled =
@@ -128,23 +121,29 @@ export const genbaDayUpdateChain = async ({genbaId}) => {
       return ninkuFullfilled
     })
 
-    genbaDays.forEach(GenbaDay => {
-      const {status} = getGenbaScheduleStatus({GenbaDay})
-      const {taskName, ...genbaDay} = GenbaDay
-      const {allAssignedNinkuTillThisDay, allRequiredNinku} = getAllAssignedNinkuTillThisDay({GenbaDay})
-      const ninkuFullfilled =
-        allRequiredNinku !== null && allAssignedNinkuTillThisDay !== null && allRequiredNinku - allAssignedNinkuTillThisDay <= 0
-      const active = !lastFullfilledGenbaDay || genbaDay.date.getTime() <= lastFullfilledGenbaDay.date.getTime()
+    genbaDays
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .forEach(GenbaDay => {
+        const {status} = getGenbaScheduleStatus({GenbaDay})
 
-      transactionQueryList.push({
-        model: `genbaDay`,
-        method: `update`,
-        queryObject: {
-          where: {id: GenbaDay.id},
-          data: {status, active, ninkuFullfilled, allAssignedNinkuTillThisDay, allRequiredNinku},
-        },
+        const {taskName, ...genbaDay} = GenbaDay
+        const {allAssignedNinkuTillThisDay, allRequiredNinku} = getAllAssignedNinkuTillThisDay({GenbaDay})
+        const ninkuFullfilled =
+          allRequiredNinku !== null && allAssignedNinkuTillThisDay !== null && allRequiredNinku - allAssignedNinkuTillThisDay <= 0
+        const active = !lastFullfilledGenbaDay || genbaDay.date.getTime() <= lastFullfilledGenbaDay.date.getTime()
+        console.debug(GenbaDay.date, {
+          active: active ? 'アクティブ' : '',
+          status,
+        })
+        transactionQueryList.push({
+          model: `genbaDay`,
+          method: `update`,
+          queryObject: {
+            where: {id: GenbaDay.id},
+            data: {status, active, ninkuFullfilled, allAssignedNinkuTillThisDay, allRequiredNinku},
+          },
+        })
       })
-    })
   })
 
   const res = await fetchTransactionAPI({transactionQueryList})

@@ -49,7 +49,7 @@ export const Works = ({works}) => {
         },
       },
     ])
-    const {BasicForm} = useBasicFormProps({
+    const {BasicForm, latestFormData} = useBasicFormProps({
       columns,
       onFormItemBlur: props => {
         const {newlatestFormData} = props
@@ -81,7 +81,7 @@ export const Works = ({works}) => {
           // </Button>
         }
       >
-        <BasicForm {...{alignMode: 'row'}}></BasicForm>
+        <BasicForm {...{latestFormData, alignMode: 'row'}}></BasicForm>
       </BasicModal>
     )
   }

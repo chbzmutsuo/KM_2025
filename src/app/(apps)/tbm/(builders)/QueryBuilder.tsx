@@ -34,6 +34,8 @@ export class QueryBuilder {
       tbmRoute,
       tbmRouteGroup,
       tbmBase,
+      user: {include: {TbmBase: {}}} as Prisma.UserFindManyArgs,
+      tbmVehicle: {include: {TbmBase: {}}} as Prisma.TbmVehicleFindManyArgs,
     }
     Object.keys(include).forEach(key => {
       roopMakeRelationalInclude({

@@ -27,7 +27,7 @@ const AddForm = ({currentStore, setformData, handleClose, userOptions, users, se
       return {...col, form: {...col.form, register}} as colType
     })
   )
-  const {BasicForm} = useBasicFormProps({
+  const {BasicForm, latestFormData} = useBasicFormProps({
     columns,
     formData: {
       date: new Date(),
@@ -71,7 +71,7 @@ const AddForm = ({currentStore, setformData, handleClose, userOptions, users, se
   }
   return (
     <>
-      <BasicForm onSubmit={onSubmit}>
+      <BasicForm onSubmit={onSubmit} latestFormData={latestFormData}>
         <Button>追加</Button>
       </BasicForm>
     </>

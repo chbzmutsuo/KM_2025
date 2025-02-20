@@ -4,7 +4,7 @@ import {anyObject} from '@cm/types/types'
 const MyCheckBox = React.forwardRef((props: anyObject, ref) => {
   const {field, records, ReactHookForm, col, currentValue, Register, formProps, latestFormData} = props
 
-  const {onChange, ...restRegister} = Register
+  const {onChange} = Register
 
   const ischecked = currentValue
 

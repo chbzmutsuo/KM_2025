@@ -8,7 +8,7 @@ import {basePath} from '@lib/methods/common'
 import {addQuerySentence} from '@lib/methods/urls'
 
 export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
-  let ApRequest = await prisma.apRequest.findUnique({
+  let ApRequest: any = await prisma.apRequest.findUnique({
     where: {id: requestId},
     include: {
       ...ApRequestClass.ApRequestGetInclude().apRequest.include,
@@ -23,7 +23,7 @@ export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
         },
       },
     },
-  } as Prisma.ApRequestFindFirstArgs)
+  })
 
   ApRequest = new ApRequestClass(ApRequest).mapApApWithCfValue(ApRequest) as MappeadApRequest
 

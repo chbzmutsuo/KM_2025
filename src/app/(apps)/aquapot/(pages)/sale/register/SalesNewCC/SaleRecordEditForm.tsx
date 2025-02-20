@@ -1,6 +1,6 @@
 'use client'
 
-import {PAYMENT_METHOD_LIST} from '@app/(apps)/aquapot/(constants)/options'
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {DH} from '@class/DH'
 import {Fields} from '@class/Fields/Fields'
@@ -66,7 +66,7 @@ export const SaleRecordEditForm = ({
     colSource.push({
       id: `paymentMethod`,
       label: `支払方法`,
-      forSelect: {optionsOrOptionFetcher: PAYMENT_METHOD_LIST},
+      forSelect: {optionsOrOptionFetcher: AQ_CONST.PAYMENT_METHOD_LIST},
       form: {
         ...defaultRegister,
         descriptionNoteAfter: `*カート単位で変更`,
@@ -127,7 +127,7 @@ export const SaleRecordEditForm = ({
 
   return (
     <C_Stack className={`gap-4`}>
-      <BasicForm></BasicForm>
+      <BasicForm latestFormData={ItemInput}></BasicForm>
 
       <Center>
         <Button

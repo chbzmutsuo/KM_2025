@@ -28,10 +28,11 @@ export const ConfirmationForm = ({work}) => {
       },
     },
   ])
-  const {BasicForm} = useBasicFormProps({columns})
+  const {BasicForm, latestFormData} = useBasicFormProps({columns})
 
   return (
     <BasicForm
+      latestFormData={latestFormData}
       wrapperClass="col-stack items-start gap-10"
       onSubmit={async data => {
         const {type, correctionRequest} = data

@@ -34,18 +34,6 @@ const MySelect = React.memo((props: VariousInputProps) => {
         >
           <OptionSelector {...{contexts}} />
         </ShadPopover>
-
-        {/* <BaseDisplay {...{contexts}} />
-        <BasicModal
-          {...{
-            alertOnClose: false,
-            style: {minWidth: 250, maxWidth: `95vw`, padding: 0},
-            open: isOptionsVisible,
-            handleClose: () => setIsOptionsVisible(false),
-          }}
-        >
-          <OptionSelector {...{contexts}} />
-        </BasicModal> */}
       </div>
     )
   }

@@ -1,7 +1,6 @@
 import {PageGetterType, CleansePathSource} from 'src/non-common/path-title-constsnts'
-import {getScopes} from 'src/non-common/scope-lib/getScopes'
+import {getAqLoginType, getScopes} from 'src/non-common/scope-lib/getScopes'
 import {Arr} from '@class/Arr'
-import {getAqLoginType} from '@app/(apps)/aquapot/(lib)/customerLoginLib'
 
 export const aquapot_PAGES = (props: PageGetterType) => {
   const {roles = []} = props
@@ -37,7 +36,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
       children: [
         //
         {tabId: 'aqInventoryRegister', label: '仕入れ登録'},
-        {tabId: 'inventory', label: '棚卸し'},
+        {tabId: 'inventoryHistory', label: '棚卸し'},
       ],
     },
 

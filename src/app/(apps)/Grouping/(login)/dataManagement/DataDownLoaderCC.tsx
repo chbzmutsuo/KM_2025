@@ -145,7 +145,7 @@ export const DataDownLoaderCC = () => {
   return (
     <div>
       <R_Stack>
-        <BasicForm {...{alignMode: `row`}} />
+        <BasicForm {...{latestFormData, alignMode: `row`}} />
         <Button onClick={onSubmit}>検索</Button>
         <Button onClick={exportToExcel}>抽出</Button>
       </R_Stack>

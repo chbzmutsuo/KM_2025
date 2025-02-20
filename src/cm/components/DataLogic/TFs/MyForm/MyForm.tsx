@@ -37,6 +37,7 @@ export default function MyForm(props: DetailPagePropType) {
     formData: formData ?? {},
     values: formData ?? {},
     autoApplyProps: {},
+
     onFormItemBlur: onFormItemBlur,
   })
 
@@ -118,6 +119,7 @@ export default function MyForm(props: DetailPagePropType) {
       <section className={` mx-auto w-fit`}>
         <BasicForm
           {...{
+            latestFormData,
             onSubmit: handleOnSubmit,
             className: props?.myForm?.basicFormClassName,
             ControlOptions: props?.myForm?.basicFormControlOptions,

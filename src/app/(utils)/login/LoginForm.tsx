@@ -39,6 +39,7 @@ export default function LoginForm(props) {
         <div className={`t-paper mx-auto  p-4 `}>
           <BasicForm
             {...{
+              latestFormData,
               wrapperClass: 'col-stack gap-4  text-xl items-center',
               ControlOptions: {
                 ControlStyle: {width: 250},

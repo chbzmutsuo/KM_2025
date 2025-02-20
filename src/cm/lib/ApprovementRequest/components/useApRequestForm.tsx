@@ -111,6 +111,7 @@ export const useApRequestForm = (props: {
 
   return {
     Form: BasicForm,
+    latestFormData,
     columns,
     defaultValues,
     onSubmit,

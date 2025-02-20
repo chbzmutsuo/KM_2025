@@ -401,12 +401,25 @@ input[type=number].withSpin {
   .print-target * {
     @apply shadow-none;
     visibility: visible;
-    page-break-inside: avoid;
+    -moz-column-break-before: avoid;
+         break-before: avoid;
+    -moz-column-break-after: avoid;
+         break-after: avoid;
+    -moz-column-break-inside: avoid;
+         break-inside: avoid;
   }
   .print-target {
     position: absolute;
     left: 0;
     top: 0;
+  }
+}
+@media print {
+  @page {
+    margin: 0; /* ページ余白をゼロに設定 */
+  }
+  body {
+    margin: 0; /* コンテンツの余白も調整 */
   }
 }
 canvas {

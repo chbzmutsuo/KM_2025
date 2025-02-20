@@ -28,6 +28,7 @@ const GameCreateForm = ({newGameFormData, setnewGameFormData}) => {
       {copyMode && <Alert color={`red`}>コピー元の所属生徒【{GameStudent.length}名】を自動で紐付けます。</Alert>}
       <R_Stack className={`items-start gap-10`}>
         <BasicForm
+          latestFormData={latestFormData}
           onSubmit={async () => {
             toggleLoad(async () => {
               const {result: newGame} = await myFormDefaultUpsert({

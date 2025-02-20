@@ -585,9 +585,12 @@ export interface P_AqProduct {
   taxType: string;
   taxRate: number;
   stock: number;
+  inInventoryManagement: boolean;
   AqPriceOption: P_AqPriceOption[];
   AqCustomerPriceOption: P_AqCustomerPriceOption[];
   AqCustomerSubscription: P_AqCustomerSubscription[];
+  aqDefaultShiireAqCustomerId: number;
+  AqInventoryByMonth: P_AqInventoryByMonth[];
 }
 
 export interface P_AqPriceOption {
@@ -635,6 +638,7 @@ export interface P_AqCustomer {
   User: P_User;
   userId: number;
   AqInventoryRegister: P_AqInventoryRegister[];
+  AqProduct: P_AqProduct[];
 }
 
 export interface P_AqCustomerSubscription {
@@ -786,8 +790,20 @@ export interface P_AqInventoryRegister {
   sortOrder: number;
   aqProductId: number;
   date: Date;
+  remarks: string;
   AqProduct: P_AqProduct;
   AqCustomer: P_AqCustomer;
+}
+
+export interface P_AqInventoryByMonth {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  key: string;
+  yearMonth: Date;
+  count: number;
+  aqProductId: number;
 }
 
 export interface P_DemoUser {
@@ -1269,6 +1285,9 @@ export interface P_User {
   UserPayedLeaveTypeMidTable: P_UserPayedLeaveTypeMidTable[];
   TsConstructionSubConUserMidTable: P_TsConstructionSubConUserMidTable[];
   TbmOperationGroup: P_TbmOperationGroup[];
+  TbmBase: P_TbmBase;
+  tbmBaseId: number;
+  TbmDriveSchedule: P_TbmDriveSchedule[];
 }
 
 export interface P_ReleaseNotes {
@@ -1317,6 +1336,15 @@ export interface P_ChainMethodLock {
   isLocked: boolean;
   expiresAt: Date;
   updatedAt: Date;
+}
+
+export interface P_Calendar {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  holidayType: string;
 }
 
 export interface P_PrefCity {
@@ -1430,6 +1458,7 @@ export interface P_GenbaDayShift {
   from: string;
   to: string;
   important: boolean;
+  directGo: boolean;
   directReturn: boolean;
   User: P_User;
   userId: number;
@@ -1451,6 +1480,7 @@ export interface P_TbmBase {
   updatedAt: Date;
   sortOrder: number;
   name: string;
+  User: P_User[];
   TbmRouteGroup: P_TbmRouteGroup[];
 }
 
@@ -1461,6 +1491,9 @@ export interface P_TbmVehicle {
   sortOrder: number;
   name: string;
   TbmOperationGroup: P_TbmOperationGroup[];
+  TbmBase: P_TbmBase;
+  tbmBaseId: number;
+  TbmDriveSchedule: P_TbmDriveSchedule[];
 }
 
 export interface P_TbmRouteGroup {
@@ -1471,6 +1504,7 @@ export interface P_TbmRouteGroup {
   name: string;
   TbmBase: P_TbmBase;
   tbmBaseId: number;
+  TbmDriveSchedule: P_TbmDriveSchedule[];
 }
 
 export interface P_TbmBillingAddress {
@@ -1570,6 +1604,17 @@ export interface P_TbmRefuelHistory {
   TbmVehicle: P_TbmVehicle;
   tbmOperationGroupId: number;
   tbmVehicleId: number;
+}
+
+export interface P_TbmDriveSchedule {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  userId: number;
+  tbmVehicleId: number;
+  tbmRouteGroupId: number;
 }
 
 export interface P_TsMainContractor {

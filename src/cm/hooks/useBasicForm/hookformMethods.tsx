@@ -137,7 +137,7 @@ export const getFormProps = ({ControlOptions, isBooleanType, Register, col, erro
 
   const formProps: formPropType = {
     className: cl(
-      Register?.disabled ? 'disabled bg-gray-300' : '',
+      // Register?.disabled ? 'disabled bg-gray-300' : '',
       isBooleanType ? '' : normalInputClass,
       ControlOptions?.shownButDisabled ? ' disabled bg-gray-300' : '',
       errorMessage ? `errorFormControl` : '',

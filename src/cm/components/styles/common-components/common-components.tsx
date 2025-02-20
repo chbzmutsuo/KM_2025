@@ -57,13 +57,13 @@ export const CenterScreen = (props: props) => {
         ...rest,
       }}
     >
-      <div>{children}</div>
+      <>{children}</>
     </div>
   )
 }
 
 export const Center = (props: props) => {
-  const {className, style, ...rest} = props
+  const {className, style, children, ...rest} = props
   return (
     <div
       {...{
@@ -71,7 +71,9 @@ export const Center = (props: props) => {
         style,
         ...rest,
       }}
-    />
+    >
+      <>{children} </>
+    </div>
   )
 }
 

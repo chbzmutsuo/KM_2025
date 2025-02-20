@@ -73,9 +73,12 @@ export class DH {
 
       switch (convertedType) {
         case 'number':
-          if (!isNaN(Number(value))) {
-            return value ? Number(value) : undefined
+          if (value === null) {
+            return null
+          } else if (value !== undefined && !isNaN(Number(value))) {
+            return Number(value)
           }
+
           return
 
         case 'rating':

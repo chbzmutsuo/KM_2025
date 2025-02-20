@@ -99,7 +99,7 @@ const TaskAndSchedule = ({genba, allTasks}) => {
     <>
       <div></div>
       <R_Stack className={`items-stretch`}>
-        <div className={`w-[600px]`}>
+        <div className={`w-[700px]`}>
           <Accordion {...{label: `タスク一覧一覧設定`, defaultOpen: true, closable: false}}>
             <FitMargin>
               <C_Stack>
@@ -129,7 +129,6 @@ const TaskAndSchedule = ({genba, allTasks}) => {
                       drag: {},
                       customActions: clientProps => <TaskAsignBtn {...{Genba: genba, allTasks, router}} />,
                       delete: {requiredUserConfirmation: false},
-                      // style: {maxHeight: 1000},
                     },
 
                     additional: {

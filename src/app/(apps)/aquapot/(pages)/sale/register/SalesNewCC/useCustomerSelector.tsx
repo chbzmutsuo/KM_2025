@@ -6,9 +6,10 @@ import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 
 import {useEffect} from 'react'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import {PAYMENT_METHOD_LIST} from '@app/(apps)/aquapot/(constants)/options'
+
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {getMidnight} from '@class/Days'
+import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 export const useCustomerSelector = ({cartUser, setcartUser, maxWidth}) => {
   const colWidth = maxWidth - 20
   const columns = new Fields([
@@ -39,7 +40,7 @@ export const useCustomerSelector = ({cartUser, setcartUser, maxWidth}) => {
     {
       id: `paymentMethod`,
       label: `支払方法`,
-      forSelect: {optionsOrOptionFetcher: PAYMENT_METHOD_LIST},
+      forSelect: {optionsOrOptionFetcher: AQ_CONST.PAYMENT_METHOD_LIST},
       form: {...defaultRegister, style: {width: colWidth}},
     },
   ]).transposeColumns()

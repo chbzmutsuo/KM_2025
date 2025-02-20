@@ -3,40 +3,18 @@
 import {aqCustomer} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 import {aqCustomerRecordCol} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomerRecordCol'
 import {aqCustomerSubscription} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomerSubscription'
+import {aqInventoryRegister} from '@app/(apps)/aquapot/(class)/colBuilder/aqInventoryRegister'
 import {aqSaleRecord} from '@app/(apps)/aquapot/(class)/colBuilder/aqSaleRecord'
 import {getAqProduct} from '@app/(apps)/aquapot/(class)/colBuilder/getAqProduct'
 
-import {AQCUSTOMER_STATUS_LIST, CUSTOMER_MODEL_CONST, TAX_TYPE} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
-import {DH} from '@class/DH'
 
-import {defaultMultipleSelectFormat} from '@class/Fields/lib/defaultFormat'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
-import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
-
-import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
-import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
-import {Paper} from '@components/styles/common-components/paper'
-
-import GlobalModal from '@components/utils/modal/GlobalModal'
-import MyPopover from '@components/utils/popover/MyPopover'
 
 export class ColBuilder {
   static aqCustomerSubscription = aqCustomerSubscription
-  static aqInventoryRegister = (props: columnGetterType) => {
-    return new Fields([
-      {
-        id: 'date',
-        label: `登録日`,
-        form: {},
-        type: `date`,
-      },
-      {id: 'aqProductId', label: `商品 `, form: {...defaultRegister}, forSelect: {}},
-      {id: 'aqCustomerId', label: `仕入れ先顧客`, form: {...defaultRegister}, forSelect: {}},
-      {id: 'quantity', label: `数量`, form: {...defaultRegister}, type: `number`},
-    ]).transposeColumns()
-  }
+  static aqInventoryRegister = aqInventoryRegister
   static aqCustomer = aqCustomer
   static aqSaleRecord = aqSaleRecord
   static aqCustomerRecord = aqCustomerRecordCol

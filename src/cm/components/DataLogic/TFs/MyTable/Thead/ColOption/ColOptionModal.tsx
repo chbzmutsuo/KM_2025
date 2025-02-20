@@ -37,6 +37,7 @@ const SearchForm = ({dataModelName, col, query, addQuery}) => {
   return (
     <div>
       <FormHook.BasicForm
+        latestFormData={FormHook.latestFormData}
         onSubmit={data => {
           confirmSearch({
             toggleLoad,
