@@ -5,32 +5,33 @@ import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import React from 'react'
 
 import {Button} from '@components/styles/common-components/Button'
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
+import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
 
 const test = true
 export default function Base(props: FormProps) {
   const {userInput, type, labelAffix} = props
-  const data = userInput[type ?? '']
+  const data = userInput[type ?? ''] as never
 
   const {toggleLoad, session} = useGlobal()
   const {BasicForm, latestFormData} = useBasicFormProps({
     formData: data ?? {},
     columns: new Fields(getTbmOperationGroupBaseCols({session})).transposeColumns(),
   })
+
   return (
     <div>
       <BasicForm
         latestFormData={latestFormData}
         onSubmit={async data => {
-          toggleLoad(async () => {
-            const res = await fetchUniversalAPI(`tbmOperationGroup`, `upsert`, {
-              where: {id: data?.id ?? 0},
-              ...data,
-            })
+          const {userId, tbmBaseId, tbmVehicleId} = data
+          // toggleLoad(async () => {
+          //   const res = await fetchUniversalAPI(`tbmOperationGroup`, `upsert`, {
+          //     where: {id: data?.id ?? 0},
+          //     ...createUpdate({userId, tbmBaseId, tbmVehicleId}),
+          //   })
 
-            toastByResult(res)
-          })
+          //   toastByResult(res)
+          // })
 
           return
         }}

@@ -27,10 +27,8 @@ export default async function Page(props) {
     return <Redirector {...{redirectPath}} />
   }
 
-  const {result: users} = await fetchUniversalAPI(`user`, `findMany`, {
-    orderBy: [{code: `asc`}],
-    where: userForSelect.where,
-  })
+  const where = userForSelect.where
+  const {result: users} = await fetchUniversalAPI(`user`, `findMany`, {orderBy: [{code: `asc`}], where})
 
   const thisJanuary = toUtc(new Date(query.month).getFullYear(), 0, 1)
 
@@ -68,12 +66,7 @@ export default async function Page(props) {
   ]
 
   const bodyRecords: csvTableRow[] = YoshinariUserClList.map(UserCl => {
-    const {
-      user,
-      yukyuAgg,
-
-      currentWorkRule,
-    } = UserCl
+    const {user, yukyuAgg, currentWorkRule} = UserCl
 
     const {code, name, hiredAt, WorkType} = user as any
 
@@ -152,7 +145,9 @@ export default async function Page(props) {
           ),
         },
         ...usageHistoryTdList.map(d => {
-          return {cellValue: Calc.round(d, 4, `ceil`).toFixed(4), style: {textAlign: `right`}}
+          const isZero = d === 0
+
+          return {cellValue: isZero ? 0 : Calc.round(d, 4, `ceil`).toFixed(4), style: {textAlign: `right`}}
         }),
         {cellValue: Calc.round(remainYukyuInDays, 4, `ceil`).toFixed(4), style: {textAlign: `right`}},
       ],

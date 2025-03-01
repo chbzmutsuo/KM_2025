@@ -25,8 +25,8 @@ export class PageBuilder {
     const {userId, tbmBaseId} = getTbmScopes()
 
     const columns = new Fields([
-      {id: 'g_tbmBaseId', label: '営業所', forSelect: {}},
-      {id: 'g_userId', label: '従業員', forSelect: {}},
+      {id: 'g_tbmBaseId', label: '営', forSelect: {}},
+      {id: 'g_userId', label: 'ド', forSelect: {}},
     ]).transposeColumns()
 
     if (admin) {

@@ -20,7 +20,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
         {tabId: 'driveInput', label: '実績確認'},
       ],
     },
-    {tabId: 'tbmOperationGroup', label: '運行履歴'},
+    {tabId: 'tbmOperation', label: '運行履歴'},
     {tabId: 'tbmBase', label: '営業所・コース管理'},
 
     {
@@ -29,6 +29,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       children: [
         {tabId: 'calendar', label: 'カレンダー'},
         {tabId: 'user', label: 'ドライバー'},
+        {tabId: 'tbmProduct', label: '商品'},
         {tabId: 'tbmVehicle', label: '車両'},
         {tabId: 'tbmBillingAddress', label: '請求先支社'},
 

@@ -1,6 +1,6 @@
 'use client'
 import {Kaizen} from '@app/(apps)/KM/class/Kaizen'
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {cl} from '@cm/lib/methods/common'
 import {C_Stack, Flex, R_Stack} from '@components/styles/common-components/common-components'

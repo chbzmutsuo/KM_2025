@@ -120,7 +120,7 @@ export const handleOnNippoSubmit = async ({totalCostState, TheNippo, materialGro
 
   const updateTotalCostRes = await fetchUniversalAPI(`tsNippo`, `update`, {
     where: {id: TheNippo.id},
-    totalCost: totalCostState ?? undefined,
+    data: {totalCost: totalCostState ?? undefined},
   })
 
   const res = await fetchTransactionAPI({transactionQueryList})

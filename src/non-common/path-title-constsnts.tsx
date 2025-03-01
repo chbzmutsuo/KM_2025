@@ -8,6 +8,7 @@ import {getYoshinari_PAGES} from 'src/non-common/getPages/getYoshinari_PAGES'
 import {getAdvantage_PAGES} from 'src/non-common/getPages/getAdvantagePages'
 import {aquapot_PAGES} from 'src/non-common/getPages/aquapot_PAGES'
 import {getTbm_PAGES} from 'src/non-common/getPages/getTbm_PAGES'
+import {sohken_PAGES} from 'src/non-common/getPages/sohken_PAGES'
 
 export const layoutMapping_PAGES = (props: PageGetterType) => {
   const {roles} = props
@@ -46,47 +47,6 @@ export const layoutMapping_PAGES = (props: PageGetterType) => {
     pathSource: cleansedPathSource,
     navItems,
     breads,
-  }
-}
-
-export const sohken_PAGES = (props: PageGetterType) => {
-  const {session, query, rootPath, pathname, roles} = props
-  const {login} = getScopes(session, {query, roles})
-
-  const pathSource: pathItemType[] = [
-    {tabId: rootPath, label: 'TOP', ROOT: [], hide: true},
-
-    {tabId: 'myPage', label: 'マイページ', ROOT: [rootPath]},
-    {
-      tabId: `schedule`,
-      label: `スケジュール`,
-      children: [
-        {tabId: 'calendar', label: '日付選択', ROOT: [rootPath]},
-        // {tabId: 'genbaDayTwoLine', label: '日別スケジュール', ROOT: [rootPath]},
-      ],
-    },
-
-    {
-      tabId: '',
-      label: '設定',
-      ROOT: [rootPath],
-      children: [
-        {tabId: 'genba', label: '現場一覧'},
-        {tabId: 'user', label: '社員一覧'},
-        {tabId: 'sohkenCar', label: '車両一覧'},
-        {tabId: 'genbaTaskMaster', label: '共通タスクマスタ'},
-        {tabId: 'prefCity', label: '市区町村一覧'},
-      ],
-    },
-  ]
-
-  return {
-    ...CleansePathSource({
-      rootPath,
-      pathSource,
-      pathname,
-      session,
-    }),
   }
 }
 
@@ -439,7 +399,7 @@ export const PAGES: any = {
   tbm_PAGES: getTbm_PAGES,
   estimate_PAGES,
   KM_PAGES,
-  sohken_PAGES,
+  sohken_PAGES: sohken_PAGES,
   sankosha_PAGES,
   MasterKey_Pages,
   tsukurunger_PAGES,

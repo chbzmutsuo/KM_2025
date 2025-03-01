@@ -1,21 +1,20 @@
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 
-import {prismaMethodType} from '@cm/types/prisma-types'
-import {anyObject, dataModelNameType} from '@cm/types/types'
+import {prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
 import useSWR from 'swr'
 
-const usefetchUniversalAPI_SWR = (
-  model: dataModelNameType,
-  method: prismaMethodType,
-  queryObject: anyObject,
-  options?: {
-    deps: any[]
-  }
+const usefetchUniversalAPI_SWR = <T extends PrismaModelNames, M extends prismaMethodType>(
+  model: T,
+  method: M,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  queryObject: Parameters<PrismaClient[T][M]>[0],
+  options?: {deps: any[]}
 ) => {
   const key = JSON.stringify({model, method, queryObject, deps: options?.deps})
 
   const {data, isValidating, error, mutate} = useSWR(key, async () => {
-    const res = await fetchUniversalAPI(model, method, queryObject)
+    const res = await generarlFetchUniversalAPI(model, method, queryObject)
 
     return res.result
   })

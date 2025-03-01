@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {C_Stack, MyContainer, Padding} from '@cm/components/styles/common-components/common-components'
 

@@ -92,7 +92,7 @@ export default function MyForm(props: DetailPagePropType) {
       const {result: refetchedDataWithInclude} = await fetchUniversalAPI(dataModelName, `findUnique`, {
         where: {id: res?.result?.id},
         include: additional?.include,
-      })
+      } as never)
 
       mutateRecords({record: refetchedDataWithInclude})
     }

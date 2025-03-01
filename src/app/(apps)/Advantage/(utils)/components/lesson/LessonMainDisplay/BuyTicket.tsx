@@ -37,10 +37,12 @@ const BuyTicket = ({LessonLog, settickets}) => {
             onSubmit={async e => {
               const {payedAt, usedAt} = latestFormData
               const {result} = await fetchUniversalAPI(`ticket`, `create`, {
-                lessonLogId: LessonLog.id,
-                userId: LessonLog.userId,
-                payedAt: payedAt ? formatDate(payedAt, `iso`) : undefined,
-                usedAt: usedAt ? formatDate(usedAt, `iso`) : undefined,
+                data: {
+                  lessonLogId: LessonLog.id,
+                  userId: LessonLog.userId,
+                  payedAt: payedAt ? formatDate(payedAt, `iso`) : undefined,
+                  usedAt: usedAt ? formatDate(usedAt, `iso`) : undefined,
+                },
               })
 
               settickets(prev => [...prev, result])

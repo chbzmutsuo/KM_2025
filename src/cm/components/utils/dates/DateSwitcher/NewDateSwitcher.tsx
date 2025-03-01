@@ -40,7 +40,7 @@ const NewDateSwitcher = (props: {
         ControlOptions={
           width > 600
             ? {ControlStyle: {width: 150, fontSize: 14}}
-            : {LabelStyle: {fontSize: 14}, ControlStyle: {width: 130, fontSize: 14}}
+            : {LabelStyle: {fontSize: 14}, ControlStyle: {width: 145, fontSize: 14}}
         }
       ></BasicForm>
     </FitMargin>

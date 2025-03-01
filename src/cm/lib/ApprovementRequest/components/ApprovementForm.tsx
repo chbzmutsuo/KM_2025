@@ -52,10 +52,7 @@ export default function ApprovementForm({
           },
         },
       }
-      await fetchUniversalAPI(`apRequest`, `update`, {
-        where: args.where,
-        ...args.data,
-      })
+      await fetchUniversalAPI(`apRequest`, `update`, args)
       // await fetchUniversalAPI(`apReceiver`, `update`, {
       //   where: {id: theApReceiver.id},
       //   status: data.status,

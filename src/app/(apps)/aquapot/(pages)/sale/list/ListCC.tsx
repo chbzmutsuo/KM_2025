@@ -64,7 +64,15 @@ export default function ListCC({records}) {
           // {cellValue: rec.jobTitle},
           // {cellValue: rec.userName},
           {cellValue: rec.productName},
-          {cellValue: `${rec.priceOption_Name}(${DH.toPrice(rec.priceOption_Price)}円)`},
+          {
+            cellValue: [
+              //
+              rec.priceOption_Name,
+              rec.priceOption_Price && `(${DH.toPrice(rec.priceOption_Price)}円)`,
+            ]
+              .filter(Boolean)
+              .join(``),
+          },
           {cellValue: rec.quantity},
           {cellValue: rec.price},
           {cellValue: rec.taxRate},

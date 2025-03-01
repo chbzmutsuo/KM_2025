@@ -1,10 +1,10 @@
-import { formatDate} from '@cm/class/Days'
+import {formatDate} from '@cm/class/Days'
 
 import {cl} from '@cm/lib/methods/common'
 
 import {breakLines} from '@cm/lib/value-handler'
 import {BellIcon, CheckIcon} from '@heroicons/react/20/solid'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {R_Stack} from '@components/styles/common-components/common-components'
@@ -41,7 +41,12 @@ export default function SingleChatItem({modelName = `comment`, setmessages, comm
               const newMessages = prev.map(m => (m.id === id ? {...m, read: true} : m))
               return newMessages
             })
-            const {result} = await fetchUniversalAPI(modelName as PrismaModelNames, 'update', {where: {id}, read: !read})
+            const {result} = await generarlFetchUniversalAPI(modelName as PrismaModelNames, 'update', {
+              where: {id},
+              data: {
+                read: !read,
+              },
+            })
           }}
           className={`icon-btn absolute w-4  rounded-full bg-green-500 p-0.5  text-white ${readBtnClass} `}
         />

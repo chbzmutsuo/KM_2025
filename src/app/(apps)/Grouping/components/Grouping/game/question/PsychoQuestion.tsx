@@ -1,11 +1,11 @@
 import {Grouping} from '@app/(apps)/Grouping/class/Grouping'
-import React, { useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {anyObject, colType} from '@cm/types/types'
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 import {Prisma} from '@prisma/client'
 import {toast} from 'react-toastify'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import SimpleTable from '@cm/components/utils/SimpleTable'
 
 import NormalQuestions from '@app/(apps)/Grouping/components/Grouping/game/question/NormalQuestion'
@@ -75,7 +75,7 @@ const PsychoQuestion = React.memo((props: any) => {
 
   const {questionToAnswer} = playerInfo
   const onSubmit = async () => {
-    const payload: anyObject = {
+    const payload = {
       ...answers,
       gameId: Game.id,
       studentId: player?.id,
@@ -86,7 +86,11 @@ const PsychoQuestion = React.memo((props: any) => {
     }
 
     await toggleLoad(async () => {
-      await fetchUniversalAPI('answer', 'upsert', {where: {id: questionToAnswer?.id ?? 0}, ...payload})
+      await fetchUniversalAPI('answer', 'upsert', {
+        where: {id: questionToAnswer?.id ?? 0},
+        create: payload,
+        update: payload,
+      })
       const result = await fetchUniversalAPI('answer', 'deleteMany', {
         where: {
           studentId: player?.id,

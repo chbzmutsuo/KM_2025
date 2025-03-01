@@ -3,12 +3,12 @@ import {FileHandler} from 'src/cm/class/FileHandler'
 
 import {toast} from 'react-toastify'
 import {FileData} from '@cm/types/file-types'
-import {prismaArgs, prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
+import {prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
 import {anyObject, colType, dataModelNameType, requestResultType} from '@cm/types/types'
 
 import {doTransaction, transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 import {prismaDataExtractionQueryType} from '@components/DataLogic/TFs/Server/Conf'
-import {doStandardPrisma} from '@lib/server-actions/common-server-actions/doStandardPrisma/doStandardPrisma'
+import {doStandardPrisma, doStandardPrismaType} from '@lib/server-actions/common-server-actions/doStandardPrisma/doStandardPrisma'
 import {searchByQuery} from '@lib/server-actions/common-server-actions/SerachByQuery/SerachByQuery'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 
@@ -99,65 +99,82 @@ export const searchModels = async (modelNameAsStr: string, prismaDataExtractionQ
 export type usePrismaOnServerPropType = {
   model: PrismaModelNames
   method: prismaMethodType
-  queryObject: anyObject
+  queryObject: any
   transactionPrisma?: any
   // transactionQueryList: transactionQuery[]
   // fetchKey?: string
 }
 
-export const buildUniversalRoutePayload = (model: dataModelNameType, method: prismaMethodType, queryObject: anyObject) => {
-  let fetchKey
-  if (queryObject.fetchKey) {
-    fetchKey = queryObject.fetchKey
-    delete queryObject.fetchKey
-  }
-
-  const body = (() => {
-    let convertedQueryObject = {...queryObject}
-
-    const {where, include, create, update, ...data} = convertedQueryObject
-
-    /**data / create / updateなどのpayloadを作成する */
-    switch (method) {
-      case 'create':
-      case 'update': {
-        convertedQueryObject = {
-          where,
-          include,
-          data: {...data},
-        }
-        break
-      }
-
-      case 'upsert': {
-        convertedQueryObject = {where, include, create: create ?? data, update: update ?? data}
-        break
-      }
-    }
-
-    const transactionQueryList: transactionQuery = {
-      model,
-      method,
-      queryObject: convertedQueryObject,
-    }
-    return transactionQueryList
-  })()
-
-  return {body, fetchKey}
+export const generarlFetchUniversalAPI = async (model: PrismaModelNames, method: prismaMethodType, queryObject: any) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return fetchUniversalAPI(model, method, queryObject)
 }
 
-export const fetchUniversalAPI = async (
-  model: dataModelNameType,
-  method: prismaMethodType,
-  queryObject: prismaArgs,
-  transactionPrisma?: any
-) => {
-  const {body, fetchKey} = buildUniversalRoutePayload(model, method, queryObject)
+export const createUpdate = <T,>(payload: T): {create: T; update: T} => {
+  return {
+    create: payload,
+    update: payload,
+  }
+}
+
+export const fetchUniversalAPI: doStandardPrismaType = async (model, method, queryObject, transactionPrisma?: any) => {
+  const {body, fetchKey} = buildUniversalRoutePayload(model, method, queryObject as anyObject)
+  // const {fetchKey, ...body} = queryObject as anyObject
   const payload = {...body, transactionPrisma, fetchKey} as usePrismaOnServerPropType
 
-  const data = await doStandardPrisma(payload)
+  const data = await doStandardPrisma(
+    //
+    payload.model,
+    payload.method,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    payload.queryObject,
+    payload.transactionPrisma
+  )
 
   return data
+
+  function buildUniversalRoutePayload(model: dataModelNameType, method: prismaMethodType, queryObject: anyObject) {
+    let fetchKey
+    if (queryObject.fetchKey) {
+      fetchKey = queryObject.fetchKey
+      delete queryObject.fetchKey
+    }
+
+    const body = (() => {
+      let convertedQueryObject = {...queryObject}
+      const {where, include, create, update, ...data} = convertedQueryObject
+
+      /**data / create / updateなどのpayloadを作成する */
+      // switch (method) {
+      //   case 'create':
+      //   case 'update': {
+      //     convertedQueryObject = {
+      //       where,
+      //       include,
+      //       data: {...data},
+      //     }
+      //     break
+      //   }
+
+      //   case 'upsert': {
+      //     convertedQueryObject = {where, include, create: create ?? data, update: update ?? data}
+      //     break
+      //   }
+      // }
+      convertedQueryObject = {...convertedQueryObject}
+
+      const transactionQueryList: transactionQuery = {
+        model,
+        method,
+        queryObject: convertedQueryObject,
+      }
+      return transactionQueryList
+    })()
+
+    return {body, fetchKey}
+  }
 }
 
 export const fetchTransactionAPI = async (props: {transactionQueryList: transactionQuery[]}) => {

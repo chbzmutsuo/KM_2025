@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+ 
 'use server'
 
 import {revalidatePath} from 'next/cache'

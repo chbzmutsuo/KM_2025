@@ -18,7 +18,15 @@ export const POST = async (req: NextRequest) => {
       transactionPrisma?: any
     }
 
-    const result = await doStandardPrisma(body)
+    const result = await doStandardPrisma(
+      //
+      body.model,
+      body.method,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      body.queryObject,
+      body.transactionPrisma
+    )
     return NextResponse.json(result)
   } else {
     return NextResponse.json({success: false, message: 'アクセスが禁止されています', result: null}, {status: 200})

@@ -41,8 +41,7 @@ export const ConfirmationForm = ({work}) => {
           const isPublic = type === '許可'
           await fetchUniversalAPI('kaizenWork', 'update', {
             where: {id: work.id ?? 0},
-            isPublic,
-            correctionRequest,
+            data: {isPublic, correctionRequest},
           })
 
           await knockEmailApi({

@@ -4,7 +4,7 @@ import {Grouping, ClassRoom} from '@app/(apps)/Grouping/class/Grouping'
 
 import {colType, columnGetterType} from '@cm/types/types'
 
-import { formatDate} from '@cm/class/Days'
+import {formatDate} from '@cm/class/Days'
 import MemberViwer from '@cm/components/List/MemberViwer'
 import {Fields} from '@cm/class/Fields/Fields'
 import {addQuerySentence} from '@cm/lib/methods/urls'
@@ -318,11 +318,11 @@ export class ColBuilder {
                   where: {id: row.id},
                   include: {
                     QuestionPrompt: {},
-                    Room: {
-                      include: {
-                        RoomStudent: {include: {Student: {}}},
-                      },
-                    },
+                    // Room: {
+                    //   include: {
+                    //     RoomStudent: {include: {Student: {}}},
+                    //   },
+                    // },
                   },
                 })
 

@@ -138,9 +138,7 @@ const ConfirrmButton = ({
       <Button
         onClick={() => {
           handleOpen(true)
-          console.log('1', TheNippoCL.getTotalPrice().sum) //////logs
           TheNippoCL.importToTsNippo({formData, nippoOptions})
-          console.log('2', TheNippoCL.getTotalPrice().sum) //////logs
           settotalCostState(TheNippoCL.getTotalPrice().sum)
         }}
       >

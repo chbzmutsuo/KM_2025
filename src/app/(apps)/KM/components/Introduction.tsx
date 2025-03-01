@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {Kaizen, KM} from '@app/(apps)/KM/class/Kaizen'
 

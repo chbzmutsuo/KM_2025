@@ -32,7 +32,7 @@ export class ViewParamBuilder {
 
             const res = await fetchUniversalAPI(`aqProduct`, `update`, {
               where: {id: productId},
-              aqDefaultShiireAqCustomerId: customerId,
+              data: {aqDefaultShiireAqCustomerId: customerId},
             })
 
             toast.success(`仕入れ先を更新しました。`)

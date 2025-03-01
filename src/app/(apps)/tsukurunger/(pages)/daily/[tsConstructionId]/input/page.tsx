@@ -34,7 +34,7 @@ export default async function Page(props) {
     },
   }
 
-  const payload: Prisma.TsConstructionFindManyArgs = {
+  const payload: Prisma.TsConstructionFindUniqueArgs = {
     where: {id: tsConstructionId},
     include: {...include, TsMainContractor: {}},
   }

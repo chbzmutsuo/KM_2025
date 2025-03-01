@@ -4,7 +4,7 @@ import {Fields} from '@class/Fields/Fields'
 import {Button} from '@components/styles/common-components/Button'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 export const DateEditor = ({dateEditModalOpen, handleClose, workType}) => {
   const {toggleLoad} = useGlobal()
@@ -27,10 +27,7 @@ export const DateEditor = ({dateEditModalOpen, handleClose, workType}) => {
         where: {
           unique_date_workTypeId: {date, workTypeId: workType.id},
         },
-        date,
-        workTypeId: workType.id,
-        type: data.type,
-        remarks: data.remarks,
+        ...createUpdate({date, workTypeId: workType.id, type: data.type, remarks: data.remarks}),
       })
 
       handleClose()

@@ -31,16 +31,7 @@ export default function ApRequestHistory(props: {
 
   const {PC, session, accessScopes} = useGlobal()
 
-  const {
-    ApRequestList,
-    maxReceiver = 3,
-    defaultOpen,
-    ApRequestType,
-    ApRequestTypeConfigs,
-    withModal,
-    isSuperUser = false,
-    approvementTypes,
-  } = props
+  const {ApRequestList, ApRequestType, ApRequestTypeConfigs, withModal, isSuperUser = false, approvementTypes} = props
 
   const {header, body} = CreateApRequestArray({
     approvementTypes,

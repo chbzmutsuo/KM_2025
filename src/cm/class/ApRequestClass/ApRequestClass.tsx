@@ -86,7 +86,7 @@ export class ApRequestClass {
   forceAuthorize = async () => {
     await fetchUniversalAPI(`apRequest`, `update`, {
       where: {id: this.ApRequest.id},
-      forceApproved: this.ApRequest.forceApproved === true ? false : true,
+      data: {forceApproved: this.ApRequest.forceApproved === true ? false : true},
     })
   }
 
@@ -97,6 +97,7 @@ export class ApRequestClass {
       // Object.keys(d.cf).forEach(key => {
       //   console.debug(key, d.cf[key].value)
       // })
+
       return approved
     })
   }

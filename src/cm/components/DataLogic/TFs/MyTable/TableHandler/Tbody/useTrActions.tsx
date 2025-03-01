@@ -1,7 +1,7 @@
 import {FileHandler} from 'src/cm/class/FileHandler'
 import {PencilSquareIcon, TrashIcon} from '@heroicons/react/20/solid'
 
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import {cl} from 'src/cm/lib/methods/common'
 
 import {HREF} from 'src/cm/lib/methods/urls'
@@ -76,7 +76,7 @@ const useTrActions = props => {
           })
         )
 
-        const res = await fetchUniversalAPI(dataModelName, 'delete', {where: {id: record?.id}})
+        const res = await generarlFetchUniversalAPI(dataModelName, 'delete', {where: {id: record?.id}})
         toastByResult(res)
         if (res.success) {
           deleteRecord({record})

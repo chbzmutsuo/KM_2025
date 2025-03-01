@@ -3,7 +3,7 @@ import {PrismaModelNames} from '@cm/types/prisma-types'
 import {Button} from '@components/styles/common-components/Button'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import React from 'react'
 
 export default function SingleAddForm({RelationalModel, GenbaDay, selectedData, useGlobalProps, handleClose}) {
@@ -17,7 +17,7 @@ export default function SingleAddForm({RelationalModel, GenbaDay, selectedData, 
         async () => {
           const id = selectedData?.id
 
-          const res = await fetchUniversalAPI(RelationalModel as PrismaModelNames, `delete`, {
+          const res = await generarlFetchUniversalAPI(RelationalModel as PrismaModelNames, `delete`, {
             where: {id},
           })
 
@@ -38,7 +38,7 @@ export default function SingleAddForm({RelationalModel, GenbaDay, selectedData, 
 
     toggleLoad(
       async () => {
-        const res = await fetchUniversalAPI(RelationalModel as PrismaModelNames, `upsert`, {
+        const res = await generarlFetchUniversalAPI(RelationalModel as PrismaModelNames, `upsert`, {
           where: {id: selectedData?.id ?? 0},
           ...payload,
         })

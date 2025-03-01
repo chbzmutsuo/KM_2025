@@ -1,4 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
+ 
 import {anyObject, colTypeStr} from '@cm/types/types'
 import {Days, formatDate, formatDateTimeOrDate} from './Days'
 import {shorten, superTrim} from '@lib/methods/common'

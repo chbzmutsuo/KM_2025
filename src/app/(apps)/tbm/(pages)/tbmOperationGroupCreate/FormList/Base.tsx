@@ -5,8 +5,7 @@ import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import React from 'react'
 
 import {Button} from '@components/styles/common-components/Button'
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
+import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
 
 const test = true
 export default function Base(props: FormProps) {
@@ -24,12 +23,11 @@ export default function Base(props: FormProps) {
         latestFormData={latestFormData}
         onSubmit={async data => {
           toggleLoad(async () => {
-            const res = await fetchUniversalAPI(`tbmOperationGroup`, `upsert`, {
-              where: {id: data?.id ?? 0},
-              ...data,
-            })
-
-            toastByResult(res)
+            // const res = await fetchUniversalAPI(`tbmOperationGroup`, `upsert`, {
+            //   where: {id: data?.id ?? 0},
+            //   ...createUpdate(data as Prisma.TbmOperationGroupCreateInput),
+            // })
+            // toastByResult(res)
           })
 
           return

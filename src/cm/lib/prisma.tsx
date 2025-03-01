@@ -28,7 +28,7 @@ export const createMessage = ({model, method}) => {
     user: 'ユーザー',
   }
 
-  const messageObj: {[key in prismaMethodType | 'transaction']?: string} = {
+  const messageObj: {[key in prismaMethodType]?: string} = {
     findMany: `の一覧を取得しました`,
     findUnique: `の詳細を取得しました`,
     upsert: `を更新しました`,

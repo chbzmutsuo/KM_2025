@@ -15,6 +15,7 @@ export default async function Page(props) {
   const {session} = await initServerComopnent({query})
 
   const {whereQuery, redirectPath} = getYoshinariRedirectPath({query})
+
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
   const theSelectedDate = toUtc(query.month)

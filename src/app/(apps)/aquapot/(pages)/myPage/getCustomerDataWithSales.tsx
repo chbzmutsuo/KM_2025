@@ -1,6 +1,6 @@
 import {Days, formatDate, toJst, toUtc} from '@class/Days'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import {AqSaleRecord, AqPriceOption, AqSaleCart, Prisma} from '@prisma/client'
+import {AqSaleRecord, AqPriceOption, AqSaleCart} from '@prisma/client'
 
 export const getCustomerDataWithSales = async ({userId, query}) => {
   const selectedYearStr = query.from ?? query.month
@@ -33,7 +33,7 @@ export const getCustomerDataWithSales = async ({userId, query}) => {
         },
       },
     },
-  } as Prisma.AqCustomerFindManyArgs)
+  })
 
   const salesByMonth = {}
   customer.AqSaleCart.forEach((cart: AqSaleCart & {AqSaleRecord: SaleRecord[]}) => {

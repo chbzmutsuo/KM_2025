@@ -151,8 +151,6 @@ export class TsNippo {
       })
       .flat()
 
-    console.log(prices) //////logs
-
     this.Nippo.TsNippoRemarks.forEach(d => {
       const {price} = d
       const groupLabel = `その他費用`

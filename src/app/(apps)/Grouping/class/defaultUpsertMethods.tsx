@@ -1,4 +1,4 @@
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 export const upsertSchoolWithSubjects = async ({latestFormData}) => {
   const {name} = latestFormData
@@ -6,7 +6,7 @@ export const upsertSchoolWithSubjects = async ({latestFormData}) => {
     where: {
       id: latestFormData?.id ?? 0,
     },
-    name,
+    ...createUpdate({name}),
   })
 
   if (latestFormData?.id === 0) {
@@ -22,13 +22,15 @@ export const upsertSchoolWithSubjects = async ({latestFormData}) => {
 
     const res2 = await fetchUniversalAPI(`school`, `update`, {
       where: {id: res.result.id},
-      SubjectNameMaster: {
-        createMany: {
-          data: defaultSubjects.map((subject, index) => {
-            return {
-              ...subject,
-            }
-          }),
+      data: {
+        SubjectNameMaster: {
+          createMany: {
+            data: defaultSubjects.map((subject, index) => {
+              return {
+                ...subject,
+              }
+            }),
+          },
         },
       },
     })
@@ -41,32 +43,33 @@ export const upsertLearningRoleMaster = async ({latestFormData, schoolId}) => {
 
   const res = await fetchUniversalAPI(`teacher`, `upsert`, {
     where: {id: latestFormData?.id ?? 0},
-    name,
-    schoolId,
-    email,
-    password,
-    type,
+    ...createUpdate({
+      name,
+      schoolId,
+      email,
+      password,
+      type,
+    }),
   })
 
   if (latestFormData?.id === 0) {
-    const defaultupsertLearningRoleMaster = [
-      {name: `司会`, color: '#FF7E79'},
-      {name: `質問`, color: '#EFB93B'},
-      {name: `発表`, color: '#7FB93B'},
-    ]
-
-    const res2 = await fetchUniversalAPI(`teacher`, `update`, {
-      where: {id: res.result.id},
-      LearningRoleMaster: {
-        createMany: {
-          data: defaultupsertLearningRoleMaster.map((subject, index) => {
-            return {
-              ...subject,
-            }
-          }),
-        },
-      },
-    })
+    // const defaultupsertLearningRoleMaster = [
+    //   {name: `司会`, color: '#FF7E79'},
+    //   {name: `質問`, color: '#EFB93B'},
+    //   {name: `発表`, color: '#7FB93B'},
+    // ]
+    // const res2 = await fetchUniversalAPI(`teacher`, `update`, {
+    //   where: {id: res.result.id},
+    //   LearningRoleMaster: {
+    //     createMany: {
+    //       data: defaultupsertLearningRoleMaster.map((subject, index) => {
+    //         return {
+    //           ...subject,
+    //         }
+    //       }),
+    //     },
+    //   },
+    // })
   }
 
   return res

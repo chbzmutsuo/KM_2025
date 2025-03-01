@@ -53,8 +53,8 @@ export default function useGroupSettingForm({Game, groupConfigMaster, defaultCou
 
       const res = await fetchUniversalAPI(`groupCreateConfig`, `upsert`, {
         where: {gameId},
-        gameId,
-        ...keyValue,
+        create: {gameId, ...keyValue},
+        update: {gameId, ...keyValue},
       })
     },
     columns,

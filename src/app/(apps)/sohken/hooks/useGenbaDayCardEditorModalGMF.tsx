@@ -64,7 +64,7 @@ export const useGenbaDayCardEditorModalGMF = () => {
 
           await fetchUniversalAPI(`genbaTask`, `update`, {
             where: {id: genbaTaskId},
-            requiredNinku: Number(data.requiredNinku),
+            data: {requiredNinku: Number(data.requiredNinku)},
           })
 
           toastByResult(res)

@@ -3,7 +3,7 @@ import {PrismaModelNames} from '@cm/types/prisma-types'
 import {colType} from '@cm/types/types'
 import {HK_USE_RECORDS_TYPE} from '@components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobalOrigin'
-import {TbmDriveSchedule, User} from '@prisma/client'
+import { TbmBase, TbmDriveSchedule, User} from '@prisma/client'
 import {atom, useAtom} from 'jotai'
 import {atomFamily} from 'jotai/utils'
 export const useJotai = useAtom
@@ -39,8 +39,9 @@ export type atomKey =
   | `workLogHistoryGMF`
   | `shiftEditPropsGMF`
   | `GenbaDayCardEditorModalGMF`
+  | `GenbaDayBasicEditorGMF`
   | `haishaTableEditorGMF`
-
+  | `odometerInputGMF`
 export type atomTypes = {
   globalHooks: useGlobalPropType
   activeNavWrapper: number[]
@@ -75,7 +76,7 @@ export type atomTypes = {
   torokuDateApplicationForm: {newCar: any}
   torokuMikomiApplicationForm: {newCar: any}
   selectedUcarNotes: {UcarData: any; mutateRecords: HK_USE_RECORDS_TYPE[`mutateRecords`]}
-  showGarageRegister: {ucar: any; garageSlot: any}
+  showGarageRegister: {ucar: any; UcarGarageLocationMaster: any}
   ucrDetailUpdater: {ucarId: any}
   sateiConnectionGMF: {newCar: any; sateiNoList: any}
   crScheduleSwitcherModal: {theCar: any; lastHistory: any}
@@ -94,7 +95,16 @@ export type atomTypes = {
     baseModelName
   }
   GenbaDayCardEditorModalGMF: {taskMidTable; genbaId; genbaDayId}
-  haishaTableEditorGMF: {user: User; date: Date; tbmDriveSchedule?: TbmDriveSchedule}
+  GenbaDayBasicEditorGMF: {GenbaDay}
+  haishaTableEditorGMF: {user: User; date: Date; tbmDriveSchedule?: TbmDriveSchedule; tbmBase?: TbmBase}
+  odometerInputGMF: {
+    OdometerInput: {
+      date: Date
+      odometerStart: number
+      odometerEnd: number
+      TbmVehicle
+    }
+  }
 }
 type myAtomFamilyParams = {atomKey: atomKey; defaultState: any}
 

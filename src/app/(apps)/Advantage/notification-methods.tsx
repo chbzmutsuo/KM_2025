@@ -66,7 +66,7 @@ export const getLessonLogWithUnpayedTicket = ({isCoach, session}) => {
     },
     orderBy: {createdAt: 'desc'},
   }
-  const {data: LessonLogWithUnpayedTicket, isLoading} = usefetchUniversalAPI_SWR('lessonLog', 'findMany', args, {deps: []})
+  const {data: LessonLogWithUnpayedTicket, isLoading} = usefetchUniversalAPI_SWR('lessonLog', `findMany`, args, {deps: []})
 
   return {LessonLogWithUnpayedTicket, isLoading}
 }

@@ -1,14 +1,13 @@
-import Base from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/Base'
-import {InputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/Updator'
-import GoBack from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/GoBack'
-import {TbmOperation, TbmOperationGroup} from '@prisma/client'
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import Fuel from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/Fuel'
+import Base from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/Base'
+import {InputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/TbmOperationInput'
+import GoBack from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/GoBack'
+// import {TbmOperation, TbmOperationGroup} from '@prisma/client'
+import Fuel from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/Fuel'
 
 export type UserInputType = {
-  base: null | TbmOperationGroup
-  go: null | TbmOperation
-  back: null | TbmOperation
+  base: any
+  go: any
+  back: any
   refuel: null
   complete: boolean
 }
@@ -66,11 +65,11 @@ export const getFormList = (userInput: UserInputType) => {
       onClick: async toggleLoad => {
         if (confirm(`運行を完了しますか？`)) {
           toggleLoad(async () => {
-            const res = await fetchUniversalAPI(`tbmOperationGroup`, `update`, {
-              where: {id: userInput.base?.id},
-              confirmed: true,
-            })
-            toastByResult(res)
+            // const res = await fetchUniversalAPI(`tbmOperationGroup`, `update`, {
+            //   where: {id: userInput.base?.id},
+            //   data: {confirmed: true},
+            // })
+            // toastByResult(res)
           })
         }
       },

@@ -7,7 +7,6 @@ import {NextRequest, NextResponse} from 'next/server'
 import {isCron} from 'src/non-common/serverSideFunction'
 
 export const GET = async (req: NextRequest) => {
-  console.log(req) //////logs
   if ((await isCron({req})) === false) {
     const res = {success: false, message: `Unauthorized`, result: null}
     const status = {status: 401, statusText: `Unauthorized`}

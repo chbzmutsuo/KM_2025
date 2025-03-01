@@ -54,6 +54,7 @@ export default function ApRequestAuthorizerCC({apRequest, ApRequestType, ApReque
           <C_Stack className={`items-start   gap-[100px]`}>
             {ApRequestType.map(ApRequestType => {
               const allRequestsOnThisType = apRequest.filter(request => request.approvalRequestTypeMasterId === ApRequestType.id)
+
               const label = `${ApRequestType.name} (${allRequestsOnThisType.length})`
 
               return (

@@ -4,11 +4,10 @@ import {Fields} from '@cm/class/Fields/Fields'
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 import {ChevronDoubleLeftIcon, ChevronDoubleRightIcon} from '@heroicons/react/20/solid'
 
-
 import React from 'react'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {Days, formatDate, toUtc} from '@class/Days'
-import {addMonths} from 'date-fns'
+import {addMonths, addDays} from 'date-fns'
 
 export default function useDateSwitcherFunc(props) {
   const {query, addQuery, toggleLoad, width} = useGlobal()
@@ -22,8 +21,15 @@ export default function useDateSwitcherFunc(props) {
       await switchMonth({month, ...additionalDefaultValue})
     }
   }
+  const addMinusDate = async (plus = 1) => {
+    const currentDate = new Date(latestFormData[`from`])
+    const date = addDays(currentDate, plus)
+    if (Days.isDate(date)) {
+      await switchDate({date, ...additionalDefaultValue})
+    }
+  }
 
-  const columnsBase = getColumnBase({addMinusMonth, ...props})
+  const columnsBase = getColumnBase({addMinusMonth, addMinusDate, ...props})
   const {noValue, from, to, defaultValue} = getQueryInfo({query})
 
   const columns = Fields.transposeColumns([...columnsBase, ...(props.additionalCols ?? [])])
@@ -67,6 +73,21 @@ export default function useDateSwitcherFunc(props) {
     newQuery['month'] = formatDate(month)
     addQuery({...newQuery, ...getAdditionalPayload(data)})
   }
+  const switchDate = data => {
+    const date = data.date
+    if (!date) {
+      addQuery({date: undefined, ...getAdditionalPayload(data)})
+      return
+    }
+
+    ReactHookForm.setValue('from', date)
+    ReactHookForm.setValue('to', date)
+    const newQuery = {}
+    newQuery['from'] = formatDate(date)
+    newQuery['to'] = formatDate(date)
+
+    addQuery({...newQuery, ...getAdditionalPayload(data)})
+  }
 
   const switchFromTo = data => {
     const newQuery = {}
@@ -92,12 +113,20 @@ export default function useDateSwitcherFunc(props) {
   }
 }
 
-const getColumnBase = ({addMinusMonth, selectPeriod = false, selectMonth = false, monthOnly = false, yearOnly = false}) => {
+const getColumnBase = ({
+  addMinusMonth,
+  addMinusDate,
+  selectPeriod = false,
+  selectMonth = false,
+  monthOnly = false,
+  yearOnly = false,
+}) => {
   let columnsBase: any = {
     from: {
       id: 'from',
       label: 'から',
       type: 'date',
+
       form: {
         register: {
           required: '日付を指定してください',
@@ -139,7 +168,13 @@ const getColumnBase = ({addMinusMonth, selectPeriod = false, selectMonth = false
 
   if (!selectPeriod) {
     delete columnsBase.to
-    columnsBase.from.label = '日付'
+    columnsBase.from.label = '基準日'
+    columnsBase.from.surroundings = {
+      form: {
+        left: <ChevronDoubleLeftIcon className={`text-primary-main w-7`} onClick={() => addMinusDate(-1)} />,
+        right: <ChevronDoubleRightIcon className={`text-primary-main w-7`} onClick={() => addMinusDate(1)} />,
+      },
+    }
   }
   if (!selectMonth) {
     delete columnsBase.month

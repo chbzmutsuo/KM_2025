@@ -3,9 +3,8 @@ import {goBackAdoptor} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmOperation
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import React from 'react'
-import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
+import {FormProps} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
 import {Button} from '@components/styles/common-components/Button'
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 
 export default function GoBack(props: FormProps) {
   const {userInput, type, labelAffix} = props
@@ -28,16 +27,15 @@ export default function GoBack(props: FormProps) {
           const tbmOperationGroupId = userInput[`base`]?.id
           const {tbmRouteGroupId, date, distanceKm} = data
 
-          const payload = {tbmOperationGroupId, tbmRouteGroupId, date, distanceKm, type}
+          const payload: any = {tbmOperationGroupId, tbmRouteGroupId, date, distanceKm, type: type as string}
 
           toggleLoad(async () => {
-            const res = await fetchUniversalAPI(`tbmOperation`, `upsert`, {
-              where: {id: data?.id ?? 0},
-              create: payload,
-              update: payload,
-            })
-
-            toastByResult(res)
+            // const res = await fetchUniversalAPI(`tbmOperation`, `upsert`, {
+            //   where: {id: data?.id ?? 0},
+            //   create: payload,
+            //   update: payload,
+            // })
+            // toastByResult(res)
           })
 
           return

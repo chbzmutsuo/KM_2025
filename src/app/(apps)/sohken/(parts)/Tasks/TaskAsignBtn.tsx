@@ -79,13 +79,6 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
             一括反映
           </Button>
 
-          {/* <R_Stack>
-            追加候補：
-            {selectedTaskArray.map(d => {
-              return <ColoredText {...{bgColor: d.color}}>{d.name}</ColoredText>
-            })}
-          </R_Stack> */}
-
           <TableWrapper>
             <TableBorderedY>{CsvTable({headerRecords, bodyRecords}).ALL()}</TableBorderedY>
           </TableWrapper>
@@ -150,7 +143,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   type: `checkbox`,
                   className: `w-5 border h-5`,
-                  checked: doUpdate,
+                  checked: doUpdate ?? false,
                   onChange: e => handleOnChange(e, `checked`),
                 }}
               />
@@ -162,7 +155,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   className: inputClass,
                   type: `text`,
-                  value: name,
+                  value: name ?? '',
                   disabled: true,
                   onChange: e => handleOnChange(e, `name`),
                 }}
@@ -175,7 +168,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   className: inputClass,
                   type: `color`,
-                  value: activeTasks[name]?.color,
+                  value: activeTasks[name]?.color ?? '',
                   onChange: e => handleOnChange(e, `color`),
                 }}
               />
@@ -187,7 +180,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   className: inputClass,
                   type: `date`,
-                  value: formatDate(activeTasks[name]?.from),
+                  value: formatDate(activeTasks[name]?.from) ?? '',
                   onChange: e => handleOnChange(e, `from`),
                 }}
               />
@@ -199,7 +192,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   className: inputClass,
                   type: `date`,
-                  value: formatDate(activeTasks[name]?.to),
+                  value: formatDate(activeTasks[name]?.to) ?? '',
                   onChange: e => handleOnChange(e, `to`),
                 }}
               />
@@ -211,7 +204,7 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
                 {...{
                   className: inputClass,
                   type: `number`,
-                  value: activeTasks[name]?.requiredNinku,
+                  value: activeTasks[name]?.requiredNinku ?? '',
                   onChange: e => handleOnChange(e, `requiredNinku`),
                 }}
               />

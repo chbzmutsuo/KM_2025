@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import useWindowSize from 'src/cm/hooks/useWindowSize'
 import {cl} from 'src/cm/lib/methods/common'

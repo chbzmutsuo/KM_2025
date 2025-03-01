@@ -1,5 +1,5 @@
 import {DH} from 'src/cm/class/DH'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 import useSWR from 'swr'
 import {anyObject, colType} from '@cm/types/types'
 
@@ -109,7 +109,7 @@ export const getRecord = (props: {col: colType; currentValue: any; options: any[
       const modelName = convertColIdToModelName({col})
       const idIsNumber = !isNaN(Number(currentValue))
       if (idIsNumber) {
-        const {result} = await fetchUniversalAPI(modelName, 'findUnique', {
+        const {result} = await generarlFetchUniversalAPI(modelName, 'findUnique', {
           where: {id: isNaN(Number(currentValue)) ? 0 : Number(currentValue)},
         })
         record = result

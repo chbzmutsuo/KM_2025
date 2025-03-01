@@ -4,34 +4,47 @@ import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
   static getInclude = (includeProps: includeProps) => {
-    const tbmOperationGroup: Prisma.TbmOperationGroupFindManyArgs = {
-      include: {
-        TbmBase: {},
-        User: {},
-        TbmRefuelHistory: {},
-        TbmOperation: {
-          include: {
-            TbmRouteGroup: {
-              include: {
-                TbmRoute: {},
-              },
-            },
-          },
-        },
-        TbmVehicle: {},
-      },
-    }
+    // const tbmOperationGroup: Prisma.TbmOperationGroupFindManyArgs = {
+    //   include: {
+    //     TbmBase: {},
+    //     User: {},
+    //     TbmRefuelHistory: {},
+    //     TbmOperation: {
+    //       include: {
+    //         TbmRouteGroup: {
+    //           include: {
+    //             // TbmRoute: {},
+    //           },
+    //         },
+    //       },
+    //     },
+    //     TbmVehicle: {},
+    //   },
+    // }
     const tbmRouteGroup: Prisma.TbmRouteGroupFindManyArgs = {include: {TbmBase: {}}}
 
-    const tbmRoute: Prisma.TbmRouteFindManyArgs = {include: {TbmBillingAddress: {}, TbmRouteGroup: tbmRouteGroup}}
+    // const tbmRoute: Prisma.TbmRouteFindManyArgs = {include: {TbmBillingAddress: {}, TbmRouteGroup: tbmRouteGroup}}
 
     const tbmBase: Prisma.TbmBaseFindManyArgs = {
-      include: {TbmRouteGroup: {include: {TbmRoute: tbmRoute}}},
+      include: {
+        TbmRouteGroup: {
+          include: {
+            // TbmRoute: tbmRoute
+          },
+        },
+      },
     }
+    // const tbmOperation: Prisma.TbmOperationFindManyArgs = {
+    //   include: {
+    //     User: {include: {TbmBase: {}}},
+    //     TbmRouteGroup: {include: {TbmBase: {}}},
+    //   },
+    // }
 
     const include: {[key in PrismaModelNames]?: any} = {
-      tbmOperationGroup,
-      tbmRoute,
+      // tbmOperation,
+      // tbmOperationGroup,
+      // tbmRoute,
       tbmRouteGroup,
       tbmBase,
       user: {include: {TbmBase: {}}} as Prisma.UserFindManyArgs,

@@ -1,10 +1,10 @@
 'use client'
 
-import {getFormList, UserInputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate copy/FormList/formList'
+import {getFormList, UserInputType} from '@app/(apps)/tbm/(pages)/tbmOperationGroupCreate/FormList/formList'
 import {TextBlue, TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
 import {colorVariants} from '@components/styles/common-components/colorVariants'
-import {Absolute, C_Stack, CenterScreen, R_Stack} from '@components/styles/common-components/common-components'
+import {Absolute, C_Stack, Center, R_Stack} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {atomKey, useJotaiByKey} from '@hooks/useJotai'
 
@@ -51,13 +51,12 @@ export default function Updator({latestOperation}) {
   }
 
   return (
-    <CenterScreen className={`max-w-[600px] py-2`}>
+    <Center className={`max-w-[600px] py-2`}>
       {/* 入力フォームを表示 */}
       {renderCurrentForm()}
 
       <C_Stack className={`gap-8`}>
         {/* ボタン */}
-
         {currentForm ? (
           <></>
         ) : (
@@ -90,7 +89,7 @@ export default function Updator({latestOperation}) {
           </C_Stack>
         )}
       </C_Stack>
-    </CenterScreen>
+    </Center>
   )
 }
 

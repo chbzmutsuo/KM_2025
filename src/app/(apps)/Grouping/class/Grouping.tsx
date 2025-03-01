@@ -1,4 +1,4 @@
-import { formatDate} from '@cm/class/Days'
+import {formatDate} from '@cm/class/Days'
 import {DH} from '@cm/class/DH'
 import {faker} from '@faker-js/faker'
 
@@ -26,13 +26,13 @@ export class Grouping {
 
     return await fetchUniversalAPI('game', 'update', {
       where: {id: Game.id},
-      randomTargetStudentIds,
+      data: {randomTargetStudentIds},
     })
   }
   static RandomTargetStudentIds = async ({Game}) => {
     return await fetchUniversalAPI('game', 'update', {
       where: {id: Game.id},
-      randomTargetStudentIds: [],
+      data: {randomTargetStudentIds: []},
     })
   }
 
@@ -55,13 +55,15 @@ export class Grouping {
   static createNewPrompt = async ({newStatus = `アンケート実施`, Game, players, asSummary = false, dev = false}) => {
     const gameId = Game.id
     const prompt = await fetchUniversalAPI('questionPrompt', 'create', {
-      asSummary,
-      gameId,
+      data: {asSummary, gameId},
     }).then(res => res.result)
 
     const questionPromptId = prompt.id
 
-    await fetchUniversalAPI('game', 'update', {activeQuestionPromptId: prompt?.id ?? 0, where: {id: Game.id}})
+    await fetchUniversalAPI('game', 'update', {
+      where: {id: Game.id},
+      data: {activeQuestionPromptId: prompt?.id ?? 0},
+    })
 
     await Grouping.switchGameStatus({Game, status: newStatus})
     faker.locale = 'ja'
@@ -94,12 +96,12 @@ export class Grouping {
 
     const res = await fetchTransactionAPI({transactionQueryList})
     if (dev) {
-      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, status: 'アンケート終了'})
+      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, data: {status: 'アンケート終了'}})
     }
   }
 
   static switchGameStatus = async ({Game, status}) => {
-    return await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, status})
+    return await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, data: {status}})
   }
 
   /**班の番号 */

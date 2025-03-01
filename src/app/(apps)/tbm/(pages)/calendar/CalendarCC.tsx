@@ -163,7 +163,7 @@ const HolidayConfigCheckbox = (props: {daysInMonth: Days[]; calendarRecord?: Cal
                 onClick: async () => {
                   await fetchUniversalAPI(`calendar`, `update`, {
                     where: {id: calendarRecord?.id ?? 0},
-                    holidayType: value,
+                    data: {holidayType: value},
                   })
                   mutate()
                 },

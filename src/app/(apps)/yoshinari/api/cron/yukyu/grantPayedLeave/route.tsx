@@ -10,7 +10,6 @@ import {transactionQuery} from '@lib/server-actions/common-server-actions/doTran
 import {Prisma} from '@prisma/client'
 import {addMonths, addYears, isBefore, differenceInYears} from 'date-fns'
 import {NextRequest, NextResponse} from 'next/server'
-import {P_User} from 'scripts/generatedTypes'
 import {isCron} from 'src/non-common/serverSideFunction'
 
 export const GET = async (req: NextRequest) => {

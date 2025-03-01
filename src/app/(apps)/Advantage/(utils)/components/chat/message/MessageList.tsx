@@ -11,6 +11,7 @@ const MessageList = ({messages, setmessages, deleteMessage, lastMessageRef}) => 
           <div id={`message-${i}`} key={i} ref={i === messages.length - 1 ? lastMessageRef : null}>
             <SingleChatItem
               {...{
+                modelName: `comment`,
                 setmessages,
                 useGlobalProps,
                 commentObject,

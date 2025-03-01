@@ -73,12 +73,14 @@ model GenbaDay {
  ninku   Float?
 
  finished Boolean? @default(false)
- active   Boolean? @default(true)
- status   String?
+
+ active Boolean? @default(true)
+ status String?
 
  ninkuFullfilled             Boolean? @default(false)
- allRequiredNinku            Int?
+ isLastFullfilledDay         Boolean? @default(false)
  allAssignedNinkuTillThisDay Int?
+ allRequiredNinku            Int?
 
  genbaId       Int?
  GenbaDayShift GenbaDayShift[]
@@ -100,6 +102,7 @@ model GenbaTask {
  from          DateTime?
  to            DateTime?
  requiredNinku Float?
+
  // status        String?
 
  Genba                Genba                  @relation(fields: [genbaId], references: [id])

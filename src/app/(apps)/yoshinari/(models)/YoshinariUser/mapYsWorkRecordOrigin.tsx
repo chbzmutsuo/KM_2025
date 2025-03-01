@@ -95,7 +95,15 @@ export const mapYsWorkRecordOrigin = (props: {yoshinariUser: YoshinariUserClass;
       date,
     })
 
-    const shanaitairyuMins = from && to && (work?.mins ?? 0) - (chikoku?.mins ?? 0) - (soutai?.mins ?? 0) - (gaishutsu?.mins ?? 0)
+    const shanaitairyuMins =
+      from && to && (work?.mins ?? 0) - ((chikoku?.mins ?? 0) + (soutai?.mins ?? 0) + (gaishutsu?.mins ?? 0))
+    // if (formatDate(date) === `2025-02-20`) {
+    //   console.debug(work?.mins, shanaitairyuMins, chikoku?.mins, soutai?.mins, gaishutsu?.mins)
+    // }
+    // 遅刻が210分（08:30~12:00の3.5時間時間）
+    // 勤務時間が70分（12:50~17:35.50（定時））
+
+    // 「遅刻があった場合、遅刻時間を社内滞留から差し引く」
 
     const isLegalHoliday = formatDate(date, 'ddd') === rules.legalHoliday
     //=============休暇申請があった場合の処理=============

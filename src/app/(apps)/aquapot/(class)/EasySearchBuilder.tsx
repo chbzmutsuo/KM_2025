@@ -66,7 +66,36 @@ export const EasySearchBuilder = async () => {
 
     return result
   }
+  const aqCustomer = async (props: easySearchType) => {
+    'use server'
+
+    type exclusiveKeyStrings = 'normal' | 'fromBase'
+    type CONDITION_TYPE = Prisma.AqCustomerWhereInput
+    type exclusiveGroups = EasySearchObjectExclusiveGroup<exclusiveKeyStrings, CONDITION_TYPE>
+    const {session, query, dataModelName, easySearchExtraProps} = props
+    const {whereQuery} = easySearchExtraProps ?? {}
+
+    type keys = {
+      [key in string]: EasySearchObject
+    }
+
+    const Ex_SupportOrganization: exclusiveGroups = {
+      normal: {label: `通常`, CONDITION: {fromBase: false}},
+      fromBase: {label: `BASEから`, CONDITION: {fromBase: true}},
+    }
+
+    const dataArr: makeEasySearchGroupsProp[] = []
+    toRowGroup(1, dataArr, [
+      //
+      {exclusiveGroup: Ex_exclusive0, name: `全て`, additionalProps: {refresh: true}},
+      {exclusiveGroup: Ex_SupportOrganization, name: `区分`, additionalProps: {refresh: true}},
+    ])
+    const result = makeEasySearchGroups(dataArr) as keys
+
+    return result
+  }
   return {
     aqSaleRecord,
+    aqCustomer,
   }
 }

@@ -4,7 +4,7 @@ import {ForSelectConfig} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormCo
 import {OrSearchArray} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/Class/OrSearchArray'
 import {parseContexts} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/lib/useInitMySelect'
 
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 export const getAllowCreateDefault = ({contexts}) => {
   const {latestFormData} = parseContexts(contexts)
@@ -26,7 +26,7 @@ export const getAllowCreateDefault = ({contexts}) => {
         object: {name: props.searchFormData.name},
       })
 
-      const {result} = await fetchUniversalAPI(dataModeName, `findMany`, {where: {...where, OR}})
+      const {result} = await generarlFetchUniversalAPI(dataModeName, `findMany`, {where: {...where, OR}})
 
       return {optionsHit: result, searchFormData: props.searchFormData}
     }

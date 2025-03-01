@@ -56,10 +56,7 @@ export const Tbody = ({GameCtxValue, players, toggleAttendance, deleteAnswer}) =
                           onClick={async () => {
                             toggleLoad(async () => {
                               await fetchUniversalAPI(`answer`, `create`, {
-                                studentId: s.id,
-                                gameId: Game.id,
-                                questionPromptId: prompt.id,
-                                curiocity1: null,
+                                data: {studentId: s.id, gameId: Game.id, questionPromptId: prompt.id, curiocity1: null},
                               })
                             })
                           }}

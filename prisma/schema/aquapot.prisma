@@ -2,14 +2,15 @@
 model AqSaleCart {
  id Int @id @default(autoincrement())
 
+ baseOrderId   String?   @unique
  createdAt     DateTime  @default(now())
  updatedAt     DateTime? @default(now()) @updatedAt()
  sortOrder     Float     @default(0)
  date          DateTime
  paymentMethod String
 
- User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
- userId       Int
+ User         User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId       Int?
  AqCustomer   AqCustomer     @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
  aqCustomerId Int
  AqSaleRecord AqSaleRecord[]
@@ -17,10 +18,11 @@ model AqSaleCart {
 
 // 購入商品の1迷彩
 model AqSaleRecord {
- id        Int       @id @default(autoincrement())
- createdAt DateTime  @default(now())
- updatedAt DateTime? @default(now()) @updatedAt()
- sortOrder Float     @default(0)
+ baseSaleRecordId String?   @unique
+ id               Int       @id @default(autoincrement())
+ createdAt        DateTime  @default(now())
+ updatedAt        DateTime? @default(now()) @updatedAt()
+ sortOrder        Float     @default(0)
 
  date       DateTime
  quantity   Int
@@ -29,19 +31,20 @@ model AqSaleRecord {
  taxedPrice Float? // 税込価格
  remarks    String?
 
- User         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
- userId       Int
+ User   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int?
+
  AqCustomer   AqCustomer @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
  aqCustomerId Int
 
  AqProduct   AqProduct @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
  aqProductId Int
 
- AqPriceOption   AqPriceOption @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
- aqPriceOptionId Int
+ AqPriceOption   AqPriceOption? @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
+ aqPriceOptionId Int?
 
- AqSaleCart   AqSaleCart @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
- aqSaleCartId Int
+ AqSaleCart   AqSaleCart? @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
+ aqSaleCartId Int?
 }
 
 // 商品
@@ -56,10 +59,12 @@ model AqProduct {
  AqProductCategoryMaster   AqProductCategoryMaster? @relation(fields: [aqProductCategoryMasterId], references: [id], onDelete: Cascade)
  aqProductCategoryMasterId Int?
 
- price                 Float   @default(0)
+ fromBase Boolean? @default(false)
+
  cost                  Float   @default(0)
- sku                   String?
- taxType               String?
+ // price                 Float   @default(0)
+ // sku                   String?
+ // taxType               String?
  taxRate               Float   @default(10)
  stock                 Int     @default(0)
  inInventoryManagement Boolean @default(true)
@@ -100,6 +105,8 @@ model AqCustomer {
  sortOrder      Float     @default(0)
  email          String?   @unique
  customerNumber String?   @unique
+
+ fromBase Boolean? @default(false)
 
  companyName          String?
  jobTitle             String?

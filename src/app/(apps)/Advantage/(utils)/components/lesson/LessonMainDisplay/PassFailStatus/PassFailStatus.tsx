@@ -47,7 +47,7 @@ const PassFailStatus = ({LessonLog, useGlobalProps}) => {
                         where: {
                           id: LessonLog.id,
                         },
-                        isPassed: !LessonLog.isPassed,
+                        data: {isPassed: !LessonLog.isPassed},
                       })
                     },
                     {refresh: true}
@@ -67,7 +67,9 @@ const PassFailStatus = ({LessonLog, useGlobalProps}) => {
                           where: {
                             id: LessonLog.id,
                           },
-                          isPassed: !LessonLog.isPassed,
+                          data: {
+                            isPassed: !LessonLog.isPassed,
+                          },
                         })
                       },
                       {refresh: true}

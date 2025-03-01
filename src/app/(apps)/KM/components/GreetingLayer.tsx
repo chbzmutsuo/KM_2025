@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+ 
 import React, {useState} from 'react'
 import {Kaizen} from '@app/(apps)/KM/class/Kaizen'
 

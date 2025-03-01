@@ -70,7 +70,7 @@ export function CreateApRequestArray({
                 toggleLoad(async () => {
                   await fetchUniversalAPI(`apRequest`, `update`, {
                     where: {id: apRequest.id},
-                    withdrawn: true,
+                    data: {withdrawn: true},
                   })
                 })
               }

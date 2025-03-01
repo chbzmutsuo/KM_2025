@@ -77,8 +77,8 @@ model User {
   UserPayedLeaveTypeMidTable       UserPayedLeaveTypeMidTable[]
   AqSaleRecord                     AqSaleRecord[]
   TsConstructionSubConUserMidTable TsConstructionSubConUserMidTable[]
-  TbmOperation                     TbmOperation[]
-  TbmOperationGroup                TbmOperationGroup[]
+  // TbmOperation                     TbmOperation[]
+  // TbmOperationGroup                TbmOperationGroup[]
   AqCustomer                       AqCustomer[]
   TbmBase                          TbmBase?                           @relation(fields: [tbmBaseId], references: [id])
   tbmBaseId                        Int?

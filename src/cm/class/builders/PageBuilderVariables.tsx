@@ -9,6 +9,7 @@ import {PrismaModelNames} from '@cm/types/prisma-types'
 import {anyObject, DetailPagePropType} from '@cm/types/types'
 import {useEffect, useState} from 'react'
 import {RoleMaster, User, UserRole} from '@prisma/client'
+import useGlobal from '@hooks/globalHooks/useGlobal'
 
 export type PageBuidlerClassType = {
   [key in PrismaModelNames]: surroundings
@@ -34,14 +35,17 @@ export const roleMaster: DataModelBuilder = {
 }
 
 const RoleAllocationTable = ({PageBuilderExtraProps}) => {
+  const {rootPath} = useGlobal()
   type user = User & {UserRole: UserRole[]}
   const [users, setusers] = useState<user[]>([])
   const [roles, setroles] = useState<RoleMaster[]>([])
 
   const fetchUsers = async () => {
+    const apps = {has: rootPath}
     const {result: users = []} = await fetchUniversalAPI(`user`, `findMany`, {
-      where: PageBuilderExtraProps?.where,
+      where: {...PageBuilderExtraProps?.where, apps},
       include: {UserRole: {include: {RoleMaster: {}}}},
+      orderBy: [{sortOrder: `asc`}, {code: `asc`}, {name: `asc`}],
     })
     setusers(users)
   }

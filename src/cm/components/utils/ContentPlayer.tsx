@@ -79,12 +79,12 @@ export default function ContentPlayer(props: ContentPlayerProps) {
         break
       }
       default: {
-        // eslint-disable-next-line @next/next/no-img-element
+         
         thumbnail = <img src={src} alt="" style={{...thumbnailStyle}} />
 
-        // eslint-disable-next-line @next/next/no-img-element
+         
         main = (
-          // eslint-disable-next-line @next/next/no-img-element
+           
           <img
             src={src}
             alt=""

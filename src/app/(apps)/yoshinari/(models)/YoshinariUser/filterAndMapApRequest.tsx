@@ -2,19 +2,20 @@ import {rules, YoshinariUserClass} from '@app/(apps)/yoshinari/(models)/Yoshinar
 import {MappeadApRequest} from '@class/ApRequestClass/ApRequestClass'
 import {formatDate} from '@class/Days'
 import {TimeClass} from '@class/TimeClass'
-import { addMinutes} from 'date-fns'
+import {ApRequest, ApRequestTypeMaster} from '@prisma/client'
+import {addMinutes} from 'date-fns'
 
 export const filterAndMapApRequest = (props: {label; apRequest; yoshinariUser: YoshinariUserClass}) => {
   const {label, yoshinariUser, apRequest} = props
 
   const result = apRequest
-    .filter(request => {
+    .filter((request: ApRequest & {ApRequestTypeMaster: ApRequestTypeMaster}) => {
       return request.ApRequestTypeMaster.name === label
     })
-    .map(d => {
-      const date = d.cf[`日付`].value
+    .map(request => {
+      const date = request.cf[`日付`].value
       const {rules} = YoshinariUserClass.getUserWorkRules({user: yoshinariUser.user, today: date})
-      const {日付, 休暇区分, 開始時刻, 終了時刻} = d.cf ?? {}
+      const {日付, 休暇区分, 開始時刻, 終了時刻} = request.cf ?? {}
 
       let name = undefined
 
@@ -45,30 +46,37 @@ export const filterAndMapApRequest = (props: {label; apRequest; yoshinariUser: Y
         const minutesAfterWorkEnd = 30
         const workEndTime = new Date(formatDate(日付.value) + ' ' + rules.work.endTime)
         const workEndTimePlusMinutes = addMinutes(workEndTime, minutesAfterWorkEnd)
-        console.log(workEndTime, workEndTimePlusMinutes) //////logs
-        from = new Date(Math.max(new Date(from).getTime(), workEndTimePlusMinutes.getTime()))
+
+        const eveningWork = from >= workEndTime
+
+        if (eveningWork) {
+          from = new Date(Math.max(new Date(from).getTime(), workEndTimePlusMinutes.getTime()))
+        }
+        // if (formatDate(from) === '2025-02-06') {
+        //   console.log({
+        //     from: formatDate(from, 'YYYY/MM/DD(ddd) HH:mm'),
+        //     to: formatDate(to, 'YYYY/MM/DD(ddd) HH:mm'),
+        //     test: formatDate(日付.value) + ' ' + 開始時刻?.value,
+        //   })
+        // }
       }
 
       if (from > to) {
         to.setDate(to.getDate() + 1)
-        // console.debug('日跨ぎ発生のため、toを1日先に', {
-        //   from: formatDate(from, 'YYYY/MM/dd(ddd) HH:mm'),
-        //   to: formatDate(to, 'YYYY/MM/dd(ddd) HH:mm'),
-        // })
       }
 
       const mins = TimeClass.toMin(to.getTime() - from.getTime())
-      d[`name`] = name
-      d[`from`] = from
-      d[`to`] = to
-      d[`mins`] = mins
-      d[`rules`] = rules
+      request[`name`] = name
+      request[`from`] = from
+      request[`to`] = to
+      request[`mins`] = mins
+      request[`rules`] = rules
       // console.debug({
       //   mins,
       //   from: formatDate(from, 'YYYY/MM/DD HH:mm'),
       //   to: formatDate(to, 'YYYY/MM/DD HH:mm'),
       // })
-      return d
+      return request
     })
   return result as (MappeadApRequest & {
     name: string

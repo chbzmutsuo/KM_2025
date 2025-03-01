@@ -37,7 +37,11 @@ export async function GET(req: NextRequest) {
 
       const {result} = await fetchUniversalAPI(`googleAccessToken`, `upsert`, {
         where: {email: googleUser.email},
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         create: data,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         update: data,
       })
 

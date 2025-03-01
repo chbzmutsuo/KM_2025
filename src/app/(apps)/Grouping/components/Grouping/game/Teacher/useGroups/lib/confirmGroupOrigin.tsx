@@ -53,12 +53,12 @@ export const confirmGroupOrigin = async ({initialGroupName, groups, toggleLoad, 
     const {result: UpdatedGame} = await fetchUniversalAPI('game', 'update', {
       include: gameUpdatePayload.include,
       where: gameUpdatePayload.where,
-      ...gameUpdatePayload.data,
+      data: {...gameUpdatePayload.data},
     })
 
     const latestGroup = UpdatedGame?.Group?.[0]
 
-    const res = await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, activeGroupId: latestGroup.id})
+    const res = await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, data: {activeGroupId: latestGroup.id}})
 
     toast.success(`グループを作成しました。`)
     setgroups(null)

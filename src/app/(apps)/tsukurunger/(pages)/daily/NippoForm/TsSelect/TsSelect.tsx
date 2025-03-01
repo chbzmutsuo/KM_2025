@@ -1,4 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
+ 
 'use client'
 import {OptionSelector} from '@app/(apps)/tsukurunger/(pages)/daily/NippoForm/TsSelect/OptionSelector'
 import {TsNippo} from '@app/(apps)/tsukurunger/(models)/Nippo'

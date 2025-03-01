@@ -63,10 +63,7 @@ export default function useGlobalSaleEditor() {
                     AqSaleCart: {update: {paymentMethod, date}},
                   },
                 }
-                const res = await fetchUniversalAPI(`aqSaleRecord`, `update`, {
-                  where: args2.where,
-                  ...args2.data,
-                })
+                const res = await fetchUniversalAPI(`aqSaleRecord`, `update`, args2)
                 setGMF_OPEN(null)
               })
             },

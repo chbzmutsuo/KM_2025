@@ -14,7 +14,7 @@ export const ApReceiverStatusInfo = ({ApRequest, handleApprovementFormModalOpen,
       {ApRequest.ApReceiver.length === 0 ? (
         <span className={`text-xs`}>承認者未設定</span>
       ) : (
-        <C_Stack className={`gap-0.5 text-sm`}>
+        <C_Stack className={` gap-0.5 text-sm`}>
           {ApRequest.ApReceiver.map((receiver, i) => {
             const name = receiver?.User?.name
             const status = receiver?.status
@@ -51,8 +51,12 @@ export const ApReceiverStatusInfo = ({ApRequest, handleApprovementFormModalOpen,
 
             return (
               <div key={i}>
-                <div>
-                  <span>{name}</span>: <EditButton />
+                <div className={` flex w-full items-start justify-between`}>
+                  <div className={` w-[70px] `}>{name}</div>
+                  <span>:</span>
+                  <span>
+                    <EditButton />
+                  </span>
                 </div>
               </div>
             )

@@ -6,8 +6,10 @@ import {GenbaForm} from '@app/(apps)/sohken/class/pageBuilderComponents/GenbaDay
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {Fields} from '@class/Fields/Fields'
 import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
+import {DataModelBuilder, roleMaster} from '@class/builders/PageBuilderVariables'
 
 export class PageBuilder {
+  static roleMaster: DataModelBuilder = roleMaster
   static genba = {form: GenbaForm}
   static genbaDay = {
     top: GenbaDayShiftEmptyStuffSearcher,

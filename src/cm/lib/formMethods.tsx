@@ -1,5 +1,5 @@
 import {DH} from 'src/cm/class/DH'
-import {fetchUniversalAPI, updateWithImageAndAddUrlToLatestFormData} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI, updateWithImageAndAddUrlToLatestFormData} from '@lib/methods/api-fetcher'
 import {isMultiItem, updateMultiItemInTransaction} from 'src/cm/lib/methods/multipleItemLib'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
@@ -103,7 +103,11 @@ export const updateSimply = async (props: {
     }
   })
 
-  const updatedModelRes = await fetchUniversalAPI(dataModelName, 'upsert', {where: {id: id ?? 0}, ...payload})
+  const updatedModelRes = await generarlFetchUniversalAPI(dataModelName, 'upsert', {
+    where: {id: id ?? 0},
+    create: payload,
+    update: payload,
+  })
 
   await updateMultiItemInTransaction({
     MultiItems,

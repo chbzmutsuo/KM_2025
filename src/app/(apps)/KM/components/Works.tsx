@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {C_Stack, MyContainer, Padding, R_Stack} from '@cm/components/styles/common-components/common-components'
 import {WorkCard} from '@app/(apps)/KM/(public)/top/WorkCard'

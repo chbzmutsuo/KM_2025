@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 import {PDFDocument} from 'pdf-lib'
 import React, {useState} from 'react'
 import * as pdfjsLib from 'pdfjs-dist'
-import 'pdfjs-dist/build/pdf.worker.entry'
+
 import {C_Stack} from '@components/styles/common-components/common-components'
 import Loader from '@components/utils/loader/Loader'
 import {jotai_pdfImages, jotai_pdfPages, useJotai} from '@hooks/useJotai'
@@ -47,7 +47,7 @@ export default function usePdfSplitter() {
             const page = await pdfJsDoc.getPage(i + 1) // pdfjs-dist は 1-indexed
             const viewport = page.getViewport({scale: 1})
             const canvas = document.createElement('canvas')
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+             
             const context = canvas.getContext('2d')!
             canvas.width = viewport.width
             canvas.height = viewport.height

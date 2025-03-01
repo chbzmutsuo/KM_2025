@@ -35,7 +35,7 @@ export const serverUpdateSale = async (props: {
       },
     }
 
-    const newCartRes = await fetchUniversalAPI(`aqSaleCart`, `create`, args.data, transactionPrisma)
+    const newCartRes = await fetchUniversalAPI(`aqSaleCart`, `create`, args, transactionPrisma)
 
     if (newCartRes.success) {
       messages.push(`${cartItems?.length} 件の受注を登録しました`)

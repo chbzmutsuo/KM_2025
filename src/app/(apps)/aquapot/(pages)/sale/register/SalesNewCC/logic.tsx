@@ -35,7 +35,7 @@ export const createAqSaleCart = async ({useGlobalProps, userData, cartItems, tra
     },
   }
 
-  const newCartRes = await fetchUniversalAPI(`aqSaleCart`, `create`, args.data, transactionPrisma)
+  const newCartRes = await fetchUniversalAPI(`aqSaleCart`, `create`, args, transactionPrisma)
   if (newCartRes.success) {
     toast.success(`${cartItems?.length} 件の受注を登録しました`)
   } else {

@@ -1,6 +1,7 @@
-import Redirector from '@components/utils/Redirector'
+import {Absolute} from '@components/styles/common-components/common-components'
 import React from 'react'
 
 export default function Top() {
-  return <Redirector redirectPath={`/tbm/tbmOperationGroupCreate`}></Redirector>
+  return <Absolute>Top</Absolute>
+  // return <Redirector redirectPath={`/tbm/tbmOperationGroupCreate`}></Redirector>
 }

@@ -1,13 +1,13 @@
 import {TsNippo} from '@app/(apps)/tsukurunger/(models)/Nippo'
 import {TsConstructionClass} from '@app/(apps)/tsukurunger/(models)/TsConstructionClass'
 import {taxRate} from '@app/(apps)/tsukurunger/class/constants'
-import { formatDate} from '@class/Days'
+import {formatDate} from '@class/Days'
 import {DH} from '@class/DH'
 import {bodyRecordsType} from '@components/styles/common-components/CsvTable/CsvTable'
 import useLoader from '@hooks/globalHooks/useLoader'
 
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import { useState} from 'react'
+import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {useState} from 'react'
 
 const MonthcolSpan = 3
 export type monthObejectType = {
@@ -253,7 +253,7 @@ const getSummaryCsvTableProps = ({
                   tsConstructionId: data.tsConstructionId,
                 },
               },
-              ...data,
+              ...createUpdate(data),
             })
             settsConstructionDiscountList(prev => {
               const value = e.target.value

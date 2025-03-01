@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {cl, getColorStyles} from 'src/cm/lib/methods/common'
 import {IconBtn} from 'src/cm/components/styles/common-components/IconBtn'

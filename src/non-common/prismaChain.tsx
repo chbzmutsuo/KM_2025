@@ -1,6 +1,6 @@
 import {prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
 import {requestResultType} from '@cm/types/types'
-import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/getGenbaScheduleStatus'
+import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
 
 import {NotifyAfterApRequestStatusUpdate} from 'src/non-common/(chains)/NotifyAfterApRequestStatusUpdate'
 

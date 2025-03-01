@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 import {props} from 'src/cm/components/styles/common-components/type'
 import {CSSProperties} from 'react'
 

@@ -75,6 +75,10 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
     const substituteHoliday_illegal =
       (MONTH_AGG?.holidayWorkDays_illegal?.count ?? 0) - Math.min(MONTH_AGG?.holidayWorkDays_illegal?.count ?? 0, totalFurikyu)
 
+    if (MONTH_AGG?.chikoku.count) {
+      console.log(user.name, MONTH_AGG?.chikoku) //////logs
+    }
+
     return [
       {h: `コード`, b: show && user?.code},
       {h: `氏名`, b: show && user?.name},
@@ -103,9 +107,9 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
       {h: `私有車\n（km）`, b: rounder(MONTH_AGG?.privateCarUsageKm?.count)},
       {h: `通常残業\n(時間)`, b: rounder(MONTH_AGG?.normalOverTime?.count, 'hour')},
       {h: `深夜残業\n(時間)`, b: rounder(MONTH_AGG?.lateOverTime?.count, 'hour')},
-      {h: `遅刻\n(時間)`, b: rounder(MONTH_AGG?.chikoku?.count)},
-      {h: `早退\n(時間)`, b: rounder(MONTH_AGG?.soutai?.count)},
-      {h: `外出\n(時間)`, b: rounder(MONTH_AGG?.gaishutsu?.count)},
+      {h: `遅刻\n(時間)`, b: rounder(MONTH_AGG?.chikoku?.count, 'hour')},
+      {h: `早退\n(時間)`, b: rounder(MONTH_AGG?.soutai?.count, 'hour')},
+      {h: `外出\n(時間)`, b: rounder(MONTH_AGG?.gaishutsu?.count, 'hour')},
       {h: `総日数\n（日）`, b: show && totalDayCount},
     ]
   }

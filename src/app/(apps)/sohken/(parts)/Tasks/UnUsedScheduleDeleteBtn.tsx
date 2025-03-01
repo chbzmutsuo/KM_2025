@@ -1,9 +1,11 @@
 import {deleteGenbaDayWithoutAnyResource} from '@app/(apps)/sohken/(parts)/Tasks/handleUpdateSchedule'
 import {Button} from '@components/styles/common-components/Button'
+import useMatchMutate from '@hooks/useMatchMutate'
 import React from 'react'
 import {toast} from 'react-toastify'
 
 export default function UnUsedScheduleDeleteBtn({genba, router}) {
+  const mutateAll = useMatchMutate()
   return (
     <Button
       className={`text-xs`}
@@ -17,6 +19,7 @@ export default function UnUsedScheduleDeleteBtn({genba, router}) {
             toast.warn(`削除するスケジュールがありませんでした。`)
           }
         }
+        mutateAll()
         router.refresh()
       }}
     >

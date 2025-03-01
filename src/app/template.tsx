@@ -4,7 +4,7 @@ import React from 'react'
 
 import DynamicLoader from '@components/utils/loader/Loader'
 import {R_Stack} from '@components/styles/common-components/common-components'
-import {cl, isDev} from '@cm/lib/methods/common'
+import {cl} from '@cm/lib/methods/common'
 
 import ColOptionModal from '@components/DataLogic/TFs/MyTable/Thead/ColOption/ColOptionModal'
 import useInitGlobalHooks from '@hooks/globalHooks/useInitGlobalHooks'
@@ -18,7 +18,6 @@ import {useScrollPosition} from '@hooks/scrollPosition/useScrollPosition'
 
 import useLogOnRender from '@hooks/useLogOnRender'
 import {usePageTracking} from '@hooks/usePageTracking'
-import {Button} from '@components/styles/common-components/Button'
 
 export default function Global_Template(props) {
   const {globalHooks, globalPropsReady} = useInitGlobalHooks()
@@ -56,11 +55,11 @@ const Main = ({children, router}) => {
 
       <R_Stack id="portal-root-bottom-fixed" className={cl(` fixed bottom-0 w-full  `)}></R_Stack>
 
-      {isDev && (
+      {/* {isDev && (
         <div className={`fixed bottom-1 right-1`}>
           <Button {...{onClick: () => router.refresh()}}>更新</Button>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

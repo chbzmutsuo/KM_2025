@@ -4,14 +4,13 @@ import {P_Query} from '@cm/class/PQuery'
 import GameMainPage from '@app/(apps)/Grouping/components/Grouping/game/GameMainPage'
 import {fetchUniversalAPI, searchModels} from '@lib/methods/api-fetcher'
 
-
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 import {Prisma} from '@prisma/client'
 import {prismaDataExtractionQueryType} from '@components/DataLogic/TFs/Server/Conf'
 
 export default async function Page(props) {
-  const query = await props.searchParams;
-  const params = await props.params;
+  const query = await props.searchParams
+  const params = await props.params
   const dataModelName = 'game'
 
   const {take, page, skip} = P_Query.getPaginationPropsByQuery({query, tableId: ``, countPerPage: 20})
@@ -64,7 +63,7 @@ export default async function Page(props) {
         },
       },
     }
-    const {result} = await fetchUniversalAPI('game', 'update', {where: {id: game.id}, ...resetGameStatusPayload.data})
+    const {result} = await fetchUniversalAPI('game', 'update', resetGameStatusPayload)
 
     await Grouping.createNewPrompt({
       newStatus: `アンケート実施`,

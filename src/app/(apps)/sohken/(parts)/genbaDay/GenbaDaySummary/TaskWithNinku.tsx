@@ -1,9 +1,7 @@
 'use client'
 import {C_Stack, R_Stack} from '@cm/components/styles/common-components/common-components'
 
-
 import {ColoredText} from '@components/styles/common-components/colors'
-
 
 import {PlusCircleIcon} from '@heroicons/react/20/solid'
 import React from 'react'
@@ -11,17 +9,20 @@ import {GetNinkuList} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/
 
 export const TaskWithNinku = ({GenbaDay, editable, setGenbaDayCardEditModal, GenbaDayTaskMidTable}) => {
   const {ninkuList, result} = GetNinkuList({GenbaDay, theDay: GenbaDay.date, GenbaDayTaskMidTable})
-  const handleOnClick = ({taskMidTable = undefined}) =>
-    setGenbaDayCardEditModal({
-      taskMidTable,
-      genbaId: GenbaDay.Genba.id,
-      genbaDayId: GenbaDay.id,
-    })
+  const handleOnClick = ({taskMidTable = undefined}) => {
+    if (editable) {
+      setGenbaDayCardEditModal({
+        taskMidTable,
+        genbaId: GenbaDay.Genba.id,
+        genbaDayId: GenbaDay.id,
+      })
+    }
+  }
 
   return (
     <R_Stack className={`flex-nowrap  gap-1`}>
       {editable && (
-        <button onClick={() => handleOnClick({})} className={`t-link`}>
+        <button onClick={() => handleOnClick({})}>
           <PlusCircleIcon className={`w-6`} />
         </button>
       )}
@@ -30,9 +31,16 @@ export const TaskWithNinku = ({GenbaDay, editable, setGenbaDayCardEditModal, Gen
         {GenbaDayTaskMidTable.map((d, i) => {
           const {name, from, to, requiredNinku, color} = d.GenbaTask
 
+          const calc = result[name].reduce((acc, curr) => acc + curr, 0)
+          const db = GenbaDay.allAssignedNinkuTillThisDay
+          // if (calc !== db) {
+          //   console.log(`${name}の人工が一致しません。`)
+          // console.log({date: formatDate(GenbaDay.date), calc, db})
+          // }
+
           return (
             <R_Stack
-              className={`onHover gap-0.5`}
+              className={` gap-0.5`}
               key={i}
               {...{
                 onClick: () => handleOnClick({taskMidTable: d}),

@@ -28,6 +28,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
       children: [
         {tabId: 'sale/register', label: '売上登録'},
         {tabId: 'sale/list', label: '売上一覧'},
+        {tabId: 'sale/baseImport', label: 'BASEデータインポート'},
       ],
     },
     {

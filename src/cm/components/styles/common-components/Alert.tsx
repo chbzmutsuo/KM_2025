@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import {cl} from 'src/cm/lib/methods/common'
 import {colorClassMaster, colorVariants} from 'src/cm/components/styles/common-components/colorVariants'

@@ -15,7 +15,7 @@ export const POST = async () => {
 
         await fetchUniversalAPI(`genbaDay`, `update`, {
           where: {unique_date_genbaId},
-          date: toUtc(d.date),
+          data: {date: toUtc(d.date)},
         })
       }
     })

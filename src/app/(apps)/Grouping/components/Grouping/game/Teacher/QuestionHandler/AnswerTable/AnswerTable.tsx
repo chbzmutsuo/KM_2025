@@ -30,7 +30,7 @@ const AnswerTable = ({handleCreateGroup, GameCtxValue}) => {
         array = array.filter(id => id !== studentId)
       }
 
-      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, absentStudentIds: array})
+      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, data: {absentStudentIds: array}})
     })
   }
 
@@ -45,23 +45,24 @@ const AnswerTable = ({handleCreateGroup, GameCtxValue}) => {
     const msg = `回答をやり直しますか？`
     if (confirm(msg)) {
       toggleLoad(async () => {
-        const newQuestions = {
-          curiocity1: null,
-          curiocity2: null,
-          curiocity3: null,
-          curiocity4: null,
-          curiocity5: null,
-          efficacy1: null,
-          efficacy2: null,
-          efficacy3: null,
-          efficacy4: null,
-          efficacy5: null,
-          impression: null,
-          lessonSatisfaction: null,
-          lessonImpression: null,
-        }
-
-        await fetchUniversalAPI('answer', 'update', {where: {id: answer.id}, ...newQuestions})
+        await fetchUniversalAPI('answer', 'update', {
+          where: {id: answer.id},
+          data: {
+            curiocity1: null,
+            curiocity2: null,
+            curiocity3: null,
+            curiocity4: null,
+            curiocity5: null,
+            efficacy1: null,
+            efficacy2: null,
+            efficacy3: null,
+            efficacy4: null,
+            efficacy5: null,
+            impression: null,
+            lessonSatisfaction: null,
+            lessonImpression: null,
+          },
+        })
         toast.warning(`回答を削除しました。再度入力できます。`)
       })
     }

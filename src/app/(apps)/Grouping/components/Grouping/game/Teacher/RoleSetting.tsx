@@ -31,10 +31,12 @@ export const RoleSetting = ({Game, useGlobalProps}) => {
           const {name, color, maxCount} = d
 
           return await fetchUniversalAPI(`learningRoleMasterOnGame`, `create`, {
-            name,
-            color,
-            maxCount,
-            Game: {connect: {id: Game.id}},
+            data: {
+              name,
+              color,
+              maxCount,
+              Game: {connect: {id: Game.id}},
+            },
           })
         })
       )

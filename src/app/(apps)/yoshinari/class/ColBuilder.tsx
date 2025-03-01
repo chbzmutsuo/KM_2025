@@ -121,8 +121,10 @@ export class ColBuilder {
         {id: `lunchBreak_endTime`, label: '休憩終了', type: `time`},
       ]).aggregateOnSingleTd().plain,
 
+      {id: `fixedOvertime`, label: `固定残業`, form: {}, type: `time`, td: {hidden: true}},
       ...new Fields([
         {id: `workMins`, label: '勤務時間（分）', type: `number`},
+
         {
           id: `legalHoliday`,
           label: '法定休日',
@@ -130,6 +132,7 @@ export class ColBuilder {
           forSelect: {optionsOrOptionFetcher: Yoshinari.constants().legalHolidayTypes},
         },
       ]).aggregateOnSingleTd().plain,
+
       ...new Fields([
         {
           id: `calendar-edit`,

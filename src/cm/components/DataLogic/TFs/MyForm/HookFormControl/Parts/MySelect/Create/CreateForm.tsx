@@ -11,7 +11,7 @@ import {Button} from 'src/cm/components/styles/common-components/Button'
 
 import useBasicFormProps from 'src/cm/hooks/useBasicForm/useBasicFormProps'
 
-import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import React, {useEffect} from 'react'
 
 export default function CreateForm(props: {SearchFormHook: SearchFormHookType; contexts: contextsType}) {
@@ -52,7 +52,9 @@ export default function CreateForm(props: {SearchFormHook: SearchFormHookType; c
         onSubmit={async data => {
           if (confirm(`新規にマスタデータを作成しますか?`) === false) return
           const modelName = controlContextValue.col.id.replace('Id', '') as PrismaModelNames
-          const res = await fetchUniversalAPI(modelName, 'create', data)
+          const res = await generarlFetchUniversalAPI(modelName, 'create', {
+            data,
+          })
 
           res.result = {id: res.result.id, name: res.result.name}
 

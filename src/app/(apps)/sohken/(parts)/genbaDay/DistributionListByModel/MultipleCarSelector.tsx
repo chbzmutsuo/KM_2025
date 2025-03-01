@@ -8,9 +8,9 @@ import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
-import { Prisma} from '@prisma/client'
+import {Prisma} from '@prisma/client'
 import React, {useState} from 'react'
-import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/getGenbaScheduleStatus'
+import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
 
 type selectedCarObjectType = {[key: string]: {active: boolean}}
 
@@ -78,7 +78,6 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
       })
 
       record.forEach(car => {
-        console.log(car) //////logs
         const payload = {
           genbaId: GenbaDay.genbaId,
           genbaDayId: GenbaDay.id,
@@ -102,9 +101,6 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
         })
       })
 
-      transactionQueryList.forEach(
-        d => console.log(d) //////logs
-      )
       toggleLoad(
         async () => {
           await fetchTransactionAPI({transactionQueryList})

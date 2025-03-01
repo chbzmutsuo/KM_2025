@@ -7,12 +7,10 @@ import React from 'react'
 
 export default async function Page() {
   const {result} = await fetchUniversalAPI(`aqCustomerRecord`, `aggregate`, {
-    select: {
-      _count: true,
-    },
-    where: {
-      status: `対応中`,
-    },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    select: {_count: true},
+    where: {status: `対応中`},
   })
 
   return (

@@ -14,7 +14,7 @@ import {addDays} from 'date-fns'
 import React from 'react'
 
 export default async function CalendarPage(props) {
-  const query = await props.searchParams;
+  const query = await props.searchParams
   const tomorrow = addDays(getMidnight(), 1)
   const {whereQuery, redirectPath} = await dateSwitcherTemplate({
     defaultWhere: {from: tomorrow},
@@ -64,7 +64,9 @@ export default async function CalendarPage(props) {
             ],
             bodyRecords: days.map((d, dayIdx) => {
               const GenbaTaskStartingToday = allGenbaTasks.filter(task => Days.isSameDate(task.from, d))
-              const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => acc + task.requiredNinku, 0)
+              const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => {
+                return acc + task.requiredNinku
+              }, 0)
 
               const href = HREF(`/sohken/genbaDay`, {from: formatDate(d)}, query)
               return {

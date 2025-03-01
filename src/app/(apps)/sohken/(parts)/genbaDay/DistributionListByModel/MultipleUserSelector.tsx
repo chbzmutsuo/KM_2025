@@ -8,11 +8,10 @@ import {TableBordered, TableWrapper} from '@components/styles/common-components/
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
-import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
+import {fetchTransactionAPI, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 import {GenbaDayShift, Prisma} from '@prisma/client'
 import React, {useState} from 'react'
-import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/getGenbaScheduleStatus'
 
 type selectedUserObjectType = {
   [key: string]: {
@@ -139,7 +138,7 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
           })
 
           await fetchTransactionAPI({transactionQueryList})
-          await genbaDayUpdateChain({genbaId: GenbaDay.genbaId})
+          await fetchUniversalAPI(`genbaDay`, `update`, {where: {id: GenbaDay.id}, data: {}})
           handleClose()
         },
         {refresh: true, mutate: true}

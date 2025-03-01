@@ -1,6 +1,5 @@
-import {PrismaModelNames} from '@cm/types/prisma-types'
 import {IconBtn} from '@components/styles/common-components/IconBtn'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {PlusIcon} from 'lucide-react'
 import {useRouter} from 'next/navigation'
 
@@ -25,9 +24,9 @@ export const DSBM_Label = ({
   const router = useRouter()
   async function asignToGenbaDate() {
     if (GDS_DND.picked) {
-      await fetchUniversalAPI(RelationalModel as PrismaModelNames, `update`, {
+      await generarlFetchUniversalAPI(RelationalModel, `update`, {
         where: {id: GDS_DND.picked.id},
-        genbaDayId: GenbaDay.id,
+        data: {genbaDayId: GenbaDay.id},
       })
 
       router.refresh()
@@ -35,7 +34,15 @@ export const DSBM_Label = ({
     }
   }
   return (
-    <div {...{onClick: () => ShiftEditFormModalGMF.setGMF_OPEN(globalFormStateCommonProps)}}>
+    <div
+      {...{
+        onClick: () => {
+          if (editable) {
+            ShiftEditFormModalGMF.setGMF_OPEN(globalFormStateCommonProps)
+          }
+        },
+      }}
+    >
       <IconBtn
         {...{
           className: `row-stack justify-between w-full !px-2 py-0.5`,

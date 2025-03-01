@@ -34,7 +34,7 @@ export default async function Page(props) {
   const {YoshinariUsers} = await YoshinariUserClass.getUserAndYukyuHistory({userId: session.id})
 
   return (
-    <Padding>
+    <Padding className={`print-target`}>
       <FitMargin>
         <KintaiSheetCC {...{yukyuGroupedBy, YoshinariUser: YoshinariUsers[0], query, whereQuery}} />
       </FitMargin>

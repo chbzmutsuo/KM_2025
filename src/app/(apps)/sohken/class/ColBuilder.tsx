@@ -1,7 +1,6 @@
 'use client'
 
 import {userForSelect} from '@app/(apps)/sohken/class/sohken-constants'
-import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 
 import {Fields} from '@cm/class/Fields/Fields'
 
@@ -12,9 +11,11 @@ import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Button} from '@components/styles/common-components/Button'
 import {handleUpdateSchedule} from '@app/(apps)/sohken/(parts)/Tasks/handleUpdateSchedule'
 import {Days, formatDate, toUtc} from '@class/Days'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import useSWR from 'swr'
 import {addDays} from 'date-fns'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
+import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 
 const register = {required: `必須です`}
 export class ColBuilder {
@@ -162,6 +163,7 @@ export class ColBuilder {
   }
   static genbaDay = (props: columnGetterType) => {
     const {session, query} = props.useGlobalProps
+    const GenbaDayBasicEditor_HK = useGenbaDayBasicEditor()
     const {data: allShiftBetweenDays = []} = useSWR(`/`, async () => {
       const queryFrom = query.from ? toUtc(query.from) : null
       const queryTo = query.to ? toUtc(query.to) : null
@@ -234,7 +236,7 @@ export class ColBuilder {
         td: {
           getRowColor: (value, row, col) => {
             const shift = row.GenbaDayShift
-            const isMyShift = shift?.some(s => s.userId === session?.id)
+            const isMyShift = query[`myPage`] === `true` || shift?.some(s => s.userId === session?.id)
             return isMyShift ? 'rgba(255, 235, 170, 0.664)' : ''
           },
         },
@@ -242,6 +244,7 @@ export class ColBuilder {
           <div>
             <GenbaDaySummary
               {...{
+                GenbaDayBasicEditor_HK,
                 allShiftBetweenDays,
                 records: HK_USE_RECORDS?.records,
                 GenbaDay: row,
@@ -375,12 +378,12 @@ export class ColBuilder {
     const data: colType[] = [
       {id: 'name', label: '車種', form: {register}},
       {id: 'plate', label: 'プレート', form: {}},
-      {
-        id: 'userId',
-        label: '基本使用者',
-        form: {},
-        forSelect: userForSelect,
-      },
+      // {
+      //   id: 'userId',
+      //   label: '基本使用者',
+      //   form: {},
+      //   forSelect: userForSelect,
+      // },
     ]
 
     return Fields.transposeColumns(data)

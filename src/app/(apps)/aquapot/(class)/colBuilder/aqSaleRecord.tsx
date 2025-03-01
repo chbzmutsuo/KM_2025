@@ -1,11 +1,9 @@
 'use client'
 
-
 import {DH} from '@class/DH'
 
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
-
 
 export const aqSaleRecord = (props: columnGetterType) => {
   return new Fields([
@@ -19,12 +17,19 @@ export const aqSaleRecord = (props: columnGetterType) => {
     {id: `userId`, label: `担当者`, forSelect: {}},
 
     // {id: `AqProduct.code`, label: `商品コード`, forSelect: {}},
-    {id: `aqProductId`, label: `商品名`, forSelect: {}},
+    {
+      id: `aqProductId`,
+      label: `商品名`,
+      forSelect: {},
+      td: {style: {maxWidth: 200}},
+    },
     {
       id: `AqPriceOption.name`,
       label: `価格オプション`,
       format: (value, row) => {
-        return `${row.AqPriceOption.name}(${DH.toPrice(row.AqPriceOption.price)}円)`
+        if (row.AqPriceOption) {
+          return `${row.AqPriceOption?.name}(${DH.toPrice(row.AqPriceOption.price)}円)`
+        }
       },
     },
     {id: `quantity`, label: `数量`, type: `number`},

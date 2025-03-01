@@ -1,5 +1,4 @@
-import {forSelectConfig} from '@cm/types/types'
 
-export const userForSelect: forSelectConfig = {
+export const userForSelect = {
   where: {apps: {has: `yoshinari`}},
 }

@@ -88,6 +88,12 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
         },
       },
       {
+        modelNames: [`sohkenCar`],
+        setParams: async () => {
+          return {myTable: {drag: {}}}
+        },
+      },
+      {
         modelNames: [`genba`],
         setParams: async () => {
           return {

@@ -1,5 +1,5 @@
 'use client'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {useEffect, useState} from 'react'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {anyObject} from '@cm/types/types'
@@ -41,7 +41,7 @@ export default useDetailedModelData
 export type getter = (modelName: PrismaModelNames, paramsId: string) => Promise<{displayName: any; dataById: anyObject}>
 const defaultGetter: getter = async (modelName, paramsId) => {
   if (modelName) {
-    const {result: dataById} = await fetchUniversalAPI(modelName, `findUnique`, {where: {id: Number(paramsId)}})
+    const {result: dataById} = await generarlFetchUniversalAPI(modelName, `findUnique`, {where: {id: Number(paramsId)}})
     const displayName = dataById?.name ?? '詳細'
     return {dataById, displayName}
   } else {

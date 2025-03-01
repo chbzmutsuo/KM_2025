@@ -4,24 +4,23 @@ import {initServerComopnent} from 'src/non-common/serverSideFunction'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 
 const DynamicMasterPage = async props => {
-  const query = await props.searchParams;
-  const params = await props.params;
+  const query = await props.searchParams
+  const params = await props.params
   const dataModelName = params.dataModelName as PrismaModelNames
   const {session} = await initServerComopnent({query})
 
   let chatRoomId = query.chatRoomId ? Number(query.chatRoomId) : undefined
   if (!chatRoomId) {
     const {result: chatRoom} = await fetchUniversalAPI('systemChatRoom', 'upsert', {
-      userId: session?.id,
       where: {userId: session?.id},
+      create: {userId: session?.id},
+      update: {userId: session?.id},
     })
     chatRoomId = chatRoom.id
   }
 
   const {result: chatRoom} = await fetchUniversalAPI('systemChatRoom', 'findUnique', {
-    where: {
-      chatRoomId,
-    },
+    where: {id: chatRoomId},
     include: {
       SystemChat: {
         include: {User: {}},

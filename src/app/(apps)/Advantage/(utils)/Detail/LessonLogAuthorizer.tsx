@@ -53,10 +53,8 @@ const LessonLogAuthorizer = (
               onClick={async e => {
                 await toggleLoad(async () => {
                   await fetchUniversalAPI('lessonLogAuthorizedUser', 'upsert', {
-                    userId: user.id,
-                    lessonLogId: lessonLog.id,
-                    active: !authorized,
-
+                    create: {userId: user.id, lessonLogId: lessonLog.id, active: !authorized},
+                    update: {userId: user.id, lessonLogId: lessonLog.id, active: !authorized},
                     where: {
                       unique_userId_lessonLogId: {
                         userId: user.id,

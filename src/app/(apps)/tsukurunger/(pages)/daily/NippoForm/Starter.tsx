@@ -19,8 +19,7 @@ export const Starter = ({Genba, query}) => {
           <Button
             onClick={async () => {
               await fetchUniversalAPI(`tsNippo`, `create`, {
-                tsConstructionId: Genba.id,
-                date: toUtc(query.from),
+                data: {tsConstructionId: Genba.id, date: toUtc(query.from)},
               })
               router.refresh()
             }}

@@ -76,25 +76,23 @@ const TaskAndSchedule = ({genba, allTasks}) => {
   const {include} = QueryBuilder.getInclude({}).genbaDay
   const useGlobalProps = useGlobal()
   const {addQuery, query} = useGlobalProps
-  const hidden = query.hidden
+  const showPast = query.showPast
 
   const {router} = useGlobalProps
 
-  const additionalWhere: Prisma.GenbaDayWhereInput = hidden
+  const additionalWhere: Prisma.GenbaDayWhereInput = showPast
     ? {}
     : {
-        NOT: {
-          GenbaDayTaskMidTable: {
-            every: {
-              GenbaTask: {
-                to: {
-                  lt: getMidnight(),
-                },
-              },
-            },
-          },
-        },
+        NOT: {date: {lt: getMidnight()}},
+        // NOT: {GenbaDayTaskMidTable: {every: {GenbaTask: {to: {lt: getMidnight()}}}}},
+        // OR: [
+        //   {
+        //     // GenbaDayTaskMidTable: {some: {id: {gte: 0}}},
+        //     NOT: {GenbaDayTaskMidTable: {every: {GenbaTask: {to: {lt: getMidnight()}}}}},
+        //   },
+        // ],
       }
+
   return (
     <>
       <div></div>
@@ -144,7 +142,7 @@ const TaskAndSchedule = ({genba, allTasks}) => {
           <Accordion {...{label: `現場詳細スケジュール`, defaultOpen: true, closable: false}}>
             <FitMargin>
               <C_Stack>
-                <HiddenToggler {...{hidden, addQuery}} />
+                <HiddenToggler {...{showPast, addQuery}} />
                 <ChildCreator
                   {...{
                     ...{ParentData: genba, useGlobalProps},
@@ -154,6 +152,7 @@ const TaskAndSchedule = ({genba, allTasks}) => {
                     }),
                     models: {parent: `genba`, children: `genbaDay`},
                     myTable: {
+                      update: false,
                       customActions: clientProps => <UnUsedScheduleDeleteBtn {...{genba, router}} />,
 
                       delete: {requiredUserConfirmation: false},
@@ -175,20 +174,13 @@ const TaskAndSchedule = ({genba, allTasks}) => {
   )
 }
 
-const HiddenToggler = ({hidden, addQuery}) => {
+const HiddenToggler = ({showPast, addQuery}) => {
   const toggleHidden = () => {
-    return addQuery({hidden: hidden ? undefined : true})
+    return addQuery({showPast: showPast ? undefined : true})
   }
   return (
     <>
-      <Button
-        {...{
-          onClick: toggleHidden,
-          color: hidden ? 'sub' : `green`,
-        }}
-      >
-        {hidden ? `過去非表示` : `過去表示`}
-      </Button>
+      <Button {...{onClick: toggleHidden}}>{showPast ? `過去を非表示にする` : `過去を表示する`}</Button>
     </>
   )
 }

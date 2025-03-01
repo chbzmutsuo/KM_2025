@@ -80,7 +80,9 @@ const ChatSender = ({tickets, settickets, messages, setmessages, additional, scr
 
         await fetchUniversalAPI('ticket', 'update', {
           where: {id: firstAvailableTicket?.id},
-          usedAt: formatDate(new Date(), 'iso'),
+          data: {
+            usedAt: formatDate(new Date(), 'iso'),
+          },
         })
         settickets(
           tickets.map(t => {

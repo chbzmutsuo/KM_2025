@@ -235,8 +235,9 @@ const getYukyuConsumedRecords = async () => {
         ON "req"."id" = "dateFieldValue"."approvalRequestId"
         AND "dateFieldValue"."customFieldId" = (SELECT "id" FROM "ApCustomField" WHERE "name" = '日付' AND "id" = "dateFieldValue"."customFieldId")
 
-    WHERE
-      "req"."forceApproved" = true
+    WHERE 1=1
+      AND "req"."forceApproved" = true
+      AND "req"."status" = '確定'
       AND "fieldVal"."string" IN ('有給（時間給）', '有給休暇（1日休）')
 
   `

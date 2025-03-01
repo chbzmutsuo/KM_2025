@@ -10,7 +10,6 @@ import {TextBlue} from '@components/styles/common-components/Alert'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import {Paper} from '@components/styles/common-components/paper'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {Prisma} from '@prisma/client'
 
 const Title = ({children}) => {
   return (
@@ -78,7 +77,7 @@ export const tbmBase = {
                     の内訳一覧
                   </Title>
                   <div>
-                    <ChildCreator
+                    {/* <ChildCreator
                       {...{
                         ParentData: selectedRouteGroup,
                         models: {
@@ -102,7 +101,7 @@ export const tbmBase = {
                         }),
                         useGlobalProps,
                       }}
-                    />
+                    /> */}
                   </div>
                 </Paper>
               </R_Stack>

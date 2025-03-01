@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react'
 import {formatDate} from '@class/Days'
 
 import {judgeColType} from '@class/Fields/lib/methods'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 
 export default function SearchedItemList(props: {
@@ -55,7 +55,9 @@ export default function SearchedItemList(props: {
                       } else if (judgeColType(colObj) === `selectId`) {
                         const model = String(colObj?.id)?.split(`Id`)[0] as PrismaModelNames
 
-                        const {result: theOption} = await fetchUniversalAPI(model, `findUnique`, {where: {id: searchedValue}})
+                        const {result: theOption} = await generarlFetchUniversalAPI(model, `findUnique`, {
+                          where: {id: searchedValue},
+                        })
                         searchedValueforDisplay = <ColorBlock bgColor={theOption?.color ?? ``}>{theOption?.name}</ColorBlock>
                       } else {
                         searchedValueforDisplay = searchedValue

@@ -37,9 +37,7 @@ export class PageBuilder {
                   lmLocationId: props.formData?.id,
                 },
               }
-              const res = await fetchUniversalAPI(`pdf`, `create`, {
-                ...args.data,
-              })
+              const res = await fetchUniversalAPI(`pdf`, `create`, args)
 
               return file
             })

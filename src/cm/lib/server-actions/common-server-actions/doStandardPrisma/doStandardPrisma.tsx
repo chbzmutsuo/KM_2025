@@ -1,6 +1,5 @@
 'use server'
 import {requestResultType} from '@cm/types/types'
-import {usePrismaOnServerPropType} from '@lib/methods/api-fetcher'
 
 import {
   doDefaultPrismaMethod,
@@ -10,14 +9,22 @@ import {
 } from '@lib/server-actions/common-server-actions/doStandardPrisma/lib'
 import {prismaChain} from 'src/non-common/prismaChain'
 
-type doStandardPrismaType = (props: usePrismaOnServerPropType) => Promise<requestResultType>
-export const doStandardPrisma: doStandardPrismaType = async (props: usePrismaOnServerPropType) => {
-  const {model, method, transactionPrisma} = props
+// type doStandardPrismaType = (props: usePrismaOnServerPropType) => Promise<requestResultType>
 
+export type doStandardPrismaType = <T extends PrismaModelNames, M extends prismaMethodType>(
+  model: T,
+  method: M,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  queryObject: Parameters<PrismaClient[T][M]>[0],
+  transactionPrisma?: any
+) => Promise<requestResultType>
+
+export const doStandardPrisma: doStandardPrismaType = async (model, method, queryObject, transactionPrisma) => {
   const PRISMA = transactionPrisma || prisma
   const prismaModel = PRISMA[model] as any
 
-  const queryObject = await initQueryObject({model, method, queryObject: props.queryObject, prismaModel})
+  const newQueryObject = await initQueryObject({model, method, queryObject, prismaModel})
 
   let res: requestResultType
 
@@ -25,17 +32,17 @@ export const doStandardPrisma: doStandardPrismaType = async (props: usePrismaOnS
   try {
     switch (method) {
       case 'delete': {
-        res = await doDelete({prismaModel, queryObject, model, method})
+        res = await doDelete({prismaModel, queryObject: newQueryObject, model, method})
         break
       }
 
       case 'deleteMany': {
-        res = await doDeleteMany({prismaModel, queryObject, model, method})
+        res = await doDeleteMany({prismaModel, queryObject: newQueryObject, model, method})
         break
       }
 
       default: {
-        res = await doDefaultPrismaMethod({prismaModel, method, queryObject, model})
+        res = await doDefaultPrismaMethod({prismaModel, method, queryObject: newQueryObject, model})
         break
       }
     }
@@ -43,22 +50,42 @@ export const doStandardPrisma: doStandardPrismaType = async (props: usePrismaOnS
     const chainMethod = prismaChain[model]?.find(e => e.when.includes(method))?.do
     if (chainMethod) {
       const chainRes: requestResultType = await executeChainMethod(async () => {
-        return await chainMethod({res, queryObject})
+        return await chainMethod({res, queryObject: newQueryObject})
       })
       return {
         ...chainRes,
         result: res.result,
       }
     }
-    return res
+    type resultType = Awaited<ReturnType<PrismaClient['user']['findMany']>>
+    return res as {
+      success: boolean
+      message: string
+      error: string
+      result: resultType
+    }
   } catch (error) {
     const errorMessage = handlePrismaError(error)
-    console.error({errorMessage, model, method, queryObject, error: error.stack})
-    return {success: false, message: errorMessage, error: error.message, result: null}
+    console.error({
+      errorMessage,
+      model,
+      method,
+      queryObject: newQueryObject,
+      error: error.stack,
+    })
+
+    return {
+      success: false,
+      message: errorMessage,
+      error: error.message,
+      result: null,
+    }
   }
 }
 
 import prisma, {handlePrismaError} from '@lib/prisma'
+import {prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
+import {PrismaClient} from '@prisma/client'
 
 const executeChainMethod = async callback => {
   // 現在のロック状態をチェック

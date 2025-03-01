@@ -11,8 +11,18 @@ export const POST = async (req: NextRequest) => {
     const [id, name, category, price, cost, taxType] = item
     const payload: Prisma.AqProductUpsertArgs = {
       where: {name},
-      create: {name, price: parseInt(price.replace(/,/g, '')), cost: parseInt(cost.replace(/,/g, '')), taxType},
-      update: {name, price: parseInt(price.replace(/,/g, '')), cost: parseInt(cost.replace(/,/g, '')), taxType},
+      create: {
+        name,
+        // price: parseInt(price.replace(/,/g, '')),
+        cost: parseInt(cost.replace(/,/g, '')),
+        // taxType,
+      },
+      update: {
+        name,
+        // price: parseInt(price.replace(/,/g, '')),
+        cost: parseInt(cost.replace(/,/g, '')),
+        // taxType,
+      },
     }
 
     transactionQueryList.push({

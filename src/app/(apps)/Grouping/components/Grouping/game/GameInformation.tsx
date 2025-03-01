@@ -90,7 +90,7 @@ export default function GameInformation({GameCtxValue, useGroupReturnObj, groupC
       const {result: updatedPrompt} = await fetchUniversalAPI('questionPrompt', 'update', {
         where: {id: activePrompt?.id ?? 0},
         include: QueryBuilder.getInclude({session, query}).questionPrompt.include,
-        active: false,
+        data: {active: false},
       })
 
       return updatedPrompt
@@ -117,8 +117,8 @@ export default function GameInformation({GameCtxValue, useGroupReturnObj, groupC
   const handleOnFinish = async () => {
     toggleLoad(async () => {
       const currentActiveQuestionPromptId = Game.activeQuestionPromptId
-      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, activeQuestionPromptId: null})
-      await fetchUniversalAPI('questionPrompt', 'update', {where: {id: currentActiveQuestionPromptId}, active: false})
+      await fetchUniversalAPI('game', 'update', {where: {id: Game.id}, data: {activeQuestionPromptId: null}})
+      await fetchUniversalAPI('questionPrompt', 'update', {where: {id: currentActiveQuestionPromptId}, data: {active: false}})
     })
     toast.warning(`まとめアンケートを締め切りました。`)
   }

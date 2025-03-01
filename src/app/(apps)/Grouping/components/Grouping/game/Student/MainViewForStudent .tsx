@@ -25,8 +25,7 @@ export default function MainViewForStudent({GameCtxValue}) {
           onClick={async e => {
             toggleLoad(async () => {
               await fetchUniversalAPI(`answer`, 'create', {
-                gameId: Game.id,
-                studentId: player.id,
+                data: {gameId: Game.id, studentId: player.id},
               })
             })
           }}

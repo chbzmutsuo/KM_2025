@@ -5,8 +5,9 @@ import {columnGetterType} from '@cm/types/types'
 
 export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
   const tbmDriveSchedule = props.ColBuilderExtraProps?.tbmDriveSchedule
+  const tbmBase = props.ColBuilderExtraProps?.tbmBase
+  const {date, userId, tbmVehicleId, tbmRouteGroupId, tbmBaseId} = tbmDriveSchedule ?? {}
 
-  const {date, userId, tbmVehicleId, tbmRouteGroupId} = tbmDriveSchedule ?? {}
   return new Fields([
     {
       id: 'date',
@@ -17,6 +18,16 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
         disabled: date,
       },
       type: 'date',
+    },
+    {
+      id: 'tbmBaseId',
+      label: '営業所',
+      form: {
+        ...defaultRegister,
+        defaultValue: tbmBase.id,
+        disabled: tbmBase.id,
+      },
+      forSelect: {},
     },
     {
       id: 'userId',
@@ -35,19 +46,19 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
       form: {
         ...defaultRegister,
         defaultValue: tbmVehicleId,
-        disabled: tbmVehicleId,
+        // disabled: tbmVehicleId,
       },
-      forSelect: {},
+      forSelect: {config: {where: {tbmBaseId: tbmBase?.id}}},
     },
     {
       id: 'tbmRouteGroupId',
       label: 'ルート',
+      forSelect: {config: {where: {tbmBaseId: tbmBase?.id}}},
       form: {
         ...defaultRegister,
         defaultValue: tbmRouteGroupId,
-        disabled: tbmRouteGroupId,
+        // disabled: tbmRouteGroupId,
       },
-      forSelect: {},
     },
   ]).transposeColumns()
 }
