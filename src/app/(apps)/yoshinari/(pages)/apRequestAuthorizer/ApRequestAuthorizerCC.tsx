@@ -12,11 +12,14 @@ import {Yoshinari} from '@app/(apps)/yoshinari/class/Yoshinari'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {Prisma} from '@prisma/client'
 
-export default function ApRequestAuthorizerCC({apRequest, ApRequestType, ApRequestTypeConfigs, isSuperUser}) {
+export default function ApRequestAuthorizerCC({ApRecieverWhere, apRequest, ApRequestType, ApRequestTypeConfigs, isSuperUser}) {
   const {addQuery, query} = useGlobal()
 
   const {data: apRequestGroupByStatus} = usefetchUniversalAPI_SWR(`apRequest`, `groupBy`, {
     by: [`status`],
+    where: {
+      ApReceiver: ApRecieverWhere,
+    },
     _count: {status: true},
   } as Prisma.ApRequestGroupByArgs)
 

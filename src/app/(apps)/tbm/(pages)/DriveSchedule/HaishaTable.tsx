@@ -1,16 +1,21 @@
 'use client'
 import React, {useEffect} from 'react'
 
-import {Days, formatDate, getMidnight} from '@class/Days'
-import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
+import { formatDate, getMidnight} from '@class/Days'
+import { R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
-import {PencilSquareIcon, PlusCircleIcon} from '@heroicons/react/20/solid'
 import useHaishaTableEditorGMF from '@app/(apps)/tbm/(globalHooks)/useHaishaTableEditorGMF'
+import {Cell} from '@app/(apps)/tbm/(pages)/DriveSchedule/Cell'
+import {TbmDriveSchedule} from '@prisma/client'
+import useGlobal from '@hooks/globalHooks/useGlobal'
+import UserTh from '@app/(apps)/tbm/(pages)/DriveSchedule/UserTh'
 
 export default function HaishaTable({userList, days, TbmDriveSchedule, tbmBase}) {
   const HK_HaishaTableEditor = useHaishaTableEditorGMF()
   const setModalOpen = HK_HaishaTableEditor.setGMF_OPEN
+  const {query, accessScopes} = useGlobal()
+  const {admin} = accessScopes()
 
   useEffect(() => {
     //
@@ -33,47 +38,52 @@ export default function HaishaTable({userList, days, TbmDriveSchedule, tbmBase})
     }
   }, [days])
 
+  const {scheduleByDateAndUser} = getScheduleByDateAndUser({TbmDriveSchedule})
+
+  const userWorkStatusByDate = userList.reduce((acc, user) => {
+    acc[user.id] = user.UserWorkStatus.reduce((acc, userWorkStatus) => {
+      acc[formatDate(userWorkStatus.date)] = userWorkStatus.workStatus
+      return acc
+    }, {})
+    return acc
+  }, {})
+
   return (
     <div>
       {userList.length > 0 ? (
         CsvTable({
           records: userList.map(user => {
+            const userWorkStatusList = userWorkStatusByDate?.[user.id]
             return {
               csvTableRow: [
                 // ユーザー情報
                 {
-                  label: [
-                    //
-                    `コード`,
-                    `名前`,
-                    // `出勤`,
-                    // `休み`,
-                    // `有給`,
-                  ].join(` / `),
-                  cellValue: (
-                    <R_Stack>
-                      {/* <span>{user.code}</span> */}
-                      <span>{user.name}</span>
-                      {/* <span>{`-`}</span>
-                      <span>{`-`}</span>
-                      <span>{`-`}</span> */}
-                    </R_Stack>
-                  ),
+                  label: `ユーザー`,
+                  cellValue: <UserTh {...{user, admin, query, userWorkStatusList}} />,
                   style: {minWidth: 200, left: 0, position: 'sticky', background: `#d8d8d8`},
                 },
 
                 //日付別
                 ...days.map(date => {
-                  const scheduleOnDate = TbmDriveSchedule.filter(schedule => {
-                    return Days.isSameDate(schedule.date, date) && schedule.userId === user.id
-                  })
+                  const scheduleListOnDate = scheduleByDateAndUser?.[formatDate(date)]?.[String(user.id)] ?? []
 
                   return {
-                    label: <div id={`#${formatDate(date)}`}>{formatDate(date, 'M/D(ddd)')}</div>,
+                    label: (
+                      <R_Stack className={` justify-between `} id={`#${formatDate(date)}`}>
+                        <div>{formatDate(date, 'M/D(ddd)')}</div>
+                      </R_Stack>
+                    ),
                     cellValue: (
-                      <div>
-                        <Cell {...{scheduleOnDate, setModalOpen, user, date, tbmBase}} />
-                      </div>
+                      <Cell
+                        {...{
+                          userWorkStatus: userWorkStatusList?.[formatDate(date)] ?? '',
+                          scheduleListOnDate,
+                          setModalOpen,
+                          user,
+                          date,
+                          tbmBase,
+                        }}
+                      />
                     ),
                     // style: {minWidth: 160, minHeight: 160},
                   }
@@ -89,38 +99,19 @@ export default function HaishaTable({userList, days, TbmDriveSchedule, tbmBase})
   )
 }
 
-const Cell = ({scheduleOnDate, setModalOpen, user, date, tbmBase}) => {
-  return (
-    <C_Stack className={` h-full justify-between gap-1`} {...{style: {width: 140, minHeight: 60}}}>
-      <div>
-        {scheduleOnDate.map(tbmDriveSchedule => {
-          const {TbmRouteGroup, TbmVehicle} = tbmDriveSchedule
-          return (
-            <R_Stack className={`  justify-between gap-0.5 border-b pb-1`} key={tbmDriveSchedule.id}>
-              <C_Stack className={`t-paper gap-1.5  rounded-sm `}>
-                <span className={` text-[12px]`}>{TbmRouteGroup.name}</span>
-                <R_Stack className={` justify-end`}>
-                  <small className={` text-end`}>({TbmVehicle.plate})</small>
-                  <PencilSquareIcon
-                    className={`text-blue-main onHover h-5 w-5`}
-                    onClick={() => {
-                      setModalOpen({tbmDriveSchedule, user, date, tbmBase})
-                    }}
-                  />
-                </R_Stack>
-              </C_Stack>
-            </R_Stack>
-          )
-        })}
-      </div>
+const getScheduleByDateAndUser = ({TbmDriveSchedule}) => {
+  const scheduleByDateAndUser = TbmDriveSchedule.reduce((acc, schedule) => {
+    const dateKey = formatDate(schedule.date)
+    const userKey = schedule.userId
+    if (!acc[dateKey]) {
+      acc[dateKey] = {}
+    }
+    if (!acc[dateKey][userKey]) {
+      acc[dateKey][userKey] = []
+    }
+    acc[dateKey][userKey].push(schedule)
+    return acc
+  }, {})
 
-      <div className={`flex  justify-end`}>
-        <PlusCircleIcon
-          {...{className: ` onHover  text-gray-500 h-5 w-5 text-end`, onClick: async () => setModalOpen({user, date})}}
-        >
-          追加
-        </PlusCircleIcon>
-      </div>
-    </C_Stack>
-  )
+  return {scheduleByDateAndUser} as {scheduleByDateAndUser: Record<string, Record<string, TbmDriveSchedule[]>>}
 }

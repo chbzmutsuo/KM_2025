@@ -6,8 +6,7 @@ import {YoshinariUserClass} from '@app/(apps)/yoshinari/(models)/YoshinariUser/Y
 import ManualUserInputRow from '@app/(apps)/yoshinari/(pages)/beppyo/ManualUserInputRow'
 import {Calc} from '@class/Calc'
 import {Days, formatDate, getNextMonthLastDate, toUtc} from '@class/Days'
-import {Button} from '@components/styles/common-components/Button'
-import {FitMargin, R_Stack} from '@components/styles/common-components/common-components'
+import {FitMargin} from '@components/styles/common-components/common-components'
 import {CsvTable, csvTableRow} from '@components/styles/common-components/CsvTable/CsvTable'
 import {TableBordered, TableWrapper} from '@components/styles/common-components/Table'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
@@ -75,10 +74,6 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
     const substituteHoliday_illegal =
       (MONTH_AGG?.holidayWorkDays_illegal?.count ?? 0) - Math.min(MONTH_AGG?.holidayWorkDays_illegal?.count ?? 0, totalFurikyu)
 
-    if (MONTH_AGG?.chikoku.count) {
-      console.log(user.name, MONTH_AGG?.chikoku) //////logs
-    }
-
     return [
       {h: `コード`, b: show && user?.code},
       {h: `氏名`, b: show && user?.name},
@@ -117,7 +112,10 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
   const headerRecords: csvTableRow[] = [
     {csvTableRow: getHeaderBody(null).map(d => ({cellValue: d.h, className: `text-sm leading-4`, style: {textAlign: `center`}}))},
   ]
-  const dbUserRows = YoshinariUserList.map(YoshinariUser => {
+  const omnitNames = [`吉成 新一`, `小林 弘幸`, `安齋 元喜`]
+  const dbUserRows = YoshinariUserList.filter(YoshinariUser => {
+    return !omnitNames.includes(YoshinariUser.name)
+  }).map(YoshinariUser => {
     return {
       csvTableRow: getHeaderBody(YoshinariUser).map(d => {
         // const minWidth = d.h.includes(`法定`) ? 130 : 60
@@ -189,7 +187,7 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
       <TableWrapper {...{style: {width: `90vw`, margin: `auto`}}}>
         <TableBordered {...{}}>{TABLE.ALL()}</TableBordered>
       </TableWrapper>
-      <R_Stack>
+      {/* <R_Stack>
         <Button {...{onClick: () => setnewRow({})}}>フリー入力追加</Button>
         <Button
           {...{
@@ -202,7 +200,7 @@ export default function WorkRecordListCC({YoshinariUserList, yukyuGroupedBy, mon
         >
           先月からコピー
         </Button>
-      </R_Stack>
+      </R_Stack> */}
     </FitMargin>
   )
 }

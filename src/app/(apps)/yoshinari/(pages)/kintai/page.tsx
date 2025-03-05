@@ -29,9 +29,14 @@ export default async function Page(props) {
   const {whereQuery, redirectPath} = getYoshinariRedirectPath({query})
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
-  const {yukyuGroupedBy} = await getUserYukyuAgg()
+  const {yukyuGroupedBy} = await getUserYukyuAgg({
+    until: whereQuery.lte,
+  })
 
-  const {YoshinariUsers} = await YoshinariUserClass.getUserAndYukyuHistory({userId: session.id})
+  const {YoshinariUsers} = await YoshinariUserClass.getUserAndYukyuHistory({
+    userId: session.id,
+    whereQuery,
+  })
 
   return (
     <Padding className={`print-target`}>

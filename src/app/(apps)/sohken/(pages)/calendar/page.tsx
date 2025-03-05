@@ -5,6 +5,7 @@ import {T_LINK} from '@components/styles/common-components/links'
 import {Paper} from '@components/styles/common-components/paper'
 import {TableBordered, TableWrapper} from '@components/styles/common-components/Table'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
+import MyPopover from '@components/utils/popover/MyPopover'
 import Redirector from '@components/utils/Redirector'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
@@ -33,16 +34,11 @@ export default async function CalendarPage(props) {
     to: addDays(from, 15),
   }
 
-  const args: Prisma.GenbaTaskFindManyArgs = {
-    where: {
-      from: {
-        gte: from,
-        lte: to,
-      },
-    },
-  }
+  const {result: allGenbaTasks} = await fetchUniversalAPI(`genbaTask`, `findMany`, {
+    include: {Genba: {include: {PrefCity: true}}},
+    where: {from: {gte: from, lte: to}},
+  })
 
-  const {result: allGenbaTasks} = await fetchUniversalAPI(`genbaTask`, `findMany`, args)
   const {result: userList} = await fetchUniversalAPI(`user`, `findMany`, {
     where: {OR: [{app: `sohken`}, {apps: {has: `sohken`}}]},
   })
@@ -68,12 +64,25 @@ export default async function CalendarPage(props) {
                 return acc + task.requiredNinku
               }, 0)
 
+              const genbaNameList = GenbaTaskStartingToday.map(t => t.Genba.name).join(`, `)
+
               const href = HREF(`/sohken/genbaDay`, {from: formatDate(d)}, query)
               return {
                 csvTableRow: [
                   //
                   {cellValue: <T_LINK href={href}>{formatDate(d)}</T_LINK>},
-                  {cellValue: requiredNinkuSum},
+                  {
+                    cellValue: (
+                      <MyPopover
+                        {...{
+                          mode: `click`,
+                          button: requiredNinkuSum,
+                        }}
+                      >
+                        <Paper>{genbaNameList}</Paper>
+                      </MyPopover>
+                    ),
+                  },
                   // {cellValue: userCount},
                   {cellValue: userCount - requiredNinkuSum},
                 ],

@@ -18,12 +18,20 @@ export default async function DynamicMasterPage(props) {
   if (!queryFrom) {
     return <div>日付を選択してください</div>
   }
-  const whereQuery =
-    queryFrom && queryTo
-      ? {date: {gte: queryFrom, lte: queryTo}}
-      : queryFrom
-      ? {date: {gte: queryFrom, lt: addDays(queryFrom, 2)}}
-      : {}
+
+  const today = queryFrom
+  const tomorrow = addDays(today, 1)
+  const whereQuery = {
+    date: {
+      gte: today,
+      lte: tomorrow,
+    },
+  }
+  // today && queryTo
+  //   ? {date: {gte: today, lte: queryTo}}
+  //   : today
+  //   ? {date: {gte: today, lte: addDays(today, 2)}}
+  //   : {}
 
   const include = QueryBuilder.getInclude({}).genbaDay.include
   const {result: records} = await fetchUniversalAPI(`genbaDay`, `findMany`, {
@@ -40,19 +48,20 @@ export default async function DynamicMasterPage(props) {
     ],
   })
 
-  const today = queryFrom
-  const tomorrow = addDays(queryFrom, 1)
   const {result: allShiftBetweenDays} = await fetchUniversalAPI(`genbaDayShift`, `findMany`, {
     include: {GenbaDay: {}},
     where: {
       GenbaDay: {
-        date: queryFrom ? {gte: queryFrom, lt: addDays(queryFrom, 1)} : undefined,
+        date: today ? {gte: today, lt: addDays(today, 1)} : undefined,
       },
     },
   })
 
   const todayRecords = records.filter(record => Days.isSameDate(record.date, today))
-  const tomorrowRecords = records.filter(record => Days.isSameDate(record.date, tomorrow))
+  const tomorrowRecords = records.filter(record => {
+    console.log(record.date.getTime(), tomorrow.getTime()) //////logs
+    return record.date.getTime() === tomorrow.getTime()
+  })
   const isMyPage = query[`myPage`] === `true`
 
   return <GenbadayListClient {...{today, tomorrow, todayRecords, tomorrowRecords, isMyPage, allShiftBetweenDays}} />

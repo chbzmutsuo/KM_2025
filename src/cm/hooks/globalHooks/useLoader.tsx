@@ -5,6 +5,8 @@ import useMyNavigation from 'src/cm/hooks/globalHooks/useMyNavigation'
 import useMatchMutate from 'src/cm/hooks/useMatchMutate'
 
 import {atomTypes, useJotaiByKey} from '@hooks/useJotai'
+import {requestResultType} from '@cm/types/types'
+import {toast} from 'react-toastify'
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false
 export type toggleLoadType = (
@@ -38,6 +40,12 @@ export default function useLoader() {
     return res
   }
 
+  const toastIfFailed = async (res: requestResultType) => {
+    if (res.success === false) {
+      toast.error(res.message)
+      router.refresh()
+    }
+  }
   const fullLoad = async callback => {
     await toggleLoad(callback, {refresh: true, mutate: true})
   }
@@ -45,6 +53,7 @@ export default function useLoader() {
   const useLoaderDeps = [globalLoaderAtom]
 
   return {
+    toastIfFailed,
     globalLoaderAtom,
     toggleLoad,
     fullLoad,

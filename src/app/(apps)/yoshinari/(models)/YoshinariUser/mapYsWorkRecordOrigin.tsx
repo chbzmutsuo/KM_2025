@@ -96,7 +96,16 @@ export const mapYsWorkRecordOrigin = (props: {yoshinariUser: YoshinariUserClass;
     })
 
     const shanaitairyuMins =
-      from && to && (work?.mins ?? 0) - ((chikoku?.mins ?? 0) + (soutai?.mins ?? 0) + (gaishutsu?.mins ?? 0))
+      from &&
+      to &&
+      (work?.mins ?? 0) -
+        [
+          //
+          // chikoku?.mins ?? 0,
+          // soutai?.mins ?? 0,
+          gaishutsu?.mins ?? 0,
+        ].reduce((acc, curr) => acc + curr, 0)
+
     // if (formatDate(date) === `2025-02-20`) {
     //   console.debug(work?.mins, shanaitairyuMins, chikoku?.mins, soutai?.mins, gaishutsu?.mins)
     // }
@@ -133,7 +142,13 @@ export const mapYsWorkRecordOrigin = (props: {yoshinariUser: YoshinariUserClass;
     })
 
     //======振替関連の計算===============
-    const {furide, furikyu} = arrangeFurikyu({holidayRequest, kyujitsuShukkin, work, Break})
+    const {furide, furikyu} = arrangeFurikyu({
+      date,
+      holidayRequest,
+      kyujitsuShukkin,
+      work,
+      Break,
+    })
 
     //=====残業リクエスト==========================
     const {OverTime} = arrangeOverwork({

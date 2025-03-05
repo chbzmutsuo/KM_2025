@@ -34,6 +34,20 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
     dataModelName: params.dataModelName,
     variants: [
       {
+        modelNames: [`tbmRefuelHistory`, `tbmRouteGroup`],
+        setParams: async () => {
+          return {
+            additional: {
+              orderBy: [
+                //
+                {date: 'asc'},
+              ],
+            },
+          }
+        },
+      },
+
+      {
         modelNames: [`user`],
         setParams: async () => {
           return {
@@ -44,11 +58,12 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
           }
         },
       },
+
       {
         modelNames: [`tbmBase`],
         setParams: async () => {
           return {
-            // editType: {type: `pageOnSame`},
+            editType: {type: `pageOnSame`},
           }
         },
       },

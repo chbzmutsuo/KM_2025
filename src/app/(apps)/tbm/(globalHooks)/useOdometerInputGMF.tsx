@@ -1,5 +1,9 @@
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
+import {DH} from '@class/DH'
 import {Button} from '@components/styles/common-components/Button'
+import {C_Stack} from '@components/styles/common-components/common-components'
+import {Paper} from '@components/styles/common-components/paper'
+import {KeyValue} from '@components/styles/common-components/ParameterCard'
 import {useGlobalModalForm} from '@components/utils/modal/useGlobalModalForm'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
@@ -14,6 +18,11 @@ export default function useOdometerInputGMF() {
       const {OdometerInput} = GMF_OPEN ?? {}
       const {date, TbmVehicle, odometerStart, odometerEnd} = OdometerInput ?? {}
 
+      const lastOdometer = TbmVehicle.OdometerInput.filter(d => d.date < date).sort(
+        (a, b) => -(a.date.getTime() - b.date.getTime())
+      )?.[0]
+      const {odometerStart: lastOdometerStart, odometerEnd: lastOdometerEnd} = lastOdometer ?? {}
+
       const {BasicForm, latestFormData} = useBasicFormProps({
         formData: {
           date,
@@ -21,28 +30,54 @@ export default function useOdometerInputGMF() {
           odometerStart,
           odometerEnd,
         },
-        columns: ColBuilder.dometerInput({useGlobalProps}),
+        columns: ColBuilder.odometerInput({
+          useGlobalProps,
+          ColBuilderExtraProps: {
+            lastOdometerStart,
+            lastOdometerEnd,
+            tbmVehicleId: TbmVehicle?.id,
+            date,
+          },
+        }),
       })
 
       return (
-        <BasicForm
-          {...{
-            latestFormData,
-            onSubmit: async data => {
-              const {date, tbmVehicleId, odometerStart, odometerEnd} = data
-              useGlobalProps.toggleLoad(async () => {
-                const res = await fetchUniversalAPI(`odometerInput`, `upsert`, {
-                  where: {unique_tbmVehicleId_date: {tbmVehicleId: TbmVehicle?.id, date: date}},
-                  ...createUpdate({odometerStart, odometerEnd, tbmVehicleId, date}),
-                })
-                toastByResult(res)
-                setGMF_OPEN(null)
-              })
-            },
-          }}
-        >
-          <Button>設定</Button>
-        </BasicForm>
+        <C_Stack className={`gap-6`}>
+          <Paper>
+            <div>この車両の最後の記録</div>
+            <div>
+              <KeyValue label={`開始`}>{lastOdometerStart && DH.toPrice(lastOdometerStart) + ' km'}</KeyValue>
+              <KeyValue label={`終了`}>{lastOdometerEnd && DH.toPrice(lastOdometerEnd) + ' km'}</KeyValue>
+            </div>
+          </Paper>
+          <Paper>
+            <BasicForm
+              {...{
+                latestFormData,
+                onSubmit: async data => {
+                  const {date, tbmVehicleId, odometerStart, odometerEnd, userId} = data
+
+                  useGlobalProps.toggleLoad(async () => {
+                    const res = await fetchUniversalAPI(`odometerInput`, `upsert`, {
+                      where: {unique_tbmVehicleId_date: {tbmVehicleId: TbmVehicle?.id, date: date}},
+                      ...createUpdate({
+                        userId,
+                        odometerStart,
+                        odometerEnd,
+                        tbmVehicleId,
+                        date,
+                      }),
+                    })
+                    toastByResult(res)
+                    setGMF_OPEN(null)
+                  })
+                },
+              }}
+            >
+              <Button>登録</Button>
+            </BasicForm>
+          </Paper>
+        </C_Stack>
       )
     },
   })

@@ -21,7 +21,17 @@ export class QueryBuilder {
     //     TbmVehicle: {},
     //   },
     // }
-    const tbmRouteGroup: Prisma.TbmRouteGroupFindManyArgs = {include: {TbmBase: {}}}
+    const tbmRouteGroup: Prisma.TbmRouteGroupFindManyArgs = {
+      include: {
+        Mid_TbmRouteGroup_TbmCustomer: {
+          include: {TbmCustomer: {}},
+        },
+        Mid_TbmRouteGroup_TbmProduct: {
+          include: {TbmProduct: {}},
+        },
+        TbmBase: {},
+      },
+    }
 
     // const tbmRoute: Prisma.TbmRouteFindManyArgs = {include: {TbmBillingAddress: {}, TbmRouteGroup: tbmRouteGroup}}
 
@@ -49,6 +59,22 @@ export class QueryBuilder {
       tbmBase,
       user: {include: {TbmBase: {}}} as Prisma.UserFindManyArgs,
       tbmVehicle: {include: {TbmBase: {}}} as Prisma.TbmVehicleFindManyArgs,
+      tbmRefuelHistory: {include: {TbmVehicle: {}}} as Prisma.TbmRefuelHistoryFindManyArgs,
+
+      tbmDriveSchedule: {
+        include: {
+          TbmVehicle: {},
+          TbmBase: {},
+          User: {},
+          TbmRouteGroup: {},
+        },
+      } as Prisma.TbmDriveScheduleFindManyArgs,
+      odometerInput: {
+        include: {
+          TbmVehicle: {},
+          User: {},
+        },
+      } as Prisma.OdometerInputFindManyArgs,
     }
     Object.keys(include).forEach(key => {
       roopMakeRelationalInclude({

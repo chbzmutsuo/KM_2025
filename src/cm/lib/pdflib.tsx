@@ -6,7 +6,6 @@ import fontkit from '@pdf-lib/fontkit'
 import {basePath} from 'src/cm/lib/methods/common'
 
 export const initPdfLib = async ({filePath}) => {
-  // PDFを読み込む
   const existingPdfBytes = (await fs.readFileSync(filePath)) as any
 
   // PDFドキュメントをロード

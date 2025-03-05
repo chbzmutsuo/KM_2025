@@ -1,7 +1,7 @@
 import HaishaTable from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable'
 import RouteDisplay from '@app/(apps)/tbm/(pages)/DriveSchedule/RouteDisplay'
 import {Days, getMidnight} from '@class/Days'
-import { FitMargin} from '@components/styles/common-components/common-components'
+import {FitMargin} from '@components/styles/common-components/common-components'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
 import Redirector from '@components/utils/Redirector'
 import BasicTabs from '@components/utils/tabs/BasicTabs'
@@ -15,6 +15,7 @@ export default async function DynamicMasterPage(props) {
   const query = await props.searchParams
   const {session, scopes} = await initServerComopnent({query})
   const {tbmBaseId} = scopes.getTbmScopes()
+
   const {redirectPath, whereQuery} = await dateSwitcherTemplate({query})
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
@@ -22,6 +23,7 @@ export default async function DynamicMasterPage(props) {
   const MONTH = Days.getMonthDatum(theDate)
 
   const {tbmBase, calendar, TbmDriveSchedule, userList, tbmRouteGroup, carList} = await getListData({tbmBaseId, whereQuery})
+
   await autoCreateMonthConfig({MONTH, tbmBaseId})
 
   return (
@@ -34,16 +36,8 @@ export default async function DynamicMasterPage(props) {
 
             showAll: false,
             TabComponentArray: [
-              {
-                label: 'ドライバー',
-                // style: {width: 1800},
-                component: <HaishaTable {...{tbmBase, userList, TbmDriveSchedule, days: MONTH.days}} />,
-              },
-              {
-                label: '便',
-                // style: {width: 1800},
-                component: <RouteDisplay {...{tbmBase}} />,
-              },
+              {label: 'ドライバー', component: <HaishaTable {...{tbmBase, userList, TbmDriveSchedule, days: MONTH.days}} />},
+              {label: '便', component: <RouteDisplay {...{tbmBase, whereQuery}} />},
             ],
           }}
         />
@@ -107,50 +101,6 @@ const autoCreateMonthConfig = async ({MONTH, tbmBaseId}) => {
   }
 }
 
-// const createUserDateIfNull = async ({userList, MONTH, calendar}) => {
-//   const userScheduleToCreate: {user: User; calendar: Calendar}[] = []
-//   MONTH.days.map(date => {
-//     const theCalendar = calendar.find(calendar => Days.isSameDate(calendar.date, date))
-
-//     return userList.map(user => {
-//       const theDate = user.TbmUserDate.find((userDate: TbmUserDate) => {
-//         return userDate.tbmCalendarId === theCalendar.id
-//       })
-
-//       if (!theDate) {
-//         userScheduleToCreate.push({
-//           user,
-//           calendar: theCalendar,
-//         })
-//       }
-//     })
-//   })
-
-//   if (userScheduleToCreate.length > 0) {
-//     await fetchTransactionAPI({
-//       transactionQueryList: userScheduleToCreate.map(userSchedule => {
-//         const {calendar, user} = userSchedule
-
-//         const unique_userId_tbmCalendarId = {
-//           userId: user?.id ?? 0,
-//           tbmCalendarId: calendar?.id ?? 0,
-//         }
-
-//         const queryObject: Prisma.TbmUserDateUpsertArgs = {
-//           where: {unique_userId_tbmCalendarId},
-//           create: unique_userId_tbmCalendarId,
-//           update: unique_userId_tbmCalendarId,
-//         }
-//         return {
-//           model: `tbmUserDate`,
-//           method: `upsert`,
-//           queryObject,
-//         }
-//       }),
-//     })
-//   }
-// }
-
 const getListData = async ({tbmBaseId, whereQuery}) => {
   const commonWhere = {tbmBaseId}
   const {result: tbmBase} = await fetchUniversalAPI(`tbmBase`, `findUnique`, {
@@ -174,13 +124,16 @@ const getListData = async ({tbmBaseId, whereQuery}) => {
       },
     },
     include: {
-      TbmVehicle: {},
+      TbmVehicle: {
+        include: {OdometerInput: {}},
+      },
       TbmRouteGroup: {},
     },
   })
 
   const {result: userList} = await fetchUniversalAPI(`user`, `findMany`, {
     where: commonWhere,
+    include: {UserWorkStatus: {where: {date: whereQuery}}},
   } as Prisma.UserFindManyArgs)
 
   const {result: tbmRouteGroup} = await fetchUniversalAPI(`tbmRouteGroup`, `findMany`, {

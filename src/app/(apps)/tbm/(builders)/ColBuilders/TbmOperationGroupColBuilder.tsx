@@ -40,39 +40,6 @@ export const TbmOperationGroupColBuilder = (props: columnGetterType) => {
       ...custom_showSummaryInTd(new Fields(getTbmOperationGroupBaseCols({session})), SP, {
         convertColId: {userId: 'User.name', tbmBaseId: 'TbmBase.name', tbmVehicleId: 'TbmVehicle.name'},
       }),
-      // ...custom_showSummaryInTd(
-      //   new Fields([
-      //     {
-      //       id: 'fuelOwn',
-      //       label: '給油量（自社）',
-      //       form: {},
-      //       type: `float`,
-      //       format: () => {
-      //         return (
-      //           <BasicModal {...{btnComponent: <Button {...{size: `sm`}}>給油 + </Button>}}>
-      //             <div>給油量を指定してできるようにする</div>
-      //           </BasicModal>
-      //         )
-      //       },
-      //     },
-      //     {
-      //       id: 'fuelOther',
-      //       label: '給油量（他社）',
-      //       form: {},
-      //       type: `float`,
-      //       format: () => {
-      //         return (
-      //           <BasicModal {...{btnComponent: <Button {...{size: `sm`}}>給油 + </Button>}}>
-      //             <div>給油量を指定してできるようにする</div>
-      //           </BasicModal>
-      //         )
-      //       },
-      //     },
-      //     {id: 'confirmed', label: '確定', form: {}, type: `boolean`},
-      //   ]),
-      //   SP,
-      //   {}
-      // ),
     ]).buildFormGroup({groupName: `共通`}).plain,
 
     //go

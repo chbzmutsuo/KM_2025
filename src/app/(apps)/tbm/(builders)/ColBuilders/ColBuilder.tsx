@@ -14,6 +14,9 @@ import {tbmMonthlyConfigForRouteGroupBuilder} from '@app/(apps)/tbm/(builders)/C
 import {columnGetterType} from '@cm/types/types'
 import {Fields} from '@class/Fields/Fields'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
+import {tbmProductColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmProductColBuilder'
+import {odometerInputColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/odometerInputColBuilder'
+import {tbmCustomerColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmCustomerColBuilder'
 
 export class ColBuilder {
   static user = UserColBuilder
@@ -27,45 +30,23 @@ export class ColBuilder {
   static tbmDriveSchedule = TbmDriveScheduleBuilder
   static tbmOperation = tbmOperationBuilder
   static tbmMonthlyConfigForRouteGroup = tbmMonthlyConfigForRouteGroupBuilder
-  static tbmProduct = (props: columnGetterType) => {
+  static tbmProduct = tbmProductColBuilder
+  static odometerInput = odometerInputColBuilder
+  static tbmCustomer = tbmCustomerColBuilder
+  static tbmBase_MonthConfig = (props: columnGetterType) => {
+    const {tbmBaseId} = props.ColBuilderExtraProps ?? {}
     return new Fields([
-      {id: 'code', label: 'コード', type: 'text'},
-      {id: 'name', label: '名称', type: 'text'},
+      {id: 'tbmBaseId', label: '営業所', forSelect: {}, form: {defaultValue: tbmBaseId, disabled: tbmBaseId}},
+      {id: 'yearMonth', label: '年月', type: 'month'},
+      {id: 'keiyuPerLiter', label: '軽油単価', type: 'float'},
     ])
-      .customAttributes(({col}) => ({...col, form: {...defaultRegister}}))
-      .transposeColumns()
-  }
-  static dometerInput = (props: columnGetterType) => {
-    const {date, tbmVehicleId} = props.ColBuilderExtraProps ?? {}
-    return new Fields([
-      {
-        id: 'date',
-        label: '日付',
-        type: 'date',
-        form: {defaultValue: {date}},
-      },
-      {
-        id: 'tbmVehicleId',
-        label: '',
-        forSelect: {},
+      .customAttributes(({col}) => ({
+        ...col,
         form: {
-          defaultValue: {
-            tbmVehicleId,
-          },
+          ...col.form,
+          ...defaultRegister,
         },
-      },
-      {
-        id: 'odometerStart',
-        label: '乗車時オドメータ(km)',
-        form: {},
-        type: `float`,
-      },
-      {
-        id: 'odometerEnd',
-        label: '降車時オドメータ(km)',
-        form: {},
-        type: `float`,
-      },
-    ]).transposeColumns()
+      }))
+      .transposeColumns()
   }
 }

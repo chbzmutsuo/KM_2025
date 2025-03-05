@@ -12,7 +12,7 @@ export default function Template({children}) {
 
   return (
     <div>
-      {accessScopes().admin && <UnsetUserDetector />}
+      {/* {accessScopes().admin && <UnsetUserDetector />} */}
 
       {children}
     </div>

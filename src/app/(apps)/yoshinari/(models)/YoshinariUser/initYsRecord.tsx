@@ -49,7 +49,7 @@ export default function initYsRecord({rules, yoshinariUser, date}) {
   const Break: from_to_min = {
     from: new Date(formatDate(date, 'YYYY-MM-DD') + ' ' + rules.lunchBreak.startTime),
     to: new Date(formatDate(date, 'YYYY-MM-DD') + ' ' + rules.lunchBreak.endTime),
-    mins: rules.breakMin,
+    mins: breakTime,
   }
 
   return {

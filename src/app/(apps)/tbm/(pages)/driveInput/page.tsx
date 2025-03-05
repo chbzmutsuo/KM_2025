@@ -9,41 +9,40 @@ import {initServerComopnent} from 'src/non-common/serverSideFunction'
 
 export default async function Page(props) {
   const query = await props.searchParams
+
   const params = await props.params
   const {session, scopes} = await initServerComopnent({query})
 
-  const {redirectPath, whereQuery} = await dateSwitcherTemplate({query, defaultWhere: {from: getMidnight()}})
+  const {redirectPath, whereQuery} = await dateSwitcherTemplate({
+    query,
+    defaultWhere: {
+      userId: session.id,
+      from: getMidnight(),
+    },
+  })
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
-  // const {result: latestHistory} = await fetchUniversalAPI(`tbmOperationGroup`, `findMany`, {
-  //   include: QueryBuilder.getInclude({}).tbmOperationGroup.include,
-  //   where: {confirmed: false},
-  // })
+  const user = await prisma.user.findUnique({where: {id: Number(query.userId)}})
 
-  // const latestOperation = latestHistory[0]
-
-  const driveScheduleList = await getData({session, whereQuery})
+  const driveScheduleList = await getData({user, whereQuery})
 
   return (
     <Padding>
       <FitMargin>
         <C_Stack className={` h-full justify-between gap-6`}>
-          <div className={` w-full`}>
-            <NewDateSwitcher {...{}} />
-          </div>
+          <NewDateSwitcher {...{}} />
+
           {/* 入力欄 */}
-          <div>
-            <DriveInputCC {...{driveScheduleList}} />
-          </div>
+          <DriveInputCC {...{driveScheduleList}} />
         </C_Stack>
       </FitMargin>
     </Padding>
   )
 }
 
-const getData = async ({session, whereQuery}) => {
+const getData = async ({user, whereQuery}) => {
   const driveScheduleList = await prisma.tbmDriveSchedule.findMany({
-    where: {userId: session.id, date: {equals: whereQuery.gte}},
+    where: {userId: user.id, date: {equals: whereQuery.gte}},
     orderBy: {sortOrder: `asc`},
     include: {
       TbmBase: {},
@@ -51,7 +50,9 @@ const getData = async ({session, whereQuery}) => {
       TbmVehicle: {
         include: {
           OdometerInput: {
-            where: {date: {equals: whereQuery.gte}},
+            where: {date: {lte: whereQuery.gte}},
+            orderBy: {date: `desc`},
+            take: 2,
           },
         },
       },

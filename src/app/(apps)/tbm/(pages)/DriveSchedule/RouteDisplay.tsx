@@ -5,9 +5,10 @@ import {Days, getMidnight, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
+import {Prisma} from '@prisma/client'
 import React, {useEffect} from 'react'
 
-export default function RouteDisplay({tbmBase}) {
+export default function RouteDisplay({tbmBase, whereQuery}) {
   const useGlobalProps = useGlobal()
   const {query} = useGlobalProps
   const {selectedBase, setselectedBase, selectedRouteGroup, setselectedRouteGroup} = useSelectedBase()
@@ -17,24 +18,37 @@ export default function RouteDisplay({tbmBase}) {
 
   const {firstDayOfMonth: yearMonth} = Days.getMonthDatum(query.from ? toUtc(query.from) : getMidnight())
 
+  const include: Prisma.TbmRouteGroupInclude = {
+    TbmBase: {},
+    TbmDriveSchedule: {
+      where: {
+        finished: true,
+        date: whereQuery,
+      },
+    },
+    Mid_TbmRouteGroup_TbmCustomer: {
+      include: {
+        TbmCustomer: true,
+      },
+    },
+    Mid_TbmRouteGroup_TbmProduct: {
+      include: {
+        TbmProduct: true,
+      },
+    },
+    TbmMonthlyConfigForRouteGroup: {where: {yearMonth: {equals: yearMonth}}},
+  }
   return (
     <R_Stack className={` items-start`}>
       <ChildCreator
         {...{
           ParentData: tbmBase,
           models: {parent: `tbmBase`, children: `tbmRouteGroup`},
-          additional: {
-            include: {
-              TbmMonthlyConfigForRouteGroup: {where: {yearMonth: {equals: yearMonth}}},
-            },
-          },
+          additional: {include: include},
           columns: ColBuilder.tbmRouteGroup({
             useGlobalProps,
             ColBuilderExtraProps: {
-              selectedBase,
-              setselectedBase,
-              selectedRouteGroup,
-              setselectedRouteGroup,
+              showMonthConfig: true,
               yearMonth,
             },
           }),

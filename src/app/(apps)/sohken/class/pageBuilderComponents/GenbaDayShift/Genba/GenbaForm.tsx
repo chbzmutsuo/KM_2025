@@ -97,7 +97,7 @@ const TaskAndSchedule = ({genba, allTasks}) => {
     <>
       <div></div>
       <R_Stack className={`items-stretch`}>
-        <div className={`w-[700px]`}>
+        <div className={`w-[750px]`}>
           <Accordion {...{label: `タスク一覧一覧設定`, defaultOpen: true, closable: false}}>
             <FitMargin>
               <C_Stack>

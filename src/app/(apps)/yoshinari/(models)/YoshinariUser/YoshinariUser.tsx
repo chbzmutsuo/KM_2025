@@ -167,9 +167,23 @@ export class YoshinariUserClass {
                 where: {
                   OR: [
                     //有給以外は、whereQueryがある場合はその日付のみ取得
-                    {ApCustomFieldValue: {some: {ApCustomField: {OR: [{name: `日付`}]}, date: whereQuery}}},
+                    {
+                      ApCustomFieldValue: {
+                        some: {
+                          ApCustomField: {OR: [{name: `日付`}]},
+                          date: whereQuery,
+                        },
+                      },
+                    },
                     // 有給ログは全て取得する
-                    {ApCustomFieldValue: {some: {string: {contains: `有給`}, ApCustomField: {name: `休暇区分`}}}},
+                    {
+                      ApCustomFieldValue: {
+                        some: {
+                          string: {contains: `有給`},
+                          ApCustomField: {name: `休暇区分`},
+                        },
+                      },
+                    },
                   ],
                 },
                 include: apRequest.include,

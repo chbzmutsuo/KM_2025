@@ -23,8 +23,9 @@ export const getValue = ({col, record, dataModelName, mutateRecords, tdStyle}) =
     } else if (col.type === 'password') {
       value = createHiddenValuesFromLetterCount(`password`)
     } else if (timeFormat) {
-      const format = col?.type === 'date' ? 'YYYY-MM-DD(ddd)' : timeFormat
-      value = value ? formatDate(value, format, {displayInTwoLines: true}) : ''
+      const format = col?.type === 'date' ? 'short' : timeFormat
+
+      value = value ? formatDate(value, format) : ''
     } else if (col?.type === 'price') {
       value = [null, undefined].includes(value)
         ? undefined

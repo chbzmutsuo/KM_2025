@@ -1291,6 +1291,7 @@ export interface P_User {
   AqCustomer: P_AqCustomer[];
   tbmBaseId: number;
   TbmDriveSchedule: P_TbmDriveSchedule[];
+  OdometerInput: P_OdometerInput[];
 }
 
 export interface P_ReleaseNotes {
@@ -1488,6 +1489,17 @@ export interface P_TbmBase {
   User: P_User[];
   TbmRouteGroup: P_TbmRouteGroup[];
   TbmDriveSchedule: P_TbmDriveSchedule[];
+  TbmCustomer: P_TbmCustomer[];
+}
+
+export interface P_TbmBase_MonthConfig {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  yearMonth: Date;
+  TbmBase: P_TbmBase;
+  tbmBaseId: number;
 }
 
 export interface P_TbmVehicle {
@@ -1495,6 +1507,7 @@ export interface P_TbmVehicle {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
+  code: string;
   name: string;
   TbmRefuelHistory: P_TbmRefuelHistory[];
   tbmBaseId: number;
@@ -1506,11 +1519,13 @@ export interface P_TbmRouteGroup {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
+  code: string;
   name: string;
+  TbmBase: P_TbmBase;
   tbmBaseId: number;
   TbmDriveSchedule: P_TbmDriveSchedule[];
-  tbmCustomerId: number;
-  TbmMonthlyConfigForRouteGroup: P_TbmMonthlyConfigForRouteGroup[];
+  Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct;
+  Mid_TbmRouteGroup_TbmCustomer: P_Mid_TbmRouteGroup_TbmCustomer;
 }
 
 export interface P_TbmMonthlyConfigForRouteGroup {
@@ -1520,12 +1535,8 @@ export interface P_TbmMonthlyConfigForRouteGroup {
   sortOrder: number;
   yearMonth: Date;
   vehicleType: string;
-  TbmProduct: P_TbmProduct;
-  tbmProductId: number;
   postalFee: number;
-  postalHighwayFee: number;
   generalFee: number;
-  generalHighwayFee: number;
   driverFee: number;
   billingFee: number;
   tollFee: number;
@@ -1541,7 +1552,30 @@ export interface P_TbmProduct {
   sortOrder: number;
   code: string;
   name: string;
-  TbmMonthlyConfigForRouteGroup: P_TbmMonthlyConfigForRouteGroup[];
+  Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct[];
+  tbmBaseId: number;
+}
+
+export interface P_Mid_TbmRouteGroup_TbmProduct {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  TbmRouteGroup: P_TbmRouteGroup;
+  tbmRouteGroupId: number;
+  TbmProduct: P_TbmProduct;
+  tbmProductId: number;
+}
+
+export interface P_Mid_TbmRouteGroup_TbmCustomer {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  TbmRouteGroup: P_TbmRouteGroup;
+  tbmRouteGroupId: number;
+  TbmCustomer: P_TbmCustomer;
+  tbmCustomerId: number;
 }
 
 export interface P_TbmBillingAddress {
@@ -1566,11 +1600,14 @@ export interface P_TbmCustomer {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  customerName: string;
+  code: string;
+  name: string;
+  address: string;
   phoneNumber: string;
   faxNumber: string;
   bankInformation: string;
-  TbmRouteGroup: P_TbmRouteGroup[];
+  Mid_TbmRouteGroup_TbmCustomer: P_Mid_TbmRouteGroup_TbmCustomer[];
+  tbmBaseId: number;
 }
 
 export interface P_TbmRefuelHistory {
@@ -1582,6 +1619,7 @@ export interface P_TbmRefuelHistory {
   odometer: number;
   TbmVehicle: P_TbmVehicle;
   tbmVehicleId: number;
+  userId: number;
 }
 
 export interface P_TbmDriveSchedule {
@@ -1590,6 +1628,8 @@ export interface P_TbmDriveSchedule {
   updatedAt: Date;
   sortOrder: number;
   date: Date;
+  generalHighwayFee: number;
+  User: P_User;
   userId: number;
   tbmVehicleId: number;
   tbmRouteGroupId: number;
@@ -1606,6 +1646,17 @@ export interface P_OdometerInput {
   date: Date;
   TbmVehicle: P_TbmVehicle;
   tbmVehicleId: number;
+  userId: number;
+}
+
+export interface P_UserWorkStatus {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  User: P_User;
+  userId: number;
 }
 
 export interface P_TsMainContractor {

@@ -24,8 +24,8 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
       label: '営業所',
       form: {
         ...defaultRegister,
-        defaultValue: tbmBase.id,
-        disabled: tbmBase.id,
+        defaultValue: tbmBase?.id,
+        disabled: tbmBase?.id,
       },
       forSelect: {},
     },
@@ -60,5 +60,9 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
         // disabled: tbmRouteGroupId,
       },
     },
-  ]).transposeColumns()
+  ])
+    .customAttributes(({col}) => {
+      return {...col, search: {}}
+    })
+    .transposeColumns()
 }

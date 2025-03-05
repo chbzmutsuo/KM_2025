@@ -83,6 +83,9 @@ model User {
   TbmBase                          TbmBase?                           @relation(fields: [tbmBaseId], references: [id])
   tbmBaseId                        Int?
   TbmDriveSchedule                 TbmDriveSchedule[]
+  UserWorkStatus                   UserWorkStatus[]
+  OdometerInput                    OdometerInput[]
+  TbmRefuelHistory                 TbmRefuelHistory[]
 }
 
 model ReleaseNotes {

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import DatePicker, {registerLocale} from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import ja from 'date-fns/locale/ja' // import the Japanese locale
-import {Days, formatDate} from 'src/cm/class/Days'
+import {Days, formatDate, getMidnight} from 'src/cm/class/Days'
 import {anyObject} from '@cm/types/types'
 import {cl} from 'src/cm/lib/methods/common'
 import {Button} from '@components/styles/common-components/Button'
@@ -64,7 +64,8 @@ const MainDatePicker = (props: anyObject) => {
   const customStyleProps = {
     className: cl('custom-datepicker', formProps.className),
     dayClassName: (date: Date) => {
-      let dateClass = ` w-[4px] `
+      let dateClass = `  text-[.9375rem] `
+      Days.isSameDate(date, getMidnight()) && (dateClass += `bg-yellow-400 `)
       formatDate(date, 'ddd') === '土' && (dateClass += `  `)
       formatDate(date, 'ddd') === '日' && (dateClass += `  `)
       return dateClass

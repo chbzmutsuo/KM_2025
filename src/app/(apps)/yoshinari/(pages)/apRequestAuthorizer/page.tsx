@@ -17,19 +17,23 @@ export default async function DynamicMasterPage(props) {
   const ApRequestTypeConfigs = Yoshinari.constants().getApRequestTypeConfigs()
   const {session, scopes} = await initServerComopnent({query})
   const {isSuperUser} = scopes.getYoshinariScopes()
+  // const isSuperUser = false
+
+  const ApRecieverWhere = {
+    some: {userId: isSuperUser ? undefined : session?.id},
+  }
+
+  const where = isSuperUser
+    ? {status: query.status}
+    : {
+        status: query.status,
+        ApReceiver: ApRecieverWhere,
+      }
 
   const includes = getApRequestIncludes()
   const queryObj: Prisma.ApRequestFindManyArgs = {
-    // orderBy: [{createdAt: `desc`}],
     include: includes.apRequest.include,
-    where: isSuperUser
-      ? {
-          status: query.status,
-        }
-      : {
-          status: query.status,
-          ApReceiver: {some: {userId: isSuperUser ? undefined : session?.id}},
-        },
+    where: where,
   }
 
   let apRequest = await (await fetchUniversalAPI(`apRequest`, `findMany`, queryObj)).result
@@ -52,7 +56,7 @@ export default async function DynamicMasterPage(props) {
   return (
     <div>
       <div className={`print-target`}>
-        <ApRequestAuthorizerCC {...{apRequest, ApRequestType, ApRequestTypeConfigs, isSuperUser}} />
+        <ApRequestAuthorizerCC {...{ApRecieverWhere, apRequest, ApRequestType, ApRequestTypeConfigs, isSuperUser}} />
       </div>
     </div>
   )

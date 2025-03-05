@@ -1,5 +1,4 @@
 'use client'
- 
 
 import useWindowSize from 'src/cm/hooks/useWindowSize'
 import {cl} from 'src/cm/lib/methods/common'
@@ -7,7 +6,11 @@ import {cl} from 'src/cm/lib/methods/common'
 import React, {CSSProperties} from 'react'
 export const FitMargin = (props: props) => {
   const {className, style, ...rest} = props
-  return <div className={`mx-auto w-fit`}>{props.children}</div>
+  return (
+    <div className={`mx-auto w-fit ${className}`} {...rest}>
+      {props.children}
+    </div>
+  )
 }
 export const MyContainer = (
   props: props & {

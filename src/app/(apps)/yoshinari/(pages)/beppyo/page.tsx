@@ -27,7 +27,7 @@ export default async function Page(props) {
     orderBy: [{code: `asc`}],
   })
 
-  const {yukyuGroupedBy} = await getUserYukyuAgg()
+  const {yukyuGroupedBy} = await getUserYukyuAgg({until: whereQuery.lte})
 
   return (
     <Padding>

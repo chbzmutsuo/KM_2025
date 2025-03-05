@@ -4,7 +4,7 @@ import React from 'react'
 
 import DynamicLoader from '@components/utils/loader/Loader'
 import {R_Stack} from '@components/styles/common-components/common-components'
-import {cl} from '@cm/lib/methods/common'
+import {cl, isDev} from '@cm/lib/methods/common'
 
 import ColOptionModal from '@components/DataLogic/TFs/MyTable/Thead/ColOption/ColOptionModal'
 import useInitGlobalHooks from '@hooks/globalHooks/useInitGlobalHooks'
@@ -57,7 +57,9 @@ const Main = ({children, router}) => {
 
       {/* {isDev && (
         <div className={`fixed bottom-1 right-1`}>
-          <Button {...{onClick: () => router.refresh()}}>更新</Button>
+          <button className={` t-btn`} {...{onClick: () => router.refresh()}}>
+            更新
+          </button>
         </div>
       )} */}
     </div>

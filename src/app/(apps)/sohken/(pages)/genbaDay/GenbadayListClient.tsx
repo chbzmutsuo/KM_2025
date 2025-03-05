@@ -1,7 +1,7 @@
 'use client'
 //classを切り替える
 
-import { formatDate} from '@class/Days'
+import {formatDate} from '@class/Days'
 import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 import {C_Stack, Circle, FitMargin, Padding, R_Stack} from '@components/styles/common-components/common-components'
 import {Paper} from '@components/styles/common-components/paper'

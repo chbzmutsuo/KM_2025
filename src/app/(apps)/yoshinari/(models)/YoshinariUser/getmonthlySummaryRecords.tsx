@@ -116,7 +116,13 @@ export const getMonthlySummaryRecordsOrigin = (props: {yoshinariUserCl: Yoshinar
 
   const furikyuRemain = holidayWorkDays_legal + holidayWorkDays_illegal - furikyu
 
-  const furikyuRecords = [furikyu, holidayWorkDays_legal, holidayWorkDays_illegal, furikyuRemain].map(d => {
+  const furikyuRecords = [
+    //
+    furikyu,
+    holidayWorkDays_legal,
+    holidayWorkDays_illegal,
+    furikyuRemain,
+  ].map(d => {
     const style = d < 0 ? {background: `red`, color: `white`} : {}
     return {
       style,

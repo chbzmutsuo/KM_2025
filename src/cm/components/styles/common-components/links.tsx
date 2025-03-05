@@ -41,7 +41,8 @@ export const LoadingLink = (props: props & {href; target?: '_blank'; milliSecond
   return (
     <span
       onClick={async e => {
-        if (e.metaKey) return
+        if (e.metaKey || target === '_blank') return
+
         navigateRefresh(href, milliSeconds)
       }}
     >

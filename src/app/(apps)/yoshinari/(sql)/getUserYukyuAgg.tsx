@@ -1,3 +1,4 @@
+import {formatDate} from '@class/Days'
 import {sql} from '@class/SqlBuilder/SqlBuilder'
 import {useRawSql} from '@class/SqlBuilder/useRawSql'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
@@ -30,9 +31,10 @@ export type userYukyuAgg = {
   grantList: yukyuGrantRecord[]
 }
 
-export const getUserYukyuAgg = async () => {
-  const {yukyuConsumeRecords} = await getYukyuConsumedRecords()
-  const {yukyuGrantRecords} = await getYukyuGainedRecords()
+export const getUserYukyuAgg = async (props?: {until?: Date}) => {
+  const until = props?.until
+  const {yukyuConsumeRecords} = await getYukyuConsumedRecords({until})
+  const {yukyuGrantRecords} = await getYukyuGainedRecords({until})
 
   const yukyuGroupedBy = await calculateRemainingLeave(yukyuGrantRecords, yukyuConsumeRecords)
 
@@ -142,7 +144,9 @@ export const calculateRemainingLeave = async (
   return remainingLeaveByUser as userYukyuAgg[]
 }
 
-const getYukyuGainedRecords = async () => {
+const getYukyuGainedRecords = async (props?: {until?: Date}) => {
+  const until = props?.until
+
   const yukyuGrantRecordsSql = sql`
   SELECT
     u."name" AS "userName",
@@ -153,6 +157,8 @@ const getYukyuGainedRecords = async () => {
   FROM
     "PaidLeaveGrant" pg
   JOIN "User" u ON pg."userId" = u."id"
+  WHERE 1 =1
+  ${until ? `AND "pg"."grantedAt" <= '${formatDate(until)}'` : ``}
   `
 
   const yukyuGrantRecords: any[] = (await useRawSql({sql: yukyuGrantRecordsSql})).rows
@@ -171,7 +177,8 @@ const getYukyuGainedRecords = async () => {
   return {yukyuGrantRecords}
 }
 
-const getYukyuConsumedRecords = async () => {
+const getYukyuConsumedRecords = async (props?: {until?: Date}) => {
+  const until = props?.until
   const workHoursSq = sql`
   SELECT
     history.from,
@@ -236,6 +243,7 @@ const getYukyuConsumedRecords = async () => {
         AND "dateFieldValue"."customFieldId" = (SELECT "id" FROM "ApCustomField" WHERE "name" = '日付' AND "id" = "dateFieldValue"."customFieldId")
 
     WHERE 1=1
+      ${until ? `AND "dateFieldValue"."date" <= '${formatDate(until)}'` : ``}
       AND "req"."forceApproved" = true
       AND "req"."status" = '確定'
       AND "fieldVal"."string" IN ('有給（時間給）', '有給休暇（1日休）')

@@ -21,11 +21,11 @@ export const colorClassMaster = {
     primary: 'bg-primary-main text-white',
   },
   text: {
-    gray: 'text-gray-400 ',
+    gray: 'text-gray-500 ',
     red: 'text-error-main',
     blue: 'text-blue-main',
     green: 'text-green-main',
-    orange: 'text-orange-main',
+    orange: 'text-orange-600',
     yellow: 'text-yellow-main ',
     sub: 'text-sub-main',
     primary: 'text-primary-main',

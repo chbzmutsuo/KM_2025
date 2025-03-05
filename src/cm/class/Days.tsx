@@ -140,16 +140,8 @@ export const formatDateTimeOrDate = (date: Date) => {
   }
 }
 
-export const formatDate = (
-  dateObject?: any,
-  format?: TimeFormatType | TimeFormatType[],
-  options?: {
-    displayInTwoLines?: boolean
-  }
-) => {
+export const formatDate = (dateObject?: any, format?: TimeFormatType | TimeFormatType[]) => {
   const originalValue = dateObject
-
-  const {displayInTwoLines} = options ?? {}
 
   format = format ?? 'YYYY-MM-DD'
 
@@ -168,7 +160,6 @@ export const formatDate = (
       const doConvert = String(dateObject).includes('15:00:00')
 
       if (doConvert) {
-        // console.info(`=== FORMATING DATE ON SERVER ===`, dateObject)
         dateObject = toJst(dateObject)
       }
     }
@@ -178,7 +169,7 @@ export const formatDate = (
   if (format === 'iso') {
     result = dayjs(dateObject).format()
   } else if (format === 'short') {
-    result = dayjs(dateObject).format(`.YY/MM/DD`)
+    result = dayjs(dateObject).format(`.YY/MM/DD(ddd)`)
   } else {
     if (Array.isArray(format)) {
       const toMarkDown = arrToLines(format.map(f => FORMATTER(dateObject, f)))
@@ -191,10 +182,6 @@ export const formatDate = (
 
   if (result === 'Invalid Date') return originalValue
 
-  if (displayInTwoLines) {
-    return formatDate(result, `YYYY-M-D(ddd)`)
-    // return breakLines(displayDateInTwoLine(result))
-  }
   return result
 }
 
