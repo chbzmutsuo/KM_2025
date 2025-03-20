@@ -10,7 +10,7 @@ type genbaTaskByDate = {
 
 export async function handleUpdateSchedule({genbaTask}) {
   if (!genbaTask.from && !genbaTask.to) {
-    return alert('日付が設定されていません。')
+    return
   }
 
   const {from, to} = genbaTask

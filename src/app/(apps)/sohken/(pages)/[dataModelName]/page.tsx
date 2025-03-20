@@ -32,6 +32,7 @@ export default async function DynamicMasterPage(props) {
 const getBuilders = () => ({ColBuilder, ViewParamBuilder, PageBuilder, QueryBuilder, EasySearchBuilder})
 const parameters = async (props: {params; query; session; scopes: ReturnType<typeof getScopes>}) => {
   const {params, query, session, scopes} = props
+  const {admin} = scopes
   //---------------個別設定-------------
   const customParams = await setCustomParams({
     dataModelName: params.dataModelName,
@@ -115,6 +116,16 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
             },
           }
         },
+      },
+      {
+        modelNames: [`roleMaster`],
+        setParams: async () => ({
+          myTable: {
+            create: admin,
+            update: admin,
+            delete: admin,
+          },
+        }),
       },
     ],
   })

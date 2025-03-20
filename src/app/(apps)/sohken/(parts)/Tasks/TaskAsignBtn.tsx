@@ -7,7 +7,7 @@ import useModal from '@components/utils/modal/useModal'
 import {formatDate, toUtc} from '@class/Days'
 
 import BasicModal from '@components/utils/modal/BasicModal'
-import {TableBorderedY, TableWrapper} from '@components/styles/common-components/Table'
+
 import {bodyRecordsType, CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
 import {handleCopyTask, taskObj} from '@app/(apps)/sohken/(parts)/Tasks/HandleBulkUpsertTask'
@@ -76,12 +76,9 @@ export const TaskAsignBtn = ({Genba, allTasks, router}) => {
               })
             }}
           >
-            一括反映
+            登録
           </Button>
-
-          <TableWrapper>
-            <TableBorderedY>{CsvTable({headerRecords, bodyRecords}).ALL()}</TableBorderedY>
-          </TableWrapper>
+          {CsvTable({headerRecords, bodyRecords}).WithWrapper({})}
         </C_Stack>
       </BasicModal>
     </div>

@@ -1,4 +1,6 @@
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
+
+import {requestResultType} from '@cm/types/types'
 import {Button} from '@components/styles/common-components/Button'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import {useGlobalModalForm} from '@components/utils/modal/useGlobalModalForm'
@@ -6,7 +8,7 @@ import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {atomTypes} from '@hooks/useJotai'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import {Prisma} from '@prisma/client'
+import {Prisma, TbmDriveSchedule} from '@prisma/client'
 import React from 'react'
 
 type formData = {
@@ -17,7 +19,12 @@ type formData = {
   tbmRouteGroupId: number
   tbmBaseId: number
 }
-export default function useHaishaTableEditorGMF() {
+const useHaishaTableEditorGMF = (props: {
+  afterUpdate?: (props: {res: requestResultType; tbmDriveSchedule: TbmDriveSchedule}) => void
+  afterDelete?: (props: {res: requestResultType; tbmDriveSchedule: TbmDriveSchedule}) => void
+}) => {
+  ////afterUpdate / afterDelete というpropsに変更/============================================
+  const {afterUpdate = item => null} = props
   return useGlobalModalForm<atomTypes[`haishaTableEditorGMF`]>(`haishaTableEditorGMF`, null, {
     mainJsx: ({GMF_OPEN, setGMF_OPEN}) => {
       const useGlobalProps = useGlobal()
@@ -41,17 +48,27 @@ export default function useHaishaTableEditorGMF() {
           {...{
             latestFormData,
             onSubmit: async (data: formData) => {
-              useGlobalProps.toggleLoad(async () => {
-                const queryObject: Prisma.TbmDriveScheduleUpsertArgs = {
-                  where: {id: tbmDriveSchedule?.id ?? 0},
-                  create: data,
-                  update: data,
-                }
+              // useGlobalProps.toggleLoad(async () => {
+              const queryObject: Prisma.TbmDriveScheduleUpsertArgs = {
+                where: {id: tbmDriveSchedule?.id ?? 0},
+                create: data,
+                update: data,
+                include: {
+                  TbmVehicle: {
+                    include: {OdometerInput: {}},
+                  },
+                  TbmRouteGroup: {},
+                },
+              }
 
-                const res = await fetchUniversalAPI(`tbmDriveSchedule`, `upsert`, queryObject)
-                toastByResult(res)
-                setGMF_OPEN(null)
-              })
+              const res = await fetchUniversalAPI(`tbmDriveSchedule`, `upsert`, queryObject)
+              toastByResult(res)
+
+              afterUpdate?.({res, tbmDriveSchedule})
+              // 配車テーブルの時の処理
+
+              setGMF_OPEN(null)
+              //
 
               //
             },
@@ -64,13 +81,12 @@ export default function useHaishaTableEditorGMF() {
               {...{
                 onClick: async () => {
                   if (confirm(`削除しますか？`)) {
-                    useGlobalProps.toggleLoad(async () => {
-                      const res = await fetchUniversalAPI(`tbmDriveSchedule`, `delete`, {
-                        where: {id: tbmDriveSchedule?.id ?? 0},
-                      })
-                      toastByResult(res)
-                      setGMF_OPEN(null)
+                    const res = await fetchUniversalAPI(`tbmDriveSchedule`, `delete`, {
+                      where: {id: tbmDriveSchedule?.id ?? 0},
                     })
+                    toastByResult(res)
+
+                    setGMF_OPEN(null)
                   }
                 },
               }}
@@ -84,3 +100,5 @@ export default function useHaishaTableEditorGMF() {
     },
   })
 }
+
+export default useHaishaTableEditorGMF

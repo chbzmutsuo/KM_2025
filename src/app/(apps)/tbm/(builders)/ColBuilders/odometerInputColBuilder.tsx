@@ -1,4 +1,5 @@
 'use client'
+import {getVehicleForSelectConfig} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmVehicleColBuilder'
 import {Fields} from '@class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
 
@@ -19,7 +20,7 @@ export const odometerInputColBuilder = (props: columnGetterType) => {
     {
       id: 'tbmVehicleId',
       label: '車両',
-      forSelect: {},
+      forSelect: {config: getVehicleForSelectConfig()},
       form: {
         defaultValue: tbmVehicleId,
         disabled: tbmVehicleId,

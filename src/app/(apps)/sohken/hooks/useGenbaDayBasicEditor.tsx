@@ -6,7 +6,7 @@ import {useGlobalModalForm} from '@components/utils/modal/useGlobalModalForm'
 import {Fields} from '@class/Fields/Fields'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {Button} from '@components/styles/common-components/Button'
-import { fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 
 export type shiftEditProps = {
@@ -23,27 +23,29 @@ export const useGenbaDayBasicEditor = () => {
       const {BasicForm, latestFormData} = useBasicFormProps({
         formData: GMF_OPEN?.GenbaDay,
         columns: new Fields([
-          {id: 'remarks', label: '連絡事項・備考', form: {}, type: `textarea`},
-          {id: 'subTask', label: 'その他', form: {}, type: `textarea`},
+          {id: 'remarks', label: '連絡事項・備考', form: {style: {width: 400}}, type: `textarea`},
+          {id: 'subTask', label: 'その他', form: {style: {width: 400}}, type: `textarea`},
         ]).transposeColumns(),
       })
       return (
-        <BasicForm
-          {...{
-            latestFormData,
-            onSubmit: async (data: any) => {
-              toggleLoad(async item => {
-                await fetchUniversalAPI(`genbaDay`, `update`, {
-                  where: {id: GMF_OPEN?.GenbaDay.id},
-                  data,
+        <div style={{zIndex: 9999}}>
+          <BasicForm
+            {...{
+              latestFormData,
+              onSubmit: async (data: any) => {
+                toggleLoad(async item => {
+                  await fetchUniversalAPI(`genbaDay`, `update`, {
+                    where: {id: GMF_OPEN?.GenbaDay.id},
+                    data,
+                  })
                 })
-              })
-              close()
-            },
-          }}
-        >
-          <Button>確定</Button>
-        </BasicForm>
+                close()
+              },
+            }}
+          >
+            <Button>確定</Button>
+          </BasicForm>
+        </div>
       )
       return <></>
     },

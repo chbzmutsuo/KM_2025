@@ -1,7 +1,7 @@
 'use client'
 
 import {UserColBuilder} from './UserColBuilder'
-import {TbmVehicleColBuilder} from './TbmVehicleColBuilder'
+import {getVehicleForSelectConfig, TbmVehicleColBuilder} from './TbmVehicleColBuilder'
 import {TbmBaseColBuilder} from './TbmBaseColBuilder'
 import {TbmRouteGroupColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRouteGroupColBuilder'
 import {TbmRouteColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRouteColBuilder'
@@ -17,6 +17,7 @@ import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {tbmProductColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmProductColBuilder'
 import {odometerInputColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/odometerInputColBuilder'
 import {tbmCustomerColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmCustomerColBuilder'
+import {getMidnight} from '@class/Days'
 
 export class ColBuilder {
   static user = UserColBuilder
@@ -48,5 +49,57 @@ export class ColBuilder {
         },
       }))
       .transposeColumns()
+  }
+  static tbmCarWashHistory = (props: columnGetterType) => {
+    const {session} = props.useGlobalProps
+    const userId = session?.id
+    const {tbmVehicleId} = props.ColBuilderExtraProps ?? {}
+
+    return (
+      new Fields([
+        {
+          id: 'tbmVehicleId',
+          label: '車両',
+          form: {
+            ...defaultRegister,
+            defaultValue: tbmVehicleId,
+            disabled: tbmVehicleId ? true : false,
+          },
+          forSelect: {
+            config: getVehicleForSelectConfig(),
+          },
+        },
+        {
+          id: 'date',
+          label: '日付',
+          form: {
+            ...defaultRegister,
+            defaultValue: getMidnight(),
+          },
+          type: `date`,
+        },
+
+        {
+          id: 'userId',
+          label: 'ドライバ',
+          forSelect: {},
+          form: {
+            defaultValue: userId,
+            disabled: userId,
+          },
+        },
+        {
+          id: 'price',
+          label: '料金',
+          form: {defaultValue: null, ...defaultRegister},
+          type: `price`,
+        },
+      ])
+        // .showSummaryInTd({convertColId: {tbmVehicleId: 'TbmVehicle.name'}})
+        .customAttributes(({col}) => {
+          return {...col, search: {}}
+        })
+        .transposeColumns()
+    )
   }
 }

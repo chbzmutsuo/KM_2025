@@ -39,6 +39,11 @@ model User {
   app                  String?
   apps                 String[]
 
+  // tbm
+
+  employeeCode String? @unique
+  phone        String?
+
   School School? @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   VideoFromUser           VideoFromUser[]
@@ -86,6 +91,8 @@ model User {
   UserWorkStatus                   UserWorkStatus[]
   OdometerInput                    OdometerInput[]
   TbmRefuelHistory                 TbmRefuelHistory[]
+  DayRemarksUser                   DayRemarksUser[]
+  TbmCarWashHistory                TbmCarWashHistory[]
 }
 
 model ReleaseNotes {

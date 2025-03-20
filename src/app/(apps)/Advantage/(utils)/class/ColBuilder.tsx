@@ -400,7 +400,7 @@ export class ColBuilder {
                   onEditFunction: {},
                   useGlobalProps: props.useGlobalProps,
                   myForm: undefined,
-                  myTable: {header: false},
+                  myTable: {header: false, drag: {}},
                 }}
               />
             </PaperLarge>

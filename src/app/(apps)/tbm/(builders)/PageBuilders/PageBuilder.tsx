@@ -6,14 +6,6 @@ import {useGlobalPropType} from '@hooks/globalHooks/useGlobal'
 import {Fields} from '@class/Fields/Fields'
 import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
 
-const Title = ({children}) => {
-  return (
-    <div className={`mb-[10px]`}>
-      <strong>{children}</strong>
-    </div>
-  )
-}
-
 export class PageBuilder {
   static tbmBase = tbmBase
   static tbmOperationGroup = tbmOperationGroup
@@ -26,7 +18,7 @@ export class PageBuilder {
 
     const columns = new Fields([
       {id: 'g_tbmBaseId', label: '営', forSelect: {}},
-      {id: 'g_userId', label: 'ド', forSelect: {}},
+      // {id: 'g_userId', label: 'ド', forSelect: {}},
     ]).transposeColumns()
 
     if (admin) {

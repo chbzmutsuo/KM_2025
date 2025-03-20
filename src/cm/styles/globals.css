@@ -245,15 +245,6 @@
   left: 0;
 }
 
-.table-border-style {
-  @apply border-[1px] border-solid border-gray-400;
-}
-
-.simple-table td,
-.simple-table th {
-  @apply p-0.5  align-top table-border-style;
-}
-
 .sticky-table-wrapper {
   @apply p-0 rounded-lg;
   overflow: auto;
@@ -277,12 +268,6 @@
   z-index: 100;
   top: 0;
 }
-.sticky-table-wrapper table thead tr:first-child th:first-child,
-.sticky-table-wrapper table tfoot tr:first-child th:first-child {
-  position: sticky;
-  z-index: 140;
-  left: 0;
-}
 .sticky-table-wrapper table thead tr,
 .sticky-table-wrapper table tfoot tr {
   z-index: 0;
@@ -297,10 +282,6 @@
   left: 0;
   z-index: 10;
 }
-.sticky-table-wrapper table tbody tr th,
-.sticky-table-wrapper table tbody tr td {
-  @apply border-b;
-}
 .sticky-table-wrapper table tfoot {
   z-index: 100;
   position: sticky;
@@ -314,38 +295,13 @@
   @apply text-gray-600 font-normal text-start;
 }
 
-.align-td-width th {
-  width: 40px;
-}
-
-.no-padding-x td,
-.no-padding-x th {
-  padding-left: 0.5;
-  padding-right: 0.5;
-}
-
-.no-padding-y td,
-.no-padding-y th {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.borderedTable td,
-.borderedTable th {
-  border-width: 1.5px;
-  border-style: solid dashed;
-}
-
-.no-border * {
-  border: none;
-}
-
 .vertical {
   writing-mode: vertical-lr;
   text-align: center;
 }
 
 .roundedTr {
+  font: fallback;
   @apply shadow-md;
   border-width: 1px;
   border-radius: 10px;

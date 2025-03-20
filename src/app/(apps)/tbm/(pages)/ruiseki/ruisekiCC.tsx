@@ -1,17 +1,12 @@
 'use client'
-import {MonthlyTbmDriveData} from '@app/(apps)/tbm/(pages)/DriveDetail/page'
+
+import {MonthlyTbmDriveData} from '@app/(apps)/tbm/(server-actions)/getMonthlyTbmDriveData'
 import {formatDate} from '@class/Days'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
-export default function DriveDetailCC({
-  monthlyTbmDriveData,
-  ConfigForMonth,
-}: {
-  monthlyTbmDriveData: MonthlyTbmDriveData
-  ConfigForMonth: any
-}) {
+export default function Page({monthlyTbmDriveData}: {monthlyTbmDriveData: MonthlyTbmDriveData}) {
   const minWidth = 80
   const {toastIfFailed} = useGlobal()
   return (
@@ -29,14 +24,14 @@ export default function DriveDetailCC({
               let value
               if (item.type === `date`) {
                 value = formatDate(item.value, 'short')
-              } else if ([`postalHighwayFee`, `generalHighwayFee`].includes(dataKey)) {
+              } else if ([`O_postalHighwayFee`, `Q_generalHighwayFee`].includes(dataKey)) {
                 value = (
                   <input
                     {...{
                       defaultValue: schedule[dataKey],
                       type: 'number',
                       className: `border-b bg-gray-100/70 w-[70px] px-1 text-xs`,
-                      onChange: async (e: any) => {
+                      onBlur: async (e: any) => {
                         const res = await fetchUniversalAPI('tbmDriveSchedule', 'update', {
                           where: {id: schedule.id ?? 0},
                           data: {
@@ -76,10 +71,9 @@ export default function DriveDetailCC({
               return {
                 label: <div className="text-xs">{item.label}</div>,
                 style: {
-                  position: sticky ? 'sticky' : undefined,
-                  background: sticky ? `white` : `white`,
-
-                  left: totalLeft,
+                  // position: sticky ? 'sticky' : undefined,
+                  // background: sticky ? `white` : `white`,
+                  // left: totalLeft,
                   zIndex: 9999,
                   ...style,
                 },

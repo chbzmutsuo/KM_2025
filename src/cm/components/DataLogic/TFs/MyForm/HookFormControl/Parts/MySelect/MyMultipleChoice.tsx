@@ -1,3 +1,4 @@
+import {PrismaModelNames} from '@cm/types/prisma-types'
 import {multipleSelectProps} from '@cm/types/types'
 import {VariousInputProps} from '@components/DataLogic/TFs/MyForm/HookFormControl/Parts/Control/VariousInput'
 import {ColoredText} from '@components/styles/common-components/colors'
@@ -6,14 +7,17 @@ import PlaceHolder from '@components/utils/loader/PlaceHolder'
 
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 
-import React, { useMemo, useState} from 'react'
+import React, {useMemo, useState} from 'react'
 
 const useInitOptionState = (props: VariousInputProps) => {
   const {col, currentValue: fKeyList, controlContextValue} = props
 
   const {models} = col.multipleSelect as multipleSelectProps
 
-  const {data: options} = usefetchUniversalAPI_SWR(models.option, `findMany`, {})
+  const modelName = models.option as PrismaModelNames
+
+  const {data: options} = usefetchUniversalAPI_SWR(modelName, `findMany`, {} as never)
+
   return {options}
 }
 

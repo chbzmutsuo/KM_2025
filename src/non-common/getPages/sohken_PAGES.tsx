@@ -36,7 +36,15 @@ export const sohken_PAGES = (props: PageGetterType) => {
       label: '設定',
       ROOT: [rootPath],
       children: [
-        {tabId: 'genba', label: '現場一覧'},
+        {
+          tabId: 'genba',
+          label: '現場一覧',
+          link: {
+            query: {
+              g_notArchived: true,
+            },
+          },
+        },
         {tabId: 'user', label: '社員一覧'},
         {tabId: 'sohkenCar', label: '車両一覧'},
         {tabId: 'genbaTaskMaster', label: '共通タスクマスタ'},

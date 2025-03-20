@@ -161,7 +161,7 @@ export const tail_color = {
     light: '#fbc9b3',
   },
   yellow: {
-    main: '#cb9f32',
+    main: '#fec128',
     light: '#fbe7b3',
   },
   warning: {

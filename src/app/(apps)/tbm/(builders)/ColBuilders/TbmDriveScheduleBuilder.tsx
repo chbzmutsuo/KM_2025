@@ -1,4 +1,5 @@
 'use client'
+import {getVehicleForSelectConfig} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmVehicleColBuilder'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
@@ -48,15 +49,26 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
         defaultValue: tbmVehicleId,
         // disabled: tbmVehicleId,
       },
-      forSelect: {config: {where: {tbmBaseId: tbmBase?.id}}},
+      forSelect: {
+        config: getVehicleForSelectConfig(tbmBase),
+      },
     },
     {
       id: 'tbmRouteGroupId',
       label: 'ルート',
-      forSelect: {config: {where: {tbmBaseId: tbmBase?.id}}},
+      forSelect: {
+        config: {
+          where: {tbmBaseId: tbmBase?.id},
+          orderBy: [{id: 'asc'}],
+          nameChanger(op) {
+            return {...op, name: op ? [`[${op.id}]`, op.name].join(` `) : ''}
+          },
+        },
+      },
       form: {
         ...defaultRegister,
         defaultValue: tbmRouteGroupId,
+
         // disabled: tbmRouteGroupId,
       },
     },

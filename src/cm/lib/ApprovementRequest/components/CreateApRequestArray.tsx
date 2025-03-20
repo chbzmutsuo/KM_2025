@@ -90,8 +90,6 @@ export function CreateApRequestArray({
 }
 
 const SummaryTd = ({apRequest, forceApproved, isSuperUser, toggleLoad, summary}) => {
-  let message = `確定しますか？`
-
   const theStatus = apRequestStatusList.find(d => d.label === (apRequest.status ?? '保留'))
 
   const Label = () => {
@@ -100,42 +98,6 @@ const SummaryTd = ({apRequest, forceApproved, isSuperUser, toggleLoad, summary})
         {theStatus?.label}
       </ColoredText>
     )
-    if (forceApproved) {
-      message = `最終承認を取り消しますか？`
-      return (
-        <ColoredText className={`mx-auto !w-[80px]`} bgColor={`green`}>
-          反映済み
-        </ColoredText>
-      )
-    }
-
-    if (summary === `確定待ち`) {
-      message = `確定しますか？`
-      return (
-        <ColoredText className={`mx-auto !w-[80px]`} bgColor={`orange`}>
-          {summary}
-        </ColoredText>
-      )
-    }
-    if (summary === `保留`) {
-      message = `全員の承認が完了していません。強制確定しますか？`
-      return (
-        <ColoredText className={`mx-auto !w-[80px]`} bgColor={`gray`}>
-          {summary}
-        </ColoredText>
-      )
-    }
-
-    if (summary === `棄却`) {
-      message = `「棄却」で返されている稟議です。強制確定しますか？`
-      return (
-        <ColoredText className={`mx-auto !w-[80px]`} bgColor={`red`}>
-          {summary}
-        </ColoredText>
-      )
-    }
-
-    return <></>
   }
 
   if (isSuperUser) {

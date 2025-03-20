@@ -43,14 +43,14 @@ export const getNenpiDataByCar = async ({tbmBaseId, whereQuery}) => {
     const totalKyuyu = item._sum.amount ?? 0
     const avgNempi = totalSokoKyori / totalKyuyu
 
-    const price = totalKyuyu * (config?.keiyuPerLiter ?? 0)
+    const fuelCost = avgNempi * (config?.keiyuPerLiter ?? 0)
 
     return {
       vehicle,
       totalKyuyu,
       totalSokoKyori,
       avgNempi,
-      price,
+      fuelCost,
       // ...item,
     }
   })

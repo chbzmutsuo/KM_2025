@@ -10,6 +10,8 @@ import {useGenbaDayCardEditorModalGMF} from '@app/(apps)/sohken/hooks/useGenbaDa
 import GanbaName from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GanbaName'
 import {TaskWithNinku} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/TaskWithNinku'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
+import {Alert} from '@components/styles/common-components/Alert'
+import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 export default function Main(props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
   pathname: string
@@ -28,6 +30,9 @@ export default function Main(props: {
       })
     }
   }
+
+  const {Genba} = GenbaDay
+  const {warningString} = Genba
   return (
     <div className={` relative`}>
       <section>
@@ -40,8 +45,17 @@ export default function Main(props: {
           </div>
         )}
 
+        <div>
+          {warningString && (
+            <LabelValue {...{label: `注意`}}>
+              <Alert color="red">{warningString}</Alert>
+            </LabelValue>
+          )}
+        </div>
         <div className={`onHover`} onClick={activateEditFrom}>
-          <LabelValue {...{label: `連絡`}}>{GenbaDay.remarks}</LabelValue>
+          <LabelValue {...{label: `連絡`}}>
+            <MarkDownDisplay>{GenbaDay.remarks}</MarkDownDisplay>
+          </LabelValue>
         </div>
         <div>
           <LabelValue {...{label: `タスク`}}>
@@ -57,7 +71,9 @@ export default function Main(props: {
         </div>
 
         <div className={`onHover`} onClick={activateEditFrom}>
-          <LabelValue {...{label: `その他`}}>{GenbaDay.subTask}</LabelValue>
+          <LabelValue {...{label: `その他`}}>
+            <MarkDownDisplay>{GenbaDay.subTask}</MarkDownDisplay>
+          </LabelValue>
         </div>
       </section>
     </div>

@@ -122,7 +122,9 @@
     "**/Grouping/**": true,
     "**/KM/**": true,
     "**/achievement/**": true,
+    "**/apex/**": true,
     "**/appLog/**": true,
+    "**/aquapot/**": true,
     "**/cueNote/**": true,
     "**/demo/**": true,
     "**/estimate/**": true,
@@ -132,13 +134,11 @@
     "**/masterKey/**": true,
     "**/masterkey/**": true,
     "**/sankosha/**": true,
+    "**/tbm/**": true,
     "**/tmp/**": true,
     "**/tsukurunger/**": true,
     "**/twitter/**": true,
-    "**/aquapot/**": true,
-    "**/yoshinari/**": true,
-    "**/tbm/**": true,
-    "**/apex/**": true
+    "**/yoshinari/**": true
   },
   "typescript.preferences.autoImportFileExcludePatterns": [
     "Advantage",

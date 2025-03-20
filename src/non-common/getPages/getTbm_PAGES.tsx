@@ -17,7 +17,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
         //
 
         {tabId: 'DriveSchedule', label: '運行計画'},
-        {tabId: 'DriveDetail', label: '運行明細'},
+        {tabId: 'meisai', label: '運行明細'},
         {tabId: 'nempiKanri', label: '燃費管理'},
         {tabId: 'ruiseki', label: '累積距離記帳'},
         {tabId: 'eigyosho', label: '営業所別売上'},
@@ -57,7 +57,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
 
         {tabId: 'tbmDriveSchedule', label: '走行履歴'},
         {tabId: 'tbmRefuelHistory', label: '給油履歴'},
-        {tabId: 'washHistory', label: '洗車履歴'},
+        {tabId: 'tbmCarWashHistory', label: '洗車履歴'},
       ],
     },
   ].map(item => ({...item, exclusiveTo: scopes.login, ROOT: [rootPath]}))

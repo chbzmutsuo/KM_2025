@@ -10,6 +10,36 @@ model PrefCity {
  @@unique([pref, city], name: "unique_pref_city")
 }
 
+model DayRemarks {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date         DateTime @unique
+ bikou        String?
+ shinseiGyomu String?
+
+ DayRemarksUser DayRemarksUser[]
+}
+
+model DayRemarksUser {
+ id          Int       @id @default(autoincrement())
+ createdAt   DateTime  @default(now())
+ updatedAt   DateTime? @default(now()) @updatedAt()
+ sortOrder   Float     @default(0)
+ kyuka       Boolean?  @default(false)
+ kyukaTodoke Boolean?  @default(false)
+
+ DayRemarks   DayRemarks @relation(fields: [dayRemarksId], references: [id])
+ dayRemarksId Int
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
+
+ @@unique([dayRemarksId, userId], name: "unique_dayRemarksId_userId")
+}
+
 // sohken
 model Genba {
  id        Int       @id @default(autoincrement())
@@ -29,6 +59,8 @@ model Genba {
  houseHoldsCount6 Int?
  houseHoldsCount7 Int?
 
+ warningString String?
+
  zip          String?
  state        String?
  city         String?
@@ -43,6 +75,8 @@ model Genba {
  GenbaDaySoukenCar GenbaDaySoukenCar[]
 
  GenbaTask GenbaTask[]
+
+ archived Boolean? @default(false)
 }
 
 model SohkenCar {
@@ -74,8 +108,9 @@ model GenbaDay {
 
  finished Boolean? @default(false)
 
- active Boolean? @default(true)
- status String?
+ active         Boolean? @default(true)
+ overStuffCount Int?     @default(0)
+ status         String?
 
  ninkuFullfilled             Boolean? @default(false)
  isLastFullfilledDay         Boolean? @default(false)
@@ -155,6 +190,7 @@ model GenbaDayShift {
  from      String? // 08:00
  to        String? // 08:00
  important Boolean?  @default(false)
+ shokucho  Boolean?  @default(false)
 
  directGo     Boolean? @default(false)
  directReturn Boolean? @default(false)

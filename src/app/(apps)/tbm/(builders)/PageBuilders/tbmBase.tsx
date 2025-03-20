@@ -1,13 +1,13 @@
 'use client'
 
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
+import {TbmRouteGroupUpsertController} from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupUpsertController'
 import {DetailPagePropType} from '@cm/types/types'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
-import { R_Stack} from '@components/styles/common-components/common-components'
+import {R_Stack} from '@components/styles/common-components/common-components'
 import BasicTabs from '@components/utils/tabs/BasicTabs'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 const Title = ({children}) => {
   return (
@@ -47,6 +47,32 @@ export const tbmBase = {
               style: {minWidth: 700},
               TabComponentArray: [
                 //
+                {
+                  label: '便マスタ',
+                  component: (
+                    <ChildCreator
+                      {...{
+                        models: {parent: `tbmBase`, children: 'tbmRouteGroup'},
+                        columns: ColBuilder.tbmRouteGroup(ColBuiderProps),
+                        myForm: {create: TbmRouteGroupUpsertController},
+                        ...childCreatorProps,
+                        additional: {
+                          ...childCreatorProps.additional,
+                          include: {
+                            TbmBase: {},
+                            Mid_TbmRouteGroup_TbmCustomer: {
+                              include: {TbmCustomer: {}},
+                            },
+                            Mid_TbmRouteGroup_TbmProduct: {
+                              include: {TbmProduct: {}},
+                            },
+                          },
+                        },
+                      }}
+                    />
+                  ),
+                },
+
                 {
                   label: '月間設定',
                   component: (
@@ -106,73 +132,6 @@ export const tbmBase = {
                         ...childCreatorProps,
                         models: {parent: `tbmBase`, children: `tbmProduct`},
                         columns: ColBuilder.tbmProduct(ColBuiderProps),
-                      }}
-                    />
-                  ),
-                },
-                {
-                  label: '便',
-                  component: (
-                    <ChildCreator
-                      {...{
-                        ...childCreatorProps,
-                        models: {parent: `tbmBase`, children: 'tbmRouteGroup'},
-                        columns: ColBuilder.tbmRouteGroup(ColBuiderProps),
-                        myForm: {
-                          create: {
-                            executeUpdate: async item => {
-                              const {id = 0, tbmCustomerId, tbmProductId, name, tbmBaseId} = item.latestFormData
-                              const {Mid_TbmRouteGroup_TbmCustomer, Mid_TbmRouteGroup_TbmProduct} = item.latestFormData
-
-                              const res = await fetchUniversalAPI(`tbmRouteGroup`, `upsert`, {
-                                where: {id: id},
-                                create: {
-                                  name,
-                                  tbmBaseId,
-                                  Mid_TbmRouteGroup_TbmCustomer: tbmCustomerId ? {create: {tbmCustomerId}} : undefined,
-                                  Mid_TbmRouteGroup_TbmProduct: tbmProductId ? {create: {tbmProductId}} : undefined,
-                                },
-                                update: {
-                                  name,
-                                  tbmBaseId,
-
-                                  Mid_TbmRouteGroup_TbmCustomer: tbmCustomerId
-                                    ? {
-                                        upsert: {
-                                          where: {id: Mid_TbmRouteGroup_TbmCustomer?.id ?? 0},
-                                          create: {tbmCustomerId},
-                                          update: {tbmCustomerId},
-                                        },
-                                      }
-                                    : undefined,
-
-                                  Mid_TbmRouteGroup_TbmProduct: tbmProductId
-                                    ? {
-                                        upsert: {
-                                          where: {id: Mid_TbmRouteGroup_TbmProduct?.id ?? 0},
-                                          create: {tbmProductId},
-                                          update: {tbmProductId},
-                                        },
-                                      }
-                                    : undefined,
-                                },
-                              })
-
-                              return res
-                            },
-                          },
-                        },
-                        additional: {
-                          include: {
-                            TbmBase: {},
-                            Mid_TbmRouteGroup_TbmCustomer: {
-                              include: {TbmCustomer: {}},
-                            },
-                            Mid_TbmRouteGroup_TbmProduct: {
-                              include: {TbmProduct: {}},
-                            },
-                          },
-                        },
                       }}
                     />
                   ),

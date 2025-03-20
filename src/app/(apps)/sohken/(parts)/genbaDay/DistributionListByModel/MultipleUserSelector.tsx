@@ -19,16 +19,20 @@ type selectedUserObjectType = {
     from: string | undefined
     to: string | undefined
     shiftOnOtherDate: GenbaDayShift[]
-    important: boolean
     directGo: boolean
     directReturn: boolean
+    important: boolean
+    shokucho: boolean
   }
 }
 
 export default function MultipleUserSelector({currentRelationalModelRecords, GenbaDay, useGlobalProps, handleClose}) {
-  let {data: options} = usefetchUniversalAPI_SWR('user', 'findMany', {
+  let {data: options} = usefetchUniversalAPI_SWR(`user`, 'findMany', {
     orderBy: [{sortOrder: 'asc'}],
-    where: userForSelect.config.where,
+    where: {
+      ...userForSelect.config.where,
+      UserRole: {none: {RoleMaster: {name: `監督者`}}},
+    },
     include: {
       GenbaDayShift: {
         include: {GenbaDay: {}},
@@ -66,13 +70,14 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
             id: number
             from: string
             to: string
-            important: boolean
             directGo: boolean
             directReturn: boolean
+            important: boolean
+            shokucho: boolean
           }
           const usersToUpsert = Object.entries(selectedUserObject)
             .map(entry => {
-              const [id, {active, from, to, shiftOnOtherDate, important, directGo, directReturn}] = entry as [
+              const [id, {active, from, to, shiftOnOtherDate, directGo, directReturn, important, shokucho}] = entry as [
                 string,
                 selectedUserObjectType[string]
               ]
@@ -83,9 +88,10 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                   from,
                   to,
                   shiftOnOtherDate,
-                  important,
                   directGo,
                   directReturn,
+                  important,
+                  shokucho,
                 }
               }
             })
@@ -115,9 +121,10 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
               userId: user.id,
               from: user.from,
               to: user.to,
-              important: user.important,
               directGo: user.directGo,
               directReturn: user.directReturn,
+              important: user.important,
+              shokucho: user.shokucho,
             }
 
             const args: Prisma.GenbaDayShiftUpsertArgs = {
@@ -162,6 +169,7 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                       {cellValue: `直行`},
                       {cellValue: `直帰`},
                       {cellValue: `強調`},
+                      {cellValue: `職長`},
                     ],
                   },
                 ],
@@ -255,6 +263,21 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                                 user,
                                 checked: !!active?.important,
                                 dataKey: `important`,
+                                setselectedUserObject,
+                              }}
+                            />
+                          </div>
+                        ),
+                      },
+                      {
+                        cellValue: (
+                          <div>
+                            <BooleanInput
+                              {...{
+                                disabled: !active?.active,
+                                user,
+                                checked: !!active?.shokucho,
+                                dataKey: `shokucho`,
                                 setselectedUserObject,
                               }}
                             />
@@ -374,7 +397,7 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
 
     const shiftOnDate = currentRelationalModelRecords?.find(record => record?.User?.id === user.id)
 
-    const {from, to, important} = shift ?? {}
+    const {from, to, important, shokucho} = shift ?? {}
 
     return {
       ...user,
@@ -382,9 +405,10 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
       shiftsOnOtherGembaOnSameDate,
       from,
       to,
-      important,
       directGo: !!shiftOnDate?.directGo,
       directReturn: !!shiftOnDate?.directReturn,
+      important,
+      shokucho,
     }
   })
   // .sort((a, b) => {
@@ -404,6 +428,7 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
           directGo: user.directGo,
           directReturn: user.directReturn,
           important: user.important,
+          shokucho: user.shokucho,
         },
       ]
     })

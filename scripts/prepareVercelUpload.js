@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 
 const freePlanApps = [`achievement`, `roken`,]
 
@@ -30,7 +30,7 @@ const asyncFunction = async appName => {
 
  let targetAppNames = [appName]
  if (appName === `KM`) {
-  targetAppNames = [`KM`, `kickswrap`, `layout-mapping`]
+  targetAppNames = [`KM`, `kickswrap`, `layout-mapping`, `apex`]
  } else if (appName === `roken`) {
   targetAppNames = [`roken`, `reserve`]
  }

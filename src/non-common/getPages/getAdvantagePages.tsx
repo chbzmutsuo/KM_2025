@@ -5,6 +5,7 @@ import {pathItemType} from 'src/non-common/path-title-constsnts'
 export const getAdvantage_PAGES = (props: PageGetterType) => {
   const {roles, query, session, rootPath, pathname, dynamicRoutingParams} = props
   const scopes = getScopes(session, {query, roles})
+  const {admin} = scopes
   const {isCoach, isStudent} = scopes.getAdvantageProps()
 
   const pathSource: pathItemType[] = [
@@ -22,6 +23,7 @@ export const getAdvantage_PAGES = (props: PageGetterType) => {
         {tabId: 'ticket', label: 'チケット'},
         {tabId: 'systemChatRoom', label: 'チャット一覧'},
         {tabId: 'bulkNotification', label: '一斉通知'},
+        {tabId: 'category-management', label: 'カテゴリ管理', exclusiveTo: admin},
       ],
     },
     {

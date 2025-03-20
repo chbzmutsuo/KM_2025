@@ -6,7 +6,7 @@ model BigCategory {
  createdAt      DateTime         @default(now())
  updatedAt      DateTime?        @default(now()) @updatedAt()
  active         Boolean          @default(true)
- sortOrder      Float            @default(0)
+ sortOrder      Float
  name           String           @unique
  color          String?
  MiddleCategory MiddleCategory[]
@@ -23,7 +23,7 @@ model MiddleCategory {
  Lesson        Lesson[]
  BigCategory   BigCategory @relation(fields: [bigCategoryId], references: [id], onDelete: Cascade)
 
- @@unique([bigCategoryId, name], name: "unique_bigCategoryId_name")
+ // @@unique([bigCategoryId, name], name: "unique_bigCategoryId_name")
 }
 
 model Lesson {
@@ -39,7 +39,7 @@ model Lesson {
  LessonImage      LessonImage[]
  LessonLog        LessonLog[]
 
- @@unique([middleCategoryId, name], name: "unique_middleCategoryId_name")
+ // @@unique([middleCategoryId, name], name: "unique_middleCategoryId_name")
 }
 
 model Ticket {
@@ -1616,6 +1616,11 @@ model User {
   app                  String?
   apps                 String[]
 
+  // tbm
+
+  employeeCode String? @unique
+  phone        String?
+
   School School? @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   VideoFromUser           VideoFromUser[]
@@ -1663,6 +1668,8 @@ model User {
   UserWorkStatus                   UserWorkStatus[]
   OdometerInput                    OdometerInput[]
   TbmRefuelHistory                 TbmRefuelHistory[]
+  DayRemarksUser                   DayRemarksUser[]
+  TbmCarWashHistory                TbmCarWashHistory[]
 }
 
 model ReleaseNotes {
@@ -1752,6 +1759,36 @@ model PrefCity {
  @@unique([pref, city], name: "unique_pref_city")
 }
 
+model DayRemarks {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date         DateTime @unique
+ bikou        String?
+ shinseiGyomu String?
+
+ DayRemarksUser DayRemarksUser[]
+}
+
+model DayRemarksUser {
+ id          Int       @id @default(autoincrement())
+ createdAt   DateTime  @default(now())
+ updatedAt   DateTime? @default(now()) @updatedAt()
+ sortOrder   Float     @default(0)
+ kyuka       Boolean?  @default(false)
+ kyukaTodoke Boolean?  @default(false)
+
+ DayRemarks   DayRemarks @relation(fields: [dayRemarksId], references: [id])
+ dayRemarksId Int
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
+
+ @@unique([dayRemarksId, userId], name: "unique_dayRemarksId_userId")
+}
+
 // sohken
 model Genba {
  id        Int       @id @default(autoincrement())
@@ -1771,6 +1808,8 @@ model Genba {
  houseHoldsCount6 Int?
  houseHoldsCount7 Int?
 
+ warningString String?
+
  zip          String?
  state        String?
  city         String?
@@ -1785,6 +1824,8 @@ model Genba {
  GenbaDaySoukenCar GenbaDaySoukenCar[]
 
  GenbaTask GenbaTask[]
+
+ archived Boolean? @default(false)
 }
 
 model SohkenCar {
@@ -1816,8 +1857,9 @@ model GenbaDay {
 
  finished Boolean? @default(false)
 
- active Boolean? @default(true)
- status String?
+ active         Boolean? @default(true)
+ overStuffCount Int?     @default(0)
+ status         String?
 
  ninkuFullfilled             Boolean? @default(false)
  isLastFullfilledDay         Boolean? @default(false)
@@ -1897,6 +1939,7 @@ model GenbaDayShift {
  from      String? // 08:00
  to        String? // 08:00
  important Boolean?  @default(false)
+ shokucho  Boolean?  @default(false)
 
  directGo     Boolean? @default(false)
  directReturn Boolean? @default(false)
@@ -1964,16 +2007,25 @@ model TbmVehicle {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code  String? @unique
- name  String
- plate String
+ code          String  @unique
+ // number        String?
+ vehicleNumber String  @unique
+ type          String?
+ shape         String?
+ airSuspension String?
+ oilTireParts  String?
+ maintenance   String?
+ insurance     String?
 
  // TbmOperationGroup TbmOperationGroup[]
- TbmRefuelHistory TbmRefuelHistory[]
- TbmBase          TbmBase            @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId        Int
- TbmDriveSchedule TbmDriveSchedule[]
- OdometerInput    OdometerInput[]
+ TbmRefuelHistory  TbmRefuelHistory[]
+ TbmBase           TbmBase             @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId         Int
+ TbmDriveSchedule  TbmDriveSchedule[]
+ OdometerInput     OdometerInput[]
+ TbmCarWashHistory TbmCarWashHistory[]
+
+ @@unique([tbmBaseId, vehicleNumber], name: "unique_tbmBaseId_vehicleNumber")
 }
 
 model TbmRouteGroup {
@@ -1982,8 +2034,8 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code             String?            @unique
- name             String?            @unique
+ code             Int                @unique
+ name             String
  TbmBase          TbmBase            @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId        Int
  // TbmOperation     TbmOperation[]
@@ -1992,6 +2044,8 @@ model TbmRouteGroup {
  TbmMonthlyConfigForRouteGroup TbmMonthlyConfigForRouteGroup[]
  Mid_TbmRouteGroup_TbmProduct  Mid_TbmRouteGroup_TbmProduct?
  Mid_TbmRouteGroup_TbmCustomer Mid_TbmRouteGroup_TbmCustomer?
+
+ @@unique([tbmBaseId, code], name: "unique_tbmBaseId_code")
 }
 
 model TbmMonthlyConfigForRouteGroup {
@@ -2026,11 +2080,13 @@ model TbmProduct {
  createdAt                    DateTime                       @default(now())
  updatedAt                    DateTime?                      @default(now()) @updatedAt()
  sortOrder                    Float                          @default(0)
- code                         String?                        @unique
+ code                         Int                            @unique
  name                         String                         @unique
  Mid_TbmRouteGroup_TbmProduct Mid_TbmRouteGroup_TbmProduct[]
- TbmBase                      TbmBase?                       @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId                    Int?
+ TbmBase                      TbmBase                        @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId                    Int
+
+ @@unique([tbmBaseId, name], name: "unique_tbmBaseId_name")
 }
 
 model Mid_TbmRouteGroup_TbmProduct {
@@ -2163,8 +2219,10 @@ model TbmCustomer {
  bankInformation               String?
  Mid_TbmRouteGroup_TbmCustomer Mid_TbmRouteGroup_TbmCustomer[]
 
- TbmBase   TbmBase? @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId Int?
+ TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId Int
+
+ @@unique([tbmBaseId, name], name: "unique_tbmBaseId_name")
 }
 
 model TbmRefuelHistory {
@@ -2180,6 +2238,22 @@ model TbmRefuelHistory {
 
  // TbmOperationGroup TbmOperationGroup? @relation(fields: [tbmOperationGroupId], references: [id], onDelete: Cascade)
  // tbmOperationGroupId Int?
+
+ TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
+ tbmVehicleId Int
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
+}
+
+model TbmCarWashHistory {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date  DateTime
+ price Float
 
  TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
  tbmVehicleId Int
@@ -2214,9 +2288,9 @@ model TbmDriveSchedule {
  // TbmUserDate   TbmUserDate @relation(fields: [tbmUserDateId], references: [id],onDelete: Cascade)
  // tbmUserDateId Int
 
- date              DateTime
- postalHighwayFee  Int? //高速(郵便)
- generalHighwayFee Int? //高速（一般）
+ date                DateTime
+ O_postalHighwayFee  Int? //高速(郵便)
+ Q_generalHighwayFee Int? //高速（一般）
 
  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId Int

@@ -1,5 +1,5 @@
 'use client'
-import {C_Stack} from '@cm/components/styles/common-components/common-components'
+import { R_Stack} from '@cm/components/styles/common-components/common-components'
 
 import {T_LINK} from '@components/styles/common-components/links'
 
@@ -13,30 +13,32 @@ export default function GanbaName({GenbaDay, editable}) {
   const {floorThisPlay} = new GenbaCl(GenbaDay.Genba)
   const defaultStartTime = Genba.defaultStartTime
 
-  const SomeStuffIsNormal =
-    allShift.some(s => {
-      return !s.from
-    }) || allShift.length === 0
-
   const forceNormal = allShift.some(s => {
     return !s.from
   })
 
-  // const lineThrough = isNormal && !SomeStuffIsNormal ? 'line-through' : ' '
   const LinkComponent = editable ? T_LINK : ({children}) => <>{children}</>
 
   const displayNormal = forceNormal || Genba.defaultStartTime === `通常`
 
   return (
-    <C_Stack className={`items-start gap-2 md:flex-row `}>
+    <R_Stack className={`items-start gap-x-2 gap-y-0 leading-6 md:flex-row `}>
       <span>
-        <span className={displayNormal ? '' : ' text-red-600'}>{displayNormal ? '通常' : defaultStartTime}</span>
+        {!forceNormal ? (
+          <>---</>
+        ) : (
+          <span className={' font-bold ' + (defaultStartTime === '通常' ? 'text-blue-600' : ' text-pink-600')}>
+            {defaultStartTime}
+            {/* {displayNormal ? '通常' : defaultStartTime} */}
+          </span>
+        )}
       </span>
       <span>{Genba?.PrefCity?.city}</span>
       <LinkComponent {...{href: `/sohken/genba/${Genba.id}`}}>
-        {Genba.name}
-        {`(${floorThisPlay})`}
+        <span>{Genba.name}</span>
+        <span>{`(${floorThisPlay})`}</span>
       </LinkComponent>
-    </C_Stack>
+      <small>{Genba.construction}</small>
+    </R_Stack>
   )
 }

@@ -44,7 +44,8 @@ export default function RouteDisplay({tbmBase, whereQuery}) {
         {...{
           ParentData: tbmBase,
           models: {parent: `tbmBase`, children: `tbmRouteGroup`},
-          additional: {include: include},
+          additional: {include: include, orderBy: [{code: `asc`}]},
+          myTable: {style: {width: `90vw`, maxHeight: `80vh`}},
           columns: ColBuilder.tbmRouteGroup({
             useGlobalProps,
             ColBuilderExtraProps: {

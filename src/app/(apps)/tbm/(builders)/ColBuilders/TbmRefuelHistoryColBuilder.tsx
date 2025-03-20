@@ -2,6 +2,7 @@ import {colType, columnGetterType} from '@cm/types/types'
 import {Fields} from '@class/Fields/Fields'
 import {getMidnight} from '@class/Days'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
+import {getVehicleForSelectConfig} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmVehicleColBuilder'
 export const TbmRefuelHistoryColBuilder = (props: columnGetterType) => {
   const {session} = props.useGlobalProps
   const userId = session?.id
@@ -22,7 +23,7 @@ export const TbmRefuelHistoryColBuilder = (props: columnGetterType) => {
           defaultValue: tbmVehicleId,
           disabled: tbmVehicleId ? true : false,
         },
-        forSelect: {},
+        forSelect: {config: getVehicleForSelectConfig()},
       },
     ]
   }

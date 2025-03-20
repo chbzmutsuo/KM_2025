@@ -12,15 +12,6 @@ import {doStandardPrisma, doStandardPrismaType} from '@lib/server-actions/common
 import {searchByQuery} from '@lib/server-actions/common-server-actions/SerachByQuery/SerachByQuery'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 
-export type fetchUniversalAPIType = {
-  model: dataModelNameType
-  method: prismaMethodType
-  queryObject: anyObject
-  options?: {
-    deps: any[]
-  }
-}
-
 type fetchOptionType = {
   method?: string
   headers?: anyObject

@@ -4,7 +4,6 @@ export interface P_BigCategory {
   updatedAt: Date;
   active: boolean;
   sortOrder: number;
-  name: string;
   color: string;
   MiddleCategory: P_MiddleCategory[];
 }
@@ -1272,6 +1271,9 @@ export interface P_User {
   tell: string;
   app: string;
   apps: string[];
+  employeeCode: string;
+  phone: string;
+  School: P_School;
   VideoFromUser: P_VideoFromUser[];
   LessonLog: P_LessonLog[];
   Payment: P_Payment[];
@@ -1292,6 +1294,7 @@ export interface P_User {
   tbmBaseId: number;
   TbmDriveSchedule: P_TbmDriveSchedule[];
   OdometerInput: P_OdometerInput[];
+  DayRemarksUser: P_DayRemarksUser[];
 }
 
 export interface P_ReleaseNotes {
@@ -1361,6 +1364,29 @@ export interface P_PrefCity {
   Genba: P_Genba[];
 }
 
+export interface P_DayRemarks {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  bikou: string;
+  shinseiGyomu: string;
+  DayRemarksUser: P_DayRemarksUser[];
+}
+
+export interface P_DayRemarksUser {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  kyuka: boolean;
+  kyukaTodoke: boolean;
+  DayRemarks: P_DayRemarks;
+  dayRemarksId: number;
+  userId: number;
+}
+
 export interface P_Genba {
   id: number;
   createdAt: Date;
@@ -1376,6 +1402,7 @@ export interface P_Genba {
   houseHoldsCount5: number;
   houseHoldsCount6: number;
   houseHoldsCount7: number;
+  warningString: string;
   zip: string;
   state: string;
   city: string;
@@ -1385,6 +1412,7 @@ export interface P_Genba {
   prefCityId: number;
   GenbaDayShift: P_GenbaDayShift[];
   GenbaDaySoukenCar: P_GenbaDaySoukenCar[];
+  archived: boolean;
 }
 
 export interface P_SohkenCar {
@@ -1410,6 +1438,7 @@ export interface P_GenbaDay {
   ninku: number;
   finished: boolean;
   active: boolean;
+  overStuffCount: number;
   status: string;
   ninkuFullfilled: boolean;
   isLastFullfilledDay: boolean;
@@ -1464,6 +1493,7 @@ export interface P_GenbaDayShift {
   from: string;
   to: string;
   important: boolean;
+  shokucho: boolean;
   directGo: boolean;
   directReturn: boolean;
   User: P_User;
@@ -1508,7 +1538,13 @@ export interface P_TbmVehicle {
   updatedAt: Date;
   sortOrder: number;
   code: string;
-  name: string;
+  vehicleNumber: string;
+  type: string;
+  shape: string;
+  airSuspension: string;
+  oilTireParts: string;
+  maintenance: string;
+  insurance: string;
   TbmRefuelHistory: P_TbmRefuelHistory[];
   tbmBaseId: number;
   OdometerInput: P_OdometerInput[];
@@ -1519,9 +1555,8 @@ export interface P_TbmRouteGroup {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  code: string;
+  code: number;
   name: string;
-  TbmBase: P_TbmBase;
   tbmBaseId: number;
   TbmDriveSchedule: P_TbmDriveSchedule[];
   Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct;
@@ -1550,7 +1585,7 @@ export interface P_TbmProduct {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  code: string;
+  code: number;
   name: string;
   Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct[];
   tbmBaseId: number;
@@ -1622,13 +1657,24 @@ export interface P_TbmRefuelHistory {
   userId: number;
 }
 
+export interface P_TbmCarWashHistory {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  TbmVehicle: P_TbmVehicle;
+  tbmVehicleId: number;
+  userId: number;
+}
+
 export interface P_TbmDriveSchedule {
   id: number;
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
   date: Date;
-  generalHighwayFee: number;
+  Q_generalHighwayFee: number;
   User: P_User;
   userId: number;
   tbmVehicleId: number;

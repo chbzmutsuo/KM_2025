@@ -1,5 +1,3 @@
-'use client'
-
 import {formatDate} from '@class/Days'
 
 import {GenbaDayTaskMidTable, GenbaTask} from '@prisma/client'
@@ -12,7 +10,7 @@ export const GetNinkuList = ({
   GenbaDayTaskMidTable,
 }: {
   GenbaDay
-  theDay: string
+  theDay: Date
   GenbaDayTaskMidTable: (GenbaDayTaskMidTable & {GenbaTask: GenbaTask})[]
 }) => {
   const PreviousShiftByDateObj = {}
@@ -51,22 +49,32 @@ export const GetNinkuList = ({
 
   const result: any = Object.fromEntries(
     GenbaDayTaskMidTable.map(d => {
-      return [d?.GenbaTask?.name, []]
+      return [d?.GenbaTask?.name, 0]
     })
   )
 
-  GenbaDayTaskMidTable.sort((a, b) => -a.sortOrder - b.sortOrder).forEach(d => {
+  GenbaDayTaskMidTable = GenbaDayTaskMidTable.sort((a, b) => -a.sortOrder - b.sortOrder)
+  GenbaDayTaskMidTable.forEach((d, idx) => {
     const {from, to, color} = d.GenbaTask
     const name = d.GenbaTask?.name ?? ''
     const requiredNinku: number = d.GenbaTask?.requiredNinku ?? 5
 
     if (ninkuListSum >= requiredNinku) {
-      result[name].push(requiredNinku)
+      result[name] += requiredNinku
       ninkuListSum -= requiredNinku
     } else if (ninkuListSum < requiredNinku) {
       const countToAdd = ninkuListSum
-      result[name].push(countToAdd)
+      result[name] += countToAdd
       ninkuListSum -= countToAdd
+    }
+
+    const nextTaskExist = GenbaDayTaskMidTable[idx + 1]
+
+    if (!nextTaskExist) {
+      if (ninkuListSum > 0) {
+        result[name] += ninkuListSum
+        ninkuListSum -= ninkuListSum
+      }
     }
   })
 

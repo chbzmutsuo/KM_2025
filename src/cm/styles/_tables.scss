@@ -1,12 +1,12 @@
-.table-border-style {
- @apply border-[1px] border-solid border-gray-400;
-}
-.simple-table {
- td,
- th {
-  @apply p-0.5  align-top table-border-style;
- }
-}
+// .table-border-style {
+//  @apply border-[1px] border-solid border-gray-400;
+// }
+// .simple-table {
+//  td,
+//  th {
+//   @apply p-0.5  align-top table-border-style;
+//  }
+// }
 
 .sticky-table-wrapper {
  @apply p-0 rounded-lg;
@@ -39,7 +39,6 @@
    }
   }
 
-  // @apply borderForTable border-solid table-border-style;
   border-collapse: collapse;
   width: 100%;
   font-size: 15px;
@@ -50,12 +49,12 @@
    @include theadIndex();
    top: 0;
    //最初のtrの最初のth
-   tr:first-child {
-    th:first-child {
-     @include kadoIndex;
-     left: 0;
-    }
-   }
+   // tr:first-child {
+   //  th:first-child {
+   //   @include kadoIndex;
+   //   left: 0;
+   //  }
+   // }
    tr {
     z-index: 0;
    }
@@ -83,10 +82,10 @@
      z-index: 10;
     }
 
-    th,
-    td {
-     @apply border-b;
-    }
+    // th,
+    // td {
+    //  @apply border-b;
+    // }
    }
   }
 
@@ -107,39 +106,19 @@
  }
 }
 
-.align-td-width {
- th {
-  width: 40px;
- }
-}
+// .borderedTable {
+//  td,
+//  th {
+//   border-width: 1.5px;
+//   border-style: solid dashed;
+//  }
+// }
 
-.no-padding-x {
- td,
- th {
-  padding-left: 0.5;
-  padding-right: 0.5;
- }
-}
-.no-padding-y {
- td,
- th {
-  padding-top: 0;
-  padding-bottom: 0;
- }
-}
-
-.borderedTable {
- td,
- th {
-  border-width: 1.5px;
-  border-style: solid dashed;
- }
-}
-.no-border {
- * {
-  border: none;
- }
-}
+// .no-border {
+//  * {
+//   border: none;
+//  }
+// }
 
 .vertical {
  writing-mode: vertical-lr;
@@ -148,6 +127,7 @@
 }
 
 .roundedTr {
+ font: fallback;
  // Set border-radius on the top-left and bottom-left of the first table data on the table row
  td:first-child,
  th:first-child {

@@ -59,7 +59,8 @@ export class QueryBuilder {
       tbmBase,
       user: {include: {TbmBase: {}}} as Prisma.UserFindManyArgs,
       tbmVehicle: {include: {TbmBase: {}}} as Prisma.TbmVehicleFindManyArgs,
-      tbmRefuelHistory: {include: {TbmVehicle: {}}} as Prisma.TbmRefuelHistoryFindManyArgs,
+      tbmRefuelHistory: {include: {TbmVehicle: {}, User: {}}} as Prisma.TbmRefuelHistoryFindManyArgs,
+      tbmCarWashHistory: {include: {TbmVehicle: {}, User: {}}} as Prisma.TbmCarWashHistoryFindManyArgs,
 
       tbmDriveSchedule: {
         include: {

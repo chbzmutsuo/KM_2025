@@ -1,5 +1,51 @@
-import {MonthlyTbmDriveData} from '@app/(apps)/tbm/(pages)/DriveDetail/page'
+export type meisaiKey =
+  | `date`
+  | `routeCode`
+  | `routeName`
+  | `vehicleType`
+  | `productCode`
+  | `productName`
+  | `customerCode`
+  | `customerName`
+  | `vehicleTypeCode`
+  | `plateNumber`
+  | `driverCode`
+  | `driverName`
+  | `N_postalFee`
+  | `O_postalHighwayFee`
+  | `P_generalFee`
+  | `Q_generalHighwayFee`
+  | `U_jomuinFutan`
+  | `S_driverFee`
+  | `T_JomuinUnchin`
+  | `U_jomuinFutan`
+  | `V_thirteenPercentOfPostalHighway`
+  | `W_general`
+  | `X_highwayExcess`
+  | `Y_remarks`
+  | `Z_orderNumber`
+
+export type MonthlyTbmDriveData = {
+  rows: {
+    schedule: TbmDriveSchedule & {User: User}
+    ConfigForRoute: TbmMonthlyConfigForRouteGroup | undefined
+    keyValue: {
+      [key in meisaiKey]: {
+        type?: any
+        label: string
+        value?: number | string | Date | null
+        style?: {
+          width?: number
+          minWidth?: number
+          backgroundColor?: string
+        }
+      }
+    }
+  }[]
+}
+
 import prisma from '@lib/prisma'
+import {TbmDriveSchedule, TbmMonthlyConfigForRouteGroup, User} from '@prisma/client'
 
 export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
   const ConfigForMonth = await prisma.tbmMonthlyConfigForRouteGroup.findFirst({
@@ -12,7 +58,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
   })
   const tbmDriveSchedule = await prisma.tbmDriveSchedule.findMany({
     where: {date: whereQuery, tbmBaseId},
-    orderBy: [{date: 'asc'}, {userId: 'asc'}],
+    orderBy: [{date: 'asc'}, {createdAt: 'asc'}, {userId: 'asc'}],
     include: {
       TbmRouteGroup: {
         include: {
@@ -39,10 +85,10 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
       const tollFee = ConfigForRoute?.tollFee ?? 0
 
       const N_postalFee = ConfigForRoute?.postalFee ?? 0
-      const O_postalHighwayFee = schedule.postalHighwayFee ?? 0
+      const O_postalHighwayFee = schedule.O_postalHighwayFee ?? 0
 
       const P_generalFee = ConfigForRoute?.generalFee ?? 0
-      const Q_generalHighwayFee = schedule.generalHighwayFee ?? 0
+      const Q_generalHighwayFee = schedule.Q_generalHighwayFee ?? 0
 
       const V_thirteenPercentOfPostalHighway = O_postalHighwayFee * 0.3
       const U_jomuinFutan = O_postalHighwayFee - (N_postalFee + V_thirteenPercentOfPostalHighway)
@@ -72,7 +118,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
           },
           vehicleType: {
             label: '車種',
-            value: schedule.TbmVehicle.name,
+            value: schedule.TbmVehicle.type,
           },
           productCode: {
             label: '品名CD',
@@ -98,7 +144,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
           },
           plateNumber: {
             label: '車番',
-            value: schedule.TbmVehicle.plate,
+            value: schedule.TbmVehicle.vehicleNumber,
           },
           driverCode: {
             label: '運転手CD',
@@ -108,64 +154,63 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
             label: '運転手',
             value: schedule.User.name,
           },
-          postalFee: {
+          N_postalFee: {
             label: '通行料(郵便)',
             value: N_postalFee,
             style: {backgroundColor: '#fcdede'},
           },
-          postalHighwayFee: {
+          O_postalHighwayFee: {
             label: '高速代（郵便）',
             value: O_postalHighwayFee,
             style: {backgroundColor: '#fcdede'},
           },
-          generalFee: {
+          P_generalFee: {
             label: '通行料(一般)',
             value: P_generalFee,
             style: {backgroundColor: '#deebfc'},
           },
-          generalHighwayFee: {
+          Q_generalHighwayFee: {
             label: '高速代（一般）',
             value: Q_generalHighwayFee,
             style: {backgroundColor: '#deebfc'},
           },
-          highwayUsageFee: {
+          R_KosokuShiyu: {
             label: '高速使用代',
             value: U_jomuinFutan,
           },
-          fare: {
+          S_driverFee: {
             label: '運賃',
             value: S_driverFee,
           },
-          salaryFare: {
+          T_JomuinUnchin: {
             label: '給与算定運賃',
             value: T_JomuinUnchin,
-
             style: {backgroundColor: '#defceb'},
           },
-          highwayFeeWithSurcharge: {
+          U_jomuinFutan: {
             label: ['乗務員負担', '高速代-(通行量+30％)'].join(`\n`),
             value: U_jomuinFutan,
             style: {backgroundColor: '#defceb'},
           },
-          highwaySurcharge: {
+          V_thirteenPercentOfPostalHighway: {
             label: ['運賃から負担', '高速代の30％'].join(`\n`),
             value: V_thirteenPercentOfPostalHighway,
             style: {backgroundColor: '#defceb'},
           },
-          highwayFeeDiff: {
+          W_general: {
             label: '高速代-通行料',
             value: W_general,
             style: {backgroundColor: '#9ec1ff'},
           },
-          highwayExcess: {
+          X_highwayExcess: {
             label: '高速超過分',
-            value: '要検討',
+            value: 0,
           },
-          remarks: {
+          Y_remarks: {
             label: '備考',
             value: '要検討',
           },
-          orderNumber: {
+          Z_orderNumber: {
             label: '発注書NO',
             value: '要検討',
           },
@@ -173,5 +218,18 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
       }
     }),
   }
-  return {monthlyTbmDriveData, ConfigForMonth}
+
+  const userList = monthlyTbmDriveData.rows
+    .reduce((acc, row) => {
+      const {schedule, ConfigForRoute} = row
+      const {User} = schedule
+      if (acc.find(user => user.id === User.id)) {
+        return acc
+      }
+      acc.push(User)
+      return acc
+    }, [] as User[])
+    .sort((a, b) => String(a.code ?? '').localeCompare(String(b.code ?? '')))
+
+  return {monthlyTbmDriveData, ConfigForMonth, userList}
 }

@@ -46,6 +46,9 @@ latest.dump
 
 
 #ignoreを選択
+src/app/**/apex
+src/app/**/KM
+src/app/**/kickswrap
 src/app/**/yoshinari
 src/app/**/tbm
 src/app/**/Advantage
@@ -60,7 +63,5 @@ src/app/**/gpt
 src/app/**/sankosha
 src/app/**/demo
 src/app/**/tsukurunger
-src/app/**/kickswrap
-src/app/**/KM
 src/app/**/aquapot
 #src/app/**/sohken

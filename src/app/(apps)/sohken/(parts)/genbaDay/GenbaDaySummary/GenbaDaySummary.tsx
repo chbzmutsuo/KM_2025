@@ -13,9 +13,10 @@ import {Button} from '@components/styles/common-components/Button'
 import {colorVariants} from '@components/styles/common-components/colorVariants'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {Genba, GenbaDay, GenbaDayTaskMidTable} from '@prisma/client'
-import {calcGenbaDayStatus} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
+
 import {toast} from 'react-toastify'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
+import {calcGenbaDayStatus} from 'src/non-common/(chains)/getGenbaScheduleStatus/calcGenbaDayStatus'
 
 const GenbaDaySummary = (props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
@@ -47,27 +48,30 @@ const GenbaDaySummary = (props: {
     return item.label === theStatus?.label && item.finishFlag
   })
 
-  const confirmFinished = async () => {
+  const confirmFinished = async ({GenbaDay}) => {
+    const {GenbaDayTaskMidTable} = GenbaDay
+
+    const genbadays = await calcGenbaDayStatus({genbaId: GenbaDay.genbaId})
+
+    const finishDate = genbadays.find(item => {
+      const {isLastFullfilledDay} = item
+      const tasksMatch = GenbaDayTaskMidTable.every(mid => {
+        return item.GenbaDayTaskMidTable.some(item => mid.genbaTaskId === item.genbaTaskId)
+      })
+
+      return tasksMatch && isLastFullfilledDay
+    })
+
+    if (finishDate?.id === undefined) {
+      return alert('このタスクはまだ完了していません。')
+    }
+
+    const message = !isFinished
+      ? '完了確定を実施すると、完了日以降のスタッフ・車両配置が削除されます。よろしいですか？'
+      : '完了入力を取り消します。すでに自動削除されたスタッフ・車両配置は復元されません。よろしいですか？'
+
     toggleLoad(
       async () => {
-        const {GenbaDayTaskMidTable} = GenbaDay
-        const genbadays = await calcGenbaDayStatus({genbaId: GenbaDay.genbaId})
-
-        const finishDate = genbadays.find(item => {
-          const {isLastFullfilledDay} = item
-          const tasksMatch = item.GenbaDayTaskMidTable.every(mid => {
-            return GenbaDayTaskMidTable.some(item => (mid.id = item.id))
-          })
-          return tasksMatch && isLastFullfilledDay
-        })
-
-        if (finishDate?.id === undefined) {
-          return alert('このタスクはまだ完了していません。')
-        }
-
-        const message = !isFinished
-          ? '完了確定を実施すると、完了日以降のスタッフ・車両配置が削除されます。よろしいですか？'
-          : '完了入力を取り消します。すでに自動削除されたスタッフ・車両配置は復元されません。よろしいですか？'
         if (confirm(message)) {
           await fetchUniversalAPI(`genbaDay`, `update`, {where: {id: finishDate?.id}, data: {finished: !finishDate?.finished}})
 
@@ -96,30 +100,29 @@ const GenbaDaySummary = (props: {
     )
   }
 
+  const confirmFinishedByGenbaDay = async e => {
+    e.preventDefault()
+
+    confirmFinished({GenbaDay})
+  }
+
   const ButtonDisplay = item => {
     if (isFinished) {
       return (
-        <Button
-          onClick={async item => {
-            if (admin) {
-              await confirmFinished()
-            }
-          }}
-          color={theStatus?.color as colorVariants}
-        >
+        <Button onClick={confirmFinishedByGenbaDay} color={theStatus?.color as colorVariants}>
           {theStatus?.label}
         </Button>
       )
     } else if (!active) {
       return (
-        <Button onClick={confirmFinished} color={stuffAllocated ? 'red' : 'orange'}>
+        <Button onClick={confirmFinishedByGenbaDay} color={stuffAllocated ? 'red' : 'orange'}>
           {stuffAllocated ? '要確認(人員超過)' : '要確認'}
         </Button>
       )
     } else {
       if (GenbaDay.finished) {
         return (
-          <Button onClick={confirmFinished} color={theStatus?.color as colorVariants}>
+          <Button onClick={confirmFinishedByGenbaDay} color={theStatus?.color as colorVariants}>
             {theStatus?.label}
           </Button>
         )
@@ -134,9 +137,9 @@ const GenbaDaySummary = (props: {
   }
 
   return (
-    <div style={{width: 420}} className={`relative w-full `}>
+    <div style={{width: 420, maxWidth: '90vw'}} className={`relative w-full `}>
       {editable && (
-        <div className={`  absolute right-4 top-4  z-[999] w-fit rotate-6 text-lg font-bold `}>
+        <div className={`  absolute right-4 top-4  z-[10] w-fit rotate-6 text-lg font-bold `}>
           <ButtonDisplay />
         </div>
       )}

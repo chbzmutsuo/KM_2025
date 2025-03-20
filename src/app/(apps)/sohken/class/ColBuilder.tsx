@@ -90,12 +90,7 @@ export class ColBuilder {
             <>
               <Button
                 onClick={async () => {
-                  toggleLoad(
-                    async () => {
-                      await handleUpdateSchedule({genbaTask})
-                    },
-                    {refresh: true, mutate: true}
-                  )
+                  toggleLoad(async () => await handleUpdateSchedule({genbaTask}), {refresh: true, mutate: true})
                 }}
               >
                 反映
@@ -255,9 +250,9 @@ export class ColBuilder {
         ),
       },
     ]).transposeColumns()
-
     return data
   }
+
   static genba = (props: columnGetterType) => {
     const data: colType[] = [
       ...new Fields([
@@ -299,9 +294,16 @@ export class ColBuilder {
           },
           search: {},
         },
+        {
+          id: 'warningString',
+          label: '注意事項',
+          form: {},
+          type: `textarea`,
+        },
+        {id: 'archived', label: '非表示', type: `boolean`, form: {}},
       ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
+        // .setNormalTd()
+        // .aggregateOnSingleTd()
         .buildFormGroup({groupName: `基本情報`}).plain,
 
       ...new Fields([
@@ -324,44 +326,35 @@ export class ColBuilder {
             },
           },
         },
+        {id: 'addressLine1', label: '住所1', form: {}},
+        {id: 'addressLine2', label: '住所2', form: {}},
         // {id: 'state', label: '都道府県', form: {}},
         // {id: 'city', label: '市区町村', form: {}},
       ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
+        // .setNormalTd()
+        // .aggregateOnSingleTd()
         .buildFormGroup({groupName: `住所`}).plain,
-      ...new Fields([
-        {id: 'addressLine1', label: '住所1', form: {}},
-        {id: 'addressLine2', label: '住所2', form: {}},
-      ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
-        .buildFormGroup({groupName: `住所`}).plain,
+
       ...new Fields([
         {id: 'houseHoldsCount1', label: '世帯数(1F)', type: `number`, form: {}},
         {id: 'houseHoldsCount2', label: '世帯数(2F)', type: `number`, form: {}},
-      ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
-        .buildFormGroup({groupName: `世帯数1`}).plain,
-      ...new Fields([
         {id: 'houseHoldsCount3', label: '世帯数(3F)', type: `number`, form: {}},
         {id: 'houseHoldsCount4', label: '世帯数(4F)', type: `number`, form: {}},
-      ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
-        .buildFormGroup({groupName: `世帯数1`}).plain,
+      ]).buildFormGroup({groupName: `世帯数①`}).plain,
       ...new Fields([
         {id: 'houseHoldsCount5', label: '世帯数(5F)', type: `number`, form: {}},
         {id: 'houseHoldsCount6', label: '世帯数(6F)', type: `number`, form: {}},
-      ])
-        .setNormalTd()
-        .aggregateOnSingleTd()
-        .buildFormGroup({groupName: `世帯数2`}).plain,
-      ...new Fields([{id: 'houseHoldsCount7', label: '世帯数(7F)', type: `number`, form: {}}])
-        .setNormalTd()
-        .aggregateOnSingleTd()
-        .buildFormGroup({groupName: `世帯数2`}).plain,
+        {id: 'houseHoldsCount7', label: '世帯数(7F)', type: `number`, form: {}},
+      ]).buildFormGroup({groupName: `世帯数②`}).plain,
+
+      // ...new Fields([]).setNormalTd().aggregateOnSingleTd().buildFormGroup({groupName: `住所`}).plain,
+      // ...new Fields([]).setNormalTd().aggregateOnSingleTd().buildFormGroup({groupName: `世帯数1`}).plain,
+      // ...new Fields([]).setNormalTd().aggregateOnSingleTd().buildFormGroup({groupName: `世帯数1`}).plain,
+      // ...new Fields([]).setNormalTd().aggregateOnSingleTd().buildFormGroup({groupName: `世帯数2`}).plain,
+      // ...new Fields([])
+      //   .setNormalTd()
+      //   .aggregateOnSingleTd()
+      //   .buildFormGroup({groupName: `世帯数2`}).plain,
     ]
     return Fields.transposeColumns(data)
   }
@@ -370,6 +363,14 @@ export class ColBuilder {
       {id: 'name', label: '氏名', form: {register}},
       {id: 'email', label: 'メールアドレス', form: {register}, type: 'email'},
       {id: 'password', label: 'パスワード', form: {}, type: 'password'},
+      {
+        id: 'role',
+        label: '権限',
+        form: {hidden: true},
+        format: (val, user) => {
+          return user.UserRole.map(r => r.RoleMaster.name).join(`, `)
+        },
+      },
     ]
 
     return new Fields(data).transposeColumns()

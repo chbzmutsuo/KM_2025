@@ -2,17 +2,19 @@
 import {
   EasySearchObjectExclusiveGroup,
   easySearchType,
-  Ex_exclusive0,
   makeEasySearchGroups,
   makeEasySearchGroupsProp,
 } from '@cm/class/builders/QueryBuilderVariables'
 
 export const EasySearchBuilder = async () => {
-  const tmp = async (props: easySearchType) => {
+  const genba = async (props: easySearchType) => {
     'use server'
     const {session, query, dataModelName, easySearchExtraProps} = props
-    const {enginerringProcesses} = easySearchExtraProps ?? {}
-    const exclusive1: EasySearchObjectExclusiveGroup = {}
+
+    const exclusive1: EasySearchObjectExclusiveGroup = {
+      notArchived: {label: `表示`, CONDITION: {archived: false}},
+      archived: {label: `非表示`, CONDITION: {archived: true}},
+    }
 
     const keyValuedExclusive1 = {}
 
@@ -23,8 +25,8 @@ export const EasySearchBuilder = async () => {
     })
 
     const dataArr: makeEasySearchGroupsProp[] = [
-      {exclusiveGroup: Ex_exclusive0, name: ``, additionalProps: {refresh: true}},
-      {exclusiveGroup: keyValuedExclusive1, name: `ステータス`},
+      // {exclusiveGroup: Ex_exclusive0, name: ``, additionalProps: {refresh: true}},
+      {exclusiveGroup: keyValuedExclusive1, name: ``},
     ]
 
     const result = makeEasySearchGroups(dataArr)
@@ -32,6 +34,6 @@ export const EasySearchBuilder = async () => {
     return result
   }
   return {
-    tmp,
+    genba,
   }
 }

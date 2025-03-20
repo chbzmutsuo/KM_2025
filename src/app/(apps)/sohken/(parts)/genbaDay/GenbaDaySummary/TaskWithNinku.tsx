@@ -6,6 +6,8 @@ import {ColoredText} from '@components/styles/common-components/colors'
 import {PlusCircleIcon} from '@heroicons/react/20/solid'
 import React from 'react'
 import {GetNinkuList} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/getNinkuList'
+import {formatDate} from '@class/Days'
+import {Alert} from '@components/styles/common-components/Alert'
 
 export const TaskWithNinku = ({GenbaDay, editable, setGenbaDayCardEditModal, GenbaDayTaskMidTable}) => {
   const {ninkuList, result} = GetNinkuList({GenbaDay, theDay: GenbaDay.date, GenbaDayTaskMidTable})
@@ -28,29 +30,37 @@ export const TaskWithNinku = ({GenbaDay, editable, setGenbaDayCardEditModal, Gen
       )}
 
       <C_Stack className={`w-full  `}>
+        {GenbaDayTaskMidTable.length === 0 && (
+          <Alert color="red" className={` !border-4`}>
+            タスク未設定
+          </Alert>
+        )}
         {GenbaDayTaskMidTable.map((d, i) => {
           const {name, from, to, requiredNinku, color} = d.GenbaTask
 
-          const calc = result[name].reduce((acc, curr) => acc + curr, 0)
-          const db = GenbaDay.allAssignedNinkuTillThisDay
-          // if (calc !== db) {
-          //   console.log(`${name}の人工が一致しません。`)
-          // console.log({date: formatDate(GenbaDay.date), calc, db})
-          // }
+          const overStuffed = result[name] > requiredNinku
 
           return (
             <R_Stack
-              className={` gap-0.5`}
+              className={` gap-2`}
               key={i}
               {...{
                 onClick: () => handleOnClick({taskMidTable: d}),
               }}
             >
-              <ColoredText {...{bgColor: color, className: ` text-sm px-1`}}>{name}</ColoredText>
+              <C_Stack className={`items-center gap-0`}>
+                <ColoredText {...{bgColor: color, className: ` text-sm px-1`}}>{name}</ColoredText>
+              </C_Stack>
+              <div>
+                <small>{formatDate(from, 'M/D')}~</small>
+                <small>{formatDate(to, 'M/D')}</small>
+              </div>
               <R_Stack className={` gap-0.5`}>
-                <span>人工:</span>
+                <span>#</span>
                 <strong>{requiredNinku}</strong>
-                <span>{result[name].map(d => `- ${d}`)}</span>
+                <span>-</span>
+                <span>{result[name]}</span>
+                {overStuffed && <Alert color="red">超過</Alert>}
               </R_Stack>
             </R_Stack>
           )

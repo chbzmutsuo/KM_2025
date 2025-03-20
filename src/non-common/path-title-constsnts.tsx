@@ -1,9 +1,7 @@
-import {PrismaModelNames} from '@cm/types/prisma-types'
 import {anyObject} from '@cm/types/types'
 import {getPathnameSplitArr} from '@hooks/globalHooks/useMyNavigation'
 
 import {getScopes} from 'src/non-common/scope-lib/getScopes'
-import {isDev} from '@lib/methods/common'
 import {getYoshinari_PAGES} from 'src/non-common/getPages/getYoshinari_PAGES'
 import {getAdvantage_PAGES} from 'src/non-common/getPages/getAdvantagePages'
 import {aquapot_PAGES} from 'src/non-common/getPages/aquapot_PAGES'
@@ -50,75 +48,6 @@ export const layoutMapping_PAGES = (props: PageGetterType) => {
   }
 }
 
-export const tsukurunger_PAGES = (props: PageGetterType) => {
-  const {roles, session, rootPath, pathname, query} = props
-
-  const scopes = getScopes(session, {query, roles})
-  const {adminRole, subConRole} = scopes.getTsukurungerScopes()
-
-  const getMasterModels = () => {
-    const masterModels: {
-      label: string
-      model: PrismaModelNames
-    }[] = [
-      {label: `元請け業者`, model: `tsMainContractor`},
-      {label: `常用下請け業者`, model: `tsRegularSubcontractor`},
-      {label: `下請け業者`, model: `tsSubcontractor`},
-      {label: `使用機械`, model: `tsMachinery`},
-      {label: `使用材料`, model: `tsMaterial`},
-    ]
-
-    if (isDev) {
-      masterModels.push({label: `現場`, model: `tsConstruction`})
-    }
-    return masterModels
-  }
-
-  const tsukurungerPaths: pathItemType[] = [
-    {tabId: `nippo-history`, label: '月別日報履歴'},
-    {
-      tabId: ``,
-      label: 'マスタ',
-      children: [
-        {tabId: `user`, label: `ユーザー`},
-        ...getMasterModels().map(model => {
-          return {
-            tabId: model.model,
-            label: model.label,
-          }
-        }),
-      ],
-    },
-    {tabId: `roleMaster`, label: '権限管理', ROOT: [rootPath]},
-  ].map(item => ({...item, exclusiveTo: adminRole}))
-
-  const subConPaths = [{tabId: `daily`, label: '日報入力'}].map(item => ({
-    ...item,
-    exclusiveTo: scopes.login,
-  }))
-
-  const pathSource = [
-    //
-    {tabId: 'top', label: 'トップ', hide: true},
-    ...subConPaths,
-    ...tsukurungerPaths,
-  ].map(d => ({...d, ROOT: [rootPath]}))
-
-  const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
-    rootPath,
-    pathSource,
-    pathname,
-    session,
-  })
-
-  return {
-    allPathsPattenrs,
-    pathSource: cleansedPathSource,
-    navItems,
-    breads,
-  }
-}
-
 export const MasterKey_Pages = (props: PageGetterType) => {
   const {roles, session, rootPath, pathname, query} = props
   const scopes = getScopes(session, {query, roles})
@@ -134,83 +63,6 @@ export const MasterKey_Pages = (props: PageGetterType) => {
   ].map(item => ({...item, exclusiveTo: scopes.login}))
 
   const pathSource = [...adminPaths]
-
-  const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
-    rootPath,
-    pathSource,
-    pathname,
-    session,
-  })
-
-  return {
-    allPathsPattenrs,
-    pathSource: cleansedPathSource,
-    navItems,
-    breads,
-  }
-}
-export const sankosha_PAGES = (props: PageGetterType) => {
-  const {roles, session, rootPath, pathname, query} = props
-  const scopes = getScopes(session, {query, roles})
-
-  const pabulicPaths = [{tabId: '', label: 'TOP', hide: true, ROOT: [rootPath]}]
-  const adminRoot = [rootPath, 'admin']
-
-  const processPagePathCommonProps = {ROOT: adminRoot, tabId: 'sankoshaProcess', label: '商品管理'}
-
-  const getProcessPagePath = () => {
-    const inputModes = [
-      {
-        dataKey: 'storage',
-        label: `入荷`,
-        description: `入荷時に必要なデータのみを表示します`,
-        color: `#FFC0CB`,
-        query: {g_未検品: true},
-      },
-      {
-        dataKey: 'inspection',
-        label: `検品`,
-        description: `入荷時および検品時のデータを表示します`,
-        color: `#ADD8E6`,
-        query: {g_未検品: true},
-      },
-      {
-        dataKey: 'taskManagement',
-        label: `タスク`,
-        description: `入荷、検品も含めて全てのデータを表示します`,
-        color: `#FFFFE0`,
-        query: {g_未検品: null},
-      },
-    ]
-    return {
-      ...processPagePathCommonProps,
-      link: {query: {inputMode: 'all'}},
-      children: [
-        ...inputModes.map(mode => {
-          return {...processPagePathCommonProps, label: mode.label, link: {query: {inputMode: mode.dataKey, ...mode.query}}}
-        }),
-      ],
-    }
-  }
-
-  const adminPaths: pathItemType[] = [
-    getProcessPagePath(),
-    {ROOT: adminRoot, tabId: 'user', label: 'ユーザー'},
-    {
-      ...{tabId: '', label: '取引先一覧', ROOT: adminRoot},
-      children: [{tabId: 'sankoshaClientA', label: 'お客様'}],
-    },
-    {
-      ...{tabId: '', label: 'マスタ', ROOT: adminRoot},
-      children: [
-        {tabId: 'sankoshaProductMaster', label: '商品'},
-        {tabId: 'sankoshaSizeMaster', label: 'サイズ'},
-        {tabId: 'sankoshaPriceMaster', label: '費用マスタ'},
-      ],
-    },
-  ].map(item => ({...item, exclusiveTo: scopes.login}))
-
-  const pathSource = [...pabulicPaths, ...adminPaths]
 
   const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
     rootPath,
@@ -273,79 +125,6 @@ export const Grouping_PAGES = (props: PageGetterType) => {
   }
 }
 
-export const demo_PAGES = (props: PageGetterType) => {
-  const {roles, query, session, rootPath, pathname, dynamicRoutingParams} = props
-
-  const scopes = getScopes(session, {query, roles})
-
-  const pathSource: pathItemType[] = [
-    {
-      tabId: ``,
-      label: 'TOP',
-      ROOT: [],
-      hide: true,
-    },
-    {tabId: 'demoUser', label: 'ユーザー', ROOT: [rootPath]},
-    {tabId: 'demoDepartment', label: '部署・店舗', ROOT: [rootPath]},
-    {tabId: 'demoTask', label: 'タスク', ROOT: [rootPath]},
-    {tabId: 'demoTask1', label: '開閉店業務', ROOT: [rootPath]},
-    {tabId: 'demoTask2', label: '集計', ROOT: [rootPath]},
-  ]
-
-  const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
-    rootPath,
-    pathSource,
-    pathname,
-    session,
-    dynamicRoutingParams,
-  })
-
-  return {
-    allPathsPattenrs,
-    pathSource: cleansedPathSource,
-    navItems,
-    breads,
-  }
-}
-
-export const estimate_PAGES = (props: PageGetterType) => {
-  const {roles, query, session, rootPath, pathname} = props
-
-  const scopes = getScopes(session, {query, roles})
-
-  const pathSource = [
-    {tabId: 'admin', label: 'TOP', ROOT: [rootPath], hide: true, exclusiveTo: scopes.login},
-    {tabId: '', label: '簡単見積', ROOT: [rootPath]},
-
-    {
-      tabId: 'config',
-      label: '設定',
-      ROOT: [rootPath, 'admin', 'config'],
-      exclusiveTo: scopes.login,
-      children: [
-        {tabId: 'GasolinePrice', label: 'ガソリン単価', link: {}},
-        {tabId: 'vehicle', label: '車両マスタ', link: {}},
-        {tabId: 'commonCost', label: '共通諸費用', link: {}},
-        {tabId: 'tabitakuMarkDown', label: '各種表記', link: {}, exclusiveTo: scopes.admin},
-      ],
-    },
-    // getAccountPath({rootPath, login: scopes.login, session}),
-  ]
-  const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
-    rootPath,
-    pathSource,
-    pathname,
-    session,
-  })
-
-  return {
-    allPathsPattenrs,
-    pathSource: cleansedPathSource,
-    navItems,
-    breads,
-  }
-}
-
 export const KM_PAGES = (props: PageGetterType) => {
   const {roles, query, session, rootPath, pathname} = props
   const scopes = getScopes(session, {query, roles})
@@ -391,18 +170,39 @@ export const KM_PAGES = (props: PageGetterType) => {
   }
 }
 
+export const apex_PAGES = (props: PageGetterType) => {
+  const {roles, query, session, rootPath, pathname} = props
+  const scopes = getScopes(session, {query, roles})
+
+  const publicPaths = []
+
+  const adminPaths = []
+  const pathSource = []
+
+  const {cleansedPathSource, navItems, breads, allPathsPattenrs} = CleansePathSource({
+    rootPath,
+    pathSource,
+    pathname,
+    session,
+  })
+
+  return {
+    allPathsPattenrs,
+    pathSource: cleansedPathSource,
+    navItems,
+    breads,
+  }
+}
 export const PAGES: any = {
+  apex_PAGES,
   layoutMapping_PAGES,
   Grouping_PAGES,
   Advantage_PAGES: getAdvantage_PAGES,
-  demo_PAGES,
   tbm_PAGES: getTbm_PAGES,
-  estimate_PAGES,
   KM_PAGES,
   sohken_PAGES: sohken_PAGES,
-  sankosha_PAGES,
   MasterKey_Pages,
-  tsukurunger_PAGES,
+
   yoshinari_PAGES: getYoshinari_PAGES,
   aquapot_PAGES: aquapot_PAGES,
 }

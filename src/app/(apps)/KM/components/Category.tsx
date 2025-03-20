@@ -38,7 +38,9 @@ export const Category = () => {
   )
 }
 
-export const CategoryTags = ({categoryColName = 'jobCategory'}) => {
+export const CategoryTags = props => {
+  const {categoryColName = 'jobCategory'} = props
+
   const {data: categories} = usefetchUniversalAPI_SWR('kaizenWork', 'findMany', {distinct: [categoryColName]}, {deps: []})
 
   if (!categories) {

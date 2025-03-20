@@ -22,6 +22,8 @@ import {Button} from '@components/styles/common-components/Button'
 import {Prisma} from '@prisma/client'
 import {getMidnight} from '@class/Days'
 import {GenbaCl} from '@app/(apps)/sohken/class/GenbaCl'
+import {handleUpdateSchedule} from '@app/(apps)/sohken/(parts)/Tasks/handleUpdateSchedule'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 export const GenbaForm = (props: DetailPagePropType) => {
   const genba = props.formData ?? {}
   const {floorThisPlay} = new GenbaCl(genba)
@@ -75,7 +77,7 @@ export const GenbaForm = (props: DetailPagePropType) => {
 const TaskAndSchedule = ({genba, allTasks}) => {
   const {include} = QueryBuilder.getInclude({}).genbaDay
   const useGlobalProps = useGlobal()
-  const {addQuery, query} = useGlobalProps
+  const {addQuery, query, toggleLoad} = useGlobalProps
   const showPast = query.showPast
 
   const {router} = useGlobalProps
@@ -97,8 +99,8 @@ const TaskAndSchedule = ({genba, allTasks}) => {
     <>
       <div></div>
       <R_Stack className={`items-stretch`}>
-        <div className={`w-[750px]`}>
-          <Accordion {...{label: `タスク一覧一覧設定`, defaultOpen: true, closable: false}}>
+        <div className={`w-[850px]`}>
+          <Accordion {...{label: `タスク一覧設定`, defaultOpen: true, closable: false}}>
             <FitMargin>
               <C_Stack>
                 <Alert color={`red`}>
@@ -109,31 +111,47 @@ const TaskAndSchedule = ({genba, allTasks}) => {
                   </div>
                 </Alert>
 
-                <ChildCreator
-                  {...{
-                    ...{ParentData: genba, useGlobalProps},
+                <R_Stack className={` flex-nowrap items-start`}>
+                  <ChildCreator
+                    {...{
+                      ...{ParentData: genba, useGlobalProps},
 
-                    columns: ColBuilder.genbaTask({useGlobalProps, ColBuilderExtraProps: {genbaId: genba.id}}),
-                    models: {parent: `genba`, children: `genbaTask`},
-                    myForm: {
-                      onFormItemBlur: props => {
-                        const {from, to} = props.newlatestFormData
-                        if (from && !to) {
-                          props.ReactHookForm.setValue(`to`, from)
-                        }
+                      columns: ColBuilder.genbaTask({useGlobalProps, ColBuilderExtraProps: {genbaId: genba.id}}),
+                      models: {parent: `genba`, children: `genbaTask`},
+                      myForm: {
+                        onFormItemBlur: props => {
+                          const {from, to} = props.newlatestFormData
+                          if (from && !to) {
+                            props.ReactHookForm.setValue(`to`, from)
+                          }
+                        },
                       },
-                    },
-                    myTable: {
-                      drag: {},
-                      customActions: clientProps => <TaskAsignBtn {...{Genba: genba, allTasks, router}} />,
-                      delete: {requiredUserConfirmation: false},
-                    },
+                      myTable: {
+                        drag: {},
+                        customActions: clientProps => <TaskAsignBtn {...{Genba: genba, allTasks, router}} />,
+                        delete: {requiredUserConfirmation: false},
+                      },
 
-                    additional: {
-                      orderBy: [{from: `asc`}],
-                    },
-                  }}
-                />
+                      additional: {
+                        orderBy: [{from: `asc`}],
+                      },
+                    }}
+                  />
+                  <Button
+                    onClick={async () => {
+                      const {result: genbaTasks} = await fetchUniversalAPI(`genbaTask`, `findMany`, {
+                        where: {Genba: {id: genba.id}},
+                      })
+                      await Promise.all(
+                        genbaTasks.map(async item => {
+                          toggleLoad(async () => await handleUpdateSchedule({genbaTask: item}), {refresh: true, mutate: true})
+                        })
+                      )
+                    }}
+                  >
+                    一括反映
+                  </Button>
+                </R_Stack>
               </C_Stack>
             </FitMargin>
           </Accordion>
@@ -142,7 +160,7 @@ const TaskAndSchedule = ({genba, allTasks}) => {
           <Accordion {...{label: `現場詳細スケジュール`, defaultOpen: true, closable: false}}>
             <FitMargin>
               <C_Stack>
-                <HiddenToggler {...{showPast, addQuery}} />
+                <HiddenToggler {...{showPast, addQuery, toggleLoad, genba}} />
                 <ChildCreator
                   {...{
                     ...{ParentData: genba, useGlobalProps},
@@ -174,13 +192,28 @@ const TaskAndSchedule = ({genba, allTasks}) => {
   )
 }
 
-const HiddenToggler = ({showPast, addQuery}) => {
+const HiddenToggler = ({showPast, addQuery, toggleLoad, genba}) => {
   const toggleHidden = () => {
     return addQuery({showPast: showPast ? undefined : true})
   }
   return (
-    <>
+    <R_Stack>
       <Button {...{onClick: toggleHidden}}>{showPast ? `過去を非表示にする` : `過去を表示する`}</Button>
-    </>
+      <Button
+        {...{
+          color: 'blue',
+          onClick: async item => {
+            toggleLoad(async () => {
+              const res = await fetchUniversalAPI(`genbaDay`, `updateMany`, {
+                where: {genbaId: genba.id},
+                data: {finished: false, active: true},
+              })
+            })
+          },
+        }}
+      >
+        ステータスリセット
+      </Button>
+    </R_Stack>
   )
 }

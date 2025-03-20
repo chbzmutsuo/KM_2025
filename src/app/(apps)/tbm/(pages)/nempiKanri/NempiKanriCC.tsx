@@ -3,7 +3,7 @@ import React from 'react'
 import {Calc} from '@class/Calc'
 import {formatDate} from '@class/Days'
 import {DH} from '@class/DH'
-import { R_Stack} from '@components/styles/common-components/common-components'
+import {R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 import {KeyValue} from '@components/styles/common-components/ParameterCard'
 import EmptyPlaceholder from '@components/utils/loader/EmptyPlaceHolder'
@@ -36,8 +36,7 @@ export default function NempiKanriCC({vehicleList, fuelByCarWithVehicle, lastRef
             <div>
               <section>
                 <R_Stack className={` text-lg font-bold`}>
-                  <span>{vehicle?.name}</span>
-                  <span>{vehicle?.plate}</span>
+                  <span>{vehicle?.vehicleNumber}</span>
                 </R_Stack>
               </section>
 
@@ -99,64 +98,6 @@ export default function NempiKanriCC({vehicleList, fuelByCarWithVehicle, lastRef
           </div>
         )
       })}
-      {/* {userListWithCarHistory.map(data => {
-          const {user, allCars} = data
-          const {id: userId} = user
-
-          return (
-            <div key={userId} className={`t-paper w-[500px] p-2`}>
-              <R_Stack className={` w-full justify-between`}>
-                <span>{user.code}</span>
-                <h2 className={` text-2xl`}>{user.name}</h2>
-              </R_Stack>
-              {allCars.length > 0 ? (
-                CsvTable({
-                  records: allCars.map(data => {
-                    const {car, soukouKyori, heikinNenpi, ninpiShiyoryo} = data
-
-                    return {
-                      csvTableRow: [
-                        {
-                          label: `車名`,
-                          cellValue: car.name,
-                        },
-                        {
-                          label: `車番`,
-                          cellValue: car.plate,
-                        },
-                        {
-                          label: `走行距離計`,
-                          cellValue: Calc.round(soukouKyori, 1) + ' km',
-                          style: {textAlign: `right`},
-                        },
-                        {
-                          label: `平均燃費`,
-                          cellValue: Calc.round(heikinNenpi, 1) + ' km/L',
-                          style: {textAlign: `right`},
-                        },
-                        {
-                          label: `燃費使用量`,
-                          cellValue: Calc.round(ninpiShiyoryo, 1) + ' t',
-                          style: {textAlign: `right`},
-                        },
-                        {
-                          label: `使用金額`,
-                          cellValue: '金額',
-                        },
-
-                        // {cellValue: user.amount},
-                        // {cellValue: user.odometer},
-                        // {cellValue: user.type},
-                      ],
-                    }
-                  }),
-                }).WithWrapper({className: 't-paper'})
-              ) : (
-                <EmptyPlaceholder>データがありません</EmptyPlaceholder>
-              )}
-            </div>
-          )
-        })} */}
     </R_Stack>
   )
 }

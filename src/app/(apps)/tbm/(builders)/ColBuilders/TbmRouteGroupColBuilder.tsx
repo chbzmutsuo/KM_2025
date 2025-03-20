@@ -1,6 +1,6 @@
 'use client'
 import {tbmMonthlyConfigForRouteGroupBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmMonthlyConfigForRouteGroupBuilder'
-import useProductMidEditor from '@app/(apps)/tbm/(globalHooks)/useProductMidEditorGMF'
+
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@cm/class/Fields/Fields'
 import {colType, columnGetterType} from '@cm/types/types'
@@ -9,11 +9,17 @@ import {useState} from 'react'
 import {toast} from 'react-toastify'
 
 export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
-  const HK_ProductMidEditor = useProductMidEditor()
   const {yearMonth, showMonthConfig = false, tbmBaseId} = props.ColBuilderExtraProps ?? {}
   const {useGlobalProps} = props
 
   let colsource: colType[] = [
+    {
+      id: 'code',
+      label: 'コード',
+      type: 'number',
+      form: {...defaultRegister, defaultValue: null},
+      td: {style: {minWidth: 60}},
+    },
     {
       id: 'tbmBaseId',
       label: '営業所',
@@ -23,6 +29,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
         defaultValue: tbmBaseId,
         disabled: tbmBaseId,
       },
+      td: {style: {minWidth: 100}},
     },
     {
       id: 'name',
@@ -38,6 +45,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
       {
         id: `tbmCustomerId`,
         label: `取引先`,
+        td: {style: {minWidth: 200}},
         format: (val, routeGroup) => {
           return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
         },
@@ -45,7 +53,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
       {
         id: `tbmProductId`,
         label: `商品`,
-
+        td: {style: {minWidth: 150}},
         format: (val, routeGroup) => {
           return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
         },
@@ -94,6 +102,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
       {
         id: `運行回数`,
         label: `運行回数`,
+        td: {style: {minWidth: 80}},
         format: (val, row) => {
           const {TbmDriveSchedule} = row
           return <div>{TbmDriveSchedule.length}回数</div>
@@ -112,6 +121,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
           },
         },
         forSelect: {},
+        // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
         format: (val, routeGroup) => {
           return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
         },
@@ -125,6 +135,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
           },
         },
         forSelect: {},
+        // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
         format: (val, routeGroup) => {
           return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
         },

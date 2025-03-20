@@ -1,5 +1,6 @@
 'use client'
 
+import useCarWashGMF from '@app/(apps)/tbm/(globalHooks)/useCarWashGMF'
 import useGasolineGMF from '@app/(apps)/tbm/(globalHooks)/useGasolineGMF'
 import useHaishaTableEditorGMF from '@app/(apps)/tbm/(globalHooks)/useHaishaTableEditorGMF'
 import useOdometerInputGMF from '@app/(apps)/tbm/(globalHooks)/useOdometerInputGMF'
@@ -22,9 +23,13 @@ export default function DriveInputCC({
     TbmVehicle: TbmVehicle & {OdometerInput: OdometerInput[]}
   })[]
 }) {
-  const {toggleLoad, session, query} = useGlobal()
-  const HK_useHaishaTableEditorGMF = useHaishaTableEditorGMF()
+  const {toggleLoad, session, query, router} = useGlobal()
+  const HK_HaishaTableEditorGMF = useHaishaTableEditorGMF({
+    afterUpdate: ({res}) => router.refresh(),
+    afterDelete: ({res}) => router.refresh(),
+  })
   const HK_GasolineGMF = useGasolineGMF()
+  const HK_CarWashGMF = useCarWashGMF()
   const HK_OdometerInputGMF = useOdometerInputGMF()
   const allVehicleIdList = Arr.uniqArray(driveScheduleList.map(d => d.tbmVehicleId))
 
@@ -33,6 +38,7 @@ export default function DriveInputCC({
 
   return (
     <div>
+      <HK_HaishaTableEditorGMF.Modal />
       <C_Stack className={` gap-8`}>
         <div>
           <h2>あなたの運行予定</h2>
@@ -71,7 +77,7 @@ export default function DriveInputCC({
                         {...{
                           className: TextBtnClass,
                           onClick: async item => {
-                            HK_useHaishaTableEditorGMF.setGMF_OPEN({
+                            HK_HaishaTableEditorGMF.setGMF_OPEN({
                               tbmDriveSchedule: d,
                               user: session,
                               date: d.date,
@@ -80,7 +86,7 @@ export default function DriveInputCC({
                           },
                         }}
                       >
-                        {d.TbmVehicle?.plate}
+                        {d.TbmVehicle?.vehicleNumber}
                       </TextBlue>
                     </C_Stack>
                   </R_Stack>
@@ -119,8 +125,7 @@ export default function DriveInputCC({
                 <div key={i} className="rounded p-1 ">
                   <R_Stack className="justify-between   border-b">
                     <C_Stack className="w-[80px] justify-between gap-1 font-semibold">
-                      <span>{TbmVehicle?.name}</span>
-                      <small>({TbmVehicle?.plate})</small>
+                      <small>({TbmVehicle?.vehicleNumber})</small>
                     </C_Stack>
 
                     <R_Stack className={`gap-3`}>
@@ -155,11 +160,7 @@ export default function DriveInputCC({
                         <TextBlue
                           {...{
                             className: TextBtnClass,
-                            onClick: item =>
-                              HK_GasolineGMF.setGMF_OPEN({
-                                TbmVehicle,
-                                lastOdometerEnd,
-                              }),
+                            onClick: item => HK_GasolineGMF.setGMF_OPEN({TbmVehicle, lastOdometerEnd}),
                           }}
                         >
                           給油
@@ -167,11 +168,7 @@ export default function DriveInputCC({
                         <TextBlue
                           {...{
                             className: TextBtnClass,
-                            onClick: item =>
-                              HK_GasolineGMF.setGMF_OPEN({
-                                TbmVehicle,
-                                lastOdometerEnd,
-                              }),
+                            onClick: item => HK_CarWashGMF.setGMF_OPEN({TbmVehicle}),
                           }}
                         >
                           洗車

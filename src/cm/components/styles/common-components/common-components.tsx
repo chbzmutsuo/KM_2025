@@ -306,7 +306,6 @@ export const Box = (
 
 export const NodataPlaceHolder = () => {
   return <small className={`opacity-30`}>-</small>
-  // <div className={`bg-sub-main/10 w-[2.5rem] min-w-full max-w-[7.5rem]  text-transparent`}>a</div>
 }
 
 export const FloatingDataChecker = ({json}) => {

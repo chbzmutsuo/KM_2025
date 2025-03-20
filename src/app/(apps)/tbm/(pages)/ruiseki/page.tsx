@@ -1,3 +1,4 @@
+import {getUserListWithCarHistory} from '@app/(apps)/tbm/(server-actions)/getUserListWithCarHistory'
 import {Calc} from '@class/Calc'
 import {getMidnight} from '@class/Days'
 import {FitMargin, R_Stack} from '@components/styles/common-components/common-components'
@@ -6,8 +7,6 @@ import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitche
 import EmptyPlaceholder from '@components/utils/loader/EmptyPlaceHolder'
 import Redirector from '@components/utils/Redirector'
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
-import prisma from '@lib/prisma'
-import {TbmDriveSchedule, TbmMonthlyConfigForRouteGroup, TbmVehicle, User} from '@prisma/client'
 
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 
@@ -19,12 +18,9 @@ export default async function DynamicMasterPage(props) {
   if (redirectPath) return <Redirector {...{redirectPath}} />
   const theDate = whereQuery?.gte ?? getMidnight()
 
-  const {fuelByCarWithVehicle} = await getNenpiDataByCar({tbmBaseId})
-
   const userListWithCarHistory = await getUserListWithCarHistory({
     tbmBaseId,
     whereQuery,
-    fuelByCarWithVehicle,
   })
 
   return (
@@ -44,17 +40,13 @@ export default async function DynamicMasterPage(props) {
               {allCars.length > 0 ? (
                 CsvTable({
                   records: allCars.map(data => {
-                    const {car, soukouKyori, heikinNenpi, ninpiShiyoryo} = data
+                    const {car, soukouKyori, heikinNenpi, nempiShiyoryo, fuelCost} = data
 
                     return {
                       csvTableRow: [
                         {
-                          label: `車名`,
-                          cellValue: car.name,
-                        },
-                        {
                           label: `車番`,
-                          cellValue: car.plate,
+                          cellValue: car.vehicleNumber,
                         },
                         {
                           label: `走行距離計`,
@@ -68,17 +60,13 @@ export default async function DynamicMasterPage(props) {
                         },
                         {
                           label: `燃費使用量`,
-                          cellValue: Calc.round(ninpiShiyoryo, 1) + ' t',
+                          cellValue: Calc.round(nempiShiyoryo, 1) + ' t',
                           style: {textAlign: `right`},
                         },
                         {
                           label: `使用金額`,
-                          cellValue: '金額',
+                          cellValue: Calc.round(fuelCost, 0) + ' 円',
                         },
-
-                        // {cellValue: user.amount},
-                        // {cellValue: user.odometer},
-                        // {cellValue: user.type},
                       ],
                     }
                   }),
@@ -94,118 +82,4 @@ export default async function DynamicMasterPage(props) {
       {/* <ruisekiCC /> */}
     </FitMargin>
   )
-}
-
-export type MonthlyTbmDriveData = {
-  rows: {
-    schedule: TbmDriveSchedule
-    ConfigForRoute: TbmMonthlyConfigForRouteGroup | undefined
-    keyValue: {[key: string]: any}
-  }[]
-}
-
-const getNenpiDataByCar = async ({tbmBaseId}) => {
-  const vehicleList = await prisma.tbmVehicle.findMany({where: {tbmBaseId}})
-  const fuelByCar = await prisma.tbmRefuelHistory.groupBy({
-    by: [`tbmVehicleId`],
-    where: {TbmVehicle: {tbmBaseId}},
-    _sum: {amount: true},
-    _avg: {amount: true},
-    _max: {odometer: true},
-  })
-
-  await prisma.tbmVehicle.findMany({
-    where: {tbmBaseId},
-    include: {
-      TbmRefuelHistory: {},
-    },
-  })
-
-  const fuelByCarWithVehicle = fuelByCar.map(item => {
-    const vehicle = vehicleList.find(v => v.id === item.tbmVehicleId)
-
-    const totalAmount = item._sum.amount
-    const totalOdometer = item._max.odometer
-    const avgNempi = (totalOdometer ?? 0) / (totalAmount ?? 0)
-    const price = 9999
-
-    return {
-      vehicle,
-      totalAmount,
-      totalOdometer,
-      avgNempi,
-      price,
-      // ...item,
-    }
-  })
-
-  return {
-    fuelByCarWithVehicle,
-  }
-}
-
-const getUserListWithCarHistory = async ({fuelByCarWithVehicle, tbmBaseId, whereQuery}) => {
-  const userList = await prisma.user.findMany({
-    where: {tbmBaseId},
-    include: {
-      TbmDriveSchedule: {
-        where: {
-          date: whereQuery,
-          // finished: true,
-        },
-        include: {
-          TbmVehicle: {
-            include: {OdometerInput: {}},
-          },
-        },
-      },
-    },
-  })
-
-  const userListWithCarHistory = userList.map(user => {
-    const {id: userId, TbmDriveSchedule} = user
-
-    let allCars = TbmDriveSchedule.reduce((acc, cur, i) => {
-      const {TbmVehicle} = cur
-      if (!acc.find(v => v.id === TbmVehicle.id)) {
-        acc.push(TbmVehicle)
-      }
-      return acc
-    }, [] as any).sort((a, b) => (a.code ?? '')?.localeCompare(b.code ?? ''))
-
-    allCars = allCars.map(car => {
-      const fuelData = fuelByCarWithVehicle.find(v => v?.vehicle?.id === car.id)
-
-      const OdometerInput = car.OdometerInput
-      const myOdometerInput = OdometerInput.filter(v => {
-        return v.userId === userId && !!v.odometerStart && !!v.odometerEnd
-      })
-
-      const soukouKyori = myOdometerInput.reduce((acc, cur, i) => {
-        const diff = (cur.odometerEnd ?? 0) - (cur.odometerStart ?? 0)
-        return acc + diff
-      }, 0)
-      const heikinNenpi = fuelData?.avgNempi ?? 0
-      const ninpiShiyoryo = soukouKyori / heikinNenpi
-
-      return {
-        car,
-        soukouKyori,
-        heikinNenpi,
-        ninpiShiyoryo,
-      }
-    })
-    return {user, allCars}
-  })
-  type UserWithCarHistory = {
-    user: User
-    allCars: {
-      car: TbmVehicle
-      soukouKyori: number
-      heikinNenpi: number
-      ninpiShiyoryo: number
-    }[]
-  }
-
-  return userListWithCarHistory as UserWithCarHistory[]
 }

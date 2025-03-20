@@ -10,7 +10,6 @@ import Redirector from '@components/utils/Redirector'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
 import {HREF} from '@lib/methods/urls'
-import {Prisma} from '@prisma/client'
 import {addDays} from 'date-fns'
 import React from 'react'
 
@@ -40,7 +39,10 @@ export default async function CalendarPage(props) {
   })
 
   const {result: userList} = await fetchUniversalAPI(`user`, `findMany`, {
-    where: {OR: [{app: `sohken`}, {apps: {has: `sohken`}}]},
+    where: {
+      OR: [{app: `sohken`}, {apps: {has: `sohken`}}],
+      UserRole: {none: {RoleMaster: {name: `監督者`}}},
+    },
   })
   const userCount = userList.length
   const Table = () => {
@@ -53,8 +55,9 @@ export default async function CalendarPage(props) {
                 csvTableRow: [
                   //
                   {cellValue: `日付`},
-                  {cellValue: `必要人工`},
+                  {cellValue: `人工`},
                   {cellValue: `余力`},
+                  // {cellValue: `＃`},
                 ],
               },
             ],
@@ -85,6 +88,7 @@ export default async function CalendarPage(props) {
                   },
                   // {cellValue: userCount},
                   {cellValue: userCount - requiredNinkuSum},
+                  // {cellValue: '▲10', style: {width: 100}},
                 ],
               }
             }),

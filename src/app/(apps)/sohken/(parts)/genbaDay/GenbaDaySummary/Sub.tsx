@@ -11,7 +11,7 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC}) {
   const {GenbaDayShift, allShiftBetweenDays = []} = GenbaDay
 
   const ArrayData = GenbaDayShift?.map(v => {
-    const {User, from, to, important, directGo, directReturn} = v
+    const {User, from, to, important, directGo, directReturn, shokucho} = v
 
     const shiftsOnOtherGembaOnSameDate = allShiftBetweenDays
       .filter(shift => {
@@ -79,19 +79,19 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC}) {
     return {
       ...v,
       name: (
-        <div className={important ? 'texwh rounded bg-yellow-400 px-1' : ''}>
+        <div className={[important ? ' rounded bg-orange-300  px-1' : shokucho ? ' rounded bg-green-300  px-1' : ' '].join(` `)}>
           <div>{currentShiftDisplay}</div>
           <div>{nextShiftDisplay}</div>
         </div>
       ),
     }
   }).sort((a, b) => {
-    return b.User.sortOrder - a.User.sortOrder
+    return a.User.sortOrder - b.User.sortOrder
   })
   const {GenbaDaySoukenCar} = GenbaDay
 
   return (
-    <div className={`items-stretch ${PC ? 'row-stack' : 'col-stack'} `}>
+    <div className={`items-stretch ${PC ? 'row-stack' : 'col-stack mx-auto w-fit items-center'} `}>
       <DistributionListByModel
         {...{
           editable,

@@ -59,10 +59,13 @@ export default async function DynamicMasterPage(props) {
 
   const todayRecords = records.filter(record => Days.isSameDate(record.date, today))
   const tomorrowRecords = records.filter(record => {
-    console.log(record.date.getTime(), tomorrow.getTime()) //////logs
     return record.date.getTime() === tomorrow.getTime()
   })
   const isMyPage = query[`myPage`] === `true`
 
-  return <GenbadayListClient {...{today, tomorrow, todayRecords, tomorrowRecords, isMyPage, allShiftBetweenDays}} />
+  return (
+    <div>
+      <GenbadayListClient {...{today, tomorrow, todayRecords, tomorrowRecords, isMyPage, allShiftBetweenDays}} />
+    </div>
+  )
 }

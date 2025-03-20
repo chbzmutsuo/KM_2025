@@ -3,7 +3,7 @@ import {PrismaModelNames} from '@cm/types/prisma-types'
 import {colType} from '@cm/types/types'
 import {HK_USE_RECORDS_TYPE} from '@components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobalOrigin'
-import { TbmBase, TbmDriveSchedule, User} from '@prisma/client'
+import {User} from '@prisma/client'
 import {atom, useAtom} from 'jotai'
 import {atomFamily} from 'jotai/utils'
 export const useJotai = useAtom
@@ -96,7 +96,7 @@ export type atomTypes = {
   }
   GenbaDayCardEditorModalGMF: {taskMidTable; genbaId; genbaDayId}
   GenbaDayBasicEditorGMF: {GenbaDay}
-  haishaTableEditorGMF: {user: User; date: Date; tbmDriveSchedule?: TbmDriveSchedule; tbmBase?: TbmBase}
+  haishaTableEditorGMF: {user: User; date: Date; tbmDriveSchedule?: any; tbmBase?: any}
   odometerInputGMF: {
     OdometerInput: {
       date: Date

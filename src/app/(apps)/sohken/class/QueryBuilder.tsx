@@ -6,6 +6,9 @@ export class QueryBuilder {
     const user = {
       include: {
         SohkenCar: {},
+        UserRole: {
+          include: {RoleMaster: {}},
+        },
       },
     }
     const sohkenCar = {

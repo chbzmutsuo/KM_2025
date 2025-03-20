@@ -16,7 +16,7 @@ export function CsvTableHead(props: CsvTableProps) {
         const {csvTableRow, ...restPropsOnTr} = row
 
         return (
-          <tr key={rowIdx} {...restPropsOnTr} className={cl(restPropsOnTr?.className)}>
+          <tr key={rowIdx} {...restPropsOnTr} className={[restPropsOnTr?.className].join(` `)}>
             {csvTableRow.map((cell, celIdx) => {
               const stylesInThisColumn = props?.stylesInColumns?.[celIdx]
 

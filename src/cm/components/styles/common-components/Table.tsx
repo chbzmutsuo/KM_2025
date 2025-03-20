@@ -33,22 +33,12 @@ export const TableBordered = (props: props & {size?: `sm` | `base` | `lg` | `xl`
   return (
     <table
       {...{
-        className: cl(className, CssString.table.borderCerlls, sizeClass),
-        style,
-        ...rest,
-      }}
-    >
-      {children}
-    </table>
-  )
-}
-export const TableBorderedY = (props: props) => {
-  const {className, style, children, ...rest} = props
-
-  return (
-    <table
-      {...{
-        className: cl(className, CssString.table.borderCerllsY),
+        className: [
+          //
+          className,
+          CssString.table.borderCerlls,
+          sizeClass,
+        ].join(' '),
         style,
         ...rest,
       }}

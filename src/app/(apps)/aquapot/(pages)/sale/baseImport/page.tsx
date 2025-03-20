@@ -1,5 +1,5 @@
 'use client'
-import { toUtc} from '@class/Days'
+import {toUtc} from '@class/Days'
 
 import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, Center, Padding} from '@components/styles/common-components/common-components'
@@ -206,7 +206,6 @@ export default function Page(props) {
                               },
                               update: {...cartData.update},
                             })
-                            console.log(res) //////logs
                           })
                         )
                       } else {

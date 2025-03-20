@@ -38,16 +38,25 @@ model TbmVehicle {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code  String? @unique
- name  String
- plate String
+ code          String  @unique
+ // number        String?
+ vehicleNumber String  @unique
+ type          String?
+ shape         String?
+ airSuspension String?
+ oilTireParts  String?
+ maintenance   String?
+ insurance     String?
 
  // TbmOperationGroup TbmOperationGroup[]
- TbmRefuelHistory TbmRefuelHistory[]
- TbmBase          TbmBase            @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId        Int
- TbmDriveSchedule TbmDriveSchedule[]
- OdometerInput    OdometerInput[]
+ TbmRefuelHistory  TbmRefuelHistory[]
+ TbmBase           TbmBase             @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId         Int
+ TbmDriveSchedule  TbmDriveSchedule[]
+ OdometerInput     OdometerInput[]
+ TbmCarWashHistory TbmCarWashHistory[]
+
+ @@unique([tbmBaseId, vehicleNumber], name: "unique_tbmBaseId_vehicleNumber")
 }
 
 model TbmRouteGroup {
@@ -56,8 +65,8 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code             String?            @unique
- name             String?            @unique
+ code             Int                @unique
+ name             String
  TbmBase          TbmBase            @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId        Int
  // TbmOperation     TbmOperation[]
@@ -66,6 +75,8 @@ model TbmRouteGroup {
  TbmMonthlyConfigForRouteGroup TbmMonthlyConfigForRouteGroup[]
  Mid_TbmRouteGroup_TbmProduct  Mid_TbmRouteGroup_TbmProduct?
  Mid_TbmRouteGroup_TbmCustomer Mid_TbmRouteGroup_TbmCustomer?
+
+ @@unique([tbmBaseId, code], name: "unique_tbmBaseId_code")
 }
 
 model TbmMonthlyConfigForRouteGroup {
@@ -100,11 +111,13 @@ model TbmProduct {
  createdAt                    DateTime                       @default(now())
  updatedAt                    DateTime?                      @default(now()) @updatedAt()
  sortOrder                    Float                          @default(0)
- code                         String?                        @unique
+ code                         Int                            @unique
  name                         String                         @unique
  Mid_TbmRouteGroup_TbmProduct Mid_TbmRouteGroup_TbmProduct[]
- TbmBase                      TbmBase?                       @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId                    Int?
+ TbmBase                      TbmBase                        @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId                    Int
+
+ @@unique([tbmBaseId, name], name: "unique_tbmBaseId_name")
 }
 
 model Mid_TbmRouteGroup_TbmProduct {
@@ -237,8 +250,10 @@ model TbmCustomer {
  bankInformation               String?
  Mid_TbmRouteGroup_TbmCustomer Mid_TbmRouteGroup_TbmCustomer[]
 
- TbmBase   TbmBase? @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
- tbmBaseId Int?
+ TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ tbmBaseId Int
+
+ @@unique([tbmBaseId, name], name: "unique_tbmBaseId_name")
 }
 
 model TbmRefuelHistory {
@@ -254,6 +269,22 @@ model TbmRefuelHistory {
 
  // TbmOperationGroup TbmOperationGroup? @relation(fields: [tbmOperationGroupId], references: [id], onDelete: Cascade)
  // tbmOperationGroupId Int?
+
+ TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
+ tbmVehicleId Int
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
+}
+
+model TbmCarWashHistory {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date  DateTime
+ price Float
 
  TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
  tbmVehicleId Int
@@ -288,9 +319,9 @@ model TbmDriveSchedule {
  // TbmUserDate   TbmUserDate @relation(fields: [tbmUserDateId], references: [id],onDelete: Cascade)
  // tbmUserDateId Int
 
- date              DateTime
- postalHighwayFee  Int? //高速(郵便)
- generalHighwayFee Int? //高速（一般）
+ date                DateTime
+ O_postalHighwayFee  Int? //高速(郵便)
+ Q_generalHighwayFee Int? //高速（一般）
 
  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId Int

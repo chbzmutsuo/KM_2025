@@ -29,7 +29,7 @@ export const convertRecords = (props: recordsType) => {
     headerRecords = [records[0]].map(row => {
       return {
         ...row,
-        csvTableRow: row.csvTableRow.map(d => {
+        csvTableRow: (row?.csvTableRow ?? []).map(d => {
           return {
             //
             ...d,
@@ -41,7 +41,7 @@ export const convertRecords = (props: recordsType) => {
     bodyRecords = records.map(row => {
       return {
         ...row,
-        csvTableRow: row.csvTableRow.map(d => {
+        csvTableRow: (row?.csvTableRow ?? []).map(d => {
           return {
             ...d,
             label: undefined,

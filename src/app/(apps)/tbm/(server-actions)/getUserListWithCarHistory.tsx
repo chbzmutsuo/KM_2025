@@ -46,13 +46,14 @@ export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery}) => {
         return acc + diff
       }, 0)
       const heikinNenpi = fuelData?.avgNempi ?? 0
-      const ninpiShiyoryo = soukouKyori / heikinNenpi
+      const nempiShiyoryo = soukouKyori && heikinNenpi && soukouKyori / heikinNenpi
 
       return {
         car,
         soukouKyori,
         heikinNenpi,
-        ninpiShiyoryo,
+        nempiShiyoryo,
+        ...fuelData,
       }
     })
     return {user, allCars}
@@ -63,7 +64,8 @@ export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery}) => {
       car: TbmVehicle
       soukouKyori: number
       heikinNenpi: number
-      ninpiShiyoryo: number
+      nempiShiyoryo: number
+      fuelCost: number
     }[]
   }
 

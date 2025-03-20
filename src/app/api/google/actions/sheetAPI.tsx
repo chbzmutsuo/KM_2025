@@ -4,6 +4,23 @@ import {convert_GoogleURL_to_ID} from '@app/api/google/actions/convert_GoogleURL
 import {getAuth} from '@app/api/google/actions/getAuth'
 import {google, sheets_v4} from 'googleapis'
 
+export const GoogleSheet_Get = async (props: {spreadsheetId: string}) => {
+  const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
+  const auth = getAuth()
+  const sheets = google.sheets({version: 'v4', auth})
+  const res = await sheets.spreadsheets.get({spreadsheetId})
+  const {data, config} = res
+
+  return data
+}
+
+export const GoogleSheet_getSheetByName = async (props: {spreadsheetId: string; sheetName: string}) => {
+  const data = await GoogleSheet_Get({spreadsheetId: props.spreadsheetId})
+  const sheet = data.sheets?.find(item => item.properties?.title === props.sheetName)
+
+  return sheet
+}
+
 export const GoogleSheet_Read = async (props: {range: string; spreadsheetId: string}) => {
   const {range} = props
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
@@ -49,6 +66,7 @@ export const GoogleSheet_Append = async (props: {range: string; spreadsheetId: s
 
 export const GoogleSheet_BatchUpdate = async (props: {spreadsheetId: string; requests: sheets_v4.Schema$Request[]}) => {
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
+
   const auth = getAuth()
   const sheets = google.sheets({version: 'v4', auth})
 
@@ -59,4 +77,21 @@ export const GoogleSheet_BatchUpdate = async (props: {spreadsheetId: string; req
 
   const {data, config} = res
   return data
+}
+
+export const GoogleSheet_copy = async (props: {fromSSId: string; destinationFolderId: string; fileName?: string}) => {
+  const {fromSSId, destinationFolderId, fileName} = props
+  const fromSpreadsheetId = convert_GoogleURL_to_ID(fromSSId)
+  const auth = getAuth()
+
+  const drive = google.drive({version: 'v3', auth})
+
+  // スプレッドシートをコピー
+  const copyRes = await drive.files.copy({
+    fileId: fromSpreadsheetId,
+    requestBody: {name: fileName ?? undefined, parents: [destinationFolderId]},
+    supportsAllDrives: true,
+  })
+
+  return copyRes.data
 }

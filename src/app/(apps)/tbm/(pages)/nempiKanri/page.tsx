@@ -1,12 +1,11 @@
 import NempiKanriCC from '@app/(apps)/tbm/(pages)/nempiKanri/NempiKanriCC'
 import {getNenpiDataByCar} from '@app/(apps)/tbm/(server-actions)/getNenpiDataByCar'
-import { getMidnight} from '@class/Days'
+import {getMidnight} from '@class/Days'
 import {FitMargin} from '@components/styles/common-components/common-components'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
 import Redirector from '@components/utils/Redirector'
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
 import prisma from '@lib/prisma'
-import {TbmDriveSchedule, TbmMonthlyConfigForRouteGroup} from '@prisma/client'
 
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 
@@ -47,12 +46,4 @@ export default async function DynamicMasterPage(props) {
       <NempiKanriCC {...{vehicleList, fuelByCarWithVehicle, lastRefuelHistoryByCar}} />
     </FitMargin>
   )
-}
-
-export type MonthlyTbmDriveData = {
-  rows: {
-    schedule: TbmDriveSchedule
-    ConfigForRoute: TbmMonthlyConfigForRouteGroup | undefined
-    keyValue: {[key: string]: any}
-  }[]
 }

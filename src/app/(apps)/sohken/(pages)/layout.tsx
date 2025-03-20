@@ -7,7 +7,7 @@ export default async function Groupie_Admin_Layout(props) {
   return (
     <Admin
       {...{
-        AppName: 'テスト',
+        AppName: '工程管理',
         PagesMethod: 'sohken_PAGES',
         PageBuilderGetter: {class: PageBuilder, getter: 'getGlobalIdSelector'},
       }}

@@ -34,7 +34,7 @@ export default function Global_Template(props) {
 
 const Main = ({children, router}) => {
   useLogOnRender(`Template`)
-  const {headerMargin, showLoader, appbarHeight} = useGlobal()
+  const {headerMargin, showLoader, appbarHeight, rootPath} = useGlobal()
   useScrollPosition()
   usePageTracking()
   return (
@@ -45,23 +45,27 @@ const Main = ({children, router}) => {
       <div
         id="main-wrapper"
         className="bg-sub-light/40 min-h-screen "
-        style={{
-          overscrollBehavior: 'none',
-          paddingTop: appbarHeight + headerMargin,
-        }}
+        style={
+          rootPath === `apex`
+            ? {}
+            : {
+                overscrollBehavior: 'none',
+                paddingTop: appbarHeight + headerMargin,
+              }
+        }
       >
         {children}
       </div>
 
       <R_Stack id="portal-root-bottom-fixed" className={cl(` fixed bottom-0 w-full  `)}></R_Stack>
 
-      {/* {isDev && (
+      {isDev && (
         <div className={`fixed bottom-1 right-1`}>
           <button className={` t-btn`} {...{onClick: () => router.refresh()}}>
             更新
           </button>
         </div>
-      )} */}
+      )}
     </div>
   )
 }

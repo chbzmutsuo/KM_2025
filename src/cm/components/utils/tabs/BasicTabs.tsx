@@ -109,7 +109,7 @@ const renderShowEachComponent = ({filteredTabComponentArray, currentTabIdx, setc
           onClick={e => setcurrentTabIdx(i)}
           className={cl(
             `cursor-pointer`,
-            ' mx-auto max-w-[300px] rounded-full p-1 text-[16px]   ',
+            ' mx-auto max-w-[300px] rounded-lg p-1 text-[16px]    ',
             selected ? 'bg-gray-300' : 'hover:bg-gray-200'
           )}
         >
@@ -121,7 +121,7 @@ const renderShowEachComponent = ({filteredTabComponentArray, currentTabIdx, setc
 
   return (
     <div {...{...otherProps}}>
-      <R_Stack className={cl(`mx-auto mb-2  w-full min-w-[280px] justify-around  gap-0 rounded-full  shadow-md  `)}>
+      <R_Stack className={cl(`mx-auto mb-2  w-full min-w-[280px]  justify-around gap-0   border-b-2   p-1  `)}>
         {filteredTabComponentArray
           .filter(obj => obj?.label)
           .map((obj, i) => {

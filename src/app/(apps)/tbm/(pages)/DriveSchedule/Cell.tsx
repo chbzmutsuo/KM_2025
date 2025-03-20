@@ -82,7 +82,7 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
                 <C_Stack className={`t-paper gap-1.5  rounded-sm  `}>
                   <RouteDisplay className={` text-[12px] `}>{TbmRouteGroup.name}</RouteDisplay>
                   <R_Stack className={` justify-end `}>
-                    <CarDispaly className={`text-end text-sm`}>({TbmVehicle.plate})</CarDispaly>
+                    <CarDispaly className={`text-end text-sm`}>({TbmVehicle.vehicleNumber})</CarDispaly>
                     <PencilSquareIcon
                       className={`text-blue-main onHover h-5 w-5`}
                       onClick={() => {

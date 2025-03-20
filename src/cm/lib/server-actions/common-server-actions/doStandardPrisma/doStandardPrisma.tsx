@@ -9,8 +9,6 @@ import {
 } from '@lib/server-actions/common-server-actions/doStandardPrisma/lib'
 import {prismaChain} from 'src/non-common/prismaChain'
 
-// type doStandardPrismaType = (props: usePrismaOnServerPropType) => Promise<requestResultType>
-
 export type doStandardPrismaType = <T extends PrismaModelNames, M extends prismaMethodType>(
   model: T,
   method: M,

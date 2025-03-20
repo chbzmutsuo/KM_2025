@@ -88,16 +88,11 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
   const Top = SurroundingComponent({ClientProps2, type: 'top'})
 
   return (
-    <div
-      style={{
-        ...ClientProps2.displayStyle,
-        paddingTop: 10,
-      }}
-    >
+    <div style={{...ClientProps2.displayStyle, paddingTop: 10}}>
       <div>
         <section
           {...{
-            className: `rounded bg-white p-0 t-paper`,
+            className: `  p-0`,
             style: {
               position: `sticky`,
               top: appbarHeight + 10,
@@ -106,9 +101,9 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
             },
           }}
         >
-          <C_Stack className={`gap-0.5`}>
+          <C_Stack className={`gap-1`}>
             {hasEasySearch && (
-              <Wrapper>
+              <div>
                 <EasySearcher
                   {...{
                     dataModelName: ClientProps2.dataModelName,
@@ -118,12 +113,12 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
                     HK_USE_RECORDS: ClientProps2.HK_USE_RECORDS,
                   }}
                 />
-              </Wrapper>
+              </div>
             )}
 
-            {SearchingStatusMemo && <Wrapper>{SearchingStatusMemo}</Wrapper>}
+            {SearchingStatusMemo && <div>{SearchingStatusMemo}</div>}
 
-            {Top && <Wrapper>{Top}</Wrapper>}
+            {Top && <div>{Top}</div>}
           </C_Stack>
         </section>
 
@@ -162,7 +157,6 @@ export type ClientPropsType2 = ClientPropsType & {
   easySearchWhereAnd?
 }
 import {useSearchHandler} from '@components/DataLogic/TFs/MyTable/TableHandler/SearchHandler/useSearchHandler/useSearchHandler'
-import {Wrapper} from '@components/styles/common-components/paper'
 import useColumns from '@components/DataLogic/TFs/PropAdjustor/useColumns'
 import useRecords from '@components/DataLogic/TFs/PropAdjustor/useRecords'
 import useInitFormState from '@hooks/useInitFormState'

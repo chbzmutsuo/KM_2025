@@ -17,6 +17,7 @@ export default function UserTh({user, admin, query, userWorkStatusList}) {
     <C_Stack className={` h-full justify-start gap-1`}>
       <KeyValue label="氏名">
         {admin ? <T_LINK href={HREF(`/tbm/user/${user.id}`, {userId: user.id}, query)}>{user.name} </T_LINK> : user.name}
+        <span className={`text-xs`}>({user.code})</span>
       </KeyValue>
       <KeyValue label="出勤">{countByStatus?.勤 ?? `-`}</KeyValue>
       <KeyValue label="休み">{countByStatus?.怠 ?? `-`}</KeyValue>

@@ -7,7 +7,7 @@ export default async function Groupie_Admin_Layout(props) {
   return (
     <Admin
       {...{
-        AppName: '',
+        AppName: '運行管理',
         PagesMethod: 'tbm_PAGES',
         PageBuilderGetter: {class: PageBuilder, getter: 'getGlobalIdSelector'},
       }}
