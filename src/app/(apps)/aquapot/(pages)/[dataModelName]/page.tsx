@@ -79,6 +79,7 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
             editType: {type: `pageOnSame`},
             additional: {
               where: {...customerRecordFilterWhere},
+              orderBy: [{createdAt: 'desc'}],
             },
           }
         },

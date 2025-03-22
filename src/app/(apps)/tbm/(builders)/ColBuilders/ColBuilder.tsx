@@ -66,7 +66,7 @@ export class ColBuilder {
             disabled: tbmVehicleId ? true : false,
           },
           forSelect: {
-            config: getVehicleForSelectConfig(),
+            config: getVehicleForSelectConfig({}),
           },
         },
         {

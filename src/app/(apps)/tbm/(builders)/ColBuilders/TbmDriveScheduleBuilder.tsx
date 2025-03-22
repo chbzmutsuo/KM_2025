@@ -50,7 +50,7 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
         // disabled: tbmVehicleId,
       },
       forSelect: {
-        config: getVehicleForSelectConfig(tbmBase),
+        config: getVehicleForSelectConfig({tbmBaseId: tbmBase?.id}),
       },
     },
     {
@@ -74,7 +74,7 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
     },
   ])
     .customAttributes(({col}) => {
-      return {...col, search: {}}
+      return {...col, form: {...col.form, style: {minWidth: 240}}, search: {}}
     })
     .transposeColumns()
 }

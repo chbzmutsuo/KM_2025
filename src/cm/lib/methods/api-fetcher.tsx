@@ -57,6 +57,7 @@ export async function fetchAlt(url: string, body: any, defaultOptions?: fetchOpt
 
       if (!response.ok) {
         const res = await response.json()
+
         console.error(res)
         throw new Error(`HTTP error! Status: ${response.status}`)
       }

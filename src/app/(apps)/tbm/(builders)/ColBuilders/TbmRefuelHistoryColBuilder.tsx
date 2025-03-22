@@ -23,7 +23,7 @@ export const TbmRefuelHistoryColBuilder = (props: columnGetterType) => {
           defaultValue: tbmVehicleId,
           disabled: tbmVehicleId ? true : false,
         },
-        forSelect: {config: getVehicleForSelectConfig()},
+        forSelect: {config: getVehicleForSelectConfig({})},
       },
     ]
   }

@@ -72,10 +72,7 @@ export const ChildCreator = (props: ChildCreatorProps) => {
             ...{
               myTable,
               myForm,
-              additional: {
-                ...tunedAdditional,
-                toggleLoadFunc,
-              },
+              additional: {...tunedAdditional, toggleLoadFunc},
               EditForm,
               editType,
               useGlobalProps,

@@ -44,7 +44,7 @@ const NavItemParent = React.memo((props: navItemProps) => {
           onClick: () => HK_NAV.toggleSingleMenu(navWrapperIdx),
         }}
       >
-        <div className={cl(linkClass, `!row-stack flex-nowrap items-center gap-1.5 py-2`)}>
+        <div className={cl(linkClass, `!row-stack flex-nowrap items-center justify-between gap-1.5 py-2`)}>
           <div className={`w-fit`}>
             <div {...{className: cl(someChildrenIsActive ? selectedClass.join(' ') : '')}}>{label}</div>
           </div>
@@ -59,12 +59,12 @@ const NavItemParent = React.memo((props: navItemProps) => {
   } else {
     //アイテム自身
     if (item.tabId) {
-      const className = cl(
-        //
-        ` m-1 p-1 `,
-        isActive ? selectedClass.join(' ') : '',
-        'hover:bg-sub-main/20 hover:rounded'
-      )
+      // const className = cl(
+      //   //
+      //   `m-1 p-1 `,
+      //   isActive ? selectedClass.join(' ') : '',
+      //   'hover:bg-sub-main/20 hover:rounded'
+      // )
       return (
         <>
           <Link
@@ -73,10 +73,9 @@ const NavItemParent = React.memo((props: navItemProps) => {
               href,
               className: cl(
                 //
-                ` m-1 p-1 `,
+                `p-1 `,
                 isActive ? selectedClass.join(' ') : '',
                 'hover:bg-sub-main/20 hover:rounded',
-
                 linkClass,
                 `inline-block`
               ),

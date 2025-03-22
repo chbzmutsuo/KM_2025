@@ -1,4 +1,5 @@
 import NempiKanriCC from '@app/(apps)/tbm/(pages)/nempiKanri/NempiKanriCC'
+import {getTbmBase_MonthConfig} from '@app/(apps)/tbm/(server-actions)/getBasics'
 import {getNenpiDataByCar} from '@app/(apps)/tbm/(server-actions)/getNenpiDataByCar'
 import {getMidnight} from '@class/Days'
 import {FitMargin} from '@components/styles/common-components/common-components'
@@ -17,7 +18,8 @@ export default async function DynamicMasterPage(props) {
   if (redirectPath) return <Redirector {...{redirectPath}} />
   const theDate = whereQuery?.gte ?? getMidnight()
 
-  const {fuelByCarWithVehicle} = await getNenpiDataByCar({tbmBaseId, whereQuery})
+  const {TbmBase_MonthConfig} = await getTbmBase_MonthConfig({yearMonth: whereQuery.gte, tbmBaseId})
+  const {fuelByCarWithVehicle} = await getNenpiDataByCar({tbmBaseId, whereQuery, TbmBase_MonthConfig})
 
   const vehicleList = await prisma.tbmVehicle.findMany({
     where: {tbmBaseId},
@@ -41,7 +43,7 @@ export default async function DynamicMasterPage(props) {
   })
 
   return (
-    <FitMargin className={`p-2`}>
+    <FitMargin className={`pt-4`}>
       <NewDateSwitcher {...{monthOnly: true}} />
       <NempiKanriCC {...{vehicleList, fuelByCarWithVehicle, lastRefuelHistoryByCar}} />
     </FitMargin>

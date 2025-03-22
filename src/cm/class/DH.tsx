@@ -1,9 +1,9 @@
- 
 import {anyObject, colTypeStr} from '@cm/types/types'
 import {Days, formatDate, formatDateTimeOrDate} from './Days'
 import {shorten, superTrim} from '@lib/methods/common'
 import JsonFormatter from 'react-json-formatter'
 import BasicModal from '@components/utils/modal/BasicModal'
+import {Calc} from '@class/Calc'
 export type baseColTypes =
   | `password`
   | `json`
@@ -257,6 +257,9 @@ export class DH {
       return value
     }
   }
+
+  static WithUnit = (value: number, unit: string, decimalPoint = 0) => value && DH.toPrice(Calc.round(value, decimalPoint)) + unit
+
   static capitalizeFirstLetter(str) {
     if (typeof str !== 'string' || !str) return str
     return str.charAt(0).toUpperCase() + str.slice(1)

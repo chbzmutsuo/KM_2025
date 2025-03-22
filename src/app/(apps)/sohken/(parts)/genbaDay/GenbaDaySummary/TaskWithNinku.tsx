@@ -5,7 +5,7 @@ import {ColoredText} from '@components/styles/common-components/colors'
 
 import {PlusCircleIcon} from '@heroicons/react/20/solid'
 import React from 'react'
-import {GetNinkuList} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/getNinkuList'
+import {GetNinkuList} from 'src/non-common/(chains)/getGenbaScheduleStatus/getNinkuList'
 import {formatDate} from '@class/Days'
 import {Alert} from '@components/styles/common-components/Alert'
 

@@ -14,7 +14,9 @@ export default function Template({children}) {
 
   return (
     <div>
-      {/* <Button onClick={seedRouteGroup}>テスト</Button> */}
+      {/* <button className={` t-btn`} onClick={seedDriver}>
+        テスト
+      </button> */}
       <HK_ProductMidEditor.Modal />
       <HK_GasolineGMF.Modal />
 
@@ -208,7 +210,7 @@ const seedDriver = async () => {
     {code: 87, name: '社用車', employeeCode: '87'},
     {code: 88, name: '-', employeeCode: '88'},
     {code: 89, name: '委託会社', employeeCode: '89'},
-  ]
+  ].map(item => ({...item, password: item.name, email: item.name}))
   const res = await fetchTransactionAPI({
     transactionQueryList: list
       .filter(item => item.employeeCode)

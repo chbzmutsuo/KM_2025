@@ -1,3 +1,6 @@
+import IconLetter from '@components/icons/IconLetter'
+import {CalculatorIcon, CurrencyYenIcon, FireIcon, ListBulletIcon, MapIcon} from '@heroicons/react/20/solid'
+import {CheckIcon, TruckIcon} from 'lucide-react'
 import {CleansePathSource} from 'src/non-common/path-title-constsnts'
 import {PageGetterType} from 'src/non-common/path-title-constsnts'
 import {getScopes} from 'src/non-common/scope-lib/getScopes'
@@ -16,11 +19,16 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       children: [
         //
 
-        {tabId: 'DriveSchedule', label: '運行計画'},
-        {tabId: 'meisai', label: '運行明細'},
-        {tabId: 'nempiKanri', label: '燃費管理'},
-        {tabId: 'ruiseki', label: '累積距離記帳'},
-        {tabId: 'eigyosho', label: '営業所別売上'},
+        {
+          tabId: 'DriveSchedule',
+          // <R_Stack>
+          label: <IconLetter {...{Icon: MapIcon}}>運行計画</IconLetter>,
+        },
+        {tabId: 'meisai', label: <IconLetter {...{Icon: ListBulletIcon}}>運行明細</IconLetter>},
+        {tabId: 'nempiKanri', label: <IconLetter {...{Icon: FireIcon}}>燃費管理</IconLetter>},
+        {tabId: 'ruiseki', label: <IconLetter {...{Icon: CalculatorIcon}}>累積距離記帳</IconLetter>},
+        {tabId: 'eigyosho', label: <IconLetter {...{Icon: CurrencyYenIcon}}>営業所別売上</IconLetter>},
+        {tabId: 'kyuyo', label: <IconLetter {...{Icon: CurrencyYenIcon}}>給与</IconLetter>},
       ],
     },
     {
@@ -28,8 +36,8 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       label: 'マイページ',
       children: [
         //
-        {tabId: 'driveInput', label: '運行入力'},
-        {tabId: 'driveInput', label: '実績確認'},
+        {tabId: 'driveInput', label: <IconLetter {...{Icon: TruckIcon}}>運行入力</IconLetter>},
+        {tabId: 'myPage', label: <IconLetter {...{Icon: CheckIcon}}>実績確認</IconLetter>},
       ],
     },
     // {tabId: 'tbmOperation', label: '運行履歴'},

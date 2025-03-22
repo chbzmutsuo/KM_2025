@@ -6,7 +6,7 @@ import {C_Stack, R_Stack} from '@components/styles/common-components/common-comp
 
 import {PencilSquareIcon, PlusCircleIcon, TruckIcon} from '@heroicons/react/20/solid'
 import {OdometerInput, TbmDriveSchedule, TbmRouteGroup, TbmVehicle, User, TbmBase, UserWorkStatus} from '@prisma/client'
-import { TextRed, TextSub} from '@components/styles/common-components/Alert'
+import {TextRed, TextSub} from '@components/styles/common-components/Alert'
 import Link from 'next/link'
 import {HREF} from '@lib/methods/urls'
 import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
@@ -15,6 +15,7 @@ import {toast} from 'react-toastify'
 
 export const Cell = (props: {
   //
+  fetchData
   scheduleListOnDate: TbmDriveSchedule[]
   setModalOpen
   user: User & {
@@ -25,12 +26,13 @@ export const Cell = (props: {
   tbmBase: TbmBase
 }) => {
   const {query, toggleLoad} = useGlobal()
-  const {scheduleListOnDate, setModalOpen, user, date, tbmBase, userWorkStatus} = props
+  const {fetchData, scheduleListOnDate, setModalOpen, user, date, tbmBase, userWorkStatus} = props
 
   return (
     <C_Stack className={` min-h-full justify-start `} {...{style: {width: 140}}}>
       <ConfigArea
         {...{
+          fetchData,
           userWorkStatus,
           user,
           date,
@@ -100,7 +102,7 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
   )
 }
 
-const ConfigArea = ({userWorkStatus, user, date, toggleLoad, setModalOpen, tbmBase, scheduleListOnDate, query}) => {
+const ConfigArea = ({fetchData, userWorkStatus, user, date, setModalOpen, tbmBase, scheduleListOnDate, query}) => {
   return (
     <section>
       <R_Stack className={` w-full  items-center justify-between`}>
@@ -119,9 +121,7 @@ const ConfigArea = ({userWorkStatus, user, date, toggleLoad, setModalOpen, tbmBa
                     ...createUpdate({...unique_userId_date, workStatus: e.target.value}),
                   })
 
-                  if (!res.success) {
-                    toggleLoad(async () => toast.error(res.message))
-                  }
+                  fetchData()
                 },
               }}
             >
@@ -135,7 +135,7 @@ const ConfigArea = ({userWorkStatus, user, date, toggleLoad, setModalOpen, tbmBa
           {/* 入力ページ */}
           <div>
             {!!scheduleListOnDate.length && (
-              <Link target="_blank" href={HREF('/tbm/driveInput', {userId: user.id, from: formatDate(date)}, query)}>
+              <Link target="_blank" href={HREF('/tbm/driveInput', {g_userId: user.id, from: formatDate(date)}, query)}>
                 <TruckIcon className={`text-yellow-main w-5`} />
               </Link>
             )}

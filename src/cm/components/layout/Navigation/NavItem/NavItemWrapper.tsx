@@ -1,14 +1,11 @@
 'use client'
 import {pathItemType} from 'src/non-common/path-title-constsnts'
 
-const NavItemParent = dynamic(() => import('src/cm/components/layout/Navigation/NavItem/NavItemParent'), dynamicOptions)
-const NavItemChildren = dynamic(() => import('src/cm/components/layout/Navigation/NavItem/NavItemChildren'), dynamicOptions)
 
-import dynamic from 'next/dynamic'
-
-import {dynamicOptions} from 'src/cm/components/utils/loader/dynamicOptions'
 import useNavMenu from '@components/layout/Navigation/useNavMenu'
 import React from 'react'
+import NavItemParent from '@components/layout/Navigation/NavItem/NavItemParent'
+import NavItemChildren from '@components/layout/Navigation/NavItem/NavItemChildren'
 
 export type navItemProps = {
   useGlobalProps: any
@@ -25,7 +22,7 @@ const NavItemWrapper = React.memo((props: navItemProps) => {
 
   if (isValid) {
     return (
-      <div className={`  cursor-pointe relative   border-opacity-50  `}>
+      <div className={`  relative cursor-pointer   border-opacity-50  `}>
         <NavItemParent {...props} />
         <NavItemChildren {...props} />
       </div>

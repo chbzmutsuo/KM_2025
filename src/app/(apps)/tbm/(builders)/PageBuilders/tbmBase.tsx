@@ -96,6 +96,12 @@ export const tbmBase = {
                         ...childCreatorProps,
                         models: {parent: `tbmBase`, children: `user`},
                         columns: ColBuilder.user(ColBuiderProps),
+                        additional: {
+                          include: {
+                            TbmBase: {},
+                            TbmVehicle: {},
+                          },
+                        },
                       }}
                     />
                   ),

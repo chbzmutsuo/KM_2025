@@ -20,7 +20,7 @@ export const odometerInputColBuilder = (props: columnGetterType) => {
     {
       id: 'tbmVehicleId',
       label: '車両',
-      forSelect: {config: getVehicleForSelectConfig()},
+      forSelect: {config: getVehicleForSelectConfig({})},
       form: {
         defaultValue: tbmVehicleId,
         disabled: tbmVehicleId,

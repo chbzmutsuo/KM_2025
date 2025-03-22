@@ -15,14 +15,12 @@ export default async function Page(props) {
 
   const {redirectPath, whereQuery} = await dateSwitcherTemplate({
     query,
-    defaultWhere: {
-      userId: session.id,
-      from: getMidnight(),
-    },
+    defaultWhere: {from: getMidnight()},
   })
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
-  const user = await prisma.user.findUnique({where: {id: Number(query.userId)}})
+  const {userId} = scopes.getTbmScopes()
+  const user = await prisma.user.findUnique({where: {id: userId}})
 
   const driveScheduleList = await getData({user, whereQuery})
 

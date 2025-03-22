@@ -7,6 +7,7 @@ import {getAdvantage_PAGES} from 'src/non-common/getPages/getAdvantagePages'
 import {aquapot_PAGES} from 'src/non-common/getPages/aquapot_PAGES'
 import {getTbm_PAGES} from 'src/non-common/getPages/getTbm_PAGES'
 import {sohken_PAGES} from 'src/non-common/getPages/sohken_PAGES'
+import {applicationForms_PAGES} from 'src/non-common/getPages/applicationForms_PAGES'
 
 export const layoutMapping_PAGES = (props: PageGetterType) => {
   const {roles} = props
@@ -202,9 +203,9 @@ export const PAGES: any = {
   KM_PAGES,
   sohken_PAGES: sohken_PAGES,
   MasterKey_Pages,
-
   yoshinari_PAGES: getYoshinari_PAGES,
   aquapot_PAGES: aquapot_PAGES,
+  applicationForms_PAGES: applicationForms_PAGES,
 }
 
 export const CleansePathSource = (props: anyObject) => {

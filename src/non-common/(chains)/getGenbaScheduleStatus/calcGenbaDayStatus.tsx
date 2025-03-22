@@ -1,5 +1,5 @@
 'use server'
-import {GetNinkuList} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/getNinkuList'
+import {GetNinkuList} from 'src/non-common/(chains)/getGenbaScheduleStatus/getNinkuList'
 import prisma from '@lib/prisma'
 import {GenbaDayProps} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
 

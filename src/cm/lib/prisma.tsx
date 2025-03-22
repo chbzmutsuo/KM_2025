@@ -109,14 +109,7 @@ export const handlePrismaError: (error: anyObject) => string = error => {
   /** */
 }
 
-export const columnLabels = {
-  schoolId: '学校',
-  classroomId: '学級',
-  grade: '学年',
-  class: '学級',
-  classroom: '学級',
-  attendanceNumber: '出席番号',
-}
+export const columnLabels = {}
 
 export const commonOmit = {
   updatedAt: true,

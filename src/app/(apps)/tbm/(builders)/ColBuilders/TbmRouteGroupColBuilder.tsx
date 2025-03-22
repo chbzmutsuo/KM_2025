@@ -18,7 +18,7 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
       label: 'コード',
       type: 'number',
       form: {...defaultRegister, defaultValue: null},
-      td: {style: {minWidth: 60}},
+      td: {style: {minWidth: 60, color: `blue`}},
     },
     {
       id: 'tbmBaseId',
@@ -29,35 +29,65 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
         defaultValue: tbmBaseId,
         disabled: tbmBaseId,
       },
-      td: {style: {minWidth: 100}},
+      td: {style: {minWidth: 100, color: `blue`}},
     },
     {
       id: 'name',
       label: '名称',
-      td: {style: {minWidth: 200}},
+      td: {style: {minWidth: 200, color: `blue`}},
       form: {...defaultRegister},
     },
+    {
+      id: `tbmCustomerId`,
+      label: `取引先`,
+      td: {style: {minWidth: 200, color: `blue`}},
+      form: {
+        defaultValue: (alreadyRegisteredFormData, formData, col) => {
+          return formData?.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.id
+        },
+      },
+      forSelect: {},
+      // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
+      format: (val, routeGroup) => {
+        return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
+      },
+    },
+    {
+      id: `tbmProductId`,
+      label: `商品`,
+      td: {style: {minWidth: 150, color: `blue`}},
+      form: {
+        defaultValue: (alreadyRegisteredFormData, formData, col) => {
+          return formData?.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.id
+        },
+      },
+      forSelect: {},
+      // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
+      format: (val, routeGroup) => {
+        return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
+      },
+    },
+    // {
+    //   id: `tbmCustomerId`,
+    //   label: `取引先`,
+    //   td: {style: {minWidth: 200, color: `blue`}},
+    //   format: (val, routeGroup) => {
+    //     return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
+    //   },
+    // },
+    // {
+    //   id: `tbmProductId`,
+    //   label: `商品`,
+    //   td: {style: {minWidth: 150, color: `blue`}},
+    //   format: (val, routeGroup) => {
+    //     return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
+    //   },
+    // },
   ]
 
   if (showMonthConfig) {
     colsource = [
       ...colsource,
-      {
-        id: `tbmCustomerId`,
-        label: `取引先`,
-        td: {style: {minWidth: 200}},
-        format: (val, routeGroup) => {
-          return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
-        },
-      },
-      {
-        id: `tbmProductId`,
-        label: `商品`,
-        td: {style: {minWidth: 150}},
-        format: (val, routeGroup) => {
-          return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
-        },
-      },
       ...tbmMonthlyConfigForRouteGroupBuilder({useGlobalProps})
         .flat()
         .map(col => {
@@ -106,38 +136,6 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
         format: (val, row) => {
           const {TbmDriveSchedule} = row
           return <div>{TbmDriveSchedule.length}回数</div>
-        },
-      },
-    ]
-  } else {
-    colsource = [
-      ...colsource,
-      {
-        id: `tbmCustomerId`,
-        label: `取引先`,
-        form: {
-          defaultValue: (alreadyRegisteredFormData, formData, col) => {
-            return formData?.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.id
-          },
-        },
-        forSelect: {},
-        // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
-        format: (val, routeGroup) => {
-          return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
-        },
-      },
-      {
-        id: `tbmProductId`,
-        label: `商品`,
-        form: {
-          defaultValue: (alreadyRegisteredFormData, formData, col) => {
-            return formData?.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.id
-          },
-        },
-        forSelect: {},
-        // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
-        format: (val, routeGroup) => {
-          return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
         },
       },
     ]

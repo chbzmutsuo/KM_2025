@@ -2,7 +2,6 @@
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType, forSelectConfig} from '@cm/types/types'
-import {TbmBase} from '@prisma/client'
 
 export const TbmVehicleColBuilder = (props: columnGetterType) => {
   return new Fields([
@@ -17,9 +16,9 @@ export const TbmVehicleColBuilder = (props: columnGetterType) => {
   ]).transposeColumns()
 }
 
-export const getVehicleForSelectConfig = (tbmBase?: TbmBase) => {
+export const getVehicleForSelectConfig = ({tbmBaseId}: {tbmBaseId?: number}) => {
   const result: forSelectConfig = {
-    where: {tbmBaseId: tbmBase?.id ?? undefined},
+    where: {tbmBaseId: tbmBaseId ?? undefined},
     orderBy: [{id: `asc`}],
     select: {
       id: `number`,

@@ -24,7 +24,8 @@ model TbmBase_MonthConfig {
 
  yearMonth DateTime
 
- keiyuPerLiter Float
+ gasolinePerLiter Float?
+ keiyuPerLiter    Float?
 
  TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
@@ -55,6 +56,9 @@ model TbmVehicle {
  TbmDriveSchedule  TbmDriveSchedule[]
  OdometerInput     OdometerInput[]
  TbmCarWashHistory TbmCarWashHistory[]
+
+ User   User? @relation(fields: [userId], references: [id])
+ userId Int?  @unique
 
  @@unique([tbmBaseId, vehicleNumber], name: "unique_tbmBaseId_vehicleNumber")
 }
@@ -372,4 +376,23 @@ model UserWorkStatus {
  userId     Int
 
  @@unique([userId, date], name: "unique_userId_date")
+}
+
+model KyuyoTableRecord {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ other1      Float?
+ other2      Float?
+ shokuhi     Float?
+ maebaraikin Float?
+ rate        Float? @default(0.5)
+
+ yearMonth DateTime
+ User      User     @relation(fields: [userId], references: [id])
+ userId    Int
+
+ @@unique([userId, yearMonth], name: "unique_userId_yearMonth")
 }

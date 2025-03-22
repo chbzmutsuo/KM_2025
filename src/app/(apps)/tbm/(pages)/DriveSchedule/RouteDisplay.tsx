@@ -1,5 +1,6 @@
 'use client'
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
+import {TbmRouteGroupUpsertController} from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupUpsertController'
 import useSelectedBase from '@app/(apps)/tbm/(globalHooks)/useSelectedBase'
 import {Days, getMidnight, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
@@ -45,6 +46,7 @@ export default function RouteDisplay({tbmBase, whereQuery}) {
           ParentData: tbmBase,
           models: {parent: `tbmBase`, children: `tbmRouteGroup`},
           additional: {include: include, orderBy: [{code: `asc`}]},
+          myForm: {create: TbmRouteGroupUpsertController},
           myTable: {style: {width: `90vw`, maxHeight: `80vh`}},
           columns: ColBuilder.tbmRouteGroup({
             useGlobalProps,

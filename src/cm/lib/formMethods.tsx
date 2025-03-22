@@ -1,5 +1,5 @@
 import {DH} from 'src/cm/class/DH'
-import { generarlFetchUniversalAPI, updateWithImageAndAddUrlToLatestFormData} from '@lib/methods/api-fetcher'
+import {generarlFetchUniversalAPI, updateWithImageAndAddUrlToLatestFormData} from '@lib/methods/api-fetcher'
 import {isMultiItem, updateMultiItemInTransaction} from 'src/cm/lib/methods/multipleItemLib'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
@@ -32,7 +32,6 @@ export const myFormDefaultUpsert: (props: myFormDefaultUpsertPropType) => Promis
     const col = columns.flat().find(col => col.id === key)
 
     if (col) {
-      const type = col.type
       latestFormDataWithImageUrl[key] = DH.convertDataType(value, col.type, 'server')
     }
   })
@@ -179,20 +178,20 @@ const separateFormData = ({latestFormData, additionalPayload, columns}) => {
   const prismaDataObject = {...latestFormData, ...additionalPayload}
 
   const relationIdOrigin = {...prismaDataObject}
-  const modelBasicDaraOrigin = {...prismaDataObject}
+  const modelBasicDataOrigin = {...prismaDataObject}
 
   const prismaSchema = getSchema()
   // const Omit = [`Assessment_ID`, `APPINDEX`, `KJ_KAINMEI1`]
   const Omit = Object.keys(prismaSchema)
 
   // const relationalModelObject = {}
-  Object.keys(modelBasicDaraOrigin).forEach(key => {
+  Object.keys(modelBasicDataOrigin).forEach(key => {
     const col = columns.flat().find(col => col.id === key)
     const isNonDateObject =
-      !Array.isArray(modelBasicDaraOrigin[key]) &&
-      typeof modelBasicDaraOrigin[key] === 'object' &&
-      !Days.isDate(modelBasicDaraOrigin[key]) &&
-      modelBasicDaraOrigin[key] !== null
+      !Array.isArray(modelBasicDataOrigin[key]) &&
+      typeof modelBasicDataOrigin[key] === 'object' &&
+      !Days.isDate(modelBasicDataOrigin[key]) &&
+      modelBasicDataOrigin[key] !== null
 
     const isRelationalId = key.includes('Id')
 
@@ -204,18 +203,23 @@ const separateFormData = ({latestFormData, additionalPayload, columns}) => {
 
     if (isNonDateObject || isRelationalId || startsWithCapital || formHidenTrue) {
       /**リレーション先の削除 */
-      delete modelBasicDaraOrigin[key]
+      delete modelBasicDataOrigin[key]
     }
   })
 
+  const {id, ...modelBasicData} = modelBasicDataOrigin
   const relationIds = {}
   Object.keys(relationIdOrigin).forEach(key => {
     if (key.match(/.+Id/)) {
-      relationIds[key] = relationIdOrigin[key]
+      const modelName = DH.capitalizeFirstLetter(key.replace('Id', ''))
+
+      const relationalTableId = prismaDataObject[key]
+
+      if (relationalTableId) {
+        relationIds[modelName] = {connect: {id: relationalTableId}}
+      }
     }
   })
-
-  const {id, ...modelBasicData} = modelBasicDaraOrigin
 
   return {
     id,

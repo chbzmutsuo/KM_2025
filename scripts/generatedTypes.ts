@@ -541,6 +541,60 @@ export interface P_AppLog {
   userId: number;
 }
 
+export interface P_Product {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  productCode: string;
+  name: string;
+  maker: string;
+  unit: string;
+  PurchaseRequest: P_PurchaseRequest[];
+}
+
+export interface P_PurchaseRequest {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  purchaseType: string;
+  quantity: number;
+  result: string;
+  approverComment: string;
+  trashed: boolean;
+  Approval: P_Approval[];
+  userId: number;
+  productId: number;
+}
+
+export interface P_LeaveRequest {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  startDate: Date;
+  leaveType: string;
+  reason: string;
+  Approval: P_Approval[];
+  userId: number;
+}
+
+export interface P_Approval {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  status: string;
+  comment: string;
+  PurchaseRequest: P_PurchaseRequest;
+  purchaseRequestId: number;
+  LeaveRequest: P_LeaveRequest;
+  leaveRequestId: number;
+  User: P_User;
+  userId: number;
+}
+
 export interface P_AqSaleCart {
   id: number;
   baseOrderId: string;
@@ -1295,6 +1349,9 @@ export interface P_User {
   TbmDriveSchedule: P_TbmDriveSchedule[];
   OdometerInput: P_OdometerInput[];
   DayRemarksUser: P_DayRemarksUser[];
+  PurchaseRequest: P_PurchaseRequest[];
+  Approval: P_Approval[];
+  KyuyoTableRecord: P_KyuyoTableRecord[];
 }
 
 export interface P_ReleaseNotes {
@@ -1325,6 +1382,7 @@ export interface P_RoleMaster {
   updatedAt: Date;
   sortOrder: number;
   name: string;
+  description: string;
   color: string;
   apps: string[];
 }
@@ -1528,6 +1586,7 @@ export interface P_TbmBase_MonthConfig {
   updatedAt: Date;
   sortOrder: number;
   yearMonth: Date;
+  keiyuPerLiter: number;
   TbmBase: P_TbmBase;
   tbmBaseId: number;
 }
@@ -1548,6 +1607,8 @@ export interface P_TbmVehicle {
   TbmRefuelHistory: P_TbmRefuelHistory[];
   tbmBaseId: number;
   OdometerInput: P_OdometerInput[];
+  User: P_User;
+  userId: number;
 }
 
 export interface P_TbmRouteGroup {
@@ -1702,6 +1763,20 @@ export interface P_UserWorkStatus {
   sortOrder: number;
   date: Date;
   User: P_User;
+  userId: number;
+}
+
+export interface P_KyuyoTableRecord {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  other1: number;
+  other2: number;
+  shokuhi: number;
+  maebaraikin: number;
+  rate: number;
+  yearMonth: Date;
   userId: number;
 }
 

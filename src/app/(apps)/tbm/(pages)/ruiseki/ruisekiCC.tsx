@@ -6,13 +6,13 @@ import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
-export default function Page({monthlyTbmDriveData}: {monthlyTbmDriveData: MonthlyTbmDriveData}) {
+export default function RuisekiCC({monthlyTbmDriveList}: {monthlyTbmDriveList: MonthlyTbmDriveData[]}) {
   const minWidth = 80
   const {toastIfFailed} = useGlobal()
   return (
     <div className={` relative`}>
       {CsvTable({
-        records: monthlyTbmDriveData.rows.map((row, rowIdx) => {
+        records: monthlyTbmDriveList.map((row, rowIdx) => {
           const {keyValue, schedule} = row
 
           const cols = Object.entries(keyValue).filter(([dataKey, item]) => !item.label.includes(`CD`))
@@ -23,7 +23,7 @@ export default function Page({monthlyTbmDriveData}: {monthlyTbmDriveData: Monthl
 
               let value
               if (item.type === `date`) {
-                value = formatDate(item.value, 'short')
+                value = formatDate(item.cellValue, 'short')
               } else if ([`O_postalHighwayFee`, `Q_generalHighwayFee`].includes(dataKey)) {
                 value = (
                   <input
@@ -45,7 +45,7 @@ export default function Page({monthlyTbmDriveData}: {monthlyTbmDriveData: Monthl
                   />
                 )
               } else {
-                value = item.value
+                value = item.cellValue
               }
 
               const baseWidth = 80
@@ -58,25 +58,9 @@ export default function Page({monthlyTbmDriveData}: {monthlyTbmDriveData: Monthl
                 minWidth: width,
               }
 
-              const sticky = colIdx <= 1
-              const totalLeft = sticky
-                ? cols.reduce((acc, [key, item], idx) => {
-                    if (idx < colIdx) {
-                      return acc + (item.style?.width ?? baseWidth)
-                    }
-                    return acc
-                  }, 0)
-                : null
-
               return {
                 label: <div className="text-xs">{item.label}</div>,
-                style: {
-                  // position: sticky ? 'sticky' : undefined,
-                  // background: sticky ? `white` : `white`,
-                  // left: totalLeft,
-                  zIndex: 9999,
-                  ...style,
-                },
+                style,
                 cellValue: <div>{value}</div>,
               }
             }),

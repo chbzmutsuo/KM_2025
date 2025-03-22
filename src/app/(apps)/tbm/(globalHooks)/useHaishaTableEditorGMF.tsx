@@ -23,8 +23,7 @@ const useHaishaTableEditorGMF = (props: {
   afterUpdate?: (props: {res: requestResultType; tbmDriveSchedule: TbmDriveSchedule}) => void
   afterDelete?: (props: {res: requestResultType; tbmDriveSchedule: TbmDriveSchedule}) => void
 }) => {
-  ////afterUpdate / afterDelete というpropsに変更/============================================
-  const {afterUpdate = item => null} = props
+  const {afterUpdate = item => null, afterDelete = item => null} = props
   return useGlobalModalForm<atomTypes[`haishaTableEditorGMF`]>(`haishaTableEditorGMF`, null, {
     mainJsx: ({GMF_OPEN, setGMF_OPEN}) => {
       const useGlobalProps = useGlobal()
@@ -87,6 +86,7 @@ const useHaishaTableEditorGMF = (props: {
                     toastByResult(res)
 
                     setGMF_OPEN(null)
+                    afterDelete?.({res, tbmDriveSchedule})
                   }
                 },
               }}

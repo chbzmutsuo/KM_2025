@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect, useState} from 'react'
 
-import {formatDate, getMidnight} from '@class/Days'
+import {formatDate} from '@class/Days'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
@@ -10,31 +10,52 @@ import {Cell} from '@app/(apps)/tbm/(pages)/DriveSchedule/Cell'
 import {TbmDriveSchedule} from '@prisma/client'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import UserTh from '@app/(apps)/tbm/(pages)/DriveSchedule/UserTh'
-import {HaishaDriveSchedule} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
+import {getListData, HaishaDriveSchedule} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
+import PlaceHolder from '@components/utils/loader/PlaceHolder'
+import useLogOnRender from '@hooks/useLogOnRender'
 
-export default function HaishaTable(props: {userList; days; TbmDriveSchedule: HaishaDriveSchedule; tbmBase}) {
-  const {days, tbmBase} = props
-  const [userList, setuserList] = useState(props.userList)
-  const [TbmDriveSchedule, setTbmDriveSchedule] = useState<HaishaDriveSchedule>(props.TbmDriveSchedule)
+export default function HaishaTable({whereQuery, days, tbmBase}) {
+  useLogOnRender('haisha')
+  const [data, setdata] = useState<any>(null)
+  const fetchData = async () => {
+    const {TbmDriveSchedule, userList} = await getListData({tbmBaseId: tbmBase?.id, whereQuery})
+    setdata({tbmBase, TbmDriveSchedule, userList})
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const HK_HaishaTableEditorGMF = useHaishaTableEditorGMF({
     afterDelete: ({res, tbmDriveSchedule}) => {
-      setTbmDriveSchedule?.(prev => {
-        return prev.filter(item => item.id !== tbmDriveSchedule?.id)
+      setdata(prev => {
+        const newList = [...prev.TbmDriveSchedule]
+        const findIndex = newList.findIndex(item => item.id === tbmDriveSchedule?.id)
+        if (findIndex !== -1) {
+          newList.splice(findIndex, 1)
+        }
+
+        return {
+          ...prev,
+          TbmDriveSchedule: newList,
+        }
       })
     },
     afterUpdate: ({res}) => {
-      setTbmDriveSchedule?.(prev => {
-        const newList = [...prev]
+      setdata(prev => {
+        const newList = [...prev.TbmDriveSchedule]
         const newDriveSchedale = res.result
         const findIndex = newList.findIndex(item => item.id === newDriveSchedale.id)
+
         if (findIndex !== -1) {
           newList[findIndex] = newDriveSchedale
         } else {
           newList.push(newDriveSchedale)
         }
 
-        return newList
+        return {
+          ...prev,
+          TbmDriveSchedule: newList,
+        }
       })
     },
   })
@@ -43,27 +64,30 @@ export default function HaishaTable(props: {userList; days; TbmDriveSchedule: Ha
   const {query, accessScopes} = useGlobal()
   const {admin} = accessScopes()
 
-  useEffect(() => {
-    //
-    const past7DayIdList: string[] = []
-    const today = getMidnight(new Date())
+  // useEffect(() => {
+  //   //
+  //   const past7DayIdList: string[] = []
+  //   const today = getMidnight(new Date())
 
-    for (let i = 0; i < 5; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      past7DayIdList.push(`#${formatDate(date)}`)
-    }
+  //   for (let i = 0; i < 5; i++) {
+  //     const date = new Date(today)
+  //     date.setDate(today.getDate() + i)
+  //     past7DayIdList.push(`#${formatDate(date)}`)
+  //   }
 
-    past7DayIdList.reverse().map(date => `#${formatDate(date)}`)
-    for (let i = 0; i < past7DayIdList.length; i++) {
-      const theDateCell = document.getElementById(past7DayIdList[i])
-      if (theDateCell) {
-        theDateCell.scrollIntoView()
-        break
-      }
-    }
-  }, [days])
+  //   past7DayIdList.reverse().map(date => `#${formatDate(date)}`)
+  //   for (let i = 0; i < past7DayIdList.length; i++) {
+  //     const theDateCell = document.getElementById(past7DayIdList[i])
+  //     if (theDateCell) {
+  //       theDateCell.scrollIntoView()
+  //       break
+  //     }
+  //   }
+  // }, [days])
 
+  if (!data) return <PlaceHolder></PlaceHolder>
+
+  const {TbmDriveSchedule, userList} = data
   const {scheduleByDateAndUser} = getScheduleByDateAndUser({TbmDriveSchedule})
 
   const userWorkStatusByDate = userList.reduce((acc, user) => {
@@ -105,6 +129,7 @@ export default function HaishaTable(props: {userList; days; TbmDriveSchedule: Ha
                       cellValue: (
                         <Cell
                           {...{
+                            fetchData,
                             userWorkStatus: userWorkStatusList?.[formatDate(date)] ?? '',
                             scheduleListOnDate,
                             setModalOpen,

@@ -14,7 +14,7 @@ export const MetaData = React.memo((props: {pathItemObject; AppName}) => {
 
   return (
     <>
-      <title>{title}</title>
+      <title>{title.replace('[object Object]', ``)}</title>
       {icon && <link rel="icon" href={`/${icon}`} />}
     </>
   )

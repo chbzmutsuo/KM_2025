@@ -8,8 +8,7 @@ export const GET = async () => {
     genbaList.map(async genba => {
       const genbaDay = genba.GenbaDay[0]
       if (genbaDay) {
-        console.log('バッチ:' + genba.name) //////logs
-
+        console.log('バッチ:' + genba.name)
         const res = await fetchUniversalAPI(`genbaDay`, `update`, {where: {id: genbaDay.id}, data: {}})
       }
     })

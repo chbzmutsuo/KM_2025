@@ -1,6 +1,7 @@
 'use client'
 
-import {ColBuilder} from '@app/(apps)/tmp/(builders)/ColBuilder'
+import {ColBuilder} from '@app/(apps)/applicationForms/(builders)/ColBuilder'
+import {roleMaster} from '@class/builders/PageBuilderVariables'
 import {DetailPagePropType} from '@cm/types/types'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
@@ -8,6 +9,7 @@ import {R_Stack} from '@components/styles/common-components/common-components'
 import Accordion from '@components/utils/Accordions/Accordion'
 
 export class PageBuilder {
+  static roleMaster = roleMaster
   static masterKeyClient = {
     form: (props: DetailPagePropType) => {
       return (

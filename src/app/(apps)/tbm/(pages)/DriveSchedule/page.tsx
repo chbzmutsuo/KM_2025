@@ -19,7 +19,7 @@ export default async function DynamicMasterPage(props) {
   const theDate = whereQuery?.gte ?? getMidnight()
   const MONTH = Days.getMonthDatum(theDate)
 
-  const {tbmBase, calendar, TbmDriveSchedule, userList, tbmRouteGroup, carList} = await getListData({tbmBaseId, whereQuery})
+  const {result: tbmBase} = await fetchUniversalAPI(`tbmBase`, `findUnique`, {where: {id: tbmBaseId}})
 
   await autoCreateMonthConfig({MONTH, tbmBaseId})
 
@@ -27,10 +27,9 @@ export default async function DynamicMasterPage(props) {
     <>
       <DriveScheduleCC
         {...{
-          days: MONTH.days,
           tbmBase,
-          userList,
-          TbmDriveSchedule,
+          days: MONTH.days,
+          tbmBaseId,
           whereQuery,
         }}
       />
@@ -48,7 +47,7 @@ const autoCreateMonthConfig = async ({MONTH, tbmBaseId}) => {
 
   const transactionQueryList = (
     await Promise.all(
-      checkMonthConfig
+      (checkMonthConfig ?? [])
         .filter(route => {
           const monthConfig = route.TbmMonthlyConfigForRouteGroup[0]
           return !monthConfig

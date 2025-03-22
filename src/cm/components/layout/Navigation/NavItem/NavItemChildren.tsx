@@ -3,6 +3,7 @@ import React from 'react'
 import NavItemWrapper, {getItemProps, navItemProps} from 'src/cm/components/layout/Navigation/NavItem/NavItemWrapper'
 
 import {anyObject} from '@cm/types/types'
+import {C_Stack} from '@components/styles/common-components/common-components'
 
 const NavItemChildren = React.memo((props: navItemProps) => {
   const {HK_NAV, item, nestLevel = 1, navWrapperIdx, horizontalMenu} = props
@@ -22,20 +23,20 @@ const NavItemChildren = React.memo((props: navItemProps) => {
         <div
           className={`
             absolute -left-[50px] top-full min-w-[180px]  bg-white
-            shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200
+            px-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200
           `}
           style={menuStyle}
         >
-          <ul className={`py-1`}>
+          <C_Stack className={`gap-0 `}>
             {item?.children?.map((child, i) => {
               const nextLevel = nestLevel + 1
               return (
-                <li key={i} className="border-b  hover:bg-gray-50">
+                <div key={i} className="border-b  py-2 hover:bg-gray-50">
                   <NavItemWrapper {...{...props, item: child, nestLevel: nextLevel}} />
-                </li>
+                </div>
               )
             })}
-          </ul>
+          </C_Stack>
         </div>
       </div>
     )

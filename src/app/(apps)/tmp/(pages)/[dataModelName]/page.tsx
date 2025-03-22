@@ -29,6 +29,7 @@ export default async function DynamicMasterPage(props) {
 
 const parameters = async (props: {params; query; session; scopes: ReturnType<typeof getScopes>}) => {
   const {params, query, session, scopes} = props
+
   //---------------個別設定-------------
   const customParams = await setCustomParams({
     dataModelName: params.dataModelName,
@@ -36,7 +37,12 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
       {
         modelNames: [`user`],
         setParams: async () => {
-          return {}
+          return {
+            additional: {
+              payload: [],
+              where: {apps: {has: ``}},
+            },
+          }
         },
       },
     ],

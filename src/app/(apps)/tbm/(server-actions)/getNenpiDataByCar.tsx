@@ -3,18 +3,10 @@ import prisma from '@lib/prisma'
 
 const keiyuPerLiter = 159.98
 
-export const getNenpiDataByCar = async ({tbmBaseId, whereQuery}) => {
+export const getNenpiDataByCar = async ({tbmBaseId, whereQuery, TbmBase_MonthConfig}) => {
   console.warn(`営業所 / 月ごとに軽油単価の設定が必要です。`)
 
   const vehicleList = await prisma.tbmVehicle.findMany({where: {tbmBaseId}})
-  const TbmBase_MonthConfigList = await prisma.tbmBase_MonthConfig.findUnique({
-    where: {
-      unique_tbmBaseId_yearMonth: {
-        yearMonth: whereQuery.gte,
-        tbmBaseId,
-      },
-    },
-  })
 
   const fuelByCar = await prisma.tbmRefuelHistory.groupBy({
     by: [`tbmVehicleId`],
@@ -37,13 +29,11 @@ export const getNenpiDataByCar = async ({tbmBaseId, whereQuery}) => {
   const fuelByCarWithVehicle = fuelByCar.map(item => {
     const vehicle = vehicleList.find(v => v.id === item.tbmVehicleId)
 
-    const config = TbmBase_MonthConfigList
-
     const totalSokoKyori = item._max.odometer ?? 0
     const totalKyuyu = item._sum.amount ?? 0
     const avgNempi = totalSokoKyori / totalKyuyu
 
-    const fuelCost = avgNempi * (config?.keiyuPerLiter ?? 0)
+    const fuelCost = avgNempi * (TbmBase_MonthConfig?.keiyuPerLiter ?? 0)
 
     return {
       vehicle,

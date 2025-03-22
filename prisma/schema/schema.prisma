@@ -93,6 +93,11 @@ model User {
   TbmRefuelHistory                 TbmRefuelHistory[]
   DayRemarksUser                   DayRemarksUser[]
   TbmCarWashHistory                TbmCarWashHistory[]
+  PurchaseRequest                  PurchaseRequest[]
+  LeaveRequest                     LeaveRequest[]
+  Approval                         Approval[]
+  TbmVehicle                       TbmVehicle?
+  KyuyoTableRecord                 KyuyoTableRecord[]
 }
 
 model ReleaseNotes {
@@ -130,7 +135,7 @@ model RoleMaster {
   updatedAt DateTime? @updatedAt
   sortOrder Float     @default(0)
 
-  name        String
+  name        String     @unique
   description String?
   color       String?
   apps        String[]

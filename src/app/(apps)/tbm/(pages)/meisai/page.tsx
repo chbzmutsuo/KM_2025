@@ -1,4 +1,4 @@
-import DriveDetailCC from '@app/(apps)/tbm/(pages)/ruiseki/ruisekiCC'
+import RuisekiCC from '@app/(apps)/tbm/(pages)/ruiseki/ruisekiCC'
 import {getMonthlyTbmDriveData} from '@app/(apps)/tbm/(server-actions)/getMonthlyTbmDriveData'
 import {getMidnight} from '@class/Days'
 import {FitMargin} from '@components/styles/common-components/common-components'
@@ -15,13 +15,13 @@ export default async function DynamicMasterPage(props) {
   const {redirectPath, whereQuery} = await dateSwitcherTemplate({query})
   if (redirectPath) return <Redirector {...{redirectPath}} />
   const theDate = whereQuery?.gte ?? getMidnight()
-  const {monthlyTbmDriveData, ConfigForMonth} = await getMonthlyTbmDriveData({whereQuery, tbmBaseId})
+  const {monthlyTbmDriveList, ConfigForMonth} = await getMonthlyTbmDriveData({whereQuery, tbmBaseId})
 
   return (
-    <FitMargin className={`p-2`}>
+    <FitMargin className={`pt-4`}>
       <NewDateSwitcher {...{monthOnly: true}} />
 
-      <DriveDetailCC {...{monthlyTbmDriveData}} />
+      <RuisekiCC {...{monthlyTbmDriveList}} />
     </FitMargin>
   )
 }

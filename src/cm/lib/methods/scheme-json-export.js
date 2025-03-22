@@ -679,6 +679,103 @@ model AppLog {
 }
 
  
+// ユーザーテーブル
+// model User {
+//  id        Int       @id @default(autoincrement())
+//  createdAt DateTime  @default(now())
+//  updatedAt DateTime? @default(now()) @updatedAt()
+//  sortOrder Float     @default(0)
+
+//  name       String
+//  email      String  @unique
+//  department String
+//  role       String
+//  position   String?
+
+//  // リレーション
+//  PurchaseRequest PurchaseRequest[]
+//  LeaveRequest    LeaveRequest[]
+//  Approval        Approval[]
+// }
+
+// 商品マスターテーブル
+model Product {
+ id          Int       @id @default(autoincrement())
+ createdAt   DateTime  @default(now())
+ updatedAt   DateTime? @default(now()) @updatedAt()
+ sortOrder   Float     @default(0)
+ productCode String?   @unique
+ name        String?
+ maker       String?
+ unit        String?
+
+ // リレーション
+ PurchaseRequest PurchaseRequest[]
+}
+
+// 発注履歴テーブル
+model PurchaseRequest {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ purchaseType    String // 新規/折損/リピート
+ quantity        Int
+ reason          String
+ result          String?
+ approverComment String?
+ trashed         Boolean @default(false)
+
+ // リレーション
+ Approval  Approval[]
+ User      User       @relation(fields: [userId], references: [id])
+ userId    Int
+ Product   Product    @relation(fields: [productId], references: [id])
+ productId Int
+}
+
+// 休暇申請履歴テーブル
+model LeaveRequest {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ startDate DateTime
+ endDate   DateTime
+ leaveType String // 1日/年休休/午後休/特別休暇/慶弔休暇/産前産後休暇/代休/欠勤/早退/遅刻
+ reason    String
+
+ // リレーション
+ Approval Approval[]
+ User     User       @relation(fields: [userId], references: [id])
+ userId   Int
+}
+
+// 承認テーブル
+model Approval {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ status  String // 承認/却下
+ comment String?
+
+ // 発注申請の承認
+ PurchaseRequest   PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+ purchaseRequestId Int?
+
+ // 休暇申請の承認
+ LeaveRequest   LeaveRequest? @relation(fields: [leaveRequestId], references: [id])
+ leaveRequestId Int?
+
+ User   User @relation(fields: [userId], references: [id])
+ userId Int
+}
+
+ 
 // 一回の購入
 model AqSaleCart {
  id Int @id @default(autoincrement())
@@ -1670,6 +1767,11 @@ model User {
   TbmRefuelHistory                 TbmRefuelHistory[]
   DayRemarksUser                   DayRemarksUser[]
   TbmCarWashHistory                TbmCarWashHistory[]
+  PurchaseRequest                  PurchaseRequest[]
+  LeaveRequest                     LeaveRequest[]
+  Approval                         Approval[]
+  TbmVehicle                       TbmVehicle?
+  KyuyoTableRecord                 KyuyoTableRecord[]
 }
 
 model ReleaseNotes {
@@ -1707,7 +1809,7 @@ model RoleMaster {
   updatedAt DateTime? @updatedAt
   sortOrder Float     @default(0)
 
-  name        String
+  name        String     @unique
   description String?
   color       String?
   apps        String[]
@@ -1993,7 +2095,8 @@ model TbmBase_MonthConfig {
 
  yearMonth DateTime
 
- keiyuPerLiter Float
+ gasolinePerLiter Float?
+ keiyuPerLiter    Float?
 
  TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
@@ -2024,6 +2127,9 @@ model TbmVehicle {
  TbmDriveSchedule  TbmDriveSchedule[]
  OdometerInput     OdometerInput[]
  TbmCarWashHistory TbmCarWashHistory[]
+
+ User   User? @relation(fields: [userId], references: [id])
+ userId Int?  @unique
 
  @@unique([tbmBaseId, vehicleNumber], name: "unique_tbmBaseId_vehicleNumber")
 }
@@ -2341,6 +2447,25 @@ model UserWorkStatus {
  userId     Int
 
  @@unique([userId, date], name: "unique_userId_date")
+}
+
+model KyuyoTableRecord {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ other1      Float?
+ other2      Float?
+ shokuhi     Float?
+ maebaraikin Float?
+ rate        Float? @default(0.5)
+
+ yearMonth DateTime
+ User      User     @relation(fields: [userId], references: [id])
+ userId    Int
+
+ @@unique([userId, yearMonth], name: "unique_userId_yearMonth")
 }
 
  

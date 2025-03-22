@@ -1,6 +1,6 @@
 import {cl, funcOrVar, ObjectMap} from 'src/cm/lib/methods/common'
 import {isMultiItem, parseMultiId} from 'src/cm/lib/methods/multipleItemLib'
-import {useFormContext, UseFormReturn, useWatch} from 'react-hook-form'
+import {useForm, UseFormReturn, useWatch} from 'react-hook-form'
 import {formPropType} from '@cm/types/form-control-type'
 import {colType} from '@cm/types/types'
 import {DH} from 'src/cm/class/DH'
@@ -28,6 +28,12 @@ export const getLatestFormData = ({formData, ReactHookForm}) => {
     ...formData,
     ...useWatch({control}),
   }
+
+  // Object.keys(latestFormData).forEach(key => {
+  //   if (latestFormData[key] === null) {
+  //     delete latestFormData[key]
+  //   }
+  // })
 
   return latestFormData
 }
@@ -76,7 +82,7 @@ export const makeDefaultValues = ({columns, formData}) => {
 }
 
 export const useFormValues = () => {
-  const {getValues} = useFormContext()
+  const {getValues} = useForm()
 
   return {
     ...useWatch(), // subscribe to form value updates

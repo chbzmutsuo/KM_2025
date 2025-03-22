@@ -6,14 +6,14 @@ import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
-export default function DriveDetailCC({monthlyTbmDriveData}: {monthlyTbmDriveData: MonthlyTbmDriveData}) {
+export default function DriveDetailCC({monthlyTbmDriveList}: {monthlyTbmDriveList: MonthlyTbmDriveData[]}) {
   const minWidth = 80
   const {toastIfFailed} = useGlobal()
   return (
     <div className={` relative`}>
-      {monthlyTbmDriveData.rows.length > 0 ? (
+      {monthlyTbmDriveList.length > 0 ? (
         CsvTable({
-          records: monthlyTbmDriveData.rows.map((row, rowIdx) => {
+          records: monthlyTbmDriveList.map((row, rowIdx) => {
             const {keyValue, schedule} = row
 
             const cols = Object.entries(keyValue).filter(([dataKey, item]) => !item.label.includes(`CD`))

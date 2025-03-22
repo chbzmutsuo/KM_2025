@@ -7,10 +7,10 @@ type props = {
   style?: CSSProperties
 }
 const IconLetter = (props: props) => {
-  const {Icon, colorClass = 'bg-sub-main', children, style} = props
+  const {Icon, colorClass = 'bg-blue-main', children, style} = props
   return (
     <div className={`row-stack w-fit gap-2`}>
-      <Icon className={cl(`h-6 rounded-full   p-1 text-white`, colorClass)} style={style} />
+      <Icon className={cl(`h-7  w-7 rounded   p-0.5 text-white`, colorClass)} style={style} />
       {children}
     </div>
   )

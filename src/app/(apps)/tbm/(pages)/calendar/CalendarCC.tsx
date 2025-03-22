@@ -23,7 +23,7 @@ export default function CalendarCC() {
 
   return (
     <Padding>
-      <FitMargin>
+      <FitMargin className={`pt-4`}>
         <NewDateSwitcher {...{monthOnly: true}} />
       </FitMargin>
       <R_Stack>

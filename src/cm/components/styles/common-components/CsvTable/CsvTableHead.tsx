@@ -35,7 +35,7 @@ export function CsvTableHead(props: CsvTableProps) {
                   {...restPropsOnTd}
                   {...{
                     style: {...stylesInThisColumn?.style, ...style},
-                    className: cl(stylesInThisColumn?.className, className),
+                    className: cl(`!text-center`, stylesInThisColumn?.className, className),
                   }}
                 >
                   {isNumber ? (

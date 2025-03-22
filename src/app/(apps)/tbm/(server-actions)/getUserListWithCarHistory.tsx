@@ -3,11 +3,14 @@ import {getNenpiDataByCar} from '@app/(apps)/tbm/(server-actions)/getNenpiDataBy
 import prisma from '@lib/prisma'
 import {TbmVehicle, User} from '@prisma/client'
 
-export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery}) => {
-  const {fuelByCarWithVehicle} = await getNenpiDataByCar({tbmBaseId, whereQuery})
+export type carHistoryKey = `soukouKyori` | `heikinNenpi` | `nenryoiShiyoryo` | `fuelCost`
+
+export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery, TbmBase_MonthConfig}) => {
+  const {fuelByCarWithVehicle} = await getNenpiDataByCar({tbmBaseId, whereQuery, TbmBase_MonthConfig})
   const userList = await prisma.user.findMany({
     where: {tbmBaseId},
     include: {
+      TbmVehicle: {},
       TbmDriveSchedule: {
         where: {
           date: whereQuery,
@@ -46,25 +49,26 @@ export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery}) => {
         return acc + diff
       }, 0)
       const heikinNenpi = fuelData?.avgNempi ?? 0
-      const nempiShiyoryo = soukouKyori && heikinNenpi && soukouKyori / heikinNenpi
+
+      const nenryoiShiyoryo = soukouKyori && heikinNenpi ? soukouKyori / heikinNenpi : 0
 
       return {
         car,
         soukouKyori,
         heikinNenpi,
-        nempiShiyoryo,
+        nenryoiShiyoryo,
         ...fuelData,
       }
     })
     return {user, allCars}
   })
   type UserWithCarHistory = {
-    user: User
+    user: User & {TbmVehicle: TbmVehicle}
     allCars: {
       car: TbmVehicle
       soukouKyori: number
       heikinNenpi: number
-      nempiShiyoryo: number
+      nenryoiShiyoryo: number
       fuelCost: number
     }[]
   }
