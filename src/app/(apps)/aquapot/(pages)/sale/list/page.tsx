@@ -63,6 +63,7 @@ SELECT
 "sr"."taxedPrice" AS "taxedPrice",
 "sr"."remarks" AS "remarks",
 "sc"."paymentMethod" AS "paymentMethod",
+"c"."id" AS "aqCustomerId",
   CASE
     WHEN "csgmt"."from" <= "sr"."date" AND "csgmt"."to" >= "sr"."date" THEN "sgm"."name"
     WHEN "csgmt"."from" <= "sr"."date" AND "csgmt"."to" IS NULL THEN "sgm"."name"

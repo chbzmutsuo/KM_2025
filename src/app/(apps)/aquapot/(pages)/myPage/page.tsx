@@ -10,11 +10,15 @@ import {Fields} from '@class/Fields/Fields'
 
 export default function DynamicMasterPage(props) {
   const {session, accessScopes} = useGlobal()
+  const {aqCustomerId} = accessScopes().getAquepotScopes()
 
   const {asCustomer, asUser} = getAqLoginType({session})
   if (asCustomer) return <Redirector redirectPath={`/aquapot/myPage/${session.id}`} />
 
   if (!asUser) return <Redirector redirectPath={`/404`} />
+  if (aqCustomerId) {
+    return <Redirector redirectPath={`/aquapot/myPage/${aqCustomerId}`} />
+  }
 
   return (
     <CenterScreen>
@@ -24,18 +28,12 @@ export default function DynamicMasterPage(props) {
             {
               id: 'email',
               label: 'メールアドレス',
-              form: {
-                register: {
-                  required: '必須項目です',
-                },
-              },
+              form: {register: {required: '必須項目です'}},
             },
             {
               id: 'password',
               label: '顧客番号',
-              form: {
-                register: {required: '必須項目です'},
-              },
+              form: {register: {required: '必須項目です'}},
             },
           ]).transposeColumns(),
         }}

@@ -7,5 +7,6 @@ export default function PurchaseHistoryPage() {
   const useGlobalProps = useGlobal()
   const {session} = useGlobalProps
   const userId = session.id
+
   return <CommonTable {...{dataFetchProps: {where: {userId}}}} />
 }

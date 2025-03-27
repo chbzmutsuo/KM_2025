@@ -107,6 +107,7 @@ export const getAqProduct = (props: columnGetterType) => {
     {
       id: `AqInventory`,
       label: `在庫`,
+      td: {style: {minWidth: 220}},
       format: (value, aqProduct) => {
         const {AqInventoryRegister, AqSaleRecord} = aqProduct
         const totalPurchaseQuantity = AqInventoryRegister.reduce((acc, curr) => acc + curr.quantity, 0)
@@ -114,12 +115,12 @@ export const getAqProduct = (props: columnGetterType) => {
 
         //
         return (
-          <R_Stack className={`justify-between gap-1 text-center `}>
-            <span className={`w-[70px] font-bold `}>{Number(totalPurchaseQuantity - totalSaleQuantity)}</span>
-            <span className={`w-[10px]`}>=</span>
-            <span className={`w-[70px] font-bold text-red-700 `}>{totalPurchaseQuantity}</span>
+          <R_Stack className={`justify-between gap-0.5 text-center `}>
+            <span className={`w-[60px] font-bold text-red-700 `}>{totalPurchaseQuantity}</span>
             <span className={`w-[10px]`}>-</span>
-            <span className={`w-[70px] font-bold text-green-600 `}>{totalSaleQuantity}</span>
+            <span className={`w-[60px] font-bold text-green-600 `}>{totalSaleQuantity}</span>
+            <span className={`w-[10px]`}>=</span>
+            <span className={`w-[60px] font-bold `}>{Number(totalPurchaseQuantity - totalSaleQuantity)}</span>
 
             {/* <KeyValue label={`仕入れ合計`}>{totalPurchaseQuantity || '-'}</KeyValue>
             <KeyValue label={`販売`}>{totalSaleQuantity || '-'}</KeyValue>

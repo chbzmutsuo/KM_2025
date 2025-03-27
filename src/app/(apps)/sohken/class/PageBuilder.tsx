@@ -13,43 +13,7 @@ export class PageBuilder {
   static genba = {form: GenbaForm}
   static genbaDay = {
     top: GenbaDayShiftEmptyStuffSearcher,
-    // left: () => {
-    //   const ShiftEditFormModal_HK = useShiftEditFormModal()
-    //   const {RelationalModel, GenbaDay, selectedData, baseModelName} = ShiftEditFormModal_HK.GMF_OPEN ?? {}
-    //   const useGlobalProps = useGlobal()
-    //   const currentRelationalModelRecords = GenbaDay?.[DH.capitalizeFirstLetter(RelationalModel)]
 
-    //   const handleClose = () => ShiftEditFormModal_HK.setGMF_OPEN(null)
-    //   const commonProps = {
-    //     GenbaDay,
-    //     handleClose,
-    //     useGlobalProps,
-    //   }
-
-    //   return (
-    //     <div>
-    //       {ShiftEditFormModal_HK.GMF_OPEN && (
-    //         <div>
-    //           <div className={` fixed inset-0 bg-black/50`} style={{zIndex: Z_INDEX.overlay}}></div>
-    //           <Paper className={`fixed left-4 top-[200px] bg-white p-4`} style={{zIndex: Z_INDEX.overlay}}>
-    //             {baseModelName === `user` ? (
-    //               <MultipleUserSelector {...{...commonProps, currentRelationalModelRecords}} />
-    //             ) : (
-    //               <SingleAddForm {...{...commonProps, RelationalModel, selectedData}} />
-    //             )}
-    //             <Button
-    //               onClick={() => {
-    //                 ShiftEditFormModal_HK.setGMF_OPEN(null)
-    //               }}
-    //             >
-    //               閉じる
-    //             </Button>
-    //           </Paper>
-    //         </div>
-    //       )}
-    //     </div>
-    //   )
-    // },
     form: GenbaDayShiftForm,
   }
   static getGlobalIdSelector = ({useGlobalProps}) => {

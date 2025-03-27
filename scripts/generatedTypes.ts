@@ -626,6 +626,8 @@ export interface P_AqSaleRecord {
   aqPriceOptionId: number;
   AqSaleCart: P_AqSaleCart;
   aqSaleCartId: number;
+  aqCustomerSubscriptionId: number;
+  subscriptionYearMonth: Date;
 }
 
 export interface P_AqProduct {
@@ -705,10 +707,11 @@ export interface P_AqCustomerSubscription {
   sortOrder: number;
   active: boolean;
   maintananceYear: number;
-  updateDate: Date;
+  AqCustomer: P_AqCustomer;
   aqCustomerId: number;
   aqDeviceMasterId: number;
   aqProductId: number;
+  AqSaleRecord: P_AqSaleRecord[];
 }
 
 export interface P_AqCustomerPriceOption {
@@ -1422,17 +1425,6 @@ export interface P_PrefCity {
   Genba: P_Genba[];
 }
 
-export interface P_DayRemarks {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  sortOrder: number;
-  date: Date;
-  bikou: string;
-  shinseiGyomu: string;
-  DayRemarksUser: P_DayRemarksUser[];
-}
-
 export interface P_DayRemarksUser {
   id: number;
   createdAt: Date;
@@ -1566,6 +1558,18 @@ export interface P_GenbaTaskMaster {
   updatedAt: Date;
   sortOrder: number;
   name: string;
+}
+
+export interface P_DayRemarks {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  bikou: string;
+  shinseiGyomu: string;
+  ninkuCount: number;
+  DayRemarksUser: P_DayRemarksUser[];
 }
 
 export interface P_TbmBase {
@@ -1738,7 +1742,9 @@ export interface P_TbmDriveSchedule {
   Q_generalHighwayFee: number;
   User: P_User;
   userId: number;
+  TbmVehicle: P_TbmVehicle;
   tbmVehicleId: number;
+  TbmRouteGroup: P_TbmRouteGroup;
   tbmRouteGroupId: number;
   TbmBase: P_TbmBase;
   tbmBaseId: number;

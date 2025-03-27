@@ -14,9 +14,12 @@ export const GET = async (req: NextRequest) => {
   }
   let result
 
+  // 現在の日付から月の初日を取得し、yearMonthに格納
   const {firstDayOfMonth: yearMonth} = Days.getMonthDatum(new Date())
+  // yearMonthの年と月をキーとして結合
   const key = `${yearMonth.getFullYear()}-${yearMonth.getMonth()}`
 
+  // 在庫管理中の製品リストを取得
   const productList = await prisma.aqProduct.findMany({
     where: {inInventoryManagement: true},
     include: {
@@ -25,17 +28,23 @@ export const GET = async (req: NextRequest) => {
     },
   })
 
+  // トランザクションを実行し、各製品の在庫を更新
   const res = await doTransaction({
     transactionQueryList: productList.map(aqProduct => {
       const {AqInventoryRegister, AqSaleRecord, id: aqProductId} = aqProduct
+      // 購入数量の合計を計算
       const totalPurchaseQuantity = AqInventoryRegister.reduce((acc, curr) => acc + curr.quantity, 0)
+      // 販売数量の合計を計算
       const totalSaleQuantity = AqSaleRecord.reduce((acc, curr) => acc + curr.quantity, 0)
+      // 残りの数量を計算
       const rest = Number(totalPurchaseQuantity - totalSaleQuantity)
+      // 在庫をアップサートするためのクエリオブジェクトを作成
       const queryObject: Prisma.AqInventoryByMonthUpsertArgs = {
         where: {key},
         create: {key, yearMonth, count: rest, aqProductId},
         update: {count: rest},
       }
+      // アップサートのためのオブジェクトを返す
       return {model: `aqInventoryByMonth`, method: `upsert`, queryObject}
     }),
   })

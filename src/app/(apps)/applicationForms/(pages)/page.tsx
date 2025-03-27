@@ -1,12 +1,15 @@
 'use client'
 
+import { CenterScreen} from '@components/styles/common-components/common-components'
+import useGlobal from '@hooks/globalHooks/useGlobal'
+import {HREF} from '@lib/methods/urls'
 import Link from 'next/link'
 
 const navigationItems = [
   {
     title: '発注申請',
     description: '新規発注申請の作成',
-    href: '/applicationForms/purchase',
+    href: '/applicationForms/purchase/create',
     color: 'bg-blue-500 hover:bg-blue-600',
   },
   {
@@ -42,6 +45,9 @@ const navigationItems = [
 ]
 
 export default function ApplicationFormsPage() {
+  const {query} = useGlobal()
+
+  return <CenterScreen className={` text-2xl font-bold`}>メニューを選択してください</CenterScreen>
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-8 text-3xl font-bold">申請フォーム</h1>
@@ -50,7 +56,7 @@ export default function ApplicationFormsPage() {
         {navigationItems.map(item => (
           <Link
             key={item.href}
-            href={item.href}
+            href={HREF(item.href, query, {})}
             className={`block rounded-lg p-6 text-white ${item.color} transition-colors duration-200`}
           >
             <h2 className="mb-2 text-xl font-semibold">{item.title}</h2>

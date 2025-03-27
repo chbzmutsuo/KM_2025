@@ -63,6 +63,6 @@ src/app/**/Advantage
 src/app/**/tbm
 src/app/**/yoshinari
 src/app/**/applicationForms
-#src/app/**/apex
-#src/app/**/KM
 #src/app/**/kickswrap
+#src/app/**/KM
+#src/app/**/apex

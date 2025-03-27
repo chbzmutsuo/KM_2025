@@ -21,11 +21,12 @@ export type shiftEditProps = {
 } | null
 
 export const useShiftEditFormModal = () => {
+  const useGlobalProps = useGlobal()
   const [shiftEditPropsGMF, setshiftEditPropsGMF] = useJotaiByKey<atomTypes[`shiftEditPropsGMF`] | null>(
     `shiftEditPropsGMF`,
     null
   )
-  const useGlobalProps = useGlobal()
+
   const setGMF_OPEN = (v: shiftEditProps) => {
     setshiftEditPropsGMF(v)
   }

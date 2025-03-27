@@ -398,12 +398,14 @@ export type PageBuilderGetterType = {
 }
 
 export type serverFetchihngDataType = {
-  easySearchPrismaDataOnServer: easySearchDataSwrType
   DetailePageId: number | undefined
-  prismaDataExtractionQuery: any
   easySearchObject: EasySearchObject
   easySearchWhereAnd: any[]
   prismaData: any
+
+  easySearchPrismaDataOnServer: easySearchDataSwrType
+  EasySearcherQuery: any
+  prismaDataExtractionQuery: any
 }
 export type ClientPropsType = {
   params: anyObject

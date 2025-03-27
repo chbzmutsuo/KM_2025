@@ -11,6 +11,7 @@ import {makePrismaDataExtractionQuery} from 'src/cm/components/DataLogic/TFs/Cli
 import {searchModels} from '@lib/methods/api-fetcher'
 import {getMyTableId} from '@components/DataLogic/TFs/MyTable/getMyTableId'
 import {SearchQuery} from '@components/DataLogic/TFs/MyTable/TableHandler/SearchHandler/search-methods'
+import {getInitModelRecordsProps} from '@components/DataLogic/TFs/ClientConf/fetchers/getInitModelRecordsProps'
 
 export type ES_Atom_FetcherProps = {
   DetailePageId
@@ -64,40 +65,26 @@ export async function ES_Atom_Fetcher(props: ES_Atom_FetcherProps) {
     easySearchExtraProps: easySearchExtraProps,
   })
 
-  const flexQuery = P_Query.createFlexQuery({query, dataModelName, myTable, additional, take, skip, page})
-
-  const searchQueryAnd: any = SearchQuery.createWhere({dataModelName, query: query})
-  const easySearchWhereAnd = await getEasySearchWhereAnd({
+  const easySearchWhereAnd = getEasySearchWhereAnd({
     easySearchObject,
     query,
     additionalWhere: {...additional?.where},
   })
 
-  const prismaDataExtractionQuery = await makePrismaDataExtractionQuery({
-    take,
-    skip,
-    page,
-    query,
+  const {EasySearcherQuery, prismaDataExtractionQuery} = await getInitModelRecordsProps({
+    DetailePageId,
+    EasySearchBuilder,
     dataModelName,
     additional,
-    easySearchWhereAnd,
     myTable,
-    DetailePageId,
     include,
-    searchQueryAnd,
+    session,
+    query,
+    easySearchExtraProps,
+    useSql,
   })
 
-  const easySearchPrismaDataOnServer = await EasySearchDataSwrFetcher({
-    dataModelName,
-    additional: {
-      ...additional,
-      //詳細検索状態を反映させる
-      where: {...additional?.where},
-    },
-    searchQueryAnd,
-    easySearchObject,
-    query,
-  })
+  const easySearchPrismaDataOnServer = await EasySearchDataSwrFetcher(EasySearcherQuery)
 
   let prismaData = await searchModels(dataModelName, prismaDataExtractionQuery)
 
@@ -109,18 +96,17 @@ export async function ES_Atom_Fetcher(props: ES_Atom_FetcherProps) {
       take,
       skip,
     })
-    prismaData = {
-      records: rows,
-      totalCount,
-    }
+    prismaData = {records: rows, totalCount}
   }
 
   return {
-    easySearchPrismaDataOnServer,
     DetailePageId,
-    prismaDataExtractionQuery,
     easySearchObject,
     easySearchWhereAnd,
     prismaData,
+    easySearchPrismaDataOnServer,
+
+    prismaDataExtractionQuery,
+    EasySearcherQuery,
   } as serverFetchihngDataType
 }

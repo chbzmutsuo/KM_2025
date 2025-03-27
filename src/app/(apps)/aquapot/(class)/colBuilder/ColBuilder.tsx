@@ -49,8 +49,6 @@ export class ColBuilder {
   }
   static aqCustomerSupportGroupMidTable = (props: columnGetterType) => {
     return new Fields([
-      //
-      // {id: `aqCustomerId`, label: `顧客`, forSelect: {}},
       {id: `aqSupportGroupMasterId`, label: `支援団体`, forSelect: {}},
       {id: `from`, label: `開始日`, type: `date`, form: {...defaultRegister}},
       {id: `to`, label: `終了日`, type: `date`, form: {}},
@@ -58,8 +56,6 @@ export class ColBuilder {
   }
   static aqCustomerPriceOption = (props: columnGetterType) => {
     return new Fields([
-      //
-      // {id: `aqCustomerId`, label: `顧客`, forSelect: {}},
       {id: `aqProductId`, label: `商品`, forSelect: {}, form: {...defaultRegister}},
       {
         id: `aqPriceOptionId`,

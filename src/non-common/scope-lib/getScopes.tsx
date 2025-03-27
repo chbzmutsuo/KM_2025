@@ -82,7 +82,9 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
     getGlobalUserId,
     getGroupieScopes,
     getAdvantageProps,
-
+    getAquepotScopes: () => ({
+      aqCustomerId: !admin ? session?.aqCustomerId : Number(query?.g_aqCustomerId ?? 0),
+    }),
     getTbmScopes,
     getYoshinariScopes,
     getTsukurungerScopes,

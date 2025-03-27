@@ -1,5 +1,6 @@
 'use client'
 
+import {aqCustomerForSelectConfig} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 import {ColBuilder} from '@app/(apps)/aquapot/(class)/colBuilder/ColBuilder'
 import useAqCustomerFilter from '@app/(apps)/aquapot/(class)/Pagebuilder/useAqCustomerFilter'
 import useAqCustomerRecordFilter from '@app/(apps)/aquapot/(class)/Pagebuilder/useAqCustomerRecordFilter'
@@ -62,6 +63,7 @@ export class PageBuilder {
                 columns: ColBuilder.aqCustomerPriceOption(props),
                 additional: {
                   include: QueryBuilder.getInclude({}).aqCustomerPriceOption.include,
+                  payload: {aqCustomerId: undefined},
                 },
                 useGlobalProps: props.useGlobalProps,
               }}
@@ -180,14 +182,16 @@ export class PageBuilder {
     return () => {
       const columns = Fields.transposeColumns([
         {
-          ...{id: 'g_userId', label: ''},
+          id: 'g_userId',
+          label: '',
           form: {},
-          forSelect: {
-            config: {
-              modelName: `user`,
-              select: {id: `number`, name: 'text'},
-            },
-          },
+          forSelect: {config: {modelName: `user`, select: {id: `number`, name: 'text'}}},
+        },
+        {
+          id: 'g_aqCustomerId',
+          label: '顧客',
+          form: {},
+          forSelect: {config: {...aqCustomerForSelectConfig}},
         },
       ])
       return (

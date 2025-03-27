@@ -3,7 +3,7 @@
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultMultipleSelectFormat} from '@class/Fields/lib/defaultFormat'
 import {Fields} from '@cm/class/Fields/Fields'
-import {columnGetterType} from '@cm/types/types'
+import {columnGetterType, forSelectConfig} from '@cm/types/types'
 
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
@@ -21,7 +21,7 @@ export const aqCustomer = (props: columnGetterType) => {
   return new Fields([
     ...new Fields([
       ...new Fields([
-        {id: 'id', label: `ID`},
+        // {id: 'id', label: `ID`},
         {id: 'customerNumber', label: '顧客番号', type: 'string', form: {}, search: {}},
         {id: 'name', label: '氏名', type: 'string', form: {}, search: {}},
       ])
@@ -184,4 +184,16 @@ export const aqCustomer = (props: columnGetterType) => {
       },
     },
   ]).transposeColumns()
+}
+
+export const aqCustomerForSelectConfig: forSelectConfig = {
+  select: {
+    name: `text`,
+    companyName: `text`,
+    jobTitle: `text`,
+  },
+  nameChanger: op => {
+    const name = op ? [op.companyName, op.jobTitle, op.name].filter(Boolean).join(` / `) : ''
+    return {...op, name}
+  },
 }

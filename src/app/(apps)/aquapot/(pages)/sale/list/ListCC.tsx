@@ -11,6 +11,7 @@ import {Paper} from '@components/styles/common-components/paper'
 import {PencilSquareIcon, TrashIcon} from '@heroicons/react/20/solid'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import Link from 'next/link'
 import React from 'react'
 
 export default function ListCC({records}) {
@@ -58,7 +59,13 @@ export default function ListCC({records}) {
         className: rowColor,
         csvTableRow: [
           {cellValue: formatDate(rec.date, `YYYY/MM/DD(ddd)`)},
-          {cellValue: [rec.companyName, rec.jobTitle, rec.name].filter(Boolean).join(` / `)},
+          {
+            cellValue: (
+              <Link href={`/aquapot/aqCustomer/${rec.aqCustomerId}`}>
+                {[rec.companyName, rec.jobTitle, rec.name].filter(Boolean).join(` / `)}
+              </Link>
+            ),
+          },
           {cellValue: rec.userName},
           // {cellValue: rec.companyName},
           // {cellValue: rec.jobTitle},

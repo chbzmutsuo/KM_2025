@@ -72,7 +72,7 @@ export default function ChartWrapper(props: {
             })}
           </C_Stack>
         </section>
-        <section className={``}>
+        <section className={` mx-auto`}>
           <Chart
             {...{
               chartData,
@@ -87,7 +87,7 @@ export default function ChartWrapper(props: {
 
         {keyName === `after` && (
           <div>
-            <small>
+            <small className={`leading-6`}>
               ※<span>{SS_CONSTANTS.title}</span>のみの概算となります <br />
               ※他規程と合わせるとさらに手取りを増やす事ができます
             </small>

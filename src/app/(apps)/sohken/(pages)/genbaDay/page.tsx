@@ -47,15 +47,11 @@ export default async function DynamicMasterPage(props) {
       {Genba: {PrefCity: {sortOrder: `asc`}}},
     ],
   })
-
-  const {result: allShiftBetweenDays} = await fetchUniversalAPI(`genbaDayShift`, `findMany`, {
-    include: {GenbaDay: {}},
-    where: {
-      GenbaDay: {
-        date: today ? {gte: today, lt: addDays(today, 1)} : undefined,
-      },
+  const where = {
+    GenbaDay: {
+      date: today ? {gte: today, lt: addDays(today, 1)} : undefined,
     },
-  })
+  }
 
   const todayRecords = records.filter(record => Days.isSameDate(record.date, today))
   const tomorrowRecords = records.filter(record => {
@@ -65,7 +61,7 @@ export default async function DynamicMasterPage(props) {
 
   return (
     <div>
-      <GenbadayListClient {...{today, tomorrow, todayRecords, tomorrowRecords, isMyPage, allShiftBetweenDays}} />
+      <GenbadayListClient {...{today, tomorrow, todayRecords, tomorrowRecords, isMyPage}} />
     </div>
   )
 }

@@ -27,6 +27,7 @@ import {PaperLarge} from '@components/styles/common-components/paper'
 export type CartItem = {
   uuid: string
   quantity: number
+  price: number
   selectedProduct: AqProduct
   selectedPriceOption: AqPriceOption
   setAsDefaultPrice: boolean

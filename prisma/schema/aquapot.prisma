@@ -43,8 +43,16 @@ model AqSaleRecord {
  AqPriceOption   AqPriceOption? @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
  aqPriceOptionId Int?
 
- AqSaleCart   AqSaleCart? @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
- aqSaleCartId Int?
+ AqSaleCart   AqSaleCart @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
+ aqSaleCartId Int
+
+ AqCustomerSubscription AqCustomerSubscription? @relation(fields: [aqCustomerSubscriptionId], references: [id])
+
+ aqCustomerSubscriptionId Int?
+
+ subscriptionYearMonth DateTime?
+
+ @@unique([aqCustomerId, aqProductId, subscriptionYearMonth], name: "unique_aqCustomerId_aqProductId_subscriptionYearMonth")
 }
 
 // 商品
@@ -159,7 +167,6 @@ model AqCustomerSubscription {
 
  maintananceYear  Int
  maintananceMonth Int
- updateDate       DateTime
 
  AqCustomer       AqCustomer     @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
  aqCustomerId     Int
@@ -169,7 +176,8 @@ model AqCustomerSubscription {
  AqProduct   AqProduct @relation(fields: [aqProductId], references: [id])
  aqProductId Int
 
- remarks String?
+ remarks      String?
+ AqSaleRecord AqSaleRecord[]
 }
 
 model AqCustomerPriceOption {
@@ -178,14 +186,17 @@ model AqCustomerPriceOption {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- AqCustomer      AqCustomer    @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
- aqCustomerId    Int
- AqProduct       AqProduct     @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
- aqProductId     Int
+ AqCustomer   AqCustomer @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
+ aqCustomerId Int
+
+ AqProduct AqProduct @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
+
+ aqProductId Int
+
  AqPriceOption   AqPriceOption @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
  aqPriceOptionId Int
 
- @@unique([aqCustomerId, aqProductId, aqPriceOptionId], name: "unique_aqCustomerId_aqProductId_aqPriceOptionId")
+ @@unique([aqCustomerId, aqProductId], name: "unique_aqCustomerId_aqProductId")
 }
 
 model AqCustomerRecord {

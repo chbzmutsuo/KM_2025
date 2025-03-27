@@ -11,8 +11,9 @@ import {Center, C_Stack} from '@components/styles/common-components/common-compo
 import useGlobal from '@hooks/globalHooks/useGlobal'
 
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
+import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 
-import React from 'react'
+import React, {useEffect} from 'react'
 
 export const SaleRecordEditForm = ({
   showDate = false,
@@ -22,6 +23,8 @@ export const SaleRecordEditForm = ({
   aqCustomerPriceOption,
   fromSaleList = false,
 }) => {
+  const {data: aqPriceOption = []} = usefetchUniversalAPI_SWR(`aqPriceOption`, `findMany`, {})
+
   const {session} = useGlobal()
   const colSource: colType[] = [
     {id: `userId`, label: `担当者`, form: {...defaultRegister, defaultValue: session.id}, forSelect: {}},
@@ -35,7 +38,7 @@ export const SaleRecordEditForm = ({
     {
       id: `aqPriceOptionId`,
       label: `価格`,
-      form: {...defaultRegister},
+      form: {},
       forSelect: {
         dependenceColIds: ['aqProductId'],
         config: {
@@ -50,6 +53,18 @@ export const SaleRecordEditForm = ({
         },
       },
     },
+    {
+      id: `price`,
+      label: `金額`,
+      type: `number`,
+      form: {
+        ...defaultRegister,
+        disabled: props => {
+          return !!props.record.aqPriceOptionId
+        },
+      },
+    },
+
     {id: `quantity`, label: `数量`, type: `number`, form: {...defaultRegister}},
     {id: `remarks`, label: `但し書き`, type: `textarea`, form: {}},
   ]
@@ -110,6 +125,19 @@ export const SaleRecordEditForm = ({
     formData,
   })
 
+  useEffect(() => {
+    const selectedAqPriceOptionId = ItemInput[`aqPriceOptionId`]
+
+    if (selectedAqPriceOptionId) {
+      const price =
+        aqPriceOption.find(item => {
+          return item.id === selectedAqPriceOptionId
+        })?.price ?? 0
+
+      ReactHookForm.setValue(`price`, price)
+    }
+  }, [ItemInput[`aqPriceOptionId`]])
+
   const selectedProduct = aqProducts?.find(d => d.id === ItemInput.aqProductId)
 
   const selectedPriceOption = selectedProduct?.AqPriceOption?.find(d => {
@@ -122,7 +150,8 @@ export const SaleRecordEditForm = ({
       return d.form?.register
     })
     .every(d => {
-      return ItemInput[d.id]
+      const hasValue = ItemInput[d.id] !== undefined
+      return hasValue
     })
 
   return (

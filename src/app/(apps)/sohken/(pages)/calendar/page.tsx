@@ -38,6 +38,10 @@ export default async function CalendarPage(props) {
     where: {from: {gte: from, lte: to}},
   })
 
+  const {result: dayRemarks} = await fetchUniversalAPI(`dayRemarks`, `findMany`, {
+    where: {date: {gte: from, lte: to}},
+  })
+
   const {result: userList} = await fetchUniversalAPI(`user`, `findMany`, {
     where: {
       OR: [{app: `sohken`}, {apps: {has: `sohken`}}],
@@ -57,11 +61,12 @@ export default async function CalendarPage(props) {
                   {cellValue: `日付`},
                   {cellValue: `人工`},
                   {cellValue: `余力`},
-                  // {cellValue: `＃`},
+                  {cellValue: `＃`},
                 ],
               },
             ],
             bodyRecords: days.map((d, dayIdx) => {
+              const ninkuCount = dayRemarks.find(dayRemark => Days.isSameDate(dayRemark.date, d))?.ninkuCount ?? 0
               const GenbaTaskStartingToday = allGenbaTasks.filter(task => Days.isSameDate(task.from, d))
               const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => {
                 return acc + task.requiredNinku
@@ -86,9 +91,9 @@ export default async function CalendarPage(props) {
                       </MyPopover>
                     ),
                   },
-                  // {cellValue: userCount},
+
                   {cellValue: userCount - requiredNinkuSum},
-                  // {cellValue: '▲10', style: {width: 100}},
+                  {cellValue: ninkuCount >= 0 ? ninkuCount : `▲${ninkuCount}`, style: {width: 100, textAlign: 'right'}},
                 ],
               }
             }),

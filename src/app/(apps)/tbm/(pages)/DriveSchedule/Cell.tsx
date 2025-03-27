@@ -11,7 +11,6 @@ import Link from 'next/link'
 import {HREF} from '@lib/methods/urls'
 import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {toast} from 'react-toastify'
 
 export const Cell = (props: {
   //
@@ -84,7 +83,7 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
                 <C_Stack className={`t-paper gap-1.5  rounded-sm  `}>
                   <RouteDisplay className={` text-[12px] `}>{TbmRouteGroup.name}</RouteDisplay>
                   <R_Stack className={` justify-end `}>
-                    <CarDispaly className={`text-end text-sm`}>({TbmVehicle.vehicleNumber})</CarDispaly>
+                    <CarDispaly className={`text-end text-sm`}>({TbmVehicle?.vehicleNumber})</CarDispaly>
                     <PencilSquareIcon
                       className={`text-blue-main onHover h-5 w-5`}
                       onClick={() => {

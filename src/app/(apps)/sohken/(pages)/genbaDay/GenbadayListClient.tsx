@@ -11,78 +11,99 @@ import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicE
 import React from 'react'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {DayRemarkComponent} from '@app/(apps)/sohken/(pages)/genbaDay/DayRemarkComponent'
+import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 
-export default function GenbadayListClient({today, tomorrow, todayRecords, tomorrowRecords, isMyPage, allShiftBetweenDays}) {
+export default function GenbadayListClient({today, tomorrow, todayRecords, tomorrowRecords, isMyPage}) {
   const GenbaDayBasicEditor_HK = useGenbaDayBasicEditor()
   const {session} = useGlobal()
 
   const Today = () => {
-    return (
-      <C_Stack className={`    items-center justify-between`}>
-        <div>
-          <strong>{formatDate(today)}</strong>
-          <C_Stack className={` gap-8    p-2`}>
-            {todayRecords.map((GenbaDay, i) => {
-              const shift = GenbaDay.GenbaDayShift
-              const isMyShift = isMyPage && shift?.some(s => s.userId === session?.id)
-              const bgColor = isMyShift ? 'rgba(244, 232, 190, 0.664)' : ''
+    const {data: allShiftBetweenDays = []} = usefetchUniversalAPI_SWR(`genbaDayShift`, `findMany`, {
+      include: {GenbaDay: {}},
+      where: {genbaDayId: {in: todayRecords.map(item => item.id)}},
+    })
 
-              return (
-                <div key={GenbaDay.id}>
-                  <Paper {...{style: {background: bgColor, color: 'black'}}}>
-                    <R_Stack>
-                      <Circle {...{width: 24}}>{i + 1}</Circle>
-                      <GenbaDaySummary
-                        {...{
-                          GenbaDayBasicEditor_HK,
-                          allShiftBetweenDays,
-                          records: todayRecords,
-                          GenbaDay,
-                          editable: !isMyPage,
-                        }}
-                      />
-                    </R_Stack>
-                  </Paper>
-                </div>
-              )
-            })}
-          </C_Stack>
-        </div>
-        <DayRemarkComponent {...{date: today, editable: !isMyPage}} />
-      </C_Stack>
+    return (
+      <div>
+        <R_Stack>
+          <strong>{formatDate(today)}</strong>
+          {!isMyPage && <DayRemarkComponent {...{date: today, editable: !isMyPage, type: `top`}} />}
+        </R_Stack>
+        <C_Stack className={`    items-center justify-between`}>
+          <div>
+            <C_Stack className={` gap-8    p-2`}>
+              {todayRecords.map((GenbaDay, i) => {
+                const shift = GenbaDay.GenbaDayShift
+                const isMyShift = isMyPage && shift?.some(s => s.userId === session?.id)
+                const bgColor = isMyShift ? 'rgba(244, 232, 190, 0.664)' : ''
+
+                return (
+                  <div key={GenbaDay.id}>
+                    <Paper {...{style: {background: bgColor, color: 'black'}}}>
+                      <R_Stack>
+                        <Circle {...{width: 24}}>{i + 1}</Circle>
+                        <GenbaDaySummary
+                          {...{
+                            GenbaDayBasicEditor_HK,
+                            allShiftBetweenDays,
+                            records: todayRecords,
+                            GenbaDay,
+                            editable: !isMyPage,
+                          }}
+                        />
+                      </R_Stack>
+                    </Paper>
+                  </div>
+                )
+              })}
+            </C_Stack>
+          </div>
+          <DayRemarkComponent {...{date: today, editable: !isMyPage, type: `bottom`}} />
+        </C_Stack>
+      </div>
     )
   }
 
   const Tomorrow = () => {
+    const {data: allShiftBetweenDays = []} = usefetchUniversalAPI_SWR(`genbaDayShift`, `findMany`, {
+      include: {GenbaDay: {}},
+      where: {genbaDayId: {in: tomorrowRecords.map(item => item.id)}},
+    })
+
     return (
-      <C_Stack className={`    items-center justify-between`}>
-        <div>
+      <div>
+        <R_Stack>
           <strong>{formatDate(tomorrow)}</strong>
-          <C_Stack className={` justify-between gap-8  p-2`}>
-            {tomorrowRecords.map((GenbaDay, i) => {
-              return (
-                <div key={GenbaDay.id}>
-                  <Paper>
-                    <R_Stack>
-                      <Circle {...{width: 24}}>{i + 1}</Circle>
-                      <GenbaDaySummary
-                        {...{
-                          GenbaDayBasicEditor_HK,
-                          allShiftBetweenDays,
-                          records: tomorrowRecords,
-                          GenbaDay,
-                          editable: !isMyPage,
-                        }}
-                      />
-                    </R_Stack>
-                  </Paper>
-                </div>
-              )
-            })}
-          </C_Stack>
-        </div>
-        <DayRemarkComponent {...{date: tomorrow, editable: !isMyPage}} />
-      </C_Stack>
+          {!isMyPage && <DayRemarkComponent {...{date: tomorrow, editable: !isMyPage, type: `top`}} />}
+        </R_Stack>
+        <C_Stack className={`    items-center justify-between`}>
+          <div>
+            <C_Stack className={` justify-between gap-8  p-2`}>
+              {tomorrowRecords.map((GenbaDay, i) => {
+                return (
+                  <div key={GenbaDay.id}>
+                    <Paper>
+                      <R_Stack>
+                        <Circle {...{width: 24}}>{i + 1}</Circle>
+                        <GenbaDaySummary
+                          {...{
+                            GenbaDayBasicEditor_HK,
+                            allShiftBetweenDays,
+                            records: tomorrowRecords,
+                            GenbaDay,
+                            editable: !isMyPage,
+                          }}
+                        />
+                      </R_Stack>
+                    </Paper>
+                  </div>
+                )
+              })}
+            </C_Stack>
+          </div>
+          <DayRemarkComponent {...{date: tomorrow, editable: !isMyPage, type: `bottom`}} />
+        </C_Stack>
+      </div>
     )
   }
 

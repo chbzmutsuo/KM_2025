@@ -327,11 +327,11 @@ model TbmDriveSchedule {
  O_postalHighwayFee  Int? //高速(郵便)
  Q_generalHighwayFee Int? //高速（一般）
 
- User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
- userId Int
+ User   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int?
 
- TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
- tbmVehicleId Int
+ TbmVehicle   TbmVehicle? @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
+ tbmVehicleId Int?
 
  TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)
  tbmRouteGroupId Int

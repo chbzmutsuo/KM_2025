@@ -1,6 +1,5 @@
 'use client'
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
-import {getListData} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
 import HaishaTable from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable'
 import RouteDisplay from '@app/(apps)/tbm/(pages)/DriveSchedule/RouteDisplay'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
@@ -10,7 +9,6 @@ import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitche
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import BasicTabs from '@components/utils/tabs/BasicTabs'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {useEffect, useState} from 'react'
 
 export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
   const useGlobalProps = useGlobal()

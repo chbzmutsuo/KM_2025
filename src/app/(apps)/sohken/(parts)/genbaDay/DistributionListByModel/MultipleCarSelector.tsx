@@ -128,6 +128,16 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
                 ],
                 bodyRecords: optionList.map(car => {
                   const active = selectedCarObject?.[car.id]
+                  const {carsOnOtherGembaOnSameDate} = car
+
+                  const CarNameDisplay = () => {
+                    return (
+                      <R_Stack className={`items-start leading-3`}>
+                        <div>{car.name}</div>
+                        <div className={`text-error-main`}>{carsOnOtherGembaOnSameDate.length > 0 ? '★' : ''}</div>
+                      </R_Stack>
+                    )
+                  }
 
                   return {
                     style: {
@@ -156,7 +166,7 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
                         style: {width: 30, padding: 5},
                       },
                       {
-                        cellValue: car?.name,
+                        cellValue: <CarNameDisplay />,
                         style: {width: 120, padding: 5},
                       },
                     ],
@@ -180,20 +190,20 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
 
 const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
   const optionList = options.map((car, idx) => {
-    const shiftsOnOtherGembaOnSameDate = car.GenbaDaySoukenCar.filter(shift => {
+    const carsOnOtherGembaOnSameDate = car.GenbaDaySoukenCar.filter(shift => {
       const isSameDate = Days.isSameDate(shift.GenbaDay.date, GenbaDay.date)
       const isSameGenba = shift.GenbaDay.genbaId === GenbaDay.genbaId
       return isSameDate && !isSameGenba
     })
 
-    const shiftOnDate = currentRelationalModelRecords?.find(record => {
+    const carsOnDate = currentRelationalModelRecords?.find(record => {
       return record?.SohkenCar?.id === car.id
     })
 
     return {
       ...car,
-      active: !!shiftOnDate,
-      shiftsOnOtherGembaOnSameDate,
+      active: !!carsOnDate,
+      carsOnOtherGembaOnSameDate,
     }
   })
 

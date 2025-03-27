@@ -133,7 +133,7 @@ export const tail_color = {
 
   white: '#ffffff',
   blue: {
-    main: '#2e679b',
+    main: '#306ea7',
     light: '#90BCE4',
   },
 
@@ -152,7 +152,7 @@ export const tail_color = {
     main: '#636363',
   },
   error: {
-    main: '#ac3232',
+    main: '#bf3636',
     light: 'rgb(255, 173, 162)',
   },
 

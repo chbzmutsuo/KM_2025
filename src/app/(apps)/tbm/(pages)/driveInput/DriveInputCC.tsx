@@ -8,6 +8,7 @@ import {Arr} from '@class/Arr'
 import {Days, formatDate, toUtc} from '@class/Days'
 import {DH} from '@class/DH'
 import {TextBlue, TextGray, TextGreen, TextOrange, TextRed} from '@components/styles/common-components/Alert'
+import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
@@ -95,7 +96,6 @@ export default function DriveInputCC({
             })}
           </div>
         </div>
-
         <div>
           <h2>あなたの利用予定の車両</h2>
           <div className="rounded-lg bg-white p-2.5 shadow">
@@ -181,6 +181,14 @@ export default function DriveInputCC({
             })}
           </div>
         </div>
+        ⬇︎
+        <section className={`text-center`}>
+          <Button>業務終了</Button>
+        </section>
+        ⬇︎
+        <section className={`text-center`}>
+          <Button color="red">給油と洗車を入力しました</Button>
+        </section>
       </C_Stack>
     </div>
   )

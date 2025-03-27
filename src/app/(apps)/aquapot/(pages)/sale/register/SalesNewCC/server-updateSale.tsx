@@ -52,13 +52,12 @@ export const serverUpdateSale = async (props: {
           const payload = {
             aqCustomerId: aqCustomerId,
             aqProductId: item?.selectedProduct?.id,
-            aqPriceOptionId: item?.selectedPriceOption?.id,
           }
 
           const args: Prisma.AqCustomerPriceOptionUpsertArgs = {
-            where: {unique_aqCustomerId_aqProductId_aqPriceOptionId: {...payload}},
-            create: payload,
-            update: payload,
+            where: {unique_aqCustomerId_aqProductId: {...payload}},
+            create: {...payload, aqPriceOptionId: item?.selectedPriceOption?.id},
+            update: {...payload, aqPriceOptionId: item?.selectedPriceOption?.id},
           }
           const res = await fetchUniversalAPI(`aqCustomerPriceOption`, `upsert`, args, transactionPrisma)
 
@@ -72,6 +71,7 @@ export const serverUpdateSale = async (props: {
         messages.push(`${count}件のデフォルト価格を設定しました`)
       }
     } catch (error) {
+      console.error(error.stack) //logs
       throw new Error('Failed to create price option')
     }
     success += 1

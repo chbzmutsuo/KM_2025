@@ -1,7 +1,7 @@
 import MyPageCC from '@app/(apps)/aquapot/(pages)/myPage/[id]/MyPageCC'
 import {getCustomerDataWithSales} from '@app/(apps)/aquapot/(pages)/myPage/getCustomerDataWithSales'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
-import {C_Stack} from '@components/styles/common-components/common-components'
+import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
 
 import Redirector from '@components/utils/Redirector'
 
@@ -15,7 +15,8 @@ export default async function page(props: {searchParams: any; params: any}) {
   const query = await props.searchParams
   const params = await props.params
 
-  const {session} = await initServerComopnent({query})
+  const {session, scopes} = await initServerComopnent({query})
+  const {aqCustomerId} = scopes.getAquepotScopes()
   const {asCustomer} = getAqLoginType({session})
 
   const isValidUser = asCustomer && session.id === Number(params.id)
@@ -32,9 +33,11 @@ export default async function page(props: {searchParams: any; params: any}) {
   const {customer, salesByMonth} = await getCustomerDataWithSales({userId: Number(params.id), query})
 
   return (
-    <C_Stack className={`p-2`}>
-      <NewDateSwitcher {...{yearOnly: true}} />
-      <MyPageCC {...{customer, salesByMonth}} />
-    </C_Stack>
+    <FitMargin>
+      <C_Stack className={`p-2`}>
+        <NewDateSwitcher {...{yearOnly: true}} />
+        <MyPageCC {...{customer, salesByMonth}} />
+      </C_Stack>
+    </FitMargin>
   )
 }

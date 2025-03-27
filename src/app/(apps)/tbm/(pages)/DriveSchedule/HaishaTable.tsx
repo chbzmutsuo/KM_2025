@@ -10,9 +10,11 @@ import {Cell} from '@app/(apps)/tbm/(pages)/DriveSchedule/Cell'
 import {TbmDriveSchedule} from '@prisma/client'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import UserTh from '@app/(apps)/tbm/(pages)/DriveSchedule/UserTh'
-import {getListData, HaishaDriveSchedule} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
+import {getListData} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import useLogOnRender from '@hooks/useLogOnRender'
+import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
+import {Fields} from '@class/Fields/Fields'
 
 export default function HaishaTable({whereQuery, days, tbmBase}) {
   useLogOnRender('haisha')
@@ -85,6 +87,14 @@ export default function HaishaTable({whereQuery, days, tbmBase}) {
   //   }
   // }, [days])
 
+  const {BasicForm, latestFormData} = useBasicFormProps({
+    columns: new Fields([
+      //
+      {id: `userId`, label: `スタッフ`, forSelect: {}},
+      {id: `date`, label: `日付`, form: {}},
+    ]).transposeColumns(),
+  })
+
   if (!data) return <PlaceHolder></PlaceHolder>
 
   const {TbmDriveSchedule, userList} = data
@@ -100,6 +110,8 @@ export default function HaishaTable({whereQuery, days, tbmBase}) {
 
   return (
     <div>
+      <BasicForm {...{alignMode: 'row', latestFormData}} />
+
       <HK_HaishaTableEditorGMF.Modal />
       {userList.length > 0 ? (
         CsvTable({

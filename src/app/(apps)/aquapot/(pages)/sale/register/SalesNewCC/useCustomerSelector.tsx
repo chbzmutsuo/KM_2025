@@ -10,6 +10,7 @@ import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {getMidnight} from '@class/Days'
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
+import {aqCustomerForSelectConfig} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 export const useCustomerSelector = ({cartUser, setcartUser, maxWidth}) => {
   const colWidth = maxWidth - 20
   const columns = new Fields([
@@ -23,17 +24,7 @@ export const useCustomerSelector = ({cartUser, setcartUser, maxWidth}) => {
       id: `aqCustomerId`,
       label: `お客様（会社名/役職/氏名）`,
       forSelect: {
-        config: {
-          select: {
-            name: `text`,
-            companyName: `text`,
-            jobTitle: `text`,
-          },
-          nameChanger: op => {
-            const name = op ? [op.companyName, op.jobTitle, op.name].filter(Boolean).join(` / `) : ''
-            return {...op, name}
-          },
-        },
+        config: aqCustomerForSelectConfig,
       },
       form: {...defaultRegister, style: {width: colWidth}},
     },

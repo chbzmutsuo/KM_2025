@@ -216,7 +216,7 @@ const separateFormData = ({latestFormData, additionalPayload, columns}) => {
       const relationalTableId = prismaDataObject[key]
 
       if (relationalTableId) {
-        relationIds[modelName] = {connect: {id: relationalTableId}}
+        relationIds[key] = relationalTableId
       }
     }
   })

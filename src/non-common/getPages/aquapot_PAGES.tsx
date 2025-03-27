@@ -12,6 +12,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
 
   const {session, rootPath, pathname, query} = props
   const scopes = getScopes(session, {query, roles})
+  const {admin} = scopes
 
   const publicPaths = [
     {
@@ -67,6 +68,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
       ],
     },
     {tabId: `roleMaster`, label: '権限管理'},
+    {tabId: `batch`, label: 'バッチ', exclusiveTo: admin},
 
     // {tabId: 'inventory', label: '在庫一覧'},
   ].map(item => ({...item, exclusiveTo: !!getAqLoginType({session}).asUser, ROOT: [rootPath]}))

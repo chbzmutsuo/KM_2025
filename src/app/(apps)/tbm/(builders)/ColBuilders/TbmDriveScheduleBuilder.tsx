@@ -34,7 +34,7 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
       id: 'userId',
       label: 'ドライバ',
       form: {
-        ...defaultRegister,
+        // ...defaultRegister,
         defaultValue: userId,
         disabled: userId,
       },
@@ -45,7 +45,7 @@ export const TbmDriveScheduleBuilder = (props: columnGetterType) => {
       id: 'tbmVehicleId',
       label: '車両',
       form: {
-        ...defaultRegister,
+        // ...defaultRegister,
         defaultValue: tbmVehicleId,
         // disabled: tbmVehicleId,
       },

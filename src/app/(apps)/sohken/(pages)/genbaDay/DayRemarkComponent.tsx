@@ -11,11 +11,15 @@ import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import useModal from '@components/utils/modal/useModal'
 
-export const DayRemarkComponent = ({date, editable}) => {
+export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom'}) => {
+  const {date, editable, type} = props
+
   type dayRemarksType = DayRemarks & {DayRemarksUser: (DayRemarksUser & {User: User})[]}
 
   const {Modal, handleOpen, handleClose, open, setopen} = useModal()
+
   const [dayRemarksState, setdayRemarksState] = useState<dayRemarksType | null>(null)
+
   useEffect(() => {
     const include = {DayRemarksUser: {include: {User: true}}}
     fetchUniversalAPI(`dayRemarks`, `findUnique`, {where: {date}, include}).then(async res => {
@@ -35,6 +39,27 @@ export const DayRemarkComponent = ({date, editable}) => {
 
   if (dayRemarksState === null) return <PlaceHolder />
 
+  if (type === `top`) {
+    return (
+      <div className={`ml-8 text-lg font-bold`}>
+        <label>
+          <span className={` mr-2`}>#</span>
+          <input
+            className="w-[60px] rounded border p-1 text-center "
+            value={dayRemarksState.ninkuCount || ''}
+            type="number"
+            onChange={async e => {
+              setdayRemarksState({...dayRemarksState, ninkuCount: Number(e.target.value)})
+              await fetchUniversalAPI(`dayRemarks`, `upsert`, {
+                where: {date},
+                ...createUpdate({date, ninkuCount: Number(e.target.value)}),
+              })
+            }}
+          />
+        </label>
+      </div>
+    )
+  }
   const TextArea = ({label, dataKey, dayRemarksState, defaultValue}) => {
     const [value, setvalue] = useState(dayRemarksState?.[dataKey] ?? defaultValue)
 

@@ -13,7 +13,6 @@ import {Button} from '@components/styles/common-components/Button'
 import {colorVariants} from '@components/styles/common-components/colorVariants'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {Genba, GenbaDay, GenbaDayTaskMidTable} from '@prisma/client'
-
 import {toast} from 'react-toastify'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import {calcGenbaDayStatus} from 'src/non-common/(chains)/getGenbaScheduleStatus/calcGenbaDayStatus'
@@ -25,7 +24,8 @@ const GenbaDaySummary = (props: {
   GenbaDay
   allShiftBetweenDays: any
 }) => {
-  const {GenbaDayBasicEditor_HK, editable = true, records, GenbaDay} = props
+  const {GenbaDayBasicEditor_HK, editable = true, records, GenbaDay, allShiftBetweenDays} = props
+
   const {accessScopes} = useGlobal()
   const admin = accessScopes()
 
@@ -159,7 +159,7 @@ const GenbaDaySummary = (props: {
           </Wrapper>
 
           <Wrapper className={` !bg-transparent`}>
-            <Sub {...{records, GenbaDay, editable, commonProps, PC}} />
+            <Sub {...{records, GenbaDay, editable, commonProps, PC, allShiftBetweenDays}} />
           </Wrapper>
         </C_Stack>
       </div>

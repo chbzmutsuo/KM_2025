@@ -1,3 +1,4 @@
+import {aqCustomerForSelectConfig} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {colType} from '@cm/types/types'
 import {Prisma} from '@prisma/client'
@@ -109,14 +110,7 @@ export class AqCustomerCl {
             id: `aqCustomerId`,
             label: `法人名 / 顧客名`,
             forSelect: {
-              config: {
-                select: {id: `number`, name: `text`, companyName: `text`},
-                nameChanger: op => {
-                  const name = [op.companyName, op.name].filter(Boolean).join(`\n`)
-
-                  return {...op, name: name}
-                },
-              },
+              config: aqCustomerForSelectConfig,
             },
           },
 

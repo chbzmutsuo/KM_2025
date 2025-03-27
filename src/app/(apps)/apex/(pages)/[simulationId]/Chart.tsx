@@ -18,7 +18,7 @@ export default function Chart({keyName, renderCenterText, chartData, chartRecord
         x: '50%',
         y: '42%',
         value: `手取り合計`,
-        tspanProps: {},
+        tspanProps: {fontSize: 16},
       })}
       {renderCenterText({
         x: '50%',
@@ -27,6 +27,7 @@ export default function Chart({keyName, renderCenterText, chartData, chartRecord
         tspanProps: {
           fill: keyName === 'before' ? redColor : blueColor,
           fontSize: 24,
+
           fontWeight: 'bold',
         },
       })}
@@ -34,7 +35,7 @@ export default function Chart({keyName, renderCenterText, chartData, chartRecord
         x: '50%',
         y: '58%',
         value: `法人+社長合わせて`,
-        tspanProps: {},
+        tspanProps: {fontSize: 16},
       })}
       {keyName === `after` &&
         renderCenterText({

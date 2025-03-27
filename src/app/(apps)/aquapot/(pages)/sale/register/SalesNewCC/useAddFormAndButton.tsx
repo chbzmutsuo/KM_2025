@@ -10,7 +10,7 @@ import {v4 as uuidv4} from 'uuid'
 export const useAddFormAndButton = ({latestFormData, setcartItems}) => {
   const {aqProducts, aqCustomerPriceOption, loading} = useProductsAndPriceOptions({aqCustomerId: latestFormData.aqCustomerId})
 
-  const upsertToCart = ({date, selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice, remarks}) => {
+  const upsertToCart = ({date, selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice, remarks, price}) => {
     const newItem: CartItem = {
       uuid: uuidv4(),
       selectedProduct,
@@ -18,6 +18,7 @@ export const useAddFormAndButton = ({latestFormData, setcartItems}) => {
       quantity,
       setAsDefaultPrice,
       remarks,
+      price,
     }
 
     setcartItems(prev => {

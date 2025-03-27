@@ -27,6 +27,7 @@ import {formatDate} from '@class/Days'
 import {SheetRequests} from '@app/api/google/actions/SheetRequests'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {sleep} from '@lib/methods/common'
+import Link from 'next/link'
 
 export default function Page() {
   const {toggleLoad} = useGlobal()
@@ -36,7 +37,7 @@ export default function Page() {
   const {url: spreadsheetId = ''} = SS_CONSTANTS.templateSheet ?? {}
 
   const [questions, setquestions] = useState<questionType[] | null>(null)
-  const [calc, setcalc] = useState<calcType[]>([])
+  // const [calc, setcalc] = useState<calcType[]>([])
   const [chartData, setChartData] = useState<ChartDataType | null>(null)
 
   const getQuestionsFormSS = async () => {
@@ -89,7 +90,7 @@ export default function Page() {
 
       const res = await GoogleSheet_Read({range: `結果!E2:I12`, spreadsheetId: newSpreadsheetId})
 
-      const header = ['手取り額（社長）', `手取り額（法人）`, '税金（社長・法人）', '社会保険資料（社長・法人）']
+      const header = ['手取り額（社長）', `手取り額（法人）`, '税金（社長・法人）', '社会保険料（社長・法人）']
 
       let tedori = {}
       let hoshu = {}
@@ -143,8 +144,25 @@ export default function Page() {
   }
   return (
     <FitMargin>
-      <div className=" py-4">
+      <C_Stack className=" items-center gap-[30px] py-4">
         <h1 className="text-center text-2xl font-bold text-blue-600">{SS_CONSTANTS.title}シミュレーション</h1>
+
+        <Link href={`/apex`} className={`t-link`}>
+          トップへ戻る
+        </Link>
+        <Button
+          {...{
+            onClick: item => {
+              toggleLoad(async item => {
+                getQuestionsFormSS()
+                setChartData(null)
+              })
+            },
+          }}
+        >
+          シミュレーションをやり直す
+        </Button>
+
         <FitMargin>
           <C_Stack className="gap-8">
             {!chartData ? (
@@ -213,7 +231,7 @@ export default function Page() {
               </div>
             )}
 
-            <section>
+            {/* <section>
               {calc.length > 0 ? (
                 <section className="rounded-lg bg-gradient-to-r from-blue-300 to-pink-400 p-4 shadow-lg">
                   <C_Stack className="rounded-lg border border-blue-300 bg-blue-100 p-4">
@@ -233,10 +251,10 @@ export default function Page() {
                   </C_Stack>
                 </section>
               ) : null}
-            </section>
+            </section> */}
           </C_Stack>
         </FitMargin>
-      </div>
+      </C_Stack>
     </FitMargin>
   )
 }

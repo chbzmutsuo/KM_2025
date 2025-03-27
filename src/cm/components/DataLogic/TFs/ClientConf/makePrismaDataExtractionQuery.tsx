@@ -32,5 +32,5 @@ export const makePrismaDataExtractionQuery = ({
     orderBy,
   }
 
-  return prismaDataExtractionQuery
+  return prismaDataExtractionQuery as prismaDataExtractionQueryType
 }

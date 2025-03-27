@@ -21,6 +21,7 @@ export default function AddFormAndButton({formOpen, setformOpen, toggleForm, ups
             formData: {
               ...formOpen,
               quantity: formOpen?.quantity ?? 1,
+              price: formOpen?.price ?? 0,
               setAsDefaultPrice: !!formOpen?.setAsDefaultPrice,
               aqProductId: formOpen?.selectedProduct?.id,
               aqPriceOptionId: formOpen?.selectedPriceOption?.id,

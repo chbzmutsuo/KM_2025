@@ -33,7 +33,7 @@ export const DistributionListByModel = ({
   }
 
   return (
-    <C_Stack className={`w-[200px]  gap-0.5  overflow-auto   rounded border p-1 text-xs leading-5`}>
+    <C_Stack className={`w-[200px]  gap-0.5  overflow-auto   rounded border p-1 text-[14px] leading-5`}>
       <DSBM_Label {...common} {...{iconBtn}} />
       <DSBM_List {...common} {...{ArrayData}} />
     </C_Stack>

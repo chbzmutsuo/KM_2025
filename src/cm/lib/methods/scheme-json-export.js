@@ -821,8 +821,16 @@ model AqSaleRecord {
  AqPriceOption   AqPriceOption? @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
  aqPriceOptionId Int?
 
- AqSaleCart   AqSaleCart? @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
- aqSaleCartId Int?
+ AqSaleCart   AqSaleCart @relation(fields: [aqSaleCartId], references: [id], onDelete: Cascade)
+ aqSaleCartId Int
+
+ AqCustomerSubscription AqCustomerSubscription? @relation(fields: [aqCustomerSubscriptionId], references: [id])
+
+ aqCustomerSubscriptionId Int?
+
+ subscriptionYearMonth DateTime?
+
+ @@unique([aqCustomerId, aqProductId, subscriptionYearMonth], name: "unique_aqCustomerId_aqProductId_subscriptionYearMonth")
 }
 
 // 商品
@@ -937,7 +945,6 @@ model AqCustomerSubscription {
 
  maintananceYear  Int
  maintananceMonth Int
- updateDate       DateTime
 
  AqCustomer       AqCustomer     @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
  aqCustomerId     Int
@@ -947,7 +954,8 @@ model AqCustomerSubscription {
  AqProduct   AqProduct @relation(fields: [aqProductId], references: [id])
  aqProductId Int
 
- remarks String?
+ remarks      String?
+ AqSaleRecord AqSaleRecord[]
 }
 
 model AqCustomerPriceOption {
@@ -956,14 +964,17 @@ model AqCustomerPriceOption {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- AqCustomer      AqCustomer    @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
- aqCustomerId    Int
- AqProduct       AqProduct     @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
- aqProductId     Int
+ AqCustomer   AqCustomer @relation(fields: [aqCustomerId], references: [id], onDelete: Cascade)
+ aqCustomerId Int
+
+ AqProduct AqProduct @relation(fields: [aqProductId], references: [id], onDelete: Cascade)
+
+ aqProductId Int
+
  AqPriceOption   AqPriceOption @relation(fields: [aqPriceOptionId], references: [id], onDelete: Cascade)
  aqPriceOptionId Int
 
- @@unique([aqCustomerId, aqProductId, aqPriceOptionId], name: "unique_aqCustomerId_aqProductId_aqPriceOptionId")
+ @@unique([aqCustomerId, aqProductId], name: "unique_aqCustomerId_aqProductId")
 }
 
 model AqCustomerRecord {
@@ -1861,19 +1872,6 @@ model PrefCity {
  @@unique([pref, city], name: "unique_pref_city")
 }
 
-model DayRemarks {
- id        Int       @id @default(autoincrement())
- createdAt DateTime  @default(now())
- updatedAt DateTime? @default(now()) @updatedAt()
- sortOrder Float     @default(0)
-
- date         DateTime @unique
- bikou        String?
- shinseiGyomu String?
-
- DayRemarksUser DayRemarksUser[]
-}
-
 model DayRemarksUser {
  id          Int       @id @default(autoincrement())
  createdAt   DateTime  @default(now())
@@ -2066,6 +2064,21 @@ model GenbaTaskMaster {
 
  name  String
  color String
+}
+
+model DayRemarks {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date         DateTime @unique
+ bikou        String?
+ shinseiGyomu String?
+
+ ninkuCount Float @default(0)
+
+ DayRemarksUser DayRemarksUser[]
 }
 
  
@@ -2398,11 +2411,11 @@ model TbmDriveSchedule {
  O_postalHighwayFee  Int? //高速(郵便)
  Q_generalHighwayFee Int? //高速（一般）
 
- User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
- userId Int
+ User   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int?
 
- TbmVehicle   TbmVehicle @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
- tbmVehicleId Int
+ TbmVehicle   TbmVehicle? @relation(fields: [tbmVehicleId], references: [id], onDelete: Cascade)
+ tbmVehicleId Int?
 
  TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)
  tbmRouteGroupId Int

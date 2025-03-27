@@ -1,6 +1,5 @@
 'use client'
 
-
 import {Fields} from '@class/Fields/Fields'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
@@ -14,13 +13,15 @@ import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 
 export default function PurchaseRequestPage() {
   const useGlobalProps = useGlobal()
-  const {session, toggleLoad} = useGlobalProps
+  const {session, toggleLoad, accessScopes, router} = useGlobalProps
+
+  const {admin} = accessScopes()
   const userId = session.id
 
   const {BasicForm, latestFormData} = useBasicFormProps({
     columns: new Fields([
       //
-      {id: `userId`, label: `申請者`, forSelect: {}, form: {defaultValue: userId, disabled: userId}},
+      {id: `userId`, label: `申請者`, forSelect: {}, form: {defaultValue: userId, disabled: admin ? false : userId}},
       {id: `purchaseType`, label: `購入区分`, forSelect: {optionsOrOptionFetcher: PURCHASE_TYPE_OPTIONS}},
       {
         id: `productId`,
@@ -60,7 +61,7 @@ export default function PurchaseRequestPage() {
           latestFormData,
           onSubmit: async data => {
             toggleLoad(async item => {
-              const {purchaseType, productId, quantity, reason} = data
+              const {purchaseType, productId, quantity, reason, userId} = data
               const approverRoleList = [`新規`, `折損`].some(item => item === purchaseType) ? [`工場長`] : [`営業担当者`]
 
               const {result: approveUser} = await fetchUniversalAPI(`user`, `findFirst`, {
@@ -86,6 +87,7 @@ export default function PurchaseRequestPage() {
               })
 
               toastByResult(res)
+              router.push(`/applicationForms`)
             })
           },
         }}

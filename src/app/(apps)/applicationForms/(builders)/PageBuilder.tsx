@@ -2,11 +2,14 @@
 
 import {ColBuilder} from '@app/(apps)/applicationForms/(builders)/ColBuilder'
 import {roleMaster} from '@class/builders/PageBuilderVariables'
+import {Fields} from '@class/Fields/Fields'
 import {DetailPagePropType} from '@cm/types/types'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
+import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
 import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import Accordion from '@components/utils/Accordions/Accordion'
+import useGlobal from '@hooks/globalHooks/useGlobal'
 
 export class PageBuilder {
   static roleMaster = roleMaster
@@ -38,5 +41,31 @@ export class PageBuilder {
         </R_Stack>
       )
     },
+  }
+  static getGlobalIdSelector = ({useGlobalProps}) => {
+    return () => {
+      const {accessScopes} = useGlobal()
+      const scopes = accessScopes()
+      const {admin} = scopes
+
+      if (!admin) {
+        return <></>
+      }
+
+      const columns = Fields.transposeColumns([
+        {
+          label: '',
+          id: 'g_userId',
+          forSelect: {
+            config: {
+              where: {apps: {has: `applicationForms`}},
+            },
+          },
+          form: {},
+        },
+      ])
+
+      return <GlobalIdSelector {...{useGlobalProps, columns}} />
+    }
   }
 }

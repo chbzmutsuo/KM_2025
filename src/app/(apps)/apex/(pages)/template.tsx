@@ -1,6 +1,17 @@
 'use client'
 
+import useGlobal from '@hooks/globalHooks/useGlobal'
+
 import React from 'react'
 export default function Template({children}) {
-  return <div>{children}</div>
+  const {pathname} = useGlobal()
+  const HeaderTargetPathList = [`/apex`]
+
+  return (
+    <div>
+      {HeaderTargetPathList.includes(pathname) && <></>}
+
+      {children}
+    </div>
+  )
 }

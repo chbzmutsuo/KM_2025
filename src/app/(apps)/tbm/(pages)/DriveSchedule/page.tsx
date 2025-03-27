@@ -1,5 +1,4 @@
 import DriveScheduleCC from '@app/(apps)/tbm/(pages)/DriveSchedule/DriveScheduleCC'
-import {getListData} from '@app/(apps)/tbm/(pages)/DriveSchedule/getListData'
 import {Days, getMidnight} from '@class/Days'
 import Redirector from '@components/utils/Redirector'
 import {createUpdate, fetchTransactionAPI, fetchUniversalAPI} from '@lib/methods/api-fetcher'

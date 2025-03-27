@@ -131,7 +131,9 @@ const Main = ({
         style={{zIndex: Z_INDEX.overlay}}
         className="fixed inset-0 bg-black/50  "
         onClick={e => {
-          if (allowOuterClick) customeHandleClose(e)
+          if (allowOuterClick) {
+            customeHandleClose(e)
+          }
         }}
       />
 

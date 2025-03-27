@@ -1,4 +1,3 @@
-import {CurrencyYenIcon} from '@heroicons/react/20/solid'
 
 export type SPREADSHEET_URLS_TYPE = {
   simulationId: number
@@ -38,7 +37,7 @@ export const SPREADSHEET_URLS: SPREADSHEET_URLS_TYPE[] = [
   },
   {
     simulationId: 4,
-    subTitle: <CurrencyYenIcon />,
+    subTitle: '',
     title: '全部節税',
     description: `①〜③を全て導入することでいくら手取りを増やせるか確認できます。`,
     templateSheet: {
@@ -47,7 +46,7 @@ export const SPREADSHEET_URLS: SPREADSHEET_URLS_TYPE[] = [
   },
   {
     simulationId: 5,
-    subTitle: <CurrencyYenIcon />,
+    subTitle: '',
     title: '賃料相当額',
     description: `法人名義で家を借りたとき、会社に支払うべき家賃を税法を基に計算します。`,
     templateSheet: {

@@ -10,19 +10,6 @@ model PrefCity {
  @@unique([pref, city], name: "unique_pref_city")
 }
 
-model DayRemarks {
- id        Int       @id @default(autoincrement())
- createdAt DateTime  @default(now())
- updatedAt DateTime? @default(now()) @updatedAt()
- sortOrder Float     @default(0)
-
- date         DateTime @unique
- bikou        String?
- shinseiGyomu String?
-
- DayRemarksUser DayRemarksUser[]
-}
-
 model DayRemarksUser {
  id          Int       @id @default(autoincrement())
  createdAt   DateTime  @default(now())
@@ -215,4 +202,19 @@ model GenbaTaskMaster {
 
  name  String
  color String
+}
+
+model DayRemarks {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ date         DateTime @unique
+ bikou        String?
+ shinseiGyomu String?
+
+ ninkuCount Float @default(0)
+
+ DayRemarksUser DayRemarksUser[]
 }

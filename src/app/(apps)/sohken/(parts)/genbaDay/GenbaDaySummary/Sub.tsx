@@ -7,8 +7,8 @@ import {formatDate} from '@class/Days'
 
 import React from 'react'
 
-export default function Sub({records, GenbaDay, editable, commonProps, PC}) {
-  const {GenbaDayShift, allShiftBetweenDays = []} = GenbaDay
+export default function Sub({records, GenbaDay, editable, commonProps, PC, allShiftBetweenDays}) {
+  const {GenbaDayShift} = GenbaDay
 
   const ArrayData = GenbaDayShift?.map(v => {
     const {User, from, to, important, directGo, directReturn, shokucho} = v
@@ -39,6 +39,7 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC}) {
       <R_Stack className={`gap-[1px]`}>
         {directGo && <small>{'直行)'}</small>}
         {directReturn && <small>{'直帰)'}</small>}
+
         <span className={`  font-extrabold text-blue-500`}>{User?.name}: </span>
 
         {from && (
@@ -55,7 +56,11 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC}) {
       </R_Stack>
     )
 
-    const nextShiftIndex = nextShift ? records.findIndex(genbaday => genbaday.id === nextShift?.genbaDayId) : null
+    const nextShiftIndex = nextShift
+      ? records.findIndex(genbaday => {
+          return genbaday.id === nextShift?.genbaDayId
+        })
+      : null
 
     const nextShiftDisplay = nextShift ? (
       <R_Stack className={`gap-[1px]`}>

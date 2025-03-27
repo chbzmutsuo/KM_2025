@@ -16,12 +16,12 @@ export const Cart = ({cartItems, setcartItems, setformOpen}) => {
   return (
     <C_Stack>
       {cartItems.map((item: CartItem, index) => {
-        const {selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice} = item
+        const {selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice, price} = item
 
         const dataList = [
           {label: '名称', value: selectedProduct?.name},
           {label: '数量', value: item.quantity},
-          {label: '価格', value: DH.toPrice((selectedPriceOption?.price ?? 0) * (quantity ?? 0))},
+          {label: '価格', value: DH.toPrice(price * (quantity ?? 0))},
           {label: 'デフォルト価格設定', value: setAsDefaultPrice ? 'はい' : 'いいえ'},
         ]
         return (

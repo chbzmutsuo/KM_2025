@@ -39,8 +39,14 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
     ColBuilderExtraProps: ClientProps.ColBuilderExtraProps,
   })
 
-  const {prismaDataExtractionQuery, easySearchObject, easySearchWhereAnd, prismaData, easySearchPrismaDataOnServer} =
-    props.serverFetchihngData
+  const {
+    EasySearcherQuery,
+    prismaDataExtractionQuery,
+    easySearchObject,
+    easySearchWhereAnd,
+    prismaData,
+    easySearchPrismaDataOnServer,
+  } = props.serverFetchihngData
 
   const additional = useAdditional({additional: ClientProps.additional, prismaDataExtractionQuery})
 

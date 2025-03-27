@@ -39,7 +39,8 @@ export default function useGlobalSaleEditor() {
             aqProducts,
             aqCustomerPriceOption,
             upsertToCart: async props => {
-              const {date, selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice, paymentMethod, remarks} = props
+              const {date, selectedProduct, selectedPriceOption, quantity, setAsDefaultPrice, paymentMethod, remarks, price} =
+                props
 
               await toggleLoad(async () => {
                 const args = createSaleRecordArgs({
@@ -53,6 +54,7 @@ export default function useGlobalSaleEditor() {
                     selectedPriceOption,
                     setAsDefaultPrice,
                     remarks,
+                    price,
                   },
                 })
 

@@ -10,7 +10,6 @@ export const adjustBasicFormProps = props => {
     : 'col-stack  justify-center  gap-6'
 
   if (alignMode === 'row') {
-    //4月23日(火)変更 GlobalIdSelectorの幅が狭いので、minHeightを削除
     ControlOptions.ControlStyle = {...ControlOptions?.ControlStyle, minHeight: undefined}
     ControlOptions.direction = 'horizontal'
   }
