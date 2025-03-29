@@ -1,12 +1,9 @@
 import React, {useCallback} from 'react'
 import {Fragment} from 'react'
 
-import dynamic from 'next/dynamic'
 import {ClientPropsType2} from 'src/cm/components/DataLogic/TFs/PropAdjustor/PropAdjustor'
 import {OB} from 'src/cm/class/OB'
-import {DnDTableRowPropsType} from 'src/cm/components/DataLogic/TFs/MyTable/DndTableRow'
-
-const DnDTableRow = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/DndTableRow'), {})
+import DnDTableRow, {DnDTableRowPropsType} from 'src/cm/components/DataLogic/TFs/MyTable/DndTableRow'
 
 export type tbodyParamsType = {
   getPaginationProps: any
@@ -23,7 +20,16 @@ const Tbody = React.memo((props: {rows: any[][]; ClientProps2: ClientPropsType2;
   }
   const DnDTableRowCb = useCallback(
     ({DnDTableRowProps}) => {
-      return <DnDTableRow {...{...DnDTableRowCallbackProps, rows, DnDTableRowProps}} />
+      return (
+        <DnDTableRow
+          {...{
+            totalCount: ClientProps2.totalCount,
+            ...DnDTableRowCallbackProps,
+            rows,
+            DnDTableRowProps,
+          }}
+        />
+      )
     },
     [ClientProps2.records]
   )

@@ -1,4 +1,3 @@
-
 export type SPREADSHEET_URLS_TYPE = {
   simulationId: number
   title: string
@@ -54,3 +53,7 @@ export const SPREADSHEET_URLS: SPREADSHEET_URLS_TYPE[] = [
     },
   },
 ]
+
+export const HISTORY_SS = {
+  url: `https://docs.google.com/spreadsheets/d/1sGXOzhe9eo3gpHowWOLF8EebI7D9Ig5usgX76rQmbY8/edit?gid=0#gid=0`,
+}

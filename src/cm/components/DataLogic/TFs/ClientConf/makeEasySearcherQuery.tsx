@@ -14,7 +14,7 @@ export const makeEasySearcherQuery = async (props: {
   const {EasySearchBuilder, dataModelName, additional, session, query, easySearchExtraProps} = props
 
   const EasySearchBuilderFunc = await EasySearchBuilder?.()
-  const easySearchObject = await EasySearchBuilderFunc[dataModelName]?.({
+  const easySearchObject = await EasySearchBuilderFunc?.[dataModelName]?.({
     additionalWhere: additional?.where,
     session,
     query,

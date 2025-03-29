@@ -5,7 +5,6 @@ import {setCustomParams} from '@cm/components/DataLogic/TFs/Server/SetCustomPara
 import {getScopes} from 'src/non-common/scope-lib/getScopes'
 import {Conf} from '@components/DataLogic/TFs/Server/Conf'
 import PropAdjustor from '@components/DataLogic/TFs/PropAdjustor/PropAdjustor'
-import EasySearchAtomProvider from '@components/DataLogic/TFs/ClientConf/Providers/EasySearchAtomProvider'
 import {PageBuilder} from '@app/(apps)/aquapot/(class)/Pagebuilder/PageBuilder'
 import {ColBuilder} from '@app/(apps)/aquapot/(class)/colBuilder/ColBuilder'
 import {QueryBuilder} from '@app/(apps)/aquapot/(class)/QueryBuilder'
@@ -22,9 +21,9 @@ export default async function DynamicMasterPage(props) {
   const conf = await Conf({params, session, query, customParams, ...getBuilders()})
 
   return (
-    <EasySearchAtomProvider {...conf}>
-      <PropAdjustor {...conf} />
-    </EasySearchAtomProvider>
+    // <EasySearchAtomProvider {...conf}>
+    <PropAdjustor {...conf} />
+    // </EasySearchAtomProvider>
   )
 }
 

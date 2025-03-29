@@ -2,8 +2,8 @@
 
 import useGlobal, {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobal'
 
-import React, {useEffect} from 'react'
-import {ClientPropsType, prismaDataType, serverFetchihngDataType} from '@cm/types/types'
+import React from 'react'
+import {ClientPropsType} from '@cm/types/types'
 import {NestHandler} from 'src/cm/class/NestHandler'
 import TableForm from 'src/cm/components/DataLogic/TFs/PropAdjustor/TableForm'
 import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
@@ -11,25 +11,61 @@ import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/commo
 import {HK_USE_RECORDS_TYPE} from 'src/cm/components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
 import {prismaDataExtractionQueryType} from 'src/cm/components/DataLogic/TFs/Server/Conf'
 
-import DetailedPageCC from '@components/DataLogic/TFs/PropAdjustor/DetailedPageCC'
 import EasySearcher from '@components/DataLogic/TFs/MyTable/EasySearcher/EasySearcher'
 import {Z_INDEX} from '@lib/constants/constants'
 
-export type PropAdjustorPropsType = {ClientProps: ClientPropsType; serverFetchihngData: serverFetchihngDataType}
-const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
+import useMergeWithCustomViewParams from '@components/DataLogic/TFs/PropAdjustor/useMergeWithCustomViewParams'
+import PlaceHolder from '@components/utils/loader/PlaceHolder'
+import {useSearchHandler} from '@components/DataLogic/TFs/MyTable/TableHandler/SearchHandler/useSearchHandler/useSearchHandler'
+import useColumns from '@components/DataLogic/TFs/PropAdjustor/useColumns'
+import useRecords from '@components/DataLogic/TFs/PropAdjustor/useRecords'
+import useInitFormState from '@hooks/useInitFormState'
+import useEditForm from '@components/DataLogic/TFs/PropAdjustor/useEditForm'
+import useMyTable from '@components/DataLogic/TFs/PropAdjustor/useMyTable'
+import useAdditional from '@components/DataLogic/TFs/PropAdjustor/useAdditional'
+
+import DetailedPageCC from '@components/DataLogic/TFs/PropAdjustor/DetailedPageCC'
+import {serverFetchProps} from '@components/DataLogic/TFs/ClientConf/fetchers/getInitModelRecordsProps'
+import useLogOnRender from '@hooks/useLogOnRender'
+
+export type PropAdjustorPropsType = {
+  ClientProps: ClientPropsType
+  // serverFetchihngData: serverFetchihngDataType
+  serverFetchProps: serverFetchProps
+}
+
+const PropAdjustor = (props: PropAdjustorPropsType) => {
+  useLogOnRender(`records`)
+
   const useGlobalProps = useGlobal()
   const {router, pathname} = useGlobalProps
-  const {ClientProps} = props
+  const {
+    ClientProps,
+    serverFetchProps,
+    // serverFetchihngData
+  } = props
 
-  useEffect(() => {
-    if (pathname === window.location.pathname) return
+  // const {
+  //   EasySearcherQuery,
+  //   prismaDataExtractionQuery,
+  //   // easySearchObject,
+  //   // easySearchWhereAnd,
+  //   // prismaData,
+  //   // easySearchPrismaDataOnServer,
+  // } = serverFetchihngData
 
-    router.refresh()
-  }, [])
+  const HK_USE_RECORDS: HK_USE_RECORDS_TYPE = useRecords({
+    // recordSource: [],
+    // EasySearcherQuery,
+    // prismaDataExtractionQuery,
+    // modelName: ClientProps.dataModelName,
+    serverFetchProps,
+  })
 
-  const HK_USE_RECORDS: HK_USE_RECORDS_TYPE = useRecords({recordSource: props.serverFetchihngData.prismaData.records})
+  const {prismaDataExtractionQuery, easySearchPrismaDataOnServer} = HK_USE_RECORDS
+  const modelData = HK_USE_RECORDS.records[0]
 
-  const {formData, setformData} = useInitFormState(null, props.serverFetchihngData.prismaData.records)
+  const {formData, setformData} = useInitFormState(null, [modelData])
 
   const columns = useColumns({
     useGlobalProps,
@@ -38,15 +74,6 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
     ColBuilder: ClientProps.ColBuilder,
     ColBuilderExtraProps: ClientProps.ColBuilderExtraProps,
   })
-
-  const {
-    EasySearcherQuery,
-    prismaDataExtractionQuery,
-    easySearchObject,
-    easySearchWhereAnd,
-    prismaData,
-    easySearchPrismaDataOnServer,
-  } = props.serverFetchihngData
 
   const additional = useAdditional({additional: ClientProps.additional, prismaDataExtractionQuery})
 
@@ -73,13 +100,12 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
     formData,
     setformData,
     HK_USE_RECORDS,
-    prismaData,
     prismaDataExtractionQuery,
-    easySearchObject,
-    easySearchWhereAnd,
-  })
 
-  if (props.serverFetchihngData.DetailePageId) return <DetailedPageCC {...{ClientProps2, prismaData}} />
+    // prismaData,
+    // easySearchObject,
+    // easySearchWhereAnd,
+  })
 
   const {appbarHeight} = ClientProps2.useGlobalProps
 
@@ -92,6 +118,11 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
   })
 
   const Top = SurroundingComponent({ClientProps2, type: 'top'})
+
+  const loading = easySearchPrismaDataOnServer.loading || easySearchPrismaDataOnServer.loading
+
+  if (loading) return <PlaceHolder />
+  if (serverFetchProps.DetailePageId) return <DetailedPageCC {...{ClientProps2, modelData}} />
 
   return (
     <div style={{...ClientProps2.displayStyle, paddingTop: 10}}>
@@ -143,7 +174,7 @@ const PropAdjustor = React.memo((props: PropAdjustorPropsType) => {
       </div>
     </div>
   )
-})
+}
 
 export default PropAdjustor
 
@@ -155,20 +186,14 @@ export type ClientPropsType2 = ClientPropsType & {
   setformData
   records
   setrecords
+  totalCount
   mutateRecords
   deleteRecord
-  prismaData: prismaDataType
+  // prismaData: prismaDataType
   prismaDataExtractionQuery: prismaDataExtractionQueryType
   easySearchObject?
   easySearchWhereAnd?
 }
-import {useSearchHandler} from '@components/DataLogic/TFs/MyTable/TableHandler/SearchHandler/useSearchHandler/useSearchHandler'
-import useColumns from '@components/DataLogic/TFs/PropAdjustor/useColumns'
-import useRecords from '@components/DataLogic/TFs/PropAdjustor/useRecords'
-import useInitFormState from '@hooks/useInitFormState'
-import useEditForm from '@components/DataLogic/TFs/PropAdjustor/useEditForm'
-import useMyTable from '@components/DataLogic/TFs/PropAdjustor/useMyTable'
-import useAdditional from '@components/DataLogic/TFs/PropAdjustor/useAdditional'
 
 const SurroundingComponent = ({type, ClientProps2}) => {
   const {PageBuilder, dataModelName} = ClientProps2
@@ -181,4 +206,3 @@ const SurroundingComponent = ({type, ClientProps2}) => {
     return <TableForm {...ClientProps2} />
   }
 }
-import useMergeWithCustomViewParams from '@components/DataLogic/TFs/PropAdjustor/useMergeWithCustomViewParams'

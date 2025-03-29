@@ -12,8 +12,9 @@ import {DetailPagePropType} from '@cm/types/types'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
 import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
-import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
+import {C_Stack} from '@components/styles/common-components/common-components'
 import {T_LINK} from '@components/styles/common-components/links'
+import {Wrapper} from '@components/styles/common-components/paper'
 import BasicTabs from '@components/utils/tabs/BasicTabs'
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobal'
 
@@ -24,7 +25,7 @@ export class PageBuilder {
   static aqCustomerRecord: DataModelBuilder = {
     top: props => {
       const {Filter} = useAqCustomerRecordFilter()
-      return <FitMargin className={`p-2`}>{Filter}</FitMargin>
+      return <Wrapper className={``}>{Filter}</Wrapper>
     },
 
     form: props => {
@@ -42,7 +43,7 @@ export class PageBuilder {
   static aqCustomer: DataModelBuilder = {
     top: props => {
       const {Filter} = useAqCustomerFilter()
-      return <FitMargin className={`p-2`}>{Filter}</FitMargin>
+      return <Wrapper className={``}>{Filter}</Wrapper>
     },
     form: (props: DetailPagePropType) => {
       const {query, router} = props.useGlobalProps

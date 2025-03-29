@@ -1,9 +1,7 @@
 import {Days} from '@class/Days'
-import {createUpdate} from '@lib/methods/api-fetcher'
 import prisma from '@lib/prisma'
 import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 import {Prisma} from '@prisma/client'
-import {update} from 'lodash'
 import {NextRequest, NextResponse} from 'next/server'
 
 import {isCron} from 'src/non-common/serverSideFunction'

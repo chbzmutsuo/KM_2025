@@ -37,8 +37,7 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
 
   const {editType} = ClientProps2
 
-  const {columns, dataModelName, setformData, myTable, formData, useGlobalProps, records, setrecords, prismaData, deleteRecord} =
-    ClientProps2
+  const {columns, dataModelName, setformData, myTable, formData, useGlobalProps, records, setrecords, deleteRecord} = ClientProps2
 
   const {
     columnCount,
@@ -46,7 +45,7 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
     tableStyle,
     methods: {getPaginationProps, handleDragEndMemo},
     dndProps: {items, sensors},
-  } = useMyTableParams({columns, dataModelName, useGlobalProps, myTable, records, setrecords, prismaData})
+  } = useMyTableParams({columns, dataModelName, useGlobalProps, myTable, records, setrecords})
 
   const {RowActionButtonComponent} = useTrActions({
     ...{records, setrecords, deleteRecord, setformData},
@@ -125,7 +124,16 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
         <div className={cl(`rounded bg-white/70`, ` mx-auto  w-fit   px-1  py-0.5  `)}>
           <R_Stack className={`  w-fit  justify-center gap-y-0`}>
             <TableConfig {...{TableConfigProps, ClientProps2}} />
-            <MyPagination {...{recordCount, myTable, getPaginationProps, useGlobalProps, records}} />
+            <MyPagination
+              {...{
+                totalCount: ClientProps2.totalCount,
+                recordCount,
+                myTable,
+                getPaginationProps,
+                useGlobalProps,
+                records,
+              }}
+            />
           </R_Stack>
         </div>
       </section>

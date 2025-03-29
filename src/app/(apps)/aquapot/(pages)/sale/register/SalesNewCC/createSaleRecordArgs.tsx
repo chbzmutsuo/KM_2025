@@ -4,7 +4,7 @@ export const createSaleRecordArgs = (props: {date: Date; userId: number; aqCusto
   const {date, userId, aqCustomerId, item} = props
   const {taxRate} = item?.selectedProduct
   const price = item.price * item.quantity
-  console.log({price, item}) //logs
+
   const taxedPrice = Math.round((price * (1 + taxRate / 100) * 100) / 100)
   return {
     User: {

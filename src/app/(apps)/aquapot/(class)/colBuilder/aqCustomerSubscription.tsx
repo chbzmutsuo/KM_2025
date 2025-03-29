@@ -6,7 +6,7 @@ import {DH} from '@class/DH'
 
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
-import {Alert, TextRed} from '@components/styles/common-components/Alert'
+import { TextRed} from '@components/styles/common-components/Alert'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 
 export const aqCustomerSubscription = (props: columnGetterType) => {

@@ -20,7 +20,7 @@ import {myFormDefaultUpsertPropType} from 'src/cm/lib/formMethods'
 import {prismaDataExtractionQueryType} from 'src/cm/components/DataLogic/TFs/Server/Conf'
 import {surroundings} from 'src/cm/components/DataLogic/TFs/Server/SetCustomParams'
 import {ClientPropsType2} from 'src/cm/components/DataLogic/TFs/PropAdjustor/PropAdjustor'
-import {easySearchDataSwrType, EasySearchObject} from 'src/cm/class/builders/QueryBuilderVariables'
+import {EasySearchObject} from 'src/cm/class/builders/QueryBuilderVariables'
 
 import {HK_USE_RECORDS_TYPE} from '@components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
 
@@ -345,7 +345,7 @@ export type dataModelNameType = PrismaModelNames
 //クライアントで使うformDataを含んだもの
 export type formDataStateType = {
   dataModelName: dataModelNameType
-  prismaData: prismaDataType
+  // prismaData: prismaDataType
   formData: anyObject | null | undefined
   setformData: any
 }
@@ -383,7 +383,7 @@ export type requestResultType = {
 
 export type DetailedPageCCPropType = {
   dataModelName: dataModelNameType
-  prismaData: prismaDataType
+  // prismaData: prismaDataType
   ColBuilder?: anyObject
 
   EditForm?: any
@@ -401,11 +401,10 @@ export type serverFetchihngDataType = {
   DetailePageId: number | undefined
   easySearchObject: EasySearchObject
   easySearchWhereAnd: any[]
-  prismaData: any
-
-  easySearchPrismaDataOnServer: easySearchDataSwrType
   EasySearcherQuery: any
   prismaDataExtractionQuery: any
+  // prismaData: any
+  // easySearchPrismaDataOnServer: easySearchDataSwrType
 }
 export type ClientPropsType = {
   params: anyObject

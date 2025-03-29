@@ -15,9 +15,6 @@ export const aqCustomer = (props: columnGetterType) => {
     },
   })
 
-  // const {router} = props.useGlobalProps
-  // const HK_USE_RECORDS = props.ColBuilderExtraProps?.HK_USE_RECORDS as HK_USE_RECORDS_TYPE
-
   return new Fields([
     ...new Fields([
       ...new Fields([

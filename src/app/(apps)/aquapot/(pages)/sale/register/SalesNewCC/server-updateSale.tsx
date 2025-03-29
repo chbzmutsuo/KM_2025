@@ -71,7 +71,7 @@ export const serverUpdateSale = async (props: {
         messages.push(`${count}件のデフォルト価格を設定しました`)
       }
     } catch (error) {
-      console.error(error.stack) //logs
+      console.error(error.stack)
       throw new Error('Failed to create price option')
     }
     success += 1

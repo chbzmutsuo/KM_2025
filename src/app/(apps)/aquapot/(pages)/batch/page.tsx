@@ -1,11 +1,8 @@
 'use client'
-import {Fields} from '@class/Fields/Fields'
-import {Button} from '@components/styles/common-components/Button'
 import {Absolute} from '@components/styles/common-components/common-components'
 import {CssString} from '@components/styles/cssString'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {fetchAlt} from '@lib/methods/api-fetcher'
 
 import {basePath, cl} from '@lib/methods/common'

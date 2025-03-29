@@ -3,6 +3,7 @@ import Chart, {redColor} from '@app/(apps)/apex/(pages)/[simulationId]/Chart'
 import {questionType} from '@app/(apps)/apex/(pages)/[simulationId]/page'
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 import useWindowSize from '@hooks/useWindowSize'
+import Image from 'next/image'
 
 import React from 'react'
 
@@ -72,7 +73,7 @@ export default function ChartWrapper(props: {
             })}
           </C_Stack>
         </section>
-        <section className={` mx-auto`}>
+        <section className={` relative mx-auto pb-20`}>
           <Chart
             {...{
               chartData,
@@ -83,6 +84,15 @@ export default function ChartWrapper(props: {
               width,
             }}
           />
+
+          <div className={` absolute -right-4 bottom-0`}>
+            <Image
+              src={keyName === `before` ? '/apex/catBefore.png' : '/apex/catAfter.png'}
+              width={keyName === `before` ? 100 : 140}
+              height={keyName === `before` ? 100 : 140}
+              alt="cat"
+            />
+          </div>
         </section>
 
         {keyName === `after` && (

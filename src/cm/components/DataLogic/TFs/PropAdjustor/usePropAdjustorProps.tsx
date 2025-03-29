@@ -2,7 +2,7 @@
 
 import {NestHandler} from 'src/cm/class/NestHandler'
 
-import { ClientPropsType, prismaDataType} from '@cm/types/types'
+import {ClientPropsType, prismaDataType} from '@cm/types/types'
 
 import {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobal'
 import useInitFormState from 'src/cm/hooks/useInitFormState'
@@ -32,8 +32,7 @@ const usePropAdjustorProps = (props: {
   } = props
 
   const {formData, setformData} = useInitFormState(null, prismaData?.records)
-  // const recordSource = prismaData.records ?? []
-  const {records, setrecords, mutateRecords, deleteRecord} = HK_USE_RECORDS
+  const {records, setrecords, mutateRecords, deleteRecord, totalCount} = HK_USE_RECORDS
 
   const {displayStyle, easySearchPrismaDataOnServer} = ClientProps
   const {dataModelName} = ClientProps ?? {}
@@ -43,6 +42,7 @@ const usePropAdjustorProps = (props: {
 
   const ClientProps2: ClientPropsType2 = {
     ...ClientProps,
+    totalCount,
     EditForm,
     myTable,
     displayStyle,
@@ -56,7 +56,7 @@ const usePropAdjustorProps = (props: {
     setrecords,
     mutateRecords,
     deleteRecord,
-    prismaData,
+    // prismaData,
     prismaDataExtractionQuery,
     easySearchObject,
     easySearchWhereAnd,

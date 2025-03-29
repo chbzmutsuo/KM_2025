@@ -221,8 +221,8 @@ export type makeEasySearchGroupsProp = {
 export type easySearchDataSwrType = {
   dataCountObject
   availableEasySearchObj
-  loading: boolean
-  noData: boolean
+  loading?: boolean
+  noData?: boolean
   beforeLoad?: boolean
 }
 

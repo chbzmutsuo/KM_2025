@@ -1,5 +1,4 @@
 import {ClientPropsType} from '@cm/types/types'
-import {ES_Atom_Fetcher} from 'src/cm/components/DataLogic/TFs/ClientConf/fetchers/ES_Atom_Fetcher'
 
 export type prismaDataExtractionQueryType = {
   where?: any
@@ -14,11 +13,8 @@ export type prismaDataExtractionQueryType = {
 //関数
 export const Conf = async props => {
   const {params, session, query, customParams, ColBuilder, ViewParamBuilder, PageBuilder, QueryBuilder, EasySearchBuilder} = props
-
   const {dataModelName, additional, QueryBuilderExtraProps, easySearchExtraProps, myTable} = customParams ?? {}
-
   const include = QueryBuilder.getInclude({session, query, QueryBuilderExtraProps})?.[dataModelName]?.include
-
   const ClientProps: ClientPropsType = {
     params,
     ...{ColBuilder, ViewParamBuilder, PageBuilder, EasySearchBuilder},
@@ -26,8 +22,7 @@ export const Conf = async props => {
     include,
   }
 
-  const serverFetchihngData = await ES_Atom_Fetcher({
-    useSql: props?.customParams?.useSql,
+  const serverFetchProps = {
     DetailePageId: params?.[`id`] ? Number(params?.[`id`]) : undefined,
     EasySearchBuilder,
     dataModelName,
@@ -35,15 +30,12 @@ export const Conf = async props => {
     myTable,
     include,
     session,
-    query,
     easySearchExtraProps,
-  })
+    useSql: undefined,
+  }
 
-  return {ClientProps, serverFetchihngData}
+  return {
+    ClientProps,
+    serverFetchProps,
+  }
 }
-
-// export const getDefaultCountPerPage = countPerPage => {
-//   const defaultCountPerPage = 20
-
-//   return result
-// }

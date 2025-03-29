@@ -20,6 +20,37 @@ export const GoogleSheet_getSheetByName = async (props: {spreadsheetId: string; 
 
   return sheet
 }
+export const GoogleSheet_getSheetByNameOrCreate = async (props: {spreadsheetId: string; sheetName: string}) => {
+  const {sheetName} = props
+  const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
+
+  const data = await GoogleSheet_Get({spreadsheetId})
+  const sheet = data.sheets?.find(item => item.properties?.title === sheetName)
+
+  if (sheet) {
+    return sheet
+  } else {
+    const auth = getAuth()
+    const sheets = google.sheets({version: 'v4', auth})
+    const res = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            addSheet: {properties: {title: props.sheetName}},
+          },
+        ],
+      },
+    })
+
+    return await GoogleSheet_getSheetByNameOrCreate({
+      spreadsheetId,
+      sheetName,
+    })
+  }
+
+  return sheet
+}
 
 export const GoogleSheet_Read = async (props: {range: string; spreadsheetId: string}) => {
   const {range} = props

@@ -1,3 +1,5 @@
+'use server'
+
 import {SearchQuery} from '@components/DataLogic/TFs/MyTable/TableHandler/SearchHandler/search-methods'
 
 import {getEasySearchWhereAnd} from '@class/builders/QueryBuilderVariables'
@@ -5,10 +7,22 @@ import {getEasySearchWhereAnd} from '@class/builders/QueryBuilderVariables'
 import {makePrismaDataExtractionQuery} from '@components/DataLogic/TFs/ClientConf/makePrismaDataExtractionQuery'
 import {getMyTableId} from '@components/DataLogic/TFs/MyTable/getMyTableId'
 import {P_Query} from '@class/PQuery'
-import {EasySearchDataSwrFetcher} from '@components/DataLogic/TFs/ClientConf/fetchers/EasySearchDataSwrFetcher'
 import {makeEasySearcherQuery} from '@components/DataLogic/TFs/ClientConf/makeEasySearcherQuery'
+import {searchModels} from '@lib/methods/api-fetcher'
+import {EasySearchDataSwrFetcher} from '@components/DataLogic/TFs/ClientConf/fetchers/EasySearchDataSwrFetcher'
 
-export async function getInitModelRecordsProps({
+export type serverFetchProps = {
+  DetailePageId
+  EasySearchBuilder
+  dataModelName
+  additional
+  myTable
+  include
+  session
+  easySearchExtraProps
+  useSql
+}
+export const getInitModelRecordsProps = async ({
   DetailePageId,
   EasySearchBuilder,
   dataModelName,
@@ -16,10 +30,10 @@ export async function getInitModelRecordsProps({
   myTable,
   include,
   session,
-  query,
   easySearchExtraProps,
   useSql,
-}) {
+  query,
+}: serverFetchProps & {query}) => {
   const {page, take, skip} = P_Query.getPaginationPropsByQuery({
     query,
     tableId: getMyTableId({dataModelName, myTable}),
@@ -27,7 +41,8 @@ export async function getInitModelRecordsProps({
   })
 
   const EasySearchBuilderFunc = await EasySearchBuilder?.()
-  const easySearchObject = await EasySearchBuilderFunc[dataModelName]?.({
+
+  const easySearchObject = await EasySearchBuilderFunc?.[dataModelName]?.({
     additionalWhere: additional?.where,
     session,
     query,
@@ -64,8 +79,19 @@ export async function getInitModelRecordsProps({
     query,
     easySearchExtraProps,
   })
+
+  const {records, totalCount} = await searchModels(dataModelName, prismaDataExtractionQuery)
+
+  const easySearchPrismaDataOnServer = await EasySearchDataSwrFetcher(EasySearcherQuery)
   return {
-    EasySearcherQuery,
-    prismaDataExtractionQuery,
+    queries: {
+      EasySearcherQuery,
+      prismaDataExtractionQuery,
+    },
+    data: {
+      records,
+      totalCount,
+      easySearchPrismaDataOnServer,
+    },
   }
 }

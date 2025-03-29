@@ -197,7 +197,8 @@ const separateFormData = ({latestFormData, additionalPayload, columns}) => {
 
     const firstLetter = key.slice(0, 1)
 
-    const startsWithCapital = /^[A-Z]+$/.test(key.slice(0, 1)) && isNaN(Number(firstLetter)) && Omit.includes(key)
+    const startsWithCapital = /^[A-Z]+$/.test(firstLetter) && isNaN(Number(firstLetter))
+    // && Omit.includes(key) //3月27日(木) 削除
 
     const formHidenTrue = col?.form?.hidden === true
 
@@ -208,16 +209,13 @@ const separateFormData = ({latestFormData, additionalPayload, columns}) => {
   })
 
   const {id, ...modelBasicData} = modelBasicDataOrigin
+
   const relationIds = {}
   Object.keys(relationIdOrigin).forEach(key => {
     if (key.match(/.+Id/)) {
-      const modelName = DH.capitalizeFirstLetter(key.replace('Id', ''))
-
       const relationalTableId = prismaDataObject[key]
 
-      if (relationalTableId) {
-        relationIds[key] = relationalTableId
-      }
+      relationIds[key] = relationalTableId
     }
   })
 

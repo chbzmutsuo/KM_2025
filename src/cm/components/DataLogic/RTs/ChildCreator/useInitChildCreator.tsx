@@ -2,14 +2,13 @@ import {DH} from 'src/cm/class/DH'
 import {ChildCreatorProps} from 'src/cm/components/DataLogic/RTs/ChildCreator/ChildCreator'
 
 import useInitFormState from 'src/cm/hooks/useInitFormState'
-import {additionalPropsType, colType, MyTableType, prismaDataType} from '@cm/types/types'
+import {additionalPropsType, colType, MyTableType} from '@cm/types/types'
 
 import useRecords from 'src/cm/components/DataLogic/TFs/PropAdjustor/useRecords'
 import {prismaDataExtractionQueryType} from 'src/cm/components/DataLogic/TFs/Server/Conf'
 
-import {searchModels} from '@lib/methods/api-fetcher'
-import useSWR from 'swr'
 import {checkShowHeader} from '@components/DataLogic/TFs/PropAdjustor/updateMyTable'
+import {defaultEasySearchBuilder} from '@class/builders/EasySearchBuilderVariables'
 
 export default function useInitChildCreator(props: ChildCreatorProps) {
   const {
@@ -50,29 +49,30 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
     prismaDataExtractionQuery,
   ]
 
-  const {
-    data = {
-      records: [],
-      totalCount: 0,
-      loading: true,
-      noData: false,
-    },
-    mutate: mutateThicChildCreator,
-  } = useSWR(JSON.stringify(dataSwitchDeps), async () => {
-    return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
+  // const {
+  //   data = {
+  //     records: [],
+  //     totalCount: 0,
+  //     loading: true,
+  //     noData: false,
+  //   },
+  //   mutate: mutateThicChildCreator,
+  // } = useSWR(JSON.stringify(dataSwitchDeps), async () => {
+  //   return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
 
-    // const Children = ParentData[DH.capitalizeFirstLetter(models.children)]
+  //   // const Children = ParentData[DH.capitalizeFirstLetter(models.children)]
 
-    // if (Children) {
-    //   return {records: Children, totalCount: Children.length}
-    // } else {
-    //   return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
-    // }
-  })
-  const prismaData = data as prismaDataType
+  //   // if (Children) {
+  //   //   return {records: Children, totalCount: Children.length}
+  //   // } else {
+  //   //   return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
+  //   // }
+  // })
+  // const prismaData = data as prismaDataType
 
-  const recordSource = prismaData?.records ?? []
-  const showHeader = checkShowHeader({myTable: props.myTable, columns})
+  // const recordSource = prismaData?.records ?? []
+  // const showHeader = checkShowHeader({myTable: props.myTable, columns})
+
   const childTableProps = {
     myTable: {
       showHeader: checkShowHeader({myTable: props.myTable, columns}),
@@ -83,23 +83,39 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
     myForm: {...props.myForm},
   }
 
-  const {records, setrecords, mutateRecords, deleteRecord} = useRecords({recordSource})
-
-  const {formData, setformData} = useInitFormState(null, prismaData?.records ?? [])
-
   const myTable = childTableProps.myTable
-
   const myForm = childTableProps.myForm
 
+  const serverFetchProps = {
+    DetailePageId: null,
+    EasySearchBuilder: defaultEasySearchBuilder,
+    dataModelName: models.children,
+    additional,
+    myTable,
+    include: additional?.include ? additional?.include : undefined,
+    session: null,
+    easySearchExtraProps: null,
+    useSql: false,
+  }
+
+  const {initFetchTableRecords, records, setrecords, mutateRecords, deleteRecord, totalCount} = useRecords({
+    serverFetchProps,
+    // modelName: models.children,
+    // EasySearcherQuery: {},
+    // prismaDataExtractionQuery,
+  })
+
+  const {formData, setformData} = useInitFormState(null, [])
+
   return {
+    initFetchTableRecords,
     prismaDataExtractionQuery,
     ...{ParentData, models, NoDatawhenParentIsUndefined, tunedAdditional},
     //以下、ChildCreatorに渡す
     ...{dataModelName: models.children, columns},
-    ...{prismaData, formData, setformData},
-    ...{records, setrecords, mutateRecords, deleteRecord},
+    ...{formData, setformData},
+    ...{records, setrecords, mutateRecords, deleteRecord, totalCount},
     ...{myTable, myForm, additional: tunedAdditional, EditForm, editType, useGlobalProps},
-    mutateThicChildCreator,
   }
   function getModelData() {
     const parentModelIdStr = models.parent ? DH.lowerCaseFirstLetter(models.parent) + 'Id' : ''

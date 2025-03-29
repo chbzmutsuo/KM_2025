@@ -30,7 +30,7 @@ export const getUserListWithCarHistory = async ({tbmBaseId, whereQuery, TbmBase_
 
     let allCars = TbmDriveSchedule.reduce((acc, cur, i) => {
       const {TbmVehicle} = cur
-      if (!acc.find(v => v.id === TbmVehicle.id)) {
+      if (!acc.find(v => v.id === TbmVehicle?.id)) {
         acc.push(TbmVehicle)
       }
       return acc

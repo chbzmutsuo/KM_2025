@@ -39,7 +39,7 @@ export type tbmTableKeyValue = {
 
 type userType = User & {TbmVehicle?: TbmVehicle}
 export type MonthlyTbmDriveData = {
-  schedule: TbmDriveSchedule & {User: userType}
+  schedule: TbmDriveSchedule & {User: userType; TbmVehicle: TbmVehicle}
   keyValue: {
     [key in meisaiKey]: tbmTableKeyValue
   }
@@ -101,7 +101,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
     const Product = schedule.TbmRouteGroup?.Mid_TbmRouteGroup_TbmProduct?.TbmProduct
 
     return {
-      schedule: schedule as TbmDriveSchedule & {User: userType},
+      schedule: schedule as TbmDriveSchedule & {User: userType; TbmVehicle: TbmVehicle},
 
       keyValue: {
         date: {
@@ -120,7 +120,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
         },
         vehicleType: {
           label: '車種',
-          cellValue: schedule.TbmVehicle.type,
+          cellValue: schedule.TbmVehicle?.type,
         },
         productCode: {
           label: '品名CD',
@@ -146,7 +146,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
         },
         plateNumber: {
           label: '車番',
-          cellValue: schedule.TbmVehicle.vehicleNumber,
+          cellValue: schedule.TbmVehicle?.vehicleNumber,
         },
         driverCode: {
           label: '運転手CD',
@@ -154,7 +154,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
         },
         driverName: {
           label: '運転手',
-          cellValue: schedule.User.name,
+          cellValue: schedule.User?.name,
         },
         N_postalFee: {
           label: '通行料(郵便)',

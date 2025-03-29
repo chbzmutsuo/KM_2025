@@ -7,9 +7,6 @@ const data = [
 ]
 
 import {
-  GoogleSheet_BatchUpdate,
-  GoogleSheet_copy,
-  GoogleSheet_getSheetByName,
   GoogleSheet_Read,
 } from '@app/api/google/actions/sheetAPI'
 import {Button} from '@components/styles/common-components/Button'
@@ -20,14 +17,12 @@ import {ChevronDoubleDownIcon} from '@heroicons/react/20/solid'
 import {Paper} from '@components/styles/common-components/paper'
 import ChartWrapper from '@app/(apps)/apex/(pages)/[simulationId]/ChartWrapper'
 import {useParams} from 'next/navigation'
-import {SPREADSHEET_URLS, SPREADSHEET_URLS_TYPE} from '@app/(apps)/apex/(constants)/SPREADSHEET_CONST'
+import { SPREADSHEET_URLS, SPREADSHEET_URLS_TYPE} from '@app/(apps)/apex/(constants)/SPREADSHEET_CONST'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
-import {GoogleDrive_UpsertFolder} from '@app/api/google/actions/driveAPI'
-import {formatDate} from '@class/Days'
-import {SheetRequests} from '@app/api/google/actions/SheetRequests'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {sleep} from '@lib/methods/common'
 import Link from 'next/link'
+import {handleGetResult} from '@app/(apps)/apex/(pages)/[simulationId]/server-actions/handleGetResult'
+import {handlePutHistory} from '@app/(apps)/apex/(pages)/[simulationId]/server-actions/handlePutHistory'
 
 export default function Page() {
   const {toggleLoad} = useGlobal()
@@ -53,75 +48,10 @@ export default function Page() {
   }
 
   const getCalculatedResultFormSS = async () => {
-    toggleLoad(async item => {
-      // ==============シートのコピー===============
-      const folderName = [SS_CONSTANTS.title, '結果'].join('_')
-      const parentFolderId = await GoogleDrive_UpsertFolder({
-        parentFolderId: 'https://drive.google.com/drive/folders/1hXHRnBQgeiEzdKJEtjZ4g5wiODpvO4o0',
-        folderNameToFind: folderName,
-      })
+    toggleLoad(async () => {
+      await handlePutHistory({SS_CONSTANTS, questions})
 
-      if (!parentFolderId) return alert(`parentFolderIdが見つかりません`)
-
-      const newSpreadsheet = await GoogleSheet_copy({
-        fromSSId: spreadsheetId,
-        destinationFolderId: parentFolderId,
-        fileName: [SS_CONSTANTS.title, formatDate(new Date(), 'YYYYMMDDHHmmss')].join(`_`),
-      })
-
-      const newSpreadsheetId = newSpreadsheet.id
-      if (!newSpreadsheetId) return alert(`newSpreadsheetIdが見つかりません`)
-
-      const sheetId =
-        (await GoogleSheet_getSheetByName({spreadsheetId: newSpreadsheetId, sheetName: '質問'}))?.properties?.sheetId ?? 0
-
-      if (!sheetId) return alert(`sheetIdxが見つかりません`)
-
-      const requests = (questions ?? []).map((item, idx) => {
-        const colIdx = 2
-        const rowNum = idx + 1
-        return SheetRequests.updateCell(sheetId, rowNum, colIdx, item.answer)
-      })
-
-      // ==============コピーしたシートへ書き込み===============
-      await GoogleSheet_BatchUpdate({spreadsheetId: newSpreadsheetId, requests})
-
-      await sleep(1000 * 3)
-
-      const res = await GoogleSheet_Read({range: `結果!E2:I12`, spreadsheetId: newSpreadsheetId})
-
-      const header = ['手取り額（社長）', `手取り額（法人）`, '税金（社長・法人）', '社会保険料（社長・法人）']
-
-      let tedori = {}
-      let hoshu = {}
-
-      const rows = res.values
-        ?.map(item => {
-          const toNumItem = item.map(v => {
-            const deleteComma = v.replace(/,/g, '')
-            return isNaN(Number(deleteComma)) ? deleteComma : Number(deleteComma)
-          })
-          const [before, after, diff, colorCode, type] = toNumItem
-
-          if (type === '中央') {
-            tedori = {before, after, diff, colorCode, type}
-            return {}
-          }
-          if (type === '報酬') {
-            hoshu = {before, after, diff, colorCode, type}
-            return {}
-          }
-
-          return {before, after, diff, colorCode, type}
-        })
-        .filter(item => item.type)
-        .map((item, index) => {
-          const label = header[index]
-          return {label, ...item}
-        })
-
-      // チャートデータをセット
-      setChartData({rows, tedori, hoshu} as ChartDataType)
+      await handleGetResult({SS_CONSTANTS, spreadsheetId, questions, setChartData})
     })
   }
 
@@ -147,26 +77,10 @@ export default function Page() {
       <C_Stack className=" items-center gap-[30px] py-4">
         <h1 className="text-center text-2xl font-bold text-blue-600">{SS_CONSTANTS.title}シミュレーション</h1>
 
-        <Link href={`/apex`} className={`t-link`}>
-          トップへ戻る
-        </Link>
-        <Button
-          {...{
-            onClick: item => {
-              toggleLoad(async item => {
-                getQuestionsFormSS()
-                setChartData(null)
-              })
-            },
-          }}
-        >
-          シミュレーションをやり直す
-        </Button>
-
         <FitMargin>
           <C_Stack className="gap-8">
             {!chartData ? (
-              <section className="rounded-lg bg-white  p-4 shadow-lg">
+              <section className="rounded-lg bg-white  p-4 shadow">
                 <C_Stack className="gap-4">
                   {questions.map((q, index) => (
                     <Fragment key={index}>
@@ -230,6 +144,24 @@ export default function Page() {
                 </Paper>
               </div>
             )}
+
+            <C_Stack className={`  items-center gap-8`}>
+              <Link href={`/apex`} className={`t-link`}>
+                トップへ戻る
+              </Link>
+              <Button
+                {...{
+                  onClick: item => {
+                    toggleLoad(async item => {
+                      getQuestionsFormSS()
+                      setChartData(null)
+                    })
+                  },
+                }}
+              >
+                シミュレーションをやり直す
+              </Button>
+            </C_Stack>
 
             {/* <section>
               {calc.length > 0 ? (
@@ -323,7 +255,7 @@ type calcType = {
   unit: string
 }
 
-type ChartDataType = {
+export type ChartDataType = {
   rows: {
     label: string
     before: string

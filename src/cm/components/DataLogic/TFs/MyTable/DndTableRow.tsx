@@ -30,14 +30,15 @@ const DnDTableRow = React.memo(
     rows: any
     tbodyRowParams: tbodyParamsType
     DnDTableRowProps: DnDTableRowPropsType
+    totalCount: number
   }) => {
-    const {myTable, formData, DnDTableRowProps, tbodyRowParams, dataModelName, mutateRecords, rows} = props
+    const {myTable, formData, DnDTableRowProps, tbodyRowParams, dataModelName, mutateRecords, rows, totalCount} = props
     const {SP} = props.useGlobalProps
 
     const {RowActionButtonComponent, getPaginationProps} = tbodyRowParams
     const {ColumnsOnTheRow, rowIdx, recIdx, record, showHeader} = DnDTableRowProps
 
-    const {from} = getPaginationProps()
+    const {from} = getPaginationProps({totalCount})
 
     const rowColor = createRowColor({myTable, recIdx, record, rows})
 

@@ -39,7 +39,7 @@ export const useGenbaDetailModal = () => {
                   const modelName = DH.capitalizeFirstLetter(id)?.replace('Id', '')
 
                   const {pref, city} = Genba['PrefCity'] ?? {}
-                  console.log(pref) //////logs
+
                   value = (pref || city) && `${pref} ${city}`
                 } else {
                   value = DH.convertDataType(value, type)

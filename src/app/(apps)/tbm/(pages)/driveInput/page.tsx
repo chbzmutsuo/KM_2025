@@ -22,7 +22,7 @@ export default async function Page(props) {
   const {userId} = scopes.getTbmScopes()
   const user = await prisma.user.findUnique({where: {id: userId}})
 
-  const driveScheduleList = await getData({user, whereQuery})
+  const driveScheduleList: any = await getData({user, whereQuery})
 
   return (
     <Padding>

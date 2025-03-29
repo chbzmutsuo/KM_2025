@@ -8,9 +8,8 @@ import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
 import {useCallback, useEffect, useRef} from 'react'
 import {getMyTableId} from '@components/DataLogic/TFs/MyTable/getMyTableId'
 import useLoader from '@hooks/globalHooks/useLoader'
-import {sleep} from '@lib/methods/common'
 
-export type getPaginationPropsType = () => {
+export type getPaginationPropsType = (props: {totalCount: number}) => {
   tableId: any
   totalCount: any
   page: any
@@ -26,8 +25,8 @@ export type getPaginationPropsType = () => {
   changeDataPerPage
 }
 
-const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, records, setrecords, prismaData}) => {
-  const {query, addQuery} = useGlobalProps
+const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, records, setrecords}) => {
+  const {query, addQuery, shallowAddQuery} = useGlobalProps
 
   const columnCount = columns ? Math.max(...columns.map((row: any) => Number(row.length))) : 0
   const tableId = getMyTableId({dataModelName, myTable})
@@ -111,14 +110,14 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
   /**
    * ページネーションの情報を取得
    */
-  const getPaginationProps: getPaginationPropsType = () => {
+  const getPaginationProps: getPaginationPropsType = props => {
     const {toggleLoad} = useLoader()
     const {page, skip, take, countPerPage} = P_Query.getPaginationPropsByQuery({
       tableId: tableId,
       query,
       countPerPage: myTable?.pagination?.countPerPage,
     })
-    const {totalCount} = prismaData
+    const {totalCount} = props
 
     const pageCount = Math.ceil(totalCount / take)
 
@@ -130,19 +129,19 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
 
     const calcSkip = (page, take) => (page - 1) * take
     const changePage = async (pageNumber: number) => {
-      toggleLoad(
-        async () => {
-          const newPage = pageNumber
-          const newQuery = {
-            ...query,
-            [pageKey]: newPage,
-            [skipKey]: calcSkip(newPage, take),
-          }
-          addQuery(newQuery)
-          await sleep(500)
-        },
-        {refresh: false, mutate: false}
-      )
+      // toggleLoad(
+      // async () => {
+      const newPage = pageNumber
+      const newQuery = {
+        ...query,
+        [pageKey]: newPage,
+        [skipKey]: calcSkip(newPage, take),
+      }
+      shallowAddQuery(newQuery)
+      // await sleep(500)
+      // },
+      // {refresh: false, mutate: false}
+      // )
     }
 
     const changeDataPerPage = (e, page) => {
@@ -153,7 +152,7 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
         [takeKey]: newTake,
         [skipKey]: calcSkip(page, countPerPage),
       }
-      addQuery(newQuery)
+      shallowAddQuery(newQuery)
     }
 
     return {

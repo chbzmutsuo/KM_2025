@@ -13,10 +13,11 @@ export type PaginationPropType = {
   recordCount
   myTable
   records
+  totalCount
 }
 
 const MyPagination = (props: PaginationPropType) => {
-  const {useGlobalProps, records, recordCount, myTable} = props
+  const {useGlobalProps, records, recordCount, myTable, totalCount} = props
 
   const showPagination = myTable?.['pagination'] !== false && recordCount > 0
 
@@ -33,11 +34,13 @@ const MyPagination = (props: PaginationPropType) => {
 export default MyPagination
 
 const Main = (props: PaginationPropType) => {
-  const {useGlobalProps, getPaginationProps, records} = props
+  const {useGlobalProps, getPaginationProps, totalCount} = props
 
   const {query, addQuery} = useGlobalProps
 
-  const {tableId, totalCount, page, skip, take, pageCount, from, to, pageKey, skipKey, takeKey, changePage} = getPaginationProps()
+  const {tableId, page, skip, take, pageCount, from, to, pageKey, skipKey, takeKey, changePage} = getPaginationProps({
+    totalCount,
+  })
 
   const range = (start, end) => {
     const firstPage = end - start + 1

@@ -16,7 +16,6 @@ import useGlobal from '@hooks/globalHooks/useGlobal'
 
 import {useScrollPosition} from '@hooks/scrollPosition/useScrollPosition'
 
-import useLogOnRender from '@hooks/useLogOnRender'
 import {usePageTracking} from '@hooks/usePageTracking'
 
 export default function Global_Template(props) {
@@ -33,7 +32,6 @@ export default function Global_Template(props) {
 }
 
 const Main = ({children, router}) => {
-  useLogOnRender(`Template`)
   const {headerMargin, showLoader, appbarHeight, rootPath} = useGlobal()
   useScrollPosition()
   usePageTracking()

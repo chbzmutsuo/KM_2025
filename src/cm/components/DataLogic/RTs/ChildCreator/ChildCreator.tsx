@@ -39,19 +39,23 @@ export const ChildCreator = (props: ChildCreatorProps) => {
     setrecords,
     mutateRecords,
     deleteRecord,
+    totalCount,
     formData,
     setformData,
     tunedAdditional,
     prismaDataExtractionQuery,
-    prismaData,
-    mutateThicChildCreator,
+    // prismaData,
+    // mutateThicChildCreator,
+    initFetchTableRecords,
   } = useInitChildCreator({...props})
 
   // const mutateAll = useMatchMutate()
 
   const defaultToggleLoadFunc = async cb => {
     const result = await cb()
-    await mutateThicChildCreator()
+
+    initFetchTableRecords()
+    // await mutateThicChildCreator()
     return result
   }
   const toggleLoadFunc = props.additional?.toggleLoadFunc ?? defaultToggleLoadFunc
@@ -67,8 +71,8 @@ export const ChildCreator = (props: ChildCreatorProps) => {
             easySearchPrismaDataOnServer: {},
             prismaDataExtractionQuery,
             ...{dataModelName: models.children, columns},
-            ...{prismaData, formData, setformData},
-            ...{records, setrecords, mutateRecords, deleteRecord},
+            ...{formData, setformData},
+            ...{records, setrecords, mutateRecords, deleteRecord, totalCount},
             ...{
               myTable,
               myForm,
