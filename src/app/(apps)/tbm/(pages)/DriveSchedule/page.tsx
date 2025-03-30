@@ -20,8 +20,6 @@ export default async function DynamicMasterPage(props) {
 
   const {result: tbmBase} = await fetchUniversalAPI(`tbmBase`, `findUnique`, {where: {id: tbmBaseId}})
 
-  await autoCreateMonthConfig({MONTH, tbmBaseId})
-
   return (
     <>
       <DriveScheduleCC
@@ -34,59 +32,4 @@ export default async function DynamicMasterPage(props) {
       />
     </>
   )
-}
-
-const autoCreateMonthConfig = async ({MONTH, tbmBaseId}) => {
-  const {result: checkMonthConfig} = await fetchUniversalAPI(`tbmRouteGroup`, `findMany`, {
-    where: {tbmBaseId},
-    include: {
-      TbmMonthlyConfigForRouteGroup: {where: {yearMonth: {equals: MONTH.firstDayOfMonth}}},
-    },
-  })
-
-  const transactionQueryList = (
-    await Promise.all(
-      (checkMonthConfig ?? [])
-        .filter(route => {
-          const monthConfig = route.TbmMonthlyConfigForRouteGroup[0]
-          return !monthConfig
-        })
-        .map(async route => {
-          const previousMonthConfig = (
-            await fetchUniversalAPI(`tbmMonthlyConfigForRouteGroup`, `findMany`, {
-              where: {
-                tbmRouteGroupId: route.id,
-                yearMonth: {
-                  lt: MONTH.firstDayOfMonth,
-                },
-              },
-              orderBy: {yearMonth: `desc`},
-              take: 1,
-            })
-          ).result[0]
-
-          if (previousMonthConfig) {
-            const payload: Prisma.TbmMonthlyConfigForRouteGroupUpsertArgs = {
-              where: {
-                unique_yearMonth_tbmRouteGroupId: {
-                  yearMonth: MONTH.firstDayOfMonth,
-                  tbmRouteGroupId: route.id,
-                },
-              },
-              ...createUpdate({...previousMonthConfig, yearMonth: MONTH.firstDayOfMonth, id: undefined}),
-            }
-
-            return {
-              model: `tbmMonthlyConfigForRouteGroup`,
-              method: `upsert`,
-              queryObject: payload,
-            }
-          }
-        })
-    )
-  ).filter(Boolean)
-
-  if (transactionQueryList.length > 0) {
-    await fetchTransactionAPI({transactionQueryList})
-  }
 }

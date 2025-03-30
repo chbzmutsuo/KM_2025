@@ -7,7 +7,6 @@ import {arrayMove} from '@dnd-kit/sortable'
 import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
 import {useCallback, useEffect, useRef} from 'react'
 import {getMyTableId} from '@components/DataLogic/TFs/MyTable/getMyTableId'
-import useLoader from '@hooks/globalHooks/useLoader'
 
 export type getPaginationPropsType = (props: {totalCount: number}) => {
   tableId: any
@@ -111,7 +110,7 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
    * ページネーションの情報を取得
    */
   const getPaginationProps: getPaginationPropsType = props => {
-    const {toggleLoad} = useLoader()
+    // const [page, setPagge]=useJotai(`page`,0)
     const {page, skip, take, countPerPage} = P_Query.getPaginationPropsByQuery({
       tableId: tableId,
       query,
@@ -137,11 +136,8 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
         [pageKey]: newPage,
         [skipKey]: calcSkip(newPage, take),
       }
+
       shallowAddQuery(newQuery)
-      // await sleep(500)
-      // },
-      // {refresh: false, mutate: false}
-      // )
     }
 
     const changeDataPerPage = (e, page) => {

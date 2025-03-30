@@ -18,9 +18,10 @@ export const doTransaction = async (props: {transactionQueryList: transactionQue
       })
     )
 
-    const message = `トランザクション---${Object.keys(models)
-      .map(d => `【${d}】`)
-      .join(', ')}の更新---${data.length}件`
+    // const message = `トランザクション---${Object.keys(models)
+    //   .map(d => `【${d}】`)
+    //   .join(', ')}の更新---${data.length}件`
+    const message = `${data.length}件を一括更新しました。`
 
     if (transactionQueryList.length > 0) {
       console.debug(message)

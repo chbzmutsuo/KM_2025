@@ -65,6 +65,7 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
       type: 'number',
       td: {style: {width: 110}},
     },
+
     {
       id: 'tollFee',
       label: '通行料（税抜）',

@@ -1303,7 +1303,7 @@ export interface P_SankoShaEstimatePriceMasterTable {
 
 export interface P_User {
   id: number;
-  code: number;
+  code: string;
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
@@ -1577,11 +1577,36 @@ export interface P_TbmBase {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
+  code: string;
   name: string;
   User: P_User[];
   TbmRouteGroup: P_TbmRouteGroup[];
-  TbmDriveSchedule: P_TbmDriveSchedule[];
-  TbmCustomer: P_TbmCustomer[];
+  TbmProduct: P_TbmProduct[];
+  TbmBase_MonthConfig: P_TbmBase_MonthConfig[];
+}
+
+export interface P_TbmCalendar {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  holidayType: string;
+  remark: string;
+  TbmBase: P_TbmBase;
+  tbmBaseId: number;
+}
+
+export interface P_TbmRouteGroupCalendar {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  holidayType: string;
+  remark: string;
+  TbmRouteGroup: P_TbmRouteGroup;
+  tbmRouteGroupId: number;
 }
 
 export interface P_TbmBase_MonthConfig {
@@ -1589,6 +1614,7 @@ export interface P_TbmBase_MonthConfig {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
+  code: string;
   yearMonth: Date;
   keiyuPerLiter: number;
   TbmBase: P_TbmBase;
@@ -1608,11 +1634,28 @@ export interface P_TbmVehicle {
   oilTireParts: string;
   maintenance: string;
   insurance: string;
+  shodoTorokubi: Date;
+  sakenManryobi: Date;
+  hokenManryobi: Date;
+  sankagetsuTenkenbi: Date;
   TbmRefuelHistory: P_TbmRefuelHistory[];
   tbmBaseId: number;
   OdometerInput: P_OdometerInput[];
   User: P_User;
   userId: number;
+  TbmVehicleMaintenanceRecord: P_TbmVehicleMaintenanceRecord[];
+}
+
+export interface P_TbmVehicleMaintenanceRecord {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  date: Date;
+  price: number;
+  type: string;
+  TbmVehicle: P_TbmVehicle;
+  tbmVehicleId: number;
 }
 
 export interface P_TbmRouteGroup {
@@ -1620,12 +1663,22 @@ export interface P_TbmRouteGroup {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  code: number;
+  code: string;
   name: string;
   tbmBaseId: number;
-  TbmDriveSchedule: P_TbmDriveSchedule[];
-  Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct;
+  TbmMonthlyConfigForRouteGroup: P_TbmMonthlyConfigForRouteGroup[];
   Mid_TbmRouteGroup_TbmCustomer: P_Mid_TbmRouteGroup_TbmCustomer;
+  TbmRouteGroupCalendar: P_TbmRouteGroupCalendar[];
+}
+
+export interface P_TbmRouteGroupFee {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  startDate: Date;
+  billingFee: number;
+  tbmRouteGroupId: number;
 }
 
 export interface P_TbmMonthlyConfigForRouteGroup {
@@ -1650,7 +1703,7 @@ export interface P_TbmProduct {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  code: number;
+  code: string;
   name: string;
   Mid_TbmRouteGroup_TbmProduct: P_Mid_TbmRouteGroup_TbmProduct[];
   tbmBaseId: number;
@@ -1757,7 +1810,6 @@ export interface P_OdometerInput {
   sortOrder: number;
   odometerStart: number;
   date: Date;
-  TbmVehicle: P_TbmVehicle;
   tbmVehicleId: number;
   userId: number;
 }

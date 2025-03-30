@@ -4,23 +4,6 @@ import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
   static getInclude = (includeProps: includeProps) => {
-    // const tbmOperationGroup: Prisma.TbmOperationGroupFindManyArgs = {
-    //   include: {
-    //     TbmBase: {},
-    //     User: {},
-    //     TbmRefuelHistory: {},
-    //     TbmOperation: {
-    //       include: {
-    //         TbmRouteGroup: {
-    //           include: {
-    //             // TbmRoute: {},
-    //           },
-    //         },
-    //       },
-    //     },
-    //     TbmVehicle: {},
-    //   },
-    // }
     const tbmRouteGroup: Prisma.TbmRouteGroupFindManyArgs = {
       include: {
         Mid_TbmRouteGroup_TbmCustomer: {
@@ -33,8 +16,6 @@ export class QueryBuilder {
       },
     }
 
-    // const tbmRoute: Prisma.TbmRouteFindManyArgs = {include: {TbmBillingAddress: {}, TbmRouteGroup: tbmRouteGroup}}
-
     const tbmBase: Prisma.TbmBaseFindManyArgs = {
       include: {
         TbmRouteGroup: {
@@ -44,24 +25,14 @@ export class QueryBuilder {
         },
       },
     }
-    // const tbmOperation: Prisma.TbmOperationFindManyArgs = {
-    //   include: {
-    //     User: {include: {TbmBase: {}}},
-    //     TbmRouteGroup: {include: {TbmBase: {}}},
-    //   },
-    // }
 
     const include: {[key in PrismaModelNames]?: any} = {
-      // tbmOperation,
-      // tbmOperationGroup,
-      // tbmRoute,
       tbmRouteGroup,
       tbmBase,
       user: {include: {TbmBase: {}, TbmVehicle: {}}} as Prisma.UserFindManyArgs,
-      tbmVehicle: {include: {TbmBase: {}}} as Prisma.TbmVehicleFindManyArgs,
+      tbmVehicle: {include: {TbmBase: {}, TbmVehicleMaintenanceRecord: {}}} as Prisma.TbmVehicleFindManyArgs,
       tbmRefuelHistory: {include: {TbmVehicle: {}, User: {}}} as Prisma.TbmRefuelHistoryFindManyArgs,
       tbmCarWashHistory: {include: {TbmVehicle: {}, User: {}}} as Prisma.TbmCarWashHistoryFindManyArgs,
-
       tbmDriveSchedule: {
         include: {
           TbmVehicle: {},

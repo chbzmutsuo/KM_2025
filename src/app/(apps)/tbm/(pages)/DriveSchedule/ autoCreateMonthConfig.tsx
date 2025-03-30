@@ -1,0 +1,80 @@
+import {Days, formatDate} from '@class/Days'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {createUpdate, fetchTransactionAPI} from '@lib/methods/api-fetcher'
+import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
+import {Prisma} from '@prisma/client'
+export const autoCreateMonthConfig = async ({toggleLoad, MONTH, tbmBaseId}) => {
+  const {result: tbmRouteGroupList} = await fetchUniversalAPI(`tbmRouteGroup`, `findMany`, {
+    where: {tbmBaseId},
+    include: {
+      TbmMonthlyConfigForRouteGroup: {
+        where: {
+          yearMonth: {lte: MONTH},
+        },
+        take: 2,
+        orderBy: {yearMonth: `desc`},
+      },
+    },
+  })
+
+  const targetRouteList: any[] = []
+  const targetRouteListWithPreviousData: any[] = []
+  tbmRouteGroupList?.filter(route => {
+    const thismonthConfig = route.TbmMonthlyConfigForRouteGroup.find(config => Days.isSameDate(config.yearMonth, MONTH))
+
+    const prevMonthConfig = route.TbmMonthlyConfigForRouteGroup.find(config => {
+      return new Date(config.yearMonth).getTime() < new Date(MONTH).getTime()
+    })
+
+    if (!thismonthConfig) {
+      targetRouteList.push(route)
+
+      if (prevMonthConfig) {
+        targetRouteListWithPreviousData.push({...route, prevMonthConfig})
+      }
+    }
+
+    return false
+  })
+
+  const confirmMsg = [
+    `①便総数:【${tbmRouteGroupList.length}件】`,
+    `②${formatDate(MONTH, 'YYYY年MM月')}の便設定のない便総数:【${targetRouteList.length}件】`,
+    `③上記のうち、過去月の便設定が存在するデータ:【${targetRouteListWithPreviousData.length}件】`,
+    '',
+    '「③」に該当する便について、過去の月のデータを引き継ぎます。よろしいですか？',
+    `※引き継ぎデータは、直前の月のデータを引き継ぎます。`,
+    `※すでに当月の便設定が一度でも行われている場合、引き継ぎは行われません。`,
+  ].join('\n')
+  if (!confirm(confirmMsg)) return
+
+  if (targetRouteListWithPreviousData.length === 0) {
+    return alert('引き継げるデータがありません。')
+  }
+
+  toggleLoad(async () => {
+    const transactionQueryList: transactionQuery[] = targetRouteListWithPreviousData?.map((route: any) => {
+      const previousMonthConfig = route.prevMonthConfig
+
+      const payload: Prisma.TbmMonthlyConfigForRouteGroupUpsertArgs = {
+        where: {
+          unique_yearMonth_tbmRouteGroupId: {
+            yearMonth: MONTH,
+            tbmRouteGroupId: route.id,
+          },
+        },
+        ...createUpdate({...previousMonthConfig, yearMonth: MONTH, id: undefined}),
+      }
+
+      return {
+        model: `tbmMonthlyConfigForRouteGroup`,
+        method: `upsert`,
+        queryObject: payload,
+      }
+    })
+
+    if (transactionQueryList.length > 0) {
+      await fetchTransactionAPI({transactionQueryList})
+    }
+  })
+}

@@ -4,7 +4,7 @@ import {UserColBuilder} from './UserColBuilder'
 import {getVehicleForSelectConfig, TbmVehicleColBuilder} from './TbmVehicleColBuilder'
 import {TbmBaseColBuilder} from './TbmBaseColBuilder'
 import {TbmRouteGroupColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRouteGroupColBuilder'
-import {TbmRouteColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRouteColBuilder'
+// import {TbmRouteColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRouteColBuilder'
 import {TbmBillingAddressColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmBillingAddressColBuilder'
 import {TbmOperationGroupColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmOperationGroupColBuilder'
 import {TbmRefuelHistoryColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/TbmRefuelHistoryColBuilder'
@@ -18,13 +18,14 @@ import {tbmProductColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmPr
 import {odometerInputColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/odometerInputColBuilder'
 import {tbmCustomerColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmCustomerColBuilder'
 import {getMidnight} from '@class/Days'
+import {TBM_OPTIONS} from '@app/(apps)/tbm/(constants)/TBM_OPTIONS'
 
 export class ColBuilder {
+  // static tbmRoute = TbmRouteColBuilder
   static user = UserColBuilder
   static tbmVehicle = TbmVehicleColBuilder
   static tbmBase = TbmBaseColBuilder
   static tbmRouteGroup = TbmRouteGroupColBuilder
-  static tbmRoute = TbmRouteColBuilder
   static tbmBillingAddress = TbmBillingAddressColBuilder
   static tbmOperationGroup = TbmOperationGroupColBuilder
   static tbmRefuelHistory = TbmRefuelHistoryColBuilder
@@ -34,6 +35,35 @@ export class ColBuilder {
   static tbmProduct = tbmProductColBuilder
   static odometerInput = odometerInputColBuilder
   static tbmCustomer = tbmCustomerColBuilder
+  static tbmVehicleMaintenanceRecord = (props: columnGetterType) => {
+    const {useGlobalProps} = props
+    const {tbmVehicleId} = props.ColBuilderExtraProps ?? {}
+    return new Fields([
+      {
+        id: 'tbmVehicleId',
+        label: '車両',
+        form: {
+          ...defaultRegister,
+          defaultValue: tbmVehicleId,
+          disabled: tbmVehicleId ? true : false,
+        },
+        forSelect: {
+          config: getVehicleForSelectConfig({}),
+        },
+      },
+      {id: 'date', label: '日付', form: {...defaultRegister}, type: 'date'},
+      {id: 'title', label: 'タイトル', form: {...defaultRegister}},
+      {id: 'price', label: '料金', form: {...defaultRegister}, type: 'price'},
+      {id: 'remark', label: '備考', form: {}},
+      {
+        id: 'type',
+        label: '区分',
+        form: {...defaultRegister},
+        type: 'select',
+        forSelect: {optionsOrOptionFetcher: TBM_OPTIONS.TBM_VEHICLE_MAINTENANCE_RECORD_TYPE},
+      },
+    ]).transposeColumns()
+  }
   static tbmBase_MonthConfig = (props: columnGetterType) => {
     const {tbmBaseId} = props.ColBuilderExtraProps ?? {}
     return new Fields([

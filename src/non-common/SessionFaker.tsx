@@ -10,9 +10,10 @@ export class SessionFaker {
     default: {
       modelNames: [
         //
-        {name: 'aqCustomer', id_pw: {id: 'email', pw: 'customerNumber'}},
-        {name: 'teacher'},
         {name: 'user'},
+        {name: 'user', id_pw: {id: 'employeeCode', pw: 'password'}},
+        {name: 'teacher'},
+        {name: 'aqCustomer', id_pw: {id: 'email', pw: 'customerNumber'}},
       ],
     },
   }

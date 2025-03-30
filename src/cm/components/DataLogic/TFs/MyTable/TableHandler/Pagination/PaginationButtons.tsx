@@ -29,39 +29,6 @@ const PaginationButtons = ({array, changePage, page, partClasses, totalCount, pa
       <small className={`ml-0.5`}>{pageCount}</small>
     </R_Stack>
   )
-  // return (
-  //   <select
-  //     value={page}
-  //     onChange={e => {
-  //       changePage(Number(e.target.value))
-  //     }}
-  //   >
-  //     {array.map((number, index) => {
-  //       return <option key={index}>{number}</option>
-  //     })}
-  //   </select>
-  // )
-  // return (
-  //   <R_Stack className={`items-center gap-2`}>
-  //     {arrayWithDots.map((number, index) => {
-  //       return (
-  //         <Fragment key={index}>
-  //           {number === '...' ? (
-  //             <>
-  //               <div className={`AlignJustCenter  px-2`}>{number}</div>
-  //             </>
-  //           ) : (
-  //             <>
-  //               <button onClick={() => changePage(number)} key={number}>
-  //                 {number}
-  //               </button>
-  //             </>
-  //           )}
-  //         </Fragment>
-  //       )
-  //     })}
-  //   </R_Stack>
-  // )
 }
 
 export default PaginationButtons

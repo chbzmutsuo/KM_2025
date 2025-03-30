@@ -16,7 +16,6 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
     {
       id: 'code',
       label: 'コード',
-      type: 'number',
       form: {...defaultRegister, defaultValue: null},
       td: {style: {minWidth: 60, color: `blue`}},
     },

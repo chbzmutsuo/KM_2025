@@ -48,6 +48,8 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       children: [
         {tabId: 'calendar', label: 'カレンダー'},
         {tabId: 'tbmBase', label: '営業所・コース管理'},
+        {tabId: 'user', label: '従業員'},
+        {tabId: 'tbmVehicle', label: '車両'},
         // {tabId: 'user', label: 'ドライバー'},
         // {tabId: 'tbmProduct', label: '商品'},
         // {tabId: 'tbmVehicle', label: '車両'},

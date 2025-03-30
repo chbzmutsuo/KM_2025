@@ -54,7 +54,7 @@ export const ChildCreator = (props: ChildCreatorProps) => {
   const defaultToggleLoadFunc = async cb => {
     const result = await cb()
 
-    initFetchTableRecords()
+    // initFetchTableRecords()
     // await mutateThicChildCreator()
     return result
   }

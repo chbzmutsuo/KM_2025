@@ -46,10 +46,10 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
           <span className={` mr-2`}>#</span>
           <input
             className="w-[60px] rounded border p-1 text-center "
-            value={dayRemarksState.ninkuCount || ''}
+            value={dayRemarksState.ninkuCount ?? ''}
             type="number"
             onChange={async e => {
-              setdayRemarksState({...dayRemarksState, ninkuCount: Number(e.target.value)})
+              setdayRemarksState({...dayRemarksState, ninkuCount: e.target.value ? Number(e.target.value) : null})
               await fetchUniversalAPI(`dayRemarks`, `upsert`, {
                 where: {date},
                 ...createUpdate({date, ninkuCount: Number(e.target.value)}),

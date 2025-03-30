@@ -12,9 +12,17 @@ export default function Template({children}) {
   const HK_ProductMidEditor = useProductMidEditor()
   const HK_CarWashGMF = useCarWashGMF()
 
+  const batch = async () => {
+    await seedDriver()
+    await seedRouteGroup()
+    await seedProduct()
+    await seedCar()
+    await seedCustomer()
+  }
+
   return (
     <div>
-      {/* <button className={` t-btn`} onClick={seedDriver}>
+      {/* <button className={` t-btn`} onClick={batch}>
         テスト
       </button> */}
       <HK_ProductMidEditor.Modal />
@@ -135,8 +143,8 @@ const seedRouteGroup = async () => {
           model: `tbmRouteGroup`,
           method: `upsert`,
           queryObject: {
-            where: {unique_tbmBaseId_code: {tbmBaseId: 1, code: item.code}},
-            ...createUpdate({...item, tbmBaseId: 1}),
+            where: {unique_tbmBaseId_code: {tbmBaseId: 1, code: String(item.code)}},
+            ...createUpdate({...item, code: String(item.code), tbmBaseId: 1}),
           },
         }
       }),
@@ -220,7 +228,7 @@ const seedDriver = async () => {
           method: `upsert`,
           queryObject: {
             where: {employeeCode: item.employeeCode},
-            ...createUpdate({...item, tbmBaseId: 1}),
+            ...createUpdate({...item, password: item.name, code: String(item.code), tbmBaseId: 1, apps: [`tbm`]}),
           },
         }
       }),
@@ -269,7 +277,7 @@ const seedProduct = async () => {
           method: `upsert`,
           queryObject: {
             where: {name: item.name},
-            ...createUpdate({...item, tbmBaseId: 1}),
+            ...createUpdate({...item, code: String(item.code), tbmBaseId: 1}),
           },
         }
       }),
@@ -700,12 +708,15 @@ const seedCar = async () => {
     transactionQueryList: list
       .filter(item => item.vehicleNumber)
       .map(item => {
+        const {number, ...data} = item
+        data[`vehicleNumber`] = number
+
         return {
           model: `tbmVehicle`,
           method: `upsert`,
           queryObject: {
-            where: {vehicleNumber: item.vehicleNumber},
-            ...createUpdate({...item, code: String(item.code), tbmBaseId: 1}),
+            where: {vehicleNumber: data.vehicleNumber},
+            ...createUpdate({...data, code: String(data.code), tbmBaseId: 1}),
           },
         }
       }),

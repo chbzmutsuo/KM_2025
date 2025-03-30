@@ -27,7 +27,7 @@ export default function useInitFormState(initialState: any, dataSourceStrOrArray
         if (typeof dataSource === 'string') {
           latestFormData = dataSource
         } else if (typeof dataSource === 'object') {
-          latestFormData = dataSource?.find(v => v.id == formData?.id)
+          latestFormData = dataSource?.find(v => v?.id == formData?.id)
         }
 
         if (latestFormData) {

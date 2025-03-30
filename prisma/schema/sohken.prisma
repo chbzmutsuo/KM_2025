@@ -214,7 +214,7 @@ model DayRemarks {
  bikou        String?
  shinseiGyomu String?
 
- ninkuCount Float @default(0)
+ ninkuCount Float? @default(0)
 
  DayRemarksUser DayRemarksUser[]
 }

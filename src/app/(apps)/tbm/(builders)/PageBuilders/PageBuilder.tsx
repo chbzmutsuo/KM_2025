@@ -1,13 +1,20 @@
 'use client'
 
-import {tbmBase} from '@app/(apps)/tbm/(builders)/PageBuilders/tbmBase'
 import {tbmOperationGroup} from '@app/(apps)/tbm/(builders)/PageBuilders/tbmOperationGroup/tbmOperationGroup'
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobal'
 import {Fields} from '@class/Fields/Fields'
 import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
+import TbmVehicleDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmVehicleDetail'
+import TbmRouteGroupDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupDetail'
 
 export class PageBuilder {
-  static tbmBase = tbmBase
+  // static tbmBase = tbmBase
+  static tbmVehicle = {
+    form: TbmVehicleDetail,
+  }
+  static tbmRouteGroup = {
+    form: TbmRouteGroupDetail,
+  }
   static tbmOperationGroup = tbmOperationGroup
 
   static getGlobalIdSelector = (props: {useGlobalProps: useGlobalPropType}) => {

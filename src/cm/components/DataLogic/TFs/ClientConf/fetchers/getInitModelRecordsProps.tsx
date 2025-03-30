@@ -10,6 +10,7 @@ import {P_Query} from '@class/PQuery'
 import {makeEasySearcherQuery} from '@components/DataLogic/TFs/ClientConf/makeEasySearcherQuery'
 import {searchModels} from '@lib/methods/api-fetcher'
 import {EasySearchDataSwrFetcher} from '@components/DataLogic/TFs/ClientConf/fetchers/EasySearchDataSwrFetcher'
+import {prismaDataExtractionQueryType} from '@components/DataLogic/TFs/Server/Conf'
 
 export type serverFetchProps = {
   DetailePageId
@@ -21,19 +22,21 @@ export type serverFetchProps = {
   session
   easySearchExtraProps
   useSql
+  prismaDataExtractionQuery?: prismaDataExtractionQueryType
 }
-export const getInitModelRecordsProps = async ({
-  DetailePageId,
-  EasySearchBuilder,
-  dataModelName,
-  additional,
-  myTable,
-  include,
-  session,
-  easySearchExtraProps,
-  useSql,
-  query,
-}: serverFetchProps & {query}) => {
+export const getInitModelRecordsProps = async (props: serverFetchProps & {query}) => {
+  const {
+    DetailePageId,
+    EasySearchBuilder,
+    dataModelName,
+    additional,
+    myTable,
+    include,
+    session,
+    easySearchExtraProps,
+    useSql,
+    query,
+  } = props
   const {page, take, skip} = P_Query.getPaginationPropsByQuery({
     query,
     tableId: getMyTableId({dataModelName, myTable}),
@@ -56,20 +59,21 @@ export const getInitModelRecordsProps = async ({
     query,
     additionalWhere: {...additional?.where},
   })
-  const prismaDataExtractionQuery = makePrismaDataExtractionQuery({
-    query,
-    dataModelName,
-    additional,
-    myTable,
-    DetailePageId,
-    include,
-
-    take,
-    skip,
-    page,
-    easySearchWhereAnd,
-    searchQueryAnd,
-  })
+  const prismaDataExtractionQuery =
+    props.prismaDataExtractionQuery ??
+    makePrismaDataExtractionQuery({
+      query,
+      dataModelName,
+      additional,
+      myTable,
+      DetailePageId,
+      include,
+      take,
+      skip,
+      page,
+      easySearchWhereAnd,
+      searchQueryAnd,
+    })
 
   const EasySearcherQuery = await makeEasySearcherQuery({
     EasySearchBuilder,

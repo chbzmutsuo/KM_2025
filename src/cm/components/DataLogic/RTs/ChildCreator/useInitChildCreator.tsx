@@ -41,38 +41,6 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
     take: undefined,
   }
 
-  const dataSwitchDeps = [
-    props.useGlobalProps.pathname,
-    props.models.children,
-    props.useGlobalProps.query,
-    // dataUpdated,
-    prismaDataExtractionQuery,
-  ]
-
-  // const {
-  //   data = {
-  //     records: [],
-  //     totalCount: 0,
-  //     loading: true,
-  //     noData: false,
-  //   },
-  //   mutate: mutateThicChildCreator,
-  // } = useSWR(JSON.stringify(dataSwitchDeps), async () => {
-  //   return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
-
-  //   // const Children = ParentData[DH.capitalizeFirstLetter(models.children)]
-
-  //   // if (Children) {
-  //   //   return {records: Children, totalCount: Children.length}
-  //   // } else {
-  //   //   return await searchModels(models.children, {...prismaDataExtractionQuery, take: undefined, skip: undefined})
-  //   // }
-  // })
-  // const prismaData = data as prismaDataType
-
-  // const recordSource = prismaData?.records ?? []
-  // const showHeader = checkShowHeader({myTable: props.myTable, columns})
-
   const childTableProps = {
     myTable: {
       showHeader: checkShowHeader({myTable: props.myTable, columns}),
@@ -87,10 +55,11 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
   const myForm = childTableProps.myForm
 
   const serverFetchProps = {
+    prismaDataExtractionQuery,
     DetailePageId: null,
     EasySearchBuilder: defaultEasySearchBuilder,
     dataModelName: models.children,
-    additional,
+    additional: tunedAdditional,
     myTable,
     include: additional?.include ? additional?.include : undefined,
     session: null,

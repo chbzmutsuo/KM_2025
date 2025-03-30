@@ -134,12 +134,12 @@
     "**/masterKey/**": true,
     "**/masterkey/**": true,
     "**/sankosha/**": true,
-    "**/sohken/**": true,
-    "**/tbm/**": true,
     "**/tmp/**": true,
     "**/tsukurunger/**": true,
     "**/twitter/**": true,
-    "**/yoshinari/**": true
+    "**/yoshinari/**": true,
+    "**/apex/**": true,
+    "**/sohken/**": true
   },
   "typescript.preferences.autoImportFileExcludePatterns": [
     "Advantage",
@@ -147,6 +147,7 @@
     "Grouping",
     "KM",
     "achievement",
+    "apex",
     "appLog",
     "applicationForms",
     "aquapot",
@@ -160,7 +161,6 @@
     "masterkey",
     "sankosha",
     "sohken",
-    "tbm",
     "tmp",
     "tsukurunger",
     "twitter",

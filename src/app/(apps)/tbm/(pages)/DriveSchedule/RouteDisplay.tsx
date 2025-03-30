@@ -1,5 +1,6 @@
 'use client'
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
+import TbmRouteGroupDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupDetail'
 import {TbmRouteGroupUpsertController} from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupUpsertController'
 import useSelectedBase from '@app/(apps)/tbm/(globalHooks)/useSelectedBase'
 import {Days, getMidnight, toUtc} from '@class/Days'
@@ -57,6 +58,8 @@ export default function RouteDisplay({tbmBase, whereQuery}) {
           }),
 
           useGlobalProps,
+
+          EditForm: TbmRouteGroupDetail,
         }}
       />
     </R_Stack>

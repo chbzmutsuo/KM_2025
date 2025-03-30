@@ -54,6 +54,7 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
             additional: {
               where: {apps: {has: `tbm`}},
               payload: {apps: [`tbm`]},
+              orderBy: [{TbmBase: {code: 'asc'}}, {code: 'asc'}],
             },
           }
         },
@@ -63,7 +64,19 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
         modelNames: [`tbmBase`],
         setParams: async () => {
           return {
-            editType: {type: `pageOnSame`},
+            // editType: {type: `pageOnSame`},
+          }
+        },
+      },
+      {
+        modelNames: [`tbmVehicle`],
+        setParams: async () => {
+          return {
+            additional: {
+              orderBy: [{vehicleNumber: 'asc'}],
+            },
+
+            // editType: {type: `pageOnSame`},
           }
         },
       },
