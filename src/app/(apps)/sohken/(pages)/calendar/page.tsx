@@ -66,7 +66,8 @@ export default async function CalendarPage(props) {
               },
             ],
             bodyRecords: days.map((d, dayIdx) => {
-              const ninkuCount = dayRemarks.find(dayRemark => Days.isSameDate(dayRemark.date, d))?.ninkuCount ?? 0
+              const ninkuCount = dayRemarks.find(dayRemark => Days.isSameDate(dayRemark.date, d))?.ninkuCount
+
               const GenbaTaskStartingToday = allGenbaTasks.filter(task => Days.isSameDate(task.from, d))
               const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => {
                 return acc + task.requiredNinku
@@ -93,7 +94,11 @@ export default async function CalendarPage(props) {
                   },
 
                   {cellValue: userCount - requiredNinkuSum},
-                  {cellValue: ninkuCount >= 0 ? ninkuCount : `▲${ninkuCount}`, style: {width: 100, textAlign: 'right'}},
+                  {
+                    cellValue:
+                      ninkuCount === undefined ? '' : ninkuCount === 0 ? '0' : ninkuCount >= 0 ? ninkuCount : `▲${ninkuCount}`,
+                    style: {width: 100, textAlign: 'right'},
+                  },
                 ],
               }
             }),

@@ -4,8 +4,9 @@ import {tbmOperationGroup} from '@app/(apps)/tbm/(builders)/PageBuilders/tbmOper
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobal'
 import {Fields} from '@class/Fields/Fields'
 import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
-import TbmVehicleDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmVehicleDetail'
-import TbmRouteGroupDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmRouteGroupDetail'
+import TbmVehicleDetail from '@app/(apps)/tbm/(builders)/PageBuilders/detailPage/TbmVehicleDetail'
+import TbmRouteGroupDetail from '@app/(apps)/tbm/(builders)/PageBuilders/detailPage/TbmRouteGroupDetail'
+import TbmUserDetail from '@app/(apps)/tbm/(builders)/PageBuilders/detailPage/TbmUserDetail'
 
 export class PageBuilder {
   // static tbmBase = tbmBase
@@ -14,6 +15,9 @@ export class PageBuilder {
   }
   static tbmRouteGroup = {
     form: TbmRouteGroupDetail,
+  }
+  static user = {
+    form: TbmUserDetail,
   }
   static tbmOperationGroup = tbmOperationGroup
 

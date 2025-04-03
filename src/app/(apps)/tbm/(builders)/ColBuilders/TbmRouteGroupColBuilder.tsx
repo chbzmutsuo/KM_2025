@@ -95,6 +95,10 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
             id: dataKey,
             label: col.label,
             format: (val, row) => {
+              if (col.format) {
+                return col.format(val, row, col)
+              }
+
               const MonthConfig = row?.TbmMonthlyConfigForRouteGroup?.[0]
               const defaultValue = MonthConfig?.[dataKey] ?? ''
               const [value, setvalue] = useState(defaultValue)

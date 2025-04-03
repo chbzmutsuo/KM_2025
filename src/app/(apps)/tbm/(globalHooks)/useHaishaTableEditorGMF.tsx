@@ -6,9 +6,10 @@ import {R_Stack} from '@components/styles/common-components/common-components'
 import {useGlobalModalForm} from '@components/utils/modal/useGlobalModalForm'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
-import {atomTypes} from '@hooks/useJotai'
+import {atomKey} from '@hooks/useJotai'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
-import {Prisma, TbmDriveSchedule} from '@prisma/client'
+import {Prisma, TbmDriveSchedule, TbmRouteGroup, User} from '@prisma/client'
+
 import React from 'react'
 
 type formData = {
@@ -24,10 +25,19 @@ const useHaishaTableEditorGMF = (props: {
   afterDelete?: (props: {res: requestResultType; tbmDriveSchedule: TbmDriveSchedule}) => void
 }) => {
   const {afterUpdate = item => null, afterDelete = item => null} = props
-  return useGlobalModalForm<atomTypes[`haishaTableEditorGMF`]>(`haishaTableEditorGMF`, null, {
+
+  const atomKey = `haishaTableEditorGMF` as atomKey
+
+  return useGlobalModalForm<{
+    user: User
+    date: Date
+    tbmDriveSchedule?: any
+    tbmBase?: any
+    tbmRouteGroup: TbmRouteGroup
+  }>(atomKey, null, {
     mainJsx: ({GMF_OPEN, setGMF_OPEN}) => {
       const useGlobalProps = useGlobal()
-      const {user, date, tbmDriveSchedule, tbmBase} = GMF_OPEN ?? {}
+      const {user, date, tbmDriveSchedule, tbmBase, tbmRouteGroup} = GMF_OPEN ?? {}
 
       const {BasicForm, latestFormData} = useBasicFormProps({
         columns: ColBuilder.tbmDriveSchedule({
@@ -37,7 +47,10 @@ const useHaishaTableEditorGMF = (props: {
 
             tbmDriveSchedule: tbmDriveSchedule ?? {
               date,
-              userId: user.id,
+              userId: user?.id,
+              tbmRouteGroupId: tbmRouteGroup?.id,
+
+              // tbmRouteGroupId: tbmDriveSchedule?.tbmRouteGroupId,
             },
           },
         }),

@@ -125,6 +125,9 @@ model GenbaTask {
  to            DateTime?
  requiredNinku Float?
 
+ subTask String?
+ remarks String?
+
  // status        String?
 
  Genba                Genba                  @relation(fields: [genbaId], references: [id])
@@ -214,7 +217,7 @@ model DayRemarks {
  bikou        String?
  shinseiGyomu String?
 
- ninkuCount Float? @default(0)
+ ninkuCount Float?
 
  DayRemarksUser DayRemarksUser[]
 }

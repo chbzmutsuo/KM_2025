@@ -1,3 +1,5 @@
+import {IsInKyuka, IsInKyukaTodoke} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
+import {IsInShift} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
 import {userForSelect} from '@app/(apps)/sohken/class/sohken-constants'
 import {Days} from '@class/Days'
 import {anyObject} from '@cm/types/types'
@@ -34,6 +36,7 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
       UserRole: {none: {RoleMaster: {name: `監督者`}}},
     },
     include: {
+      DayRemarksUser: {where: {DayRemarks: {date: {equals: GenbaDay.date}}}},
       GenbaDayShift: {
         include: {GenbaDay: {}},
         where: {
@@ -176,16 +179,27 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                 bodyRecords: optionList.map(user => {
                   const active = selectedUserObject?.[user.id]
 
-                  const {shiftsOnOtherGembaOnSameDate} = user
+                  const {shiftsOnOtherGembaOnSameDate, DayRemark} = user
 
                   const UserNameDisplay = () => {
+                    // const IsInShift = () => {
+                    //   return shiftsOnOtherGembaOnSameDate.length > 0 ? <div className={`text-error-main`}>★</div> : <></>
+                    // }
+
+                    // const IsInKyukaTodoke = () => {
+                    //   return DayRemark?.kyukaTodoke ? <div className={`text-yellow-600`}>⚫︎</div> : <></>
+                    // }
+
+                    // const IsInKyuka = () => {
+                    //   return DayRemark?.kyuka ? <div className={`text-blue-600`}>■</div> : <></>
+                    // }
+
                     return (
-                      <R_Stack className={`items-start leading-3`}>
+                      <R_Stack className={`items-start gap-0.5 leading-3`}>
                         <div>{user.name}</div>
-                        <div className={`text-error-main`}>{shiftsOnOtherGembaOnSameDate.length > 0 ? '★' : ''}</div>
-                        {/* <div className={`text-error-main text-[.5rem]`}>
-                            {shiftsOnOtherGembaOnSameDate.map(shift => formatDate(shift.GenbaDay.date, 'M/D(ddd)')).join(`,`)}
-                          </div> */}
+                        <IsInShift {...{hasShift: shiftsOnOtherGembaOnSameDate.length}} />
+                        <IsInKyukaTodoke {...{DayRemark}} />
+                        <IsInKyuka {...{DayRemark}} />
                       </R_Stack>
                     )
                   }
@@ -333,11 +347,20 @@ const BooleanInput = ({disabled, user, checked, dataKey, setselectedUserObject})
 const Input = ({user, type, dataKey = `from`, setselectedUserObject}) => {
   const [value, setvalue] = useState(user[dataKey] ?? '')
   const timeInputProps = {
-    datalist: new Array(24 * 4).fill(0).map((_, i) => {
-      const hours = Math.floor(i / 4)
-      const minutes = (i % 4) * 15
-      return {value: `${String(hours).padStart(2, `0`)}:${String(minutes).padStart(2, `0`)}`}
-    }),
+    datalist: new Array(24 * 4)
+      .fill(0)
+      .map((_, i) => {
+        const hours = Math.floor(i / 4)
+        const minutes = (i % 4) * 15
+        const time = `${String(hours).padStart(2, `0`)}:${String(minutes).padStart(2, `0`)}`
+        return {
+          value: time,
+          label: time,
+        }
+      })
+      .filter(item => {
+        return item.value >= '07:00' && item.value <= '20:00'
+      }),
     step: 60 * 15,
   }
 
@@ -355,28 +378,56 @@ const Input = ({user, type, dataKey = `from`, setselectedUserObject}) => {
     }
     return null
   }
+
+  const handleOnChange = (e: any) => {
+    setvalue(e.target.value)
+    setselectedUserObject(prev => {
+      const result = {
+        ...prev,
+        [user.id]: {
+          ...prev[user.id],
+          [dataKey]: e.target.value,
+          active: true,
+        },
+      }
+
+      return result
+    })
+  }
+
+  if (timeInputProps?.datalist) {
+    return (
+      <select
+        {...{
+          list: id,
+          className: `bg-gray-200 px-2 border rounded`,
+
+          value: value,
+          onChange: handleOnChange,
+        }}
+      >
+        <option value={``}></option>
+        {timeInputProps?.datalist?.map((item: anyObject) => {
+          return (
+            <option key={item.value} value={item.value}>
+              {item.value}
+            </option>
+          )
+        })}
+      </select>
+    )
+  }
+
   return (
     <>
       <input
         {...{
           list: id,
           className: `bg-gray-200 px-2 border rounded`,
-          type,
+
           value: value,
           onChange: e => {
-            setvalue(e.target.value)
-            setselectedUserObject(prev => {
-              const result = {
-                ...prev,
-                [user.id]: {
-                  ...prev[user.id],
-                  [dataKey]: e.target.value,
-                  active: true,
-                },
-              }
-
-              return result
-            })
+            handleOnChange(e)
           },
         }}
       />
@@ -395,6 +446,8 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
       return isSameDate && !isSameGenba
     })
 
+    const DayRemark = user.DayRemarksUser.find(remark => remark.userId === user.id)
+
     const shiftOnDate = currentRelationalModelRecords?.find(record => record?.User?.id === user.id)
 
     const {from, to, important, shokucho} = shift ?? {}
@@ -409,6 +462,7 @@ const init = ({options, currentRelationalModelRecords, GenbaDay}) => {
       directReturn: !!shiftOnDate?.directReturn,
       important,
       shokucho,
+      DayRemark,
     }
   })
   // .sort((a, b) => {

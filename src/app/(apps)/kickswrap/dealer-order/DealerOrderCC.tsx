@@ -48,6 +48,7 @@ const DealerOrderCC = () => {
   useEffect(() => {
     const getData = async () => {
       const {items, users} = await getItems(spreadApiPath)
+      console.log(users) //logs
 
       setitems(items)
       setusers(users)
@@ -64,6 +65,7 @@ const DealerOrderCC = () => {
   }
 
   if (items.length === 0) return <div>loading...</div>
+
   if (!user)
     return (
       <Center>

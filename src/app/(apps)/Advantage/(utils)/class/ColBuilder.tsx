@@ -173,7 +173,7 @@ export class ColBuilder {
         id: 'description',
         label: '詳細説明',
         type: 'textarea',
-        form: {},
+        form: {style: {width: 600, padding: 10}},
         td: {style: {width: 400}},
       },
     ]

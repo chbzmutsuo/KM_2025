@@ -20,7 +20,7 @@ export function CsvTableBody(props: CsvTableProps) {
           >
             {csvTableRow?.map((cell, celIdx) => {
               const stylesInThisColumn = props?.stylesInColumns?.[celIdx]
-              const {cellValue, className, cellValueRaw, ...restPropsOnTd} = cell ?? {}
+              const {cellValue, className, cellValueRaw, thStyle, ...restPropsOnTd} = cell ?? {}
               if (cell.colSpan === 0) return null
               const isNumber = typeof cellValue === 'number'
               const isString = typeof cellValue === 'string'

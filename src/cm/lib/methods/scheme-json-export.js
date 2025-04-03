@@ -1987,6 +1987,9 @@ model GenbaTask {
  to            DateTime?
  requiredNinku Float?
 
+ subTask String?
+ remarks String?
+
  // status        String?
 
  Genba                Genba                  @relation(fields: [genbaId], references: [id])
@@ -2076,7 +2079,7 @@ model DayRemarks {
  bikou        String?
  shinseiGyomu String?
 
- ninkuCount Float? @default(0)
+ ninkuCount Float?
 
  DayRemarksUser DayRemarksUser[]
 }
@@ -2123,7 +2126,7 @@ model TbmRouteGroupCalendar {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- date        DateTime @unique
+ date        DateTime
  holidayType String?  @default("")
  remark      String?
 
@@ -2254,10 +2257,8 @@ model TbmMonthlyConfigForRouteGroup {
 
  postalFee  Int? //通行量(郵便)
  generalFee Int? //通行量（一般）
+ tollFee    Float?
 
- driverFee       Float?
- billingFee      Float?
- tollFee         Float?
  numberOfTrips   Int?
  TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)
  tbmRouteGroupId Int
@@ -2437,9 +2438,11 @@ model UserWorkStatus {
  sortOrder Float     @default(0)
 
  date       DateTime
- workStatus String
- User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- userId     Int
+ workStatus String?
+ remark     String?
+
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ userId Int
 
  @@unique([userId, date], name: "unique_userId_date")
 }

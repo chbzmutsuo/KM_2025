@@ -18,7 +18,7 @@ export const getAdvantage_PAGES = (props: PageGetterType) => {
       children: [
         {tabId: 'coach', label: 'コーチ 一覧'},
         {tabId: 'student', label: '生徒 一覧'},
-        {tabId: 'bigCategory', label: 'レッスン設定'},
+        {tabId: 'category-management', label: 'レッスン設定'},
         {tabId: 'lessonLog', label: '受講履歴'},
         {tabId: 'ticket', label: 'チケット'},
         {tabId: 'systemChatRoom', label: 'チャット一覧'},

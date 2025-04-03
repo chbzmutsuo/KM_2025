@@ -8,5 +8,6 @@ export const getItems = async spreadApiPath => {
   })
 
   const {items, users} = res.result
+
   return {items, users}
 }

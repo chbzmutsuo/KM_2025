@@ -1,14 +1,16 @@
 'use client'
-import useSelectedBase from '@app/(apps)/tbm/(globalHooks)/useSelectedBase'
+import useUnchinChildCreator from '@app/(apps)/tbm/(globalHooks)/useUnchinChildCreator'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
+import {R_Stack} from '@components/styles/common-components/common-components'
+import {KeyValue} from '@components/styles/common-components/ParameterCard'
+import {PencilSquareIcon} from '@heroicons/react/20/solid'
 
 export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) => {
-  const {selectedBase, setselectedBase, setselectedRouteGroup} = useSelectedBase()
+  const HK_UnchinChildCreator = useUnchinChildCreator()
 
   return new Fields([
-    // {id: 'yearMonth', label: '年月', type: `date`, },
     {
       id: 'pickupTime',
       label: '接車時間',
@@ -22,13 +24,27 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
       td: {style: {width: 110}},
     },
 
-    // {
-    //   id: 'tbmProductId',
-    //   label: '商品名',
-    //   type: 'text',
-    //   td: {style: {width: 110}},
-    //   forSelect: {},
-    // },
+    {
+      id: `fee-history`,
+      label: `運賃/請求運賃`,
+      form: {hidden: true},
+      format: (value, row) => {
+        return (
+          <R_Stack className={`  w-[200px]`}>
+            <PencilSquareIcon
+              {...{
+                className: `h-5 t-link onHover`,
+                onClick: () => HK_UnchinChildCreator.setGMF_OPEN({TbmRouteGroup: row}),
+              }}
+            />
+            <div>
+              <KeyValue {...{label: '運賃'}}></KeyValue>
+              <KeyValue {...{label: '請求運賃'}}></KeyValue>
+            </div>
+          </R_Stack>
+        )
+      },
+    },
     {
       id: 'postalFee',
       label: '通行量(郵便)',
@@ -38,30 +54,6 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
     {
       id: 'generalFee',
       label: '通行量(一般)',
-      type: 'number',
-      td: {style: {width: 110}},
-    },
-    // {
-    //   id: 'postalHighwayFee',
-    //   label: '高速(郵便)',
-    //   type: 'number',
-    //   td: {style: {width: 110}},
-    // },
-    // {
-    //   id: 'generalHighwayFee',
-    //   label: '高速（一般）',
-    //   type: 'number',
-    //   td: {style: {width: 110}},
-    // },
-    {
-      id: 'driverFee',
-      label: '運賃',
-      type: 'number',
-      td: {style: {width: 110}},
-    },
-    {
-      id: 'billingFee',
-      label: '請求運賃',
       type: 'number',
       td: {style: {width: 110}},
     },

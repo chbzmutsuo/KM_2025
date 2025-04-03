@@ -1509,6 +1509,8 @@ export interface P_GenbaTask {
   from: Date;
   to: Date;
   requiredNinku: number;
+  subTask: string;
+  remarks: string;
   Genba: P_Genba;
   genbaId: number;
 }
@@ -1603,7 +1605,6 @@ export interface P_TbmRouteGroupCalendar {
   updatedAt: Date;
   sortOrder: number;
   date: Date;
-  holidayType: string;
   remark: string;
   TbmRouteGroup: P_TbmRouteGroup;
   tbmRouteGroupId: number;
@@ -1690,8 +1691,6 @@ export interface P_TbmMonthlyConfigForRouteGroup {
   vehicleType: string;
   postalFee: number;
   generalFee: number;
-  driverFee: number;
-  billingFee: number;
   tollFee: number;
   numberOfTrips: number;
   TbmRouteGroup: P_TbmRouteGroup;
@@ -1820,6 +1819,7 @@ export interface P_UserWorkStatus {
   updatedAt: Date;
   sortOrder: number;
   date: Date;
+  remark: string;
   User: P_User;
   userId: number;
 }

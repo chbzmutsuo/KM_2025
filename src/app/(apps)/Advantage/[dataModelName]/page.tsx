@@ -25,7 +25,7 @@ export default async function DynamicMasterPage(props) {
 
   return (
     <EasySearchAtomProvider {...conf}>
-      <PropAdjustor {...conf} /> cur
+      <PropAdjustor {...conf} />
     </EasySearchAtomProvider>
   )
 }

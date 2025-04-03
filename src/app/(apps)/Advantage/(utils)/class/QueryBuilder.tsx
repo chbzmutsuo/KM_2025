@@ -56,10 +56,10 @@ export class QueryBuilder {
     const bigCategory: Prisma.BigCategoryFindManyArgs = {
       include: {
         MiddleCategory: {
-          orderBy: [{id: 'asc'}],
+          orderBy: [{sortOrder: 'asc'}],
           include: {
             Lesson: {
-              orderBy: [{id: 'asc'}],
+              orderBy: [{sortOrder: 'asc'}],
             },
           },
         },

@@ -26,9 +26,12 @@ import {
 } from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
+import {useRouter} from 'next/navigation'
+import {HREF} from '@lib/methods/urls'
 
 // インライン編集コンポーネント
-const InlineEdit = ({value, onSave, placeholder = '名前を入力'}) => {
+const InlineEdit = ({value, onSave, placeholder = '名前を入力', categoryType, categoryId}) => {
+  const {router, query} = useGlobal()
   const [editing, setEditing] = useState(false)
   const [inputValue, setInputValue] = useState(value)
 
@@ -88,7 +91,16 @@ const InlineEdit = ({value, onSave, placeholder = '名前を入力'}) => {
   return (
     <div className="flex items-center">
       <span className="mr-2">{value}</span>
-      <button onClick={handleEdit} className="rounded-full bg-gray-100 p-1 text-gray-600 hover:bg-gray-200">
+      <button
+        onClick={e => {
+          if (categoryType === 'bigCategory' || categoryType === 'middleCategory') {
+            handleEdit(e)
+          } else {
+            router.push(HREF(`/Advantage/${categoryType}/${categoryId}`, {}, query))
+          }
+        }}
+        className="rounded-full bg-gray-100 p-1 text-gray-600 hover:bg-gray-200"
+      >
         <PencilIcon className="h-4 w-4" />
       </button>
     </div>
@@ -377,6 +389,8 @@ export default function CategoryManagementPage() {
                         )}
                       </div>
                       <InlineEdit
+                        categoryType="bigCategory"
+                        categoryId={bigCategory.id}
                         value={bigCategory.name}
                         onSave={newName => updateName('bigCategory', bigCategory.id, newName)}
                         placeholder="大カテゴリ名を入力"
@@ -442,6 +456,8 @@ export default function CategoryManagementPage() {
                                         )}
                                       </div>
                                       <InlineEdit
+                                        categoryType="middleCategory"
+                                        categoryId={middleCategory.id}
                                         value={middleCategory.name}
                                         onSave={newName => updateName('middleCategory', middleCategory.id, newName)}
                                         placeholder="中カテゴリ名を入力"
@@ -498,6 +514,8 @@ export default function CategoryManagementPage() {
                                                 <SortableItem key={lesson.id} id={lesson.id} handle={true}>
                                                   <div className="flex w-[400px] items-center justify-between rounded border bg-white p-2">
                                                     <InlineEdit
+                                                      categoryType="lesson"
+                                                      categoryId={lesson.id}
                                                       value={lesson.name}
                                                       onSave={newName => updateName('lesson', lesson.id, newName)}
                                                       placeholder="レッスン名を入力"

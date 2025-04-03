@@ -127,6 +127,14 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
           },
         }),
       },
+      {
+        modelNames: [`genbaTaskMaster`],
+        setParams: async () => ({
+          myTable: {
+            pagination: {countPerPage: 999999},
+          },
+        }),
+      },
     ],
   })
   return customParams

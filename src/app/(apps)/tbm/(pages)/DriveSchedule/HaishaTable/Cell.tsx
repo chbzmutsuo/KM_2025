@@ -5,7 +5,7 @@ import {Days, formatDate} from '@class/Days'
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 
 import {PencilSquareIcon, PlusCircleIcon, TruckIcon} from '@heroicons/react/20/solid'
-import {OdometerInput, TbmDriveSchedule, TbmRouteGroup, TbmVehicle, User, TbmBase, UserWorkStatus} from '@prisma/client'
+import {OdometerInput, TbmDriveSchedule, TbmRouteGroup, TbmVehicle, TbmBase, UserWorkStatus} from '@prisma/client'
 import {TextRed, TextSub} from '@components/styles/common-components/Alert'
 import Link from 'next/link'
 import {HREF} from '@lib/methods/urls'
@@ -17,22 +17,24 @@ export const Cell = (props: {
   fetchData
   scheduleListOnDate: TbmDriveSchedule[]
   setModalOpen
-  user: User & {
+  user?: any & {
     UserWorkStatus: UserWorkStatus[]
+    userWorkStatusList: Record<string, string>
   }
-  userWorkStatus: string
+  tbmRouteGroup?: any
+  // userWorkStatus: string
   date: Date
   tbmBase: TbmBase
 }) => {
   const {query, toggleLoad} = useGlobal()
-  const {fetchData, scheduleListOnDate, setModalOpen, user, date, tbmBase, userWorkStatus} = props
+  const {fetchData, scheduleListOnDate, setModalOpen, user, tbmRouteGroup, date, tbmBase} = props
 
   return (
     <C_Stack className={` min-h-full justify-start `} {...{style: {width: 140}}}>
       <ConfigArea
         {...{
           fetchData,
-          userWorkStatus,
+          tbmRouteGroup,
           user,
           date,
           scheduleListOnDate,
@@ -101,7 +103,8 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
   )
 }
 
-const ConfigArea = ({fetchData, userWorkStatus, user, date, setModalOpen, tbmBase, scheduleListOnDate, query}) => {
+const ConfigArea = ({fetchData, user, date, tbmRouteGroup, setModalOpen, tbmBase, scheduleListOnDate, query}) => {
+  const userWorkStatus = user?.userWorkStatusList?.[formatDate(date)] ?? ''
   return (
     <section>
       <R_Stack className={` w-full  items-center justify-between`}>
@@ -125,16 +128,16 @@ const ConfigArea = ({fetchData, userWorkStatus, user, date, setModalOpen, tbmBas
               }}
             >
               <option value=""></option>
-              <option value="勤">勤</option>
-              <option value="怠">怠</option>
-              <option value="有">有</option>
+              <option value="稼働">稼働</option>
+              <option value="休み">休み</option>
+              <option value="有給">有給</option>
             </select>
           </div>
 
           {/* 入力ページ */}
           <div>
             {!!scheduleListOnDate.length && (
-              <Link target="_blank" href={HREF('/tbm/driveInput', {g_userId: user.id, from: formatDate(date)}, query)}>
+              <Link target="_blank" href={HREF('/tbm/driveInput', {g_userId: user?.id, from: formatDate(date)}, query)}>
                 <TruckIcon className={`text-yellow-main w-5`} />
               </Link>
             )}
@@ -146,7 +149,7 @@ const ConfigArea = ({fetchData, userWorkStatus, user, date, setModalOpen, tbmBas
           <PlusCircleIcon
             {...{
               className: ` onHover  text-gray-500 h-5 w-5 text-end`,
-              onClick: async () => setModalOpen({user, date, tbmBase}),
+              onClick: async () => setModalOpen({user, date, tbmBase, tbmRouteGroup}),
             }}
           >
             追加

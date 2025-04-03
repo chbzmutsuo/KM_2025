@@ -151,6 +151,7 @@ export type trTdProps = {
   colSpan?: number
   className?: string
   style?: CSSProperties
+  thStyle?: CSSProperties
   onClick?: any
 }
 export type csvTableCol = {cellValue: any; cellValueRaw?: any; label?: any} & trTdProps

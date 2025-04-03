@@ -31,6 +31,14 @@ export default function Main(props: {
     }
   }
 
+  const subTasksOnGenbaTask = GenbaDayTaskMidTable.map(item => item.GenbaTask.subTask)
+  const subTasksOnGenbaDay = GenbaDay.subTask
+  const subTasks = [...subTasksOnGenbaTask, subTasksOnGenbaDay]
+
+  const remarksOnGenbaTask = GenbaDayTaskMidTable.map(item => item.GenbaTask.remarks)
+  const remarksOnGenbaDay = GenbaDay.remarks
+  const remarks = [...remarksOnGenbaTask, remarksOnGenbaDay]
+
   const {Genba} = GenbaDay
   const {warningString} = Genba
   return (
@@ -53,12 +61,23 @@ export default function Main(props: {
           )}
         </div>
         <div className={`onHover`} onClick={activateEditFrom}>
-          <LabelValue {...{label: `連絡`}}>
-            <MarkDownDisplay>{GenbaDay.remarks}</MarkDownDisplay>
+          <LabelValue
+            {...{
+              label: `連絡`,
+              styling: {
+                classes: {wrapper: `!items-start px-2`},
+              },
+            }}
+          >
+            <MarkDownDisplay className={` text-sm leading-4`}>{remarks.join(`\n`)}</MarkDownDisplay>
           </LabelValue>
         </div>
         <div>
-          <LabelValue {...{label: `タスク`}}>
+          <LabelValue
+            {...{
+              label: `タスク`,
+            }}
+          >
             <TaskWithNinku
               {...{
                 GenbaDay,
@@ -71,8 +90,15 @@ export default function Main(props: {
         </div>
 
         <div className={`onHover`} onClick={activateEditFrom}>
-          <LabelValue {...{label: `その他`}}>
-            <MarkDownDisplay>{GenbaDay.subTask}</MarkDownDisplay>
+          <LabelValue
+            {...{
+              label: `その他`,
+              styling: {
+                classes: {wrapper: `!items-start px-2`},
+              },
+            }}
+          >
+            <MarkDownDisplay className={` text-sm leading-4`}>{subTasks.join(`\n`)}</MarkDownDisplay>
           </LabelValue>
         </div>
       </section>

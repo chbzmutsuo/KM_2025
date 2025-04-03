@@ -11,7 +11,7 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
   const {GenbaDayShift} = GenbaDay
 
   const ArrayData = GenbaDayShift?.map(v => {
-    const {User, from, to, important, directGo, directReturn, shokucho} = v
+    const {User, from, to, important, directGo, directReturn, shokucho, userId} = v
 
     const shiftsOnOtherGembaOnSameDate = allShiftBetweenDays
       .filter(shift => {
@@ -28,11 +28,11 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
         return aTime.getTime() - bTime.getTime()
       })
 
+    const cardDate = new Date(formatDate(GenbaDay.date) + ' ' + to)
     const nextShift = shiftsOnOtherGembaOnSameDate.find(shift => {
-      const date1 = new Date(formatDate(GenbaDay.date) + ' ' + from)
       const date2 = new Date(formatDate(shift.GenbaDay.date) + ' ' + shift.from)
 
-      return from && shift.from && date1 <= date2
+      return cardDate <= date2 && shift.from
     })
 
     const currentShiftDisplay = (
@@ -57,7 +57,7 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
     )
 
     const nextShiftIndex = nextShift
-      ? records.findIndex(genbaday => {
+      ? records?.findIndex(genbaday => {
           return genbaday.id === nextShift?.genbaDayId
         })
       : null
@@ -73,6 +73,7 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
         )}
 
         {(nextShift?.from || nextShift?.to) && <small>~</small>}
+
         {nextShift?.to && (
           <>
             <span>{nextShift?.to}</span>

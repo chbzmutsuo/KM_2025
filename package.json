@@ -12,7 +12,7 @@
     "generateType": "node scripts/generateTypeScriptInterface.js",
     "dev": "npm run convert && npm run generateType && next dev --turbo",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "next start",
     "local-start": "next start",
     "lint": "eslint './**/*.{ts,tsx}'",
     "lint-fix": "eslint --fix './src/**/*.{js,ts}' && prettier --write './src/**/*.{js,ts}'",

@@ -6,7 +6,8 @@ import {KeyValue} from '@components/styles/common-components/ParameterCard'
 import {HREF} from '@lib/methods/urls'
 import {T_LINK} from '@components/styles/common-components/links'
 
-export default function UserTh({user, admin, query, userWorkStatusList}) {
+export default function UserTh({user, admin, query}) {
+  const userWorkStatusList = user.userWorkStatusList
   const countByStatus = Object.keys(userWorkStatusList).reduce((acc, dateStr) => {
     const userWorkStatus = userWorkStatusList[dateStr]
     acc[userWorkStatus] = (acc[userWorkStatus] || 0) + 1
@@ -15,13 +16,15 @@ export default function UserTh({user, admin, query, userWorkStatusList}) {
 
   return (
     <C_Stack className={` h-full justify-start gap-1`}>
-      <KeyValue label="氏名">
-        {admin ? <T_LINK href={HREF(`/tbm/user/${user.id}`, {userId: user.id}, query)}>{user.name} </T_LINK> : user.name}
-        <span className={`text-xs`}>({user.code})</span>
-      </KeyValue>
-      <KeyValue label="出勤">{countByStatus?.勤 ?? `-`}</KeyValue>
-      <KeyValue label="休み">{countByStatus?.怠 ?? `-`}</KeyValue>
-      <KeyValue label="有給">{countByStatus?.有 ?? `-`}</KeyValue>
+      <div className={` grid grid-cols-2 gap-1`}>
+        <KeyValue label="">
+          {admin ? <T_LINK href={HREF(`/tbm/user/${user.id}`, {userId: user.id}, query)}>{user.name} </T_LINK> : user.name}
+          <span className={`text-xs`}>({user.code})</span>
+        </KeyValue>
+        <KeyValue label="稼働">{countByStatus?.稼働 ?? '0'}</KeyValue>
+        <KeyValue label="休み">{countByStatus?.休み ?? '0'}</KeyValue>
+        <KeyValue label="有給">{countByStatus?.有給 ?? '0'}</KeyValue>
+      </div>
     </C_Stack>
   )
 }

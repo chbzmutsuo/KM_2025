@@ -20,7 +20,7 @@ export function CsvTableHead(props: CsvTableProps) {
             {csvTableRow.map((cell, celIdx) => {
               const stylesInThisColumn = props?.stylesInColumns?.[celIdx]
 
-              const {cellValue, style, className, ...restPropsOnTd} = cell ?? {}
+              const {cellValue, style, thStyle, className, ...restPropsOnTd} = cell ?? {}
 
               const isNumber = typeof cellValue === 'number'
               const isString = typeof cellValue === 'string'
@@ -34,7 +34,7 @@ export function CsvTableHead(props: CsvTableProps) {
                   key={celIdx}
                   {...restPropsOnTd}
                   {...{
-                    style: {...stylesInThisColumn?.style, ...style},
+                    style: {...stylesInThisColumn?.style, ...style, ...thStyle},
                     className: cl(`!text-center`, stylesInThisColumn?.className, className),
                   }}
                 >

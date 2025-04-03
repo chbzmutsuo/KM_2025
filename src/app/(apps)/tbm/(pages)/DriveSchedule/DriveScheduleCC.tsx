@@ -1,9 +1,10 @@
 'use client'
 import {ColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/ColBuilder'
-import TbmVehicleDetail from '@app/(apps)/tbm/(builders)/PageBuilders/TbmVehicleDetail'
+import TbmUserDetail from '@app/(apps)/tbm/(builders)/PageBuilders/detailPage/TbmUserDetail'
+import TbmVehicleDetail from '@app/(apps)/tbm/(builders)/PageBuilders/detailPage/TbmVehicleDetail'
 import {autoCreateMonthConfig} from '@app/(apps)/tbm/(pages)/DriveSchedule/ autoCreateMonthConfig'
 import CalendarSetter from '@app/(apps)/tbm/(pages)/DriveSchedule/CalendarSetter'
-import HaishaTable from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable'
+import HaishaTable from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/HaishaTable'
 import RouteDisplay from '@app/(apps)/tbm/(pages)/DriveSchedule/RouteDisplay'
 import {Days, getMidnight, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
@@ -36,9 +37,10 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
       orderBy: [{code: 'asc'}],
     },
   }
-  // const theMonth = query.from ? toUtc(query.from) : getMidnight()
-
-  const theMonth = toUtc(query.from ?? query.month)
+  if (!query.from && !query.month) {
+    return <PlaceHolder />
+  }
+  const theMonth = toUtc(query.from || query.month)
 
   const dateWhere = {
     gte: theMonth,
@@ -53,7 +55,7 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
 
   if (!width || isLoading) return <PlaceHolder></PlaceHolder>
   return (
-    <FitMargin className={`pt-4`}>
+    <FitMargin className={`pt-2`}>
       <NewDateSwitcher {...{monthOnly: true}} />
       <BasicTabs
         {...{
@@ -61,6 +63,10 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
           id: 'driveSchedule',
           showAll: false,
           TabComponentArray: [
+            {
+              label: <TextRed>配車管理【月別】</TextRed>,
+              component: <HaishaTable {...{tbmBase, days, whereQuery}} />,
+            },
             {
               label: <TextRed>便設定【月別】</TextRed>,
               component: (
@@ -78,10 +84,7 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
                 </C_Stack>
               ),
             },
-            {
-              label: <TextRed>配車管理【月別】</TextRed>,
-              component: <HaishaTable {...{tbmBase, days, whereQuery}} />,
-            },
+
             {
               label: <TextRed>営業所設定【月別】</TextRed>,
               component: (
@@ -104,6 +107,7 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
                     ...childCreatorProps,
                     models: {parent: `tbmBase`, children: `user`},
                     columns: ColBuilder.user(ColBuiderProps),
+                    EditForm: TbmUserDetail,
                   }}
                 />
               ),
@@ -161,7 +165,6 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
                     onConfirm: async ({selectedDays}) => {
                       if (!confirm('変更を反映しますか？')) return
 
-                      // toggleLoad(async () => {
                       const res = await doTransaction({
                         transactionQueryList: days.map(day => {
                           const isSelected = selectedDays.some(d => Days.isSameDate(d, day))
@@ -172,16 +175,12 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
                             method: 'upsert',
                             queryObject: {
                               where: {unique_tbmBaseId_date},
-                              ...createUpdate({
-                                ...unique_tbmBaseId_date,
-                                holidayType: isSelected ? '稼働' : '',
-                              }),
+                              ...createUpdate({...unique_tbmBaseId_date, holidayType: isSelected ? '稼働' : ''}),
                             },
                           }
                         }),
                       })
                       toastByResult(res)
-                      // })
                     },
                   }}
                 />

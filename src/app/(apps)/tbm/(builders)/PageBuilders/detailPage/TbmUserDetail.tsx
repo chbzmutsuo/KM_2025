@@ -3,7 +3,6 @@
 import {R_Stack} from '@components/styles/common-components/common-components'
 import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
 import {DetailPagePropType} from '@cm/types/types'
-import {Paper} from '@components/styles/common-components/paper'
 
 import CalendarSetter from '@app/(apps)/tbm/(pages)/DriveSchedule/CalendarSetter'
 import {Days, toUtc} from '@class/Days'
@@ -11,15 +10,14 @@ import {TextBlue} from '@components/styles/common-components/Alert'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {createUpdate, toastByResult} from '@lib/methods/api-fetcher'
 import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
+import {Prisma} from '@prisma/client'
 
-export default function TbmRouteGroupDetail(props: DetailPagePropType) {
+export default function TbmUserDetail(props: DetailPagePropType) {
   const {useGlobalProps} = props
   const {query} = useGlobalProps
 
-  const {data: calendar = []} = usefetchUniversalAPI_SWR(`tbmRouteGroupCalendar`, `findMany`, {
-    where: {tbmRouteGroupId: props.formData?.id},
-    orderBy: {date: 'asc'},
-  })
+  const userId = props.formData?.id
+  const {data: calendar = []} = usefetchUniversalAPI_SWR(`userWorkStatus`, `findMany`, {where: {userId}, orderBy: {date: 'asc'}})
 
   const theMonth = toUtc(query.month ?? query.from)
   const theYear = theMonth.getFullYear()
@@ -50,17 +48,18 @@ export default function TbmRouteGroupDetail(props: DetailPagePropType) {
                 const res = await doTransaction({
                   transactionQueryList: days.map(day => {
                     const isSelected = selectedDays.some(d => Days.isSameDate(d, day))
-                    const unique_tbmRouteGroupId_date = {tbmRouteGroupId: props.formData?.id, date: day}
+
+                    const unique_userId_date = {
+                      userId,
+                      date: day,
+                    }
 
                     return {
-                      model: 'tbmRouteGroupCalendar',
+                      model: 'userWorkStatus',
                       method: 'upsert',
                       queryObject: {
-                        where: {unique_tbmRouteGroupId_date},
-                        ...createUpdate({
-                          ...unique_tbmRouteGroupId_date,
-                          holidayType: isSelected ? '稼働' : '',
-                        }),
+                        where: {unique_userId_date},
+                        ...createUpdate({...unique_userId_date, workStatus: isSelected ? '稼働' : null}),
                       },
                     }
                   }),

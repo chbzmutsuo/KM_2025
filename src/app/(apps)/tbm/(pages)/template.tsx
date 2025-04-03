@@ -6,11 +6,13 @@ import useProductMidEditor from '@app/(apps)/tbm/(globalHooks)/useProductMidEdit
 import useCarWashGMF from '@app/(apps)/tbm/(globalHooks)/useCarWashGMF'
 import React from 'react'
 import {createUpdate, fetchTransactionAPI} from '@lib/methods/api-fetcher'
+import useUnchinChildCreator from '@app/(apps)/tbm/(globalHooks)/useUnchinChildCreator'
 export default function Template({children}) {
   const HK_OdometerInputGMF = useOdometerInputGMF()
   const HK_GasolineGMF = useGasolineGMF()
   const HK_ProductMidEditor = useProductMidEditor()
   const HK_CarWashGMF = useCarWashGMF()
+  const HK_UnchinChildCreator = useUnchinChildCreator()
 
   const batch = async () => {
     await seedDriver()
@@ -30,6 +32,7 @@ export default function Template({children}) {
 
       <HK_OdometerInputGMF.Modal />
       <HK_CarWashGMF.Modal />
+      <HK_UnchinChildCreator.Modal />
       {children}
     </div>
   )

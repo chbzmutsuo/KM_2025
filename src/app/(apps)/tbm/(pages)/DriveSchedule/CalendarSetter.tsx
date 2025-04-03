@@ -4,10 +4,10 @@ import {TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, Center, R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
-import {Paper} from '@components/styles/common-components/paper'
+import {ChevronDoubleRightIcon} from '@heroicons/react/20/solid'
 import React, {useState} from 'react'
 
-export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm}) {
+export default function CalendarSetter({days, defaultSelectedDays, onConfirm}) {
   const weekDays = [`月`, `火`, `水`, `木`, `金`, `土`, `日`, `祝`]
   const [selectedDays, setselectedDays] = useState<Date[]>(defaultSelectedDays)
   const setSelectedDays = (selectedWeekDay: string, mode: 'on' | 'off') => {
@@ -46,21 +46,29 @@ export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm})
   }
 
   return (
-    <C_Stack className={` relative  gap-4 pt-[60px]`}>
+    <C_Stack className={` relative  gap-2 `}>
       {/* 曜日選択 */}
 
-      <div className={` absolute right-0 top-0 text-center`}>
-        <Button
-          size="lg"
-          color="blue"
-          className={` !p-2 !text-[24px]  font-bold`}
-          {...{
-            onClick: async () => await onConfirm({selectedDays}),
-          }}
-        >
-          変更を反映する
-        </Button>
-      </div>
+      <div className={` absolute right-0 top-0 text-center`}></div>
+      <C_Stack className={` gap- items-center`}>
+        <div className={``}>
+          <Button
+            size="lg"
+            color="green"
+            className={` !p-2 !text-[24px]  font-bold`}
+            {...{
+              onClick: async () => await onConfirm({selectedDays}),
+            }}
+          >
+            変更を反映する
+          </Button>
+        </div>
+
+        <C_Stack className={`gap-0.5`}>
+          <small>選択した曜日を一括で、ON / OFFできます。その場合、個別に設定した値も上書きされます。 </small>
+          <small>一括反映後、個別で修正を実施することも可能です。</small>
+        </C_Stack>
+      </C_Stack>
 
       <section>
         <R_Stack className={` relative items-start  justify-between`}>
@@ -74,17 +82,16 @@ export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm})
                       ...weekDays.map(wd => ({
                         label: (
                           <Center>
-                            <strong className={` text-center text-3xl`}>{wd}</strong>
+                            <strong className={` text-center text-lg`}>{wd}</strong>
                           </Center>
                         ),
                         cellValue: (
                           <div key={wd}>
-                            <C_Stack className={` items-center   gap-3 p-3`}>
+                            <C_Stack className={` items-center   gap-1 `}>
                               <Button
                                 {...{
                                   color: 'blue',
-                                  className: `w-[60px] text-lg`,
-                                  size: 'sm',
+                                  className: `w-[60px] `,
                                   onClick: () => setSelectedDays(wd, 'on'),
                                 }}
                               >
@@ -93,8 +100,7 @@ export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm})
                               <Button
                                 {...{
                                   color: 'gray',
-                                  className: `w-[60px] text-lg`,
-                                  size: 'sm',
+                                  className: `w-[60px] `,
                                   onClick: () => setSelectedDays(wd, 'off'),
                                 }}
                               >
@@ -107,10 +113,16 @@ export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm})
                     ],
                   },
                 ],
-              }).WithWrapper({className: `t-paper  min-w-[300px] border-2 `})}
+              }).WithWrapper({className: `t-paper  min-w-[160px] border-2 `})}
             </C_Stack>
           </div>
-
+          <div>
+            <ChevronDoubleRightIcon className={`h-[100px] w-[100px]  text-blue-700 `} />
+            <ChevronDoubleRightIcon className={`h-[100px] w-[100px]  text-blue-700 `} />
+            <ChevronDoubleRightIcon className={`h-[100px] w-[100px]  text-blue-700 `} />
+            <ChevronDoubleRightIcon className={`h-[100px] w-[100px]  text-blue-700 `} />
+            <ChevronDoubleRightIcon className={`h-[100px] w-[100px]  text-blue-700 `} />
+          </div>
           <div>
             {/* 日付選択 */}
             {CsvTable({
@@ -156,18 +168,9 @@ export default function EigyoshoCalendar({days, defaultSelectedDays, onConfirm})
                   ],
                 })),
               ],
-            }).WithWrapper({className: `  min-w-[300px] t-paper border-2`})}
+            }).WithWrapper({className: `  min-w-[300px] t-paper border-2  max-h-[650px]`})}
           </div>
         </R_Stack>
-        <div className={` `}>
-          <TextRed className={` `}>
-            <C_Stack className={`gap-0.5`}>
-              <span>選択した曜日を一括で、ON / OFFできます。</span>
-              <span>個別に設定した値も上書きされます。 </span>
-              <span>一括反映後、個別で修正を実施することも可能です。</span>
-            </C_Stack>
-          </TextRed>
-        </div>
       </section>
     </C_Stack>
   )

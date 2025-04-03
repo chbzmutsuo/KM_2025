@@ -122,7 +122,9 @@ const PropAdjustor = (props: PropAdjustorPropsType) => {
   const loading = easySearchPrismaDataOnServer.loading || easySearchPrismaDataOnServer.loading
 
   if (loading) return <PlaceHolder />
-  if (serverFetchProps.DetailePageId) return <DetailedPageCC {...{ClientProps2, modelData}} />
+  if (serverFetchProps.DetailePageId) {
+    return <DetailedPageCC {...{ClientProps2, modelData}} />
+  }
 
   return (
     <div style={{...ClientProps2.displayStyle, paddingTop: 10}}>

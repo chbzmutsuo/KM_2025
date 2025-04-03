@@ -5,7 +5,7 @@ import {initServerComopnent} from 'src/non-common/serverSideFunction'
 import prisma from '@cm/lib/prisma'
 
 export default async function LessonView(props) {
-  const query = await props.searchParams;
+  const query = await props.searchParams
   const {session, scopes} = await initServerComopnent({query})
   const {isCoach} = scopes.getAdvantageProps()
   const include = QueryBuilder.getInclude({query}).bigCategory.include

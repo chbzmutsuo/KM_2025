@@ -41,7 +41,8 @@ export class ColBuilder {
           id: 'from',
           label: 'いつから',
           type: `date`,
-          form: {style: {minWidth: 120}, ...defaultRegister},
+          form: {...defaultRegister},
+          td: {style: {minWidth: 120}},
           format: (value, row) => {
             return formatDate(row[`from`], `short`)
           },
@@ -50,7 +51,8 @@ export class ColBuilder {
           id: 'to',
           label: 'いつまで',
           type: `date`,
-          form: {style: {minWidth: 120}},
+          form: {},
+          td: {style: {minWidth: 120}},
 
           format: (value, row) => {
             if (Days.isSameDate(row[`from`], row[`to`])) {
@@ -62,26 +64,46 @@ export class ColBuilder {
             }
           },
         },
-      ]).plain,
+      ])
+        .aggregateOnSingleTd()
+        .customAttributes(({col}) => ({form: {...col?.form, style: {minWidth: 240}}})).plain,
       ...new Fields([
-        {id: 'requiredNinku', label: '必要人工', type: `float`, form: {...defaultRegister}},
         {
-          id: 'status',
-          label: '状況',
-          type: `float`,
-          form: {hidden: true},
-          forSelect: {
-            optionsOrOptionFetcher: [
-              {value: '未完了', color: 'red'},
-              {value: '完了', color: 'green'},
-            ],
-          },
+          id: 'remarks',
+          label: '連絡',
+          type: `textarea`,
+          form: {},
         },
-      ]).plain,
+        {
+          id: 'subTask',
+          label: 'その他',
+          type: `textarea`,
+          form: {},
+        },
+      ])
+        .customAttributes(({col}) => ({
+          td: {style: {minWidth: 240}},
+          form: {...col?.form, style: {minWidth: 240}},
+        }))
+        .aggregateOnSingleTd().plain,
+
+      {id: 'requiredNinku', label: '必要人工', type: `float`, form: {...defaultRegister}},
+      // {
+      //   id: 'status',
+      //   label: '状況',
+      //   type: `float`,
+      //   form: {hidden: true},
+      //   forSelect: {
+      //     optionsOrOptionFetcher: [
+      //       {value: '未完了', color: 'red'},
+      //       {value: '完了', color: 'green'},
+      //     ],
+      //   },
+      // },
 
       {
         id: `updateBtn`,
-        label: `スケジュール反映`,
+        label: `反映`,
         form: {hidden: true},
         format: (value, row, col) => {
           const genbaTask = row

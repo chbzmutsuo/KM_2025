@@ -37,7 +37,7 @@ const Thead = React.memo((props: {ClientProps2; TableConfigProps: TableConfigPro
       <thead>
         {tableColumns.map((cols, rowIdx) => {
           return (
-            <tr key={rowIdx} {...{}}>
+            <tr key={rowIdx}>
               {rowIdx === 0 && (
                 <Kado
                   {...{

@@ -95,7 +95,7 @@ export const getKyuyoTableList = async ({whereQuery, tbmBaseId}) => {
       user,
       keyValue: {
         B_Shukkin: {
-          label: '出勤日数',
+          label: '稼働日数',
           cellValue: attendanceDays,
           style: {fontSize: 12, minWidth: width40},
         },

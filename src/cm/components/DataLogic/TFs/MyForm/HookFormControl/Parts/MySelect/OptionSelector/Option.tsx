@@ -24,6 +24,7 @@ export const SelectOption = (props: {contexts: contextsType; option: optionType;
   if (typeof label === `object`) return <></>
   return (
     <button
+      type="button"
       id={`option-${option.id}`}
       onClick={() => {
         setTimeout(async () => {

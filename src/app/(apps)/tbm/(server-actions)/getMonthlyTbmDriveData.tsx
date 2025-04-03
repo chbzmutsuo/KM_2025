@@ -84,7 +84,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
       config => config.tbmRouteGroupId === schedule.TbmRouteGroup.id
     )
 
-    const S_driverFee = ConfigForRoute?.driverFee ?? 0
+    const S_driverFee = 99999
 
     const N_postalFee = ConfigForRoute?.postalFee ?? 0
     const O_postalHighwayFee = schedule.O_postalHighwayFee ?? 0

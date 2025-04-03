@@ -10,17 +10,30 @@ import {DayRemarks, DayRemarksUser, User} from '@prisma/client'
 import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import useModal from '@components/utils/modal/useModal'
+import {IsInShift} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
+import {IsInKyuka} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
+import {IsInKyukaTodoke} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
+import {Days} from '@class/Days'
 
+type dayRemarksType = DayRemarks & {DayRemarksUser: (DayRemarksUser & {User: User})[]}
 export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom'}) => {
   const {date, editable, type} = props
-
-  type dayRemarksType = DayRemarks & {DayRemarksUser: (DayRemarksUser & {User: User})[]}
-
+  const [dayRemarksState, setdayRemarksState] = useState<dayRemarksType | null>(null)
+  const [users, setusers] = useState<any[]>([])
   const {Modal, handleOpen, handleClose, open, setopen} = useModal()
 
-  const [dayRemarksState, setdayRemarksState] = useState<dayRemarksType | null>(null)
+  const initState = async () => {
+    const {result: users} = await fetchUniversalAPI(`user`, `findMany`, {
+      include: {
+        GenbaDayShift: {where: {GenbaDay: {date}}},
+        DayRemarksUser: {where: {DayRemarks: {date}}},
+      },
+      where: {apps: {has: `sohken`}},
+      orderBy: [{sortOrder: `asc`}],
+    })
 
-  useEffect(() => {
+    setusers(users)
+
     const include = {DayRemarksUser: {include: {User: true}}}
     fetchUniversalAPI(`dayRemarks`, `findUnique`, {where: {date}, include}).then(async res => {
       if (!res.result) {
@@ -35,6 +48,10 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
         setdayRemarksState(res.result ?? {})
       }
     })
+  }
+
+  useEffect(() => {
+    initState()
   }, [date])
 
   if (dayRemarksState === null) return <PlaceHolder />
@@ -49,10 +66,11 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
             value={dayRemarksState.ninkuCount ?? ''}
             type="number"
             onChange={async e => {
-              setdayRemarksState({...dayRemarksState, ninkuCount: e.target.value ? Number(e.target.value) : null})
+              const nextNinkuCount = e.target.value ? Number(e.target.value) : null
+              setdayRemarksState({...dayRemarksState, ninkuCount: nextNinkuCount})
               await fetchUniversalAPI(`dayRemarks`, `upsert`, {
                 where: {date},
-                ...createUpdate({date, ninkuCount: Number(e.target.value)}),
+                ...createUpdate({date, ninkuCount: nextNinkuCount}),
               })
             }}
           />
@@ -86,11 +104,28 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
     )
   }
 
+  const freeUser = users.filter(user => {
+    const noShift = user.GenbaDayShift.length === 0
+
+    const kyuka = user.DayRemarksUser.filter(item => {
+      const bool = item.kyuka + item.kyukaTodoke
+
+      return bool
+    })
+
+    const hasKyuka = kyuka.length > 0
+
+    return noShift && !hasKyuka
+  })
+
   return (
     <div>
       <Modal {...{handleClose}}>
         <UserListSelector
           {...{
+            initState,
+            users,
+            date,
             setdayRemarksState,
             dayRemarksId: dayRemarksState.id,
             dayRemarksState,
@@ -108,11 +143,33 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
             }
           }}
         >
-          <strong>休暇</strong>
+          <strong>倉庫</strong>
           <R_Stack>
-            {dayRemarksState.DayRemarksUser.filter(item => item[`kyuka`]).map(item => {
-              return <div key={item.id}>{item?.User?.name}</div>
-            })}
+            {freeUser
+              .sort((a, b) => a.sortOrder - b.sortOrder)
+              .map(user => {
+                return <div key={user.id}>{user?.name}</div>
+              })}
+          </R_Stack>
+        </Paper>
+        <Paper
+          className={`onHover`}
+          onClick={() => {
+            if (editable) {
+              setopen({dayRemarksState, dataKey: `kyuka`})
+            }
+          }}
+        >
+          <strong>
+            <span className={`text-blue-600`}>■</span>
+            休暇
+          </strong>
+          <R_Stack>
+            {dayRemarksState.DayRemarksUser.sort((a, b) => a.User.sortOrder - b.User.sortOrder)
+              .filter(item => item[`kyuka`])
+              .map(item => {
+                return <div key={item.id}>{item?.User?.name}</div>
+              })}
           </R_Stack>
         </Paper>
         <Paper
@@ -123,11 +180,16 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
             }
           }}
         >
-          <strong>休暇願い</strong>
+          <strong>
+            <span className={`text-yellow-600`}>⚫︎</span>
+            休暇願い
+          </strong>
           <R_Stack>
-            {dayRemarksState.DayRemarksUser.filter(item => item[`kyukaTodoke`]).map(item => {
-              return <div key={item.id}>{item?.User?.name}</div>
-            })}
+            {dayRemarksState.DayRemarksUser.sort((a, b) => a.User.sortOrder - b.User.sortOrder)
+              .filter(item => item[`kyukaTodoke`])
+              .map(item => {
+                return <div key={item.id}>{item?.User?.name}</div>
+              })}
           </R_Stack>
         </Paper>
         <Paper>
@@ -155,19 +217,26 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
   )
 }
 
-const UserListSelector = ({setdayRemarksState, dayRemarksState, dataKey, dayRemarksId}) => {
-  const {data: users = []} = usefetchUniversalAPI_SWR(`user`, `findMany`, {
-    where: {apps: {has: `sohken`}},
-    orderBy: [{sortOrder: `asc`}],
-  })
+const UserListSelector = ({users, date, setdayRemarksState, dayRemarksState, dataKey, dayRemarksId, initState}) => {
   return (
     <C_Stack>
       {users.map(item => {
+        const DayRemark = item.DayRemarksUser.find(remark => {
+          return Days.isSameDate(remark?.DayRemark?.date, date)
+        })
+
+        const shiftsOnOtherGembaOnSameDate = item.GenbaDayShift
+
         const isTarget = dayRemarksState?.DayRemarksUser?.find(user => user.userId === item.id)?.[dataKey] === true
 
         return (
           <R_Stack key={item.id} className={` justify-between  border-b text-lg`}>
-            <div>{item.name}</div>
+            <R_Stack className={`items-start gap-0.5 leading-3`}>
+              <div>{item.name}</div>
+              <IsInShift {...{hasShift: shiftsOnOtherGembaOnSameDate.length}} />
+              <IsInKyukaTodoke {...{DayRemark}} />
+              <IsInKyuka {...{DayRemark}} />
+            </R_Stack>
             <div>
               <input
                 onChange={async e => {
@@ -186,37 +255,38 @@ const UserListSelector = ({setdayRemarksState, dayRemarksState, dataKey, dayRema
                     }),
                   })
 
-                  setdayRemarksState(prev => {
-                    const exist = prev.DayRemarksUser.find(user => newDayRemarksUser.id === user.id)
+                  initState()
+                  // setdayRemarksState(prev => {
+                  //   const exist = prev.DayRemarksUser.find(user => newDayRemarksUser.id === user.id)
 
-                    if (exist) {
-                      return {
-                        ...prev,
-                        DayRemarksUser: prev.DayRemarksUser.map(user => (user.id === exist.id ? newDayRemarksUser : user)).sort(
-                          (a, b) => a.User.sortOrder - b.User.sortOrder
-                        ),
-                      }
-                    } else {
-                      return {
-                        ...prev,
-                        DayRemarksUser: [...prev.DayRemarksUser, newDayRemarksUser].sort(
-                          (a, b) => a.User.sortOrder - b.User.sortOrder
-                        ),
-                      }
-                    }
+                  //   if (exist) {
+                  //     return {
+                  //       ...prev,
+                  //       DayRemarksUser: prev.DayRemarksUser.map(user => (user.id === exist.id ? newDayRemarksUser : user)).sort(
+                  //         (a, b) => a.User.sortOrder - b.User.sortOrder
+                  //       ),
+                  //     }
+                  //   } else {
+                  //     return {
+                  //       ...prev,
+                  //       DayRemarksUser: [...prev.DayRemarksUser, newDayRemarksUser].sort(
+                  //         (a, b) => a.User.sortOrder - b.User.sortOrder
+                  //       ),
+                  //     }
+                  //   }
 
-                    const newData = prev.DayRemarksUser.map(user => {
-                      if (user.userId === item.id) {
-                        return newDayRemarksUser
-                      }
-                      return user
-                    }).sort((a, b) => a.User.sortOrder - b.User.sortOrder)
+                  //   const newData = prev.DayRemarksUser.map(user => {
+                  //     if (user.userId === item.id) {
+                  //       return newDayRemarksUser
+                  //     }
+                  //     return user
+                  //   }).sort((a, b) => a.User.sortOrder - b.User.sortOrder)
 
-                    return {
-                      ...prev,
-                      DayRemarksUser: newData,
-                    }
-                  })
+                  //   return {
+                  //     ...prev,
+                  //     DayRemarksUser: newData,
+                  //   }
+                  // })
                 }}
                 type="checkbox"
                 className={`h-6 w-6`}
