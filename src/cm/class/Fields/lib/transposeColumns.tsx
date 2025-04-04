@@ -30,6 +30,11 @@ export const transposeColumns = (columns: colType[], transposeColumnsOptions?: t
         })
       }
 
+      if (col.type === `date`) {
+        if (col?.td?.hidden !== false) {
+          col.td = {...col.td, style: {minWidth: 120, ...col.td?.style}}
+        }
+      }
       if (col.type === `datetime`) {
         col.format = (value, row, col) => <MarkDownDisplay>{formatDate(value, `YYYY/MM/DD(ddd) HH:mm`)}</MarkDownDisplay>
       }

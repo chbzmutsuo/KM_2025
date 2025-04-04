@@ -1798,6 +1798,8 @@ export interface P_TbmDriveSchedule {
   tbmVehicleId: number;
   TbmRouteGroup: P_TbmRouteGroup;
   tbmRouteGroupId: number;
+  confirmed: boolean;
+  approved: boolean;
   TbmBase: P_TbmBase;
   tbmBaseId: number;
 }

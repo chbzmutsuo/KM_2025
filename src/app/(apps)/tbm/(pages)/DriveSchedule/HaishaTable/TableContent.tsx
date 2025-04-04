@@ -10,6 +10,8 @@ import {TbmDriveSchedule} from '@prisma/client'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import UserTh from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/UserTh'
 import {haishaListData} from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/getListData'
+import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 
 export default function TableContent({mode, listDataState, days, tbmBase, fetchData, setModalOpen}) {
   const {query, accessScopes} = useGlobal()
@@ -52,12 +54,13 @@ export default function TableContent({mode, listDataState, days, tbmBase, fetchD
                       )?.holidayType
 
                       const must = route?.id > 0 && holidayType === '稼働'
+                      const dateStr = formatDate(date, 'M/D(ddd)')
 
                       return {
                         label: (
-                          <R_Stack className={` justify-between `} id={`#${formatDate(date)}`}>
-                            <div>{formatDate(date, 'M/D(ddd)')}</div>
-                          </R_Stack>
+                          <div id={`#${dateStr}`}>
+                            <div>{dateStr}</div>
+                          </div>
                         ),
                         cellValue: (
                           <Center>
@@ -110,11 +113,52 @@ export default function TableContent({mode, listDataState, days, tbmBase, fetchD
                     ...days.map(date => {
                       const scheduleListOnDate = scheduleByDateAndUser?.[formatDate(date)]?.[String(user.id)] ?? []
 
+                      const dateStr = formatDate(date, 'M/D(ddd)')
+
                       return {
                         label: (
-                          <R_Stack className={` justify-between `} id={`#${formatDate(date)}`}>
-                            <div>{formatDate(date, 'M/D(ddd)')}</div>
-                          </R_Stack>
+                          <div
+                            className={`t-link `}
+                            id={`#${dateStr}`}
+                            onClick={async () => {
+                              const targetUserList = userList.filter(user => {
+                                // scheduleがapprovedのもの
+                                const schedule = scheduleListOnDate.find(
+                                  schedule => schedule.approved && schedule.userId === user.id
+                                )
+                                return schedule
+                              })
+
+                              if (confirm(`${targetUserList.length}件のユーザーを稼働に設定しますか？`)) {
+                                await doTransaction({
+                                  transactionQueryList: targetUserList.map((user, idx) => {
+                                    const unique_userId_date = {
+                                      userId: user.id,
+                                      date,
+                                    }
+
+                                    console.log(unique_userId_date) //logs
+                                    return {
+                                      model: `userWorkStatus`,
+                                      method: `upsert`,
+                                      queryObject: {
+                                        where: {
+                                          unique_userId_date,
+                                        },
+                                        ...createUpdate({
+                                          ...unique_userId_date,
+                                          workStatus: '稼働',
+                                        }),
+                                      },
+                                    }
+                                  }),
+                                })
+                                fetchData()
+                              }
+                            }}
+                          >
+                            <div>{dateStr}</div>
+                          </div>
                         ),
                         cellValue: (
                           <Cell

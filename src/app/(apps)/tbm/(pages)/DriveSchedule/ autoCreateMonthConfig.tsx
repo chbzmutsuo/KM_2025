@@ -26,25 +26,30 @@ export const autoCreateMonthConfig = async ({toggleLoad, MONTH, tbmBaseId}) => {
       return new Date(config.yearMonth).getTime() < new Date(MONTH).getTime()
     })
 
-    if (!thismonthConfig) {
-      targetRouteList.push(route)
+    targetRouteList.push(route)
 
-      if (prevMonthConfig) {
-        targetRouteListWithPreviousData.push({...route, prevMonthConfig})
-      }
+    if (prevMonthConfig) {
+      targetRouteListWithPreviousData.push({...route, prevMonthConfig})
     }
+
+    // if (!thismonthConfig) {
+    //   targetRouteList.push(route)
+
+    //   if (prevMonthConfig) {
+    //     targetRouteListWithPreviousData.push({...route, prevMonthConfig})
+    //   }
+    // }
 
     return false
   })
 
   const confirmMsg = [
     `①便総数:【${tbmRouteGroupList.length}件】`,
-    `②${formatDate(MONTH, 'YYYY年MM月')}の便設定のない便総数:【${targetRouteList.length}件】`,
-    `③上記のうち、過去月の便設定が存在するデータ:【${targetRouteListWithPreviousData.length}件】`,
+    `②上記のうち、過去月の便設定が存在するデータ:【${targetRouteListWithPreviousData.length}件】`,
     '',
-    '「③」に該当する便について、過去の月のデータを引き継ぎます。よろしいですか？',
+    `「②」の【${targetRouteListWithPreviousData.length}件】}便について、過去の月のデータを引き継ぎます。よろしいですか？`,
     `※引き継ぎデータは、直前の月のデータを引き継ぎます。`,
-    `※すでに当月の便設定が一度でも行われている場合、引き継ぎは行われません。`,
+    `※個別の設定は、上書きされますので、ご注意ください。`,
   ].join('\n')
   if (!confirm(confirmMsg)) return
 

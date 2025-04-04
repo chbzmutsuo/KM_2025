@@ -22,8 +22,8 @@ export const TbmVehicleColBuilder = (props: columnGetterType) => {
     ]).buildFormGroup({groupName: '車両情報②'}).plain,
 
     ...new Fields([
-      {id: 'shodoTorokubi', label: '初度登録日', form: {}, type: `date`},
-      {id: 'hokenManryobi', label: '保険満了日', form: {}, type: `date`},
+      {id: 'shodoTorokubi', label: '初度登録日', form: {}, type: `date`, td: {style: {minWidth: 120}}},
+      {id: 'hokenManryobi', label: '保険満了日', form: {}, type: `date`, td: {style: {minWidth: 120}}},
 
       {
         id: 'sokoKyori',
@@ -38,6 +38,7 @@ export const TbmVehicleColBuilder = (props: columnGetterType) => {
         id: 'sakenManryobi',
         label: '車検満了日',
         form: {hidden: true},
+        td: {style: {minWidth: 120}},
         format: (value, row) => {
           const {TbmVehicleMaintenanceRecord} = row
 
@@ -57,6 +58,7 @@ export const TbmVehicleColBuilder = (props: columnGetterType) => {
         id: 'sankagetsuTenkenbi',
         label: '3ヶ月点検',
         form: {hidden: true},
+        td: {style: {minWidth: 120}},
         format: (value, row) => {
           const {TbmVehicleMaintenanceRecord} = row
 

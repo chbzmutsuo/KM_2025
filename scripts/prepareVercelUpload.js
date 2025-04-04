@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-const freePlanApps = [`achievement`, `roken`,]
+const freePlanApps = [`achievement`, `roken`, `apex`]
 
 const readline = require('readline')
 const fs = require('fs')

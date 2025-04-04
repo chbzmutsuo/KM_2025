@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, {useState} from 'react'
 
 import {Days, formatDate} from '@class/Days'
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
@@ -11,6 +11,10 @@ import Link from 'next/link'
 import {HREF} from '@lib/methods/urls'
 import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import useGlobal from '@hooks/globalHooks/useGlobal'
+import {KeyValue} from '@components/styles/common-components/ParameterCard'
+import {TBM_STATUS} from '@app/(apps)/tbm/(constants)/TBM_STATUS'
+import {cl, getColorStyles} from '@lib/methods/common'
+import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 
 export const Cell = (props: {
   //
@@ -30,7 +34,7 @@ export const Cell = (props: {
   const {fetchData, scheduleListOnDate, setModalOpen, user, tbmRouteGroup, date, tbmBase} = props
 
   return (
-    <C_Stack className={` min-h-full justify-start `} {...{style: {width: 140}}}>
+    <C_Stack className={` min-h-full justify-start `} {...{style: {width: 160}}}>
       <ConfigArea
         {...{
           fetchData,
@@ -52,13 +56,14 @@ export const Cell = (props: {
           scheduleListOnDate,
           setModalOpen,
           tbmBase,
+          fetchData,
         }}
       />
     </C_Stack>
   )
 }
 
-const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) => {
+const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen, fetchData}) => {
   return (
     <section>
       <C_Stack>
@@ -71,18 +76,18 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
               }
             }
           ) => {
-            const {TbmRouteGroup, TbmVehicle, finished} = tbmDriveSchedule
+            const {TbmRouteGroup, TbmVehicle, finished, confirmed, approved} = tbmDriveSchedule
 
             const OdometerInputOnDate = TbmVehicle?.OdometerInput?.find(item => Days.isSameDate(item.date, date))
             const {odometerStart, odometerEnd} = OdometerInputOnDate ?? {}
             const carInputCompleted = odometerStart && odometerEnd
 
-            const RouteDisplay = finished ? TextSub : TextRed
+            const RouteDisplay = confirmed ? TextSub : TextRed
             const CarDispaly = carInputCompleted ? TextSub : TextRed
 
             return (
               <R_Stack className={`  justify-between gap-1  pb-1 `} key={tbmDriveSchedule.id}>
-                <C_Stack className={`t-paper gap-1.5  rounded-sm  `}>
+                <C_Stack className={`w-full gap-1.5 rounded-sm  shadow  `}>
                   <RouteDisplay className={` text-[12px] `}>{TbmRouteGroup.name}</RouteDisplay>
                   <R_Stack className={` justify-end `}>
                     <CarDispaly className={`text-end text-sm`}>({TbmVehicle?.vehicleNumber})</CarDispaly>
@@ -92,6 +97,47 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
                         setModalOpen({tbmDriveSchedule, user, date, tbmBase})
                       }}
                     />
+                  </R_Stack>
+                  <R_Stack className={`justify-end gap-0`}>
+                    {Object.entries(TBM_STATUS).map(([key, value], i) => {
+                      const {label, color} = value
+
+                      const active = tbmDriveSchedule[key]
+                      return (
+                        <div
+                          key={i}
+                          className={cl(
+                            //
+                            !active && 'opacity-30',
+                            key === 'approved' && 'cursor-pointer',
+                            ` px-2 py-[1px] text-xs `
+                          )}
+                          style={{...getColorStyles(active ? color : '')}}
+                          onClick={async () => {
+                            if (key === 'approved') {
+                              if (!confirmed) {
+                                alert('ドライバーが確定していません。')
+                                return
+                              }
+
+                              const msg = active
+                                ? '承認を取り消してよろしいですか？'
+                                : `承認してよろしいですか？承認がなされると、実績に反映されます。`
+
+                              if (confirm(msg)) {
+                                await fetchUniversalAPI(`tbmDriveSchedule`, `update`, {
+                                  where: {id: tbmDriveSchedule.id},
+                                  data: {approved: active ? false : true},
+                                })
+                                fetchData()
+                              }
+                            }
+                          }}
+                        >
+                          {label}
+                        </div>
+                      )
+                    })}
                   </R_Stack>
                 </C_Stack>
               </R_Stack>
@@ -105,6 +151,7 @@ const ScheduleArea = ({scheduleListOnDate, user, date, tbmBase, setModalOpen}) =
 
 const ConfigArea = ({fetchData, user, date, tbmRouteGroup, setModalOpen, tbmBase, scheduleListOnDate, query}) => {
   const userWorkStatus = user?.userWorkStatusList?.[formatDate(date)] ?? ''
+
   return (
     <section>
       <R_Stack className={` w-full  items-center justify-between`}>
@@ -112,12 +159,11 @@ const ConfigArea = ({fetchData, user, date, tbmRouteGroup, setModalOpen, tbmBase
           {/* 勤怠 */}
           <div>
             <select
-              defaultValue={userWorkStatus}
-              className={` w-[40px] rounded  border`}
+              value={userWorkStatus}
+              className={` w-[60px] rounded  border`}
               {...{
                 onChange: async e => {
                   const unique_userId_date = {userId: user.id, date: date}
-
                   const res = await fetchUniversalAPI(`userWorkStatus`, `upsert`, {
                     where: {unique_userId_date},
                     ...createUpdate({...unique_userId_date, workStatus: e.target.value}),

@@ -1,6 +1,7 @@
 'use client'
 import useUnchinChildCreator from '@app/(apps)/tbm/(globalHooks)/useUnchinChildCreator'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
+import {DH} from '@class/DH'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
 import {R_Stack} from '@components/styles/common-components/common-components'
@@ -26,9 +27,12 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
 
     {
       id: `fee-history`,
-      label: `運賃/請求運賃`,
+      label: `運賃/請求運賃(最新)`,
       form: {hidden: true},
       format: (value, row) => {
+        const latestTbmRouteGroupFee = row.TbmRouteGroupFee[0]
+        // const currentUntin=
+
         return (
           <R_Stack className={`  w-[200px]`}>
             <PencilSquareIcon
@@ -38,8 +42,8 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
               }}
             />
             <div>
-              <KeyValue {...{label: '運賃'}}></KeyValue>
-              <KeyValue {...{label: '請求運賃'}}></KeyValue>
+              <KeyValue {...{label: '運賃'}}>{DH.WithUnit(latestTbmRouteGroupFee?.driverFee, '円')}</KeyValue>
+              <KeyValue {...{label: '請求運賃'}}>{DH.WithUnit(latestTbmRouteGroupFee?.billingFee, '円')}</KeyValue>
             </div>
           </R_Stack>
         )

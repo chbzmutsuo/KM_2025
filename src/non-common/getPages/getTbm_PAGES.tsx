@@ -65,7 +65,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
       children: [
         //
 
-        {tabId: 'tbmDriveSchedule', label: '走行履歴'},
+        // {tabId: 'tbmDriveSchedule', label: '走行履歴'},
         {tabId: 'tbmRefuelHistory', label: '給油履歴'},
         {tabId: 'tbmCarWashHistory', label: '洗車履歴'},
       ],

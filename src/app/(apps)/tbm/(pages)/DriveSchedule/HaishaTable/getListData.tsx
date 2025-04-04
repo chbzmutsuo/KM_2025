@@ -39,6 +39,9 @@ export const getListData = async (props: {tbmBaseId: number; whereQuery: any; mo
       tbmRouteGroupId: true,
       tbmBaseId: true,
       TbmRouteGroup: {select: {id: true, code: true, name: true}},
+      finished: true,
+      confirmed: true,
+      approved: true,
       TbmVehicle: {
         select: {
           id: true,
@@ -53,6 +56,7 @@ export const getListData = async (props: {tbmBaseId: number; whereQuery: any; mo
     where: {
       date: {gte: whereQuery.gte, lte: whereQuery.lt},
     },
+    orderBy: [{date: 'asc'}, {TbmRouteGroup: {code: 'asc'}}],
   })
 
   const userList = await prisma.user.findMany({

@@ -2213,8 +2213,9 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code      String  @unique
- name      String
+ code String @unique
+ name String
+
  TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
 
@@ -2408,7 +2409,10 @@ model TbmDriveSchedule {
  tbmRouteGroupId Int
 
  finished  Boolean? @default(false)
- TbmBase   TbmBase  @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
+ confirmed Boolean? @default(false)
+ approved  Boolean? @default(false)
+
+ TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
 }
 

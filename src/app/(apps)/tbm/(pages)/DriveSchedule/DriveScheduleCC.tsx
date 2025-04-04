@@ -13,18 +13,20 @@ import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
+import Redirector from '@components/utils/Redirector'
 import BasicTabs from '@components/utils/tabs/BasicTabs'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {createUpdate, toastByResult} from '@lib/methods/api-fetcher'
+import {HREF} from '@lib/methods/urls'
 import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 import {endOfMonth} from 'date-fns'
 
 export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
   const useGlobalProps = useGlobal()
 
-  const {width, query, toggleLoad} = useGlobalProps
-  const maxWidth = width * 0.9
+  const {pathname, width, query, toggleLoad, PC} = useGlobalProps
+  const minWidth = width * 0.95
   const ColBuiderProps = {
     useGlobalProps,
     ColBuilderExtraProps: {tbmBaseId: tbmBase?.id},
@@ -40,6 +42,10 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
   if (!query.from && !query.month) {
     return <PlaceHolder />
   }
+
+  if (!PC) {
+    return <div>このページは、PC専用です。</div>
+  }
   const theMonth = toUtc(query.from || query.month)
 
   const dateWhere = {
@@ -53,13 +59,20 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
   })
   const defaultSelectedDays = calendar.filter(c => c.holidayType === '稼働').map(c => c.date)
 
+  if (!query.mode) {
+    return <Redirector {...{redirectPath: HREF(pathname, {mode: 'DRIVER'}, query)}} />
+  }
+
   if (!width || isLoading) return <PlaceHolder></PlaceHolder>
   return (
-    <FitMargin className={`pt-2`}>
+    <div className={`pt-2`}>
       <NewDateSwitcher {...{monthOnly: true}} />
       <BasicTabs
         {...{
-          style: {width: maxWidth},
+          style: {
+            minWidth: minWidth,
+            margin: 'auto',
+          },
           id: 'driveSchedule',
           showAll: false,
           TabComponentArray: [
@@ -189,6 +202,6 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
           ],
         }}
       />
-    </FitMargin>
+    </div>
   )
 }

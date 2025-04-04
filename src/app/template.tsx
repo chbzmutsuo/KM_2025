@@ -17,6 +17,7 @@ import useGlobal from '@hooks/globalHooks/useGlobal'
 import {useScrollPosition} from '@hooks/scrollPosition/useScrollPosition'
 
 import {usePageTracking} from '@hooks/usePageTracking'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 export default function Global_Template(props) {
   const {globalHooks, globalPropsReady} = useInitGlobalHooks()
@@ -58,10 +59,23 @@ const Main = ({children, router}) => {
       <R_Stack id="portal-root-bottom-fixed" className={cl(` fixed bottom-0 w-full  `)}></R_Stack>
 
       {isDev && (
-        <div className={`fixed bottom-1 right-1`}>
-          <button className={` t-btn`} {...{onClick: () => router.refresh()}}>
-            更新
-          </button>
+        <div>
+          <div className={`fixed bottom-1 right-1`}>
+            <R_Stack>
+              <button
+                className={` t-btn`}
+                {...{onClick: () => router.refresh()}}
+                onClick={async () => {
+                  // const res = await fetchUniversalAPI(``)
+                }}
+              >
+                PLAY
+              </button>
+              <button className={` t-btn`} {...{onClick: () => router.refresh()}}>
+                更新
+              </button>
+            </R_Stack>
+          </div>
         </div>
       )}
     </div>

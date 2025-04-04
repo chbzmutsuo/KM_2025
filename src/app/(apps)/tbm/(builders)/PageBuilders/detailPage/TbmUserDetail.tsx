@@ -36,7 +36,7 @@ export default function TbmUserDetail(props: DetailPagePropType) {
       </div>
       {!!props?.formData?.id && (
         <div>
-          <TextBlue className={` text-2xl font-bold `}>配車予定</TextBlue>
+          <TextBlue className={` text-2xl font-bold `}>稼働予定</TextBlue>
           <CalendarSetter
             {...{
               days: days,

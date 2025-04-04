@@ -21,12 +21,13 @@ export default function TbmRouteGroupDetail(props: DetailPagePropType) {
     orderBy: {date: 'asc'},
   })
 
-  const theMonth = toUtc(query.month ?? query.from)
+  const theMonth = toUtc(query.from)
   const theYear = theMonth.getFullYear()
 
-  const {firstDateOfYear, lastDateOfYear, getSpecifiedMonthOnThisYear} = Days.getYearDatum(theYear)
+  // const {firstDateOfYear, lastDateOfYear, getSpecifiedMonthOnThisYear} = Days.getYearDatum(theYear)
+  // const days = Days.getDaysBetweenDates(firstDateOfYear, lastDateOfYear)
 
-  const days = Days.getDaysBetweenDates(firstDateOfYear, lastDateOfYear)
+  const {days} = Days.getMonthDatum(theMonth)
 
   const defaultSelectedDays = calendar.filter(c => c.holidayType === '稼働').map(c => c.date)
 
