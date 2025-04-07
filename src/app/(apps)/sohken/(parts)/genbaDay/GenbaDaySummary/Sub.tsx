@@ -62,25 +62,26 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
         })
       : null
 
-    const nextShiftDisplay = nextShift ? (
-      <R_Stack className={`gap-[1px]`}>
-        <span>➡︎</span>
-        <Circle width={18}>{nextShiftIndex + 1}</Circle>
-        {nextShift?.from && (
-          <>
-            <span>{nextShift?.from}</span>
-          </>
-        )}
+    const nextShiftDisplay =
+      nextShift && nextShiftIndex ? (
+        <R_Stack className={`gap-[1px]`}>
+          <span>➡︎</span>
+          <Circle width={18}>{nextShiftIndex + 1}</Circle>
+          {nextShift?.from && (
+            <>
+              <span>{nextShift?.from}</span>
+            </>
+          )}
 
-        {(nextShift?.from || nextShift?.to) && <small>~</small>}
+          {(nextShift?.from || nextShift?.to) && <small>~</small>}
 
-        {nextShift?.to && (
-          <>
-            <span>{nextShift?.to}</span>
-          </>
-        )}
-      </R_Stack>
-    ) : null
+          {nextShift?.to && (
+            <>
+              <span>{nextShift?.to}</span>
+            </>
+          )}
+        </R_Stack>
+      ) : null
 
     return {
       ...v,

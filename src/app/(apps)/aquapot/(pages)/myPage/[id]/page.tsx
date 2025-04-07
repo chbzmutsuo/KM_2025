@@ -22,6 +22,7 @@ export default async function page(props: {searchParams: any; params: any}) {
   const isValidUser = asCustomer && session.id === Number(params.id)
 
   const {whereQuery, redirectPath} = await dateSwitcherTemplate({query})
+
   if (redirectPath) {
     return <Redirector {...{redirectPath}} />
   }

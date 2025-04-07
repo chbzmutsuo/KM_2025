@@ -7,6 +7,7 @@ import {useShiftEditFormModal} from '@app/(apps)/sohken/hooks/useShiftEditFormMo
 import {GoogleCalendar_Get} from '@app/api/google/actions/calendarAPI'
 import {Button} from '@components/styles/common-components/Button'
 import {isDev} from '@lib/methods/common'
+import {addDays} from 'date-fns'
 import React from 'react'
 
 export default function template({children}) {
@@ -16,15 +17,17 @@ export default function template({children}) {
   const GenbaDetailModal_HK = useGenbaDetailModal()
   return (
     <div>
-      {/* <Button
+      <Button
         onClick={async () => {
           // GoogleCalendar_Get({calendarId: 'ja.japanese#holiday@group.v.calendar.google.com'})
-          const res = await GoogleCalendar_Get({calendarId: 'skikuc03@gmail.com'})
-          console.log(res) //logs
+          // const res = await GoogleCalendar_Get({calendarId: 'skikuc03@gmail.com'})
+          const res = await GoogleCalendar_Get({calendarId: '411.mutsuo@gmail.com', from: addDays(new Date(), -1)})
+          const items = res.events.items
+          console.log(items) //logs
         }}
       >
         カレンダAPI
-      </Button> */}
+      </Button>
       <GenbaDayCardEditModal_HK.Modal />
       <ShiftEditFormModal_HK.Modal />
       <GenbaDayBasicEditor_HK.Modal />

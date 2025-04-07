@@ -36,11 +36,11 @@ export const handleGetResult = async ({SS_CONSTANTS, spreadsheetId, questions, s
     (await GoogleSheet_getSheetByName({spreadsheetId: newSpreadsheetId, sheetName: '質問'}))?.properties?.sheetId ?? 0
 
   if (!sheetId) return alert(`sheetIdxが見つかりません`)
-
   const requests = (questions ?? []).map((item, idx) => {
     const colIdx = 2
     const rowNum = idx + 1
-    return SheetRequests.updateCell(sheetId, rowNum, colIdx, item.answer)
+
+    return SheetRequests.updateCell(sheetId, rowNum, colIdx, Number(item.answer))
   })
 
   // ==============コピーしたシートへ書き込み===============

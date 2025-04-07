@@ -4,6 +4,7 @@ import {AqSaleRecord, AqPriceOption, AqSaleCart} from '@prisma/client'
 
 export const getCustomerDataWithSales = async ({userId, query}) => {
   const selectedYearStr = query.from ?? query.month
+
   const selectedYear = selectedYearStr ? toUtc(selectedYearStr) : toUtc()
 
   const {firstDateOfYear, lastDateOfYear} = Days.getYearDatum(toJst(selectedYear).getFullYear())
@@ -36,7 +37,7 @@ export const getCustomerDataWithSales = async ({userId, query}) => {
   })
 
   const salesByMonth = {}
-  customer.AqSaleCart.forEach((cart: AqSaleCart & {AqSaleRecord: SaleRecord[]}) => {
+  customer.AqSaleCart?.forEach((cart: AqSaleCart & {AqSaleRecord: SaleRecord[]}) => {
     cart.AqSaleRecord.forEach(sale => {
       const month = formatDate(sale.date, `YYYY-MM`)
       if (!salesByMonth[month]) {

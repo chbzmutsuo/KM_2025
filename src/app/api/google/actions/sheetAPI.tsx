@@ -111,8 +111,10 @@ export const GoogleSheet_BatchUpdate = async (props: {spreadsheetId: string; req
 }
 
 export const GoogleSheet_copy = async (props: {fromSSId: string; destinationFolderId: string; fileName?: string}) => {
-  const {fromSSId, destinationFolderId, fileName} = props
-  const fromSpreadsheetId = convert_GoogleURL_to_ID(fromSSId)
+  const fileName = props.fileName
+  const fromSpreadsheetId = convert_GoogleURL_to_ID(props.fromSSId)
+  const destinationFolderId = convert_GoogleURL_to_ID(props.destinationFolderId)
+
   const auth = getAuth()
 
   const drive = google.drive({version: 'v3', auth})

@@ -120,6 +120,7 @@ model AqCustomer {
  jobTitle             String?
  name                 String? @unique
  defaultPaymentMethod String?
+ furikomisakiCD       String?
 
  tel           String?
  tel2          String?

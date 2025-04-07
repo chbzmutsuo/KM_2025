@@ -1,6 +1,6 @@
 'use client'
 
-import {ColBuilder} from '@app/(apps)/applicationForms/(builders)/ColBuilder'
+import {ColBuilder} from '@app/(apps)/shinsei/(builders)/ColBuilder'
 import {roleMaster} from '@class/builders/PageBuilderVariables'
 import {Fields} from '@class/Fields/Fields'
 import {DetailPagePropType} from '@cm/types/types'
@@ -58,7 +58,7 @@ export class PageBuilder {
           id: 'g_userId',
           forSelect: {
             config: {
-              where: {apps: {has: `applicationForms`}},
+              where: {apps: {has: `shinsei`}},
             },
           },
           form: {},

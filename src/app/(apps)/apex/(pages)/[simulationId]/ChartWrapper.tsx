@@ -33,7 +33,8 @@ export default function ChartWrapper(props: {
     )
   }
 
-  const label = keyName === `before` ? `現在の手取り額（社宅規程導入前）` : `社宅規程導入後の手取り額(結果)`
+  const label =
+    keyName === `before` ? `現在の手取り額（${SS_CONSTANTS.title}導入前）` : `${SS_CONSTANTS.title}導入後の手取り額(結果)`
   return (
     <section>
       <C_Stack className="gap-0 ">

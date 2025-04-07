@@ -17,11 +17,13 @@ export const aquapot_PAGES = (props: PageGetterType) => {
   const publicPaths = [
     {
       tabId: 'myPage',
-      label: 'マイページ',
+      label: 'お客様ページ',
       ROOT: [rootPath],
       // exclusiveTo: !!getAqLoginType({session}).asCustomer
     },
   ]
+  const isCustomer = !!getAqLoginType({session}).asCustomer
+
   const adminPaths = [
     {
       tabId: '',
@@ -29,7 +31,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
       children: [
         {tabId: 'sale/register', label: '売上登録'},
         {tabId: 'sale/list', label: '売上一覧'},
-        {tabId: 'sale/baseImport', label: 'BASEデータインポート'},
+        {tabId: 'sale/baseImport', label: 'BASEインポート'},
       ],
     },
     {
@@ -71,7 +73,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
     {tabId: `batch`, label: 'バッチ', exclusiveTo: admin},
 
     // {tabId: 'inventory', label: '在庫一覧'},
-  ].map(item => ({...item, exclusiveTo: !!getAqLoginType({session}).asUser, ROOT: [rootPath]}))
+  ].map(item => ({...item, exclusiveTo: !isCustomer, ROOT: [rootPath]}))
 
   const systemAdminPaths = [{tabId: 'roleMaster', label: '権限管理'}].map(item => ({
     ...item,

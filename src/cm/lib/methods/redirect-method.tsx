@@ -7,6 +7,7 @@ import {addDays} from 'date-fns'
 
 export const redirectToDefaultQuery = async (props: {query: anyObject; defaultQueryAsStr: anyObject; pathname?: string}) => {
   const {query, pathname = ''} = props
+
   let defaultQueryAsStr = props.defaultQueryAsStr
   defaultQueryAsStr = ObjectMap(props.defaultQueryAsStr, (key, value) => {
     return String(value)

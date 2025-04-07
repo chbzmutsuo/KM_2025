@@ -541,60 +541,6 @@ export interface P_AppLog {
   userId: number;
 }
 
-export interface P_Product {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  sortOrder: number;
-  productCode: string;
-  name: string;
-  maker: string;
-  unit: string;
-  PurchaseRequest: P_PurchaseRequest[];
-}
-
-export interface P_PurchaseRequest {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  sortOrder: number;
-  purchaseType: string;
-  quantity: number;
-  result: string;
-  approverComment: string;
-  trashed: boolean;
-  Approval: P_Approval[];
-  userId: number;
-  productId: number;
-}
-
-export interface P_LeaveRequest {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  sortOrder: number;
-  startDate: Date;
-  leaveType: string;
-  reason: string;
-  Approval: P_Approval[];
-  userId: number;
-}
-
-export interface P_Approval {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  sortOrder: number;
-  status: string;
-  comment: string;
-  PurchaseRequest: P_PurchaseRequest;
-  purchaseRequestId: number;
-  LeaveRequest: P_LeaveRequest;
-  leaveRequestId: number;
-  User: P_User;
-  userId: number;
-}
-
 export interface P_AqSaleCart {
   id: number;
   baseOrderId: string;
@@ -674,6 +620,7 @@ export interface P_AqCustomer {
   jobTitle: string;
   name: string;
   defaultPaymentMethod: string;
+  furikomisakiCD: string;
   tel: string;
   tel2: string;
   fax: string;
@@ -1414,6 +1361,60 @@ export interface P_Calendar {
   sortOrder: number;
   date: Date;
   holidayType: string;
+}
+
+export interface P_Product {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  productCode: string;
+  name: string;
+  maker: string;
+  unit: string;
+  PurchaseRequest: P_PurchaseRequest[];
+}
+
+export interface P_PurchaseRequest {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  purchaseType: string;
+  quantity: number;
+  result: string;
+  approverComment: string;
+  trashed: boolean;
+  Approval: P_Approval[];
+  userId: number;
+  productId: number;
+}
+
+export interface P_LeaveRequest {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  startDate: Date;
+  leaveType: string;
+  reason: string;
+  Approval: P_Approval[];
+  userId: number;
+}
+
+export interface P_Approval {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  status: string;
+  comment: string;
+  PurchaseRequest: P_PurchaseRequest;
+  purchaseRequestId: number;
+  LeaveRequest: P_LeaveRequest;
+  leaveRequestId: number;
+  User: P_User;
+  userId: number;
 }
 
 export interface P_PrefCity {

@@ -26,7 +26,10 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
     const {result: users} = await fetchUniversalAPI(`user`, `findMany`, {
       include: {
         GenbaDayShift: {where: {GenbaDay: {date}}},
-        DayRemarksUser: {where: {DayRemarks: {date}}},
+        DayRemarksUser: {
+          include: {DayRemarks: true},
+          where: {DayRemarks: {date}},
+        },
       },
       where: {apps: {has: `sohken`}},
       orderBy: [{sortOrder: `asc`}],
@@ -143,7 +146,10 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
             }
           }}
         >
-          <strong>倉庫</strong>
+          <strong>
+            倉庫
+            <small>自動表示</small>
+          </strong>
           <R_Stack>
             {freeUser
               .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -163,6 +169,7 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
           <strong>
             <span className={`text-blue-600`}>■</span>
             休暇
+            <small>手動変更</small>
           </strong>
           <R_Stack>
             {dayRemarksState.DayRemarksUser.sort((a, b) => a.User.sortOrder - b.User.sortOrder)
@@ -183,6 +190,7 @@ export const DayRemarkComponent = (props: {date; editable; type: 'top' | 'bottom
           <strong>
             <span className={`text-yellow-600`}>⚫︎</span>
             休暇願い
+            <small>手動変更</small>
           </strong>
           <R_Stack>
             {dayRemarksState.DayRemarksUser.sort((a, b) => a.User.sortOrder - b.User.sortOrder)
@@ -222,12 +230,14 @@ const UserListSelector = ({users, date, setdayRemarksState, dayRemarksState, dat
     <C_Stack>
       {users.map(item => {
         const DayRemark = item.DayRemarksUser.find(remark => {
-          return Days.isSameDate(remark?.DayRemark?.date, date)
+          return Days.isSameDate(remark?.DayRemarks?.date, date)
         })
 
         const shiftsOnOtherGembaOnSameDate = item.GenbaDayShift
 
         const isTarget = dayRemarksState?.DayRemarksUser?.find(user => user.userId === item.id)?.[dataKey] === true
+
+        console.log(DayRemark) //logs
 
         return (
           <R_Stack key={item.id} className={` justify-between  border-b text-lg`}>

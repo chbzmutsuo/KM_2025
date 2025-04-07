@@ -12,6 +12,7 @@ import {TaskWithNinku} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import {Alert} from '@components/styles/common-components/Alert'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
+import Link from 'next/link'
 export default function Main(props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
   pathname: string
@@ -44,7 +45,13 @@ export default function Main(props: {
   return (
     <div className={` relative`}>
       <section>
-        {isDetailPage && <LabelValue {...{label: `日付`}}>{formatDate(GenbaDay.date, `MM月DD日(ddd)`)}</LabelValue>}
+        {isDetailPage && (
+          <LabelValue {...{label: `日付`}}>
+            <Link className={` t-link`} href={`/sohken/genbaDay?genbaId=${Genba.id}&from=${GenbaDay.date} `}>
+              {formatDate(GenbaDay.date, `MM月DD日(ddd)`)}
+            </Link>
+          </LabelValue>
+        )}
         {!isDetailPage && (
           <div>
             <LabelValue {...{label: `現場`}}>

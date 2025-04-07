@@ -13,7 +13,7 @@ export class ColBuilder {
   }
   static product = (props: columnGetterType) => {
     return new Fields([
-      {...{id: 'productCode', label: '商品コード'}, form: {...defaultRegister}},
+      {...{id: 'productCode', label: 'ｊ品番'}, form: {...defaultRegister}},
       {...{id: 'name', label: '商品名'}, form: {...defaultRegister}},
       {...{id: 'maker', label: 'メーカー'}, form: {...defaultRegister}},
       {...{id: 'unit', label: '単位'}, form: {...defaultRegister}},

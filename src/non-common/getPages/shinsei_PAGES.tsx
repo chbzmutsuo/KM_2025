@@ -2,7 +2,7 @@ import {getScopes} from 'src/non-common/scope-lib/getScopes'
 
 import {CleansePathSource, PageGetterType, pathItemType} from 'src/non-common/path-title-constsnts'
 
-export const applicationForms_PAGES = (props: PageGetterType) => {
+export const shinsei_PAGES = (props: PageGetterType) => {
   const {session, query, rootPath, pathname, roles} = props
   const {login, admin} = getScopes(session, {query, roles})
 

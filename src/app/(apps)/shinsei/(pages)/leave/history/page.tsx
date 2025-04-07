@@ -46,7 +46,7 @@ export default function LeaveHistoryPage() {
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">My申請履歴</h1>
-        <Button onClick={() => (window.location.href = '/applicationForms/leave')}>新規申請</Button>
+        <Button onClick={() => (window.location.href = '/shinsei/leave')}>新規申請</Button>
       </div>
 
       <div className="overflow-x-auto">

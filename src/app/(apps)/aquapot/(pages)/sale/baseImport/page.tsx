@@ -11,8 +11,10 @@ import {Prisma} from '@prisma/client'
 import React from 'react'
 import {toast} from 'react-toastify'
 
+// BASEのスプレッドシートURL
 const sheetUrl = 'https://docs.google.com/spreadsheets/d/1jr1BCd9gXaK6EYK0VCKWWLqjC66nDP_ws7HpAwN1XKU/edit?gid=0#gid=0'
 export default function Page(props) {
+  // CSVファイルのヘッダー定義
   const header = [
     `注文ID`,
     `注文日時`,
@@ -50,61 +52,72 @@ export default function Page(props) {
     `注文メモ`,
     `調整金額`,
   ]
+  // ローディング状態を管理するフック
   const {toggleLoad} = useGlobal()
 
+  // ファイルアップロード用のフック
   const {
     fileArrState,
     fileErrorState,
     component: {FileUploaderMemo},
   } = useFileUploadProps({
-    accept: {'text/csv': ['.csv']},
-    readAs: 'readAsText',
+    accept: {'text/csv': ['.csv']}, // CSVファイルのみ受け付ける
+    readAs: 'readAsText', // テキストとして読み込む
   })
 
+  // アップロードされたCSVデータ
   const csvArray = fileArrState?.[0]?.fileContent
   return (
     <Center>
       <Padding>
         <C_Stack className={` items-center gap-[60px]`}>
           <span>最新のBASE売上データをインポートしてください。</span>
+          {/* ファイルアップロードコンポーネント */}
           {FileUploaderMemo}
           <div>
             {csvArray && (
               <div>
                 <Button
                   onClick={async item => {
+                    // ローディング状態でデータ処理を実行
                     toggleLoad(async item => {
                       const array = csvArray as any[]
                       if (array) {
+                        // CSVデータをオブジェクトの配列に変換（ヘッダー行を除く）
                         const values = array.slice(1).map((item, i) => {
                           return Object.fromEntries(header.map((key, i) => [key, item[i]]))
                         })
 
+                        // 注文IDごとにデータをグループ化
                         const OrderIdList = values.reduce((acc, item) => {
                           acc[item.注文ID] = [...(acc[item.注文ID] ?? []), item]
                           return acc
                         }, {})
 
+                        // 各注文IDに対して処理を実行
                         await Promise.all(
                           Object.entries(OrderIdList).map(async ([orderId, rows]) => {
+                            // カート情報のupsert用データ準備
                             const cartData: Prisma.AqSaleCartUpsertArgs = {
                               where: {baseOrderId: orderId},
                               create: {
                                 baseOrderId: orderId,
                                 date: toUtc(rows[0].注文日時),
                                 paymentMethod: rows[0].支払い方法,
-                                aqCustomerId: 0,
+                                aqCustomerId: 0, // 仮の顧客ID（後で更新）
                               },
                               update: {
                                 baseOrderId: orderId,
                                 date: toUtc(rows[0].注文日時),
                                 paymentMethod: rows[0].支払い方法,
-                                aqCustomerId: 0,
+                                aqCustomerId: 0, // 仮の顧客ID（後で更新）
                               },
                             }
 
+                            // 各商品行に対して処理を実行
                             const payloadArray = await Promise.all(
                               rows.map(async row => {
+                                // 行データの分割代入
                                 const {
                                   注文ID,
                                   注文日時,
@@ -143,8 +156,10 @@ export default function Page(props) {
                                   調整金額,
                                 } = row
 
+                                // 顧客名の生成
                                 const name = 氏_請求先 + ' ' + 名_請求先
 
+                                // 顧客情報の登録または更新
                                 const customerRes = await fetchUniversalAPI(`aqCustomer`, `upsert`, {
                                   where: {name},
                                   ...createUpdate({
@@ -155,15 +170,17 @@ export default function Page(props) {
                                     street: 住所2_請求先,
                                     tel: 電話番号_請求先,
                                     email: メールアドレス_請求先,
-                                    fromBase: true,
+                                    fromBase: true, // BASEからのデータであることを示す
                                   }),
                                 })
 
+                                // 商品情報の登録または更新
                                 const productRes = await fetchUniversalAPI(`aqProduct`, `upsert`, {
                                   where: {name: 商品名},
                                   ...createUpdate({name: 商品名, cost: 0, fromBase: true}),
                                 })
 
+                                // カートデータの顧客ID更新
                                 cartData.create = {
                                   baseOrderId: 注文ID,
                                   date: toUtc(注文日時),
@@ -177,10 +194,13 @@ export default function Page(props) {
                                   aqCustomerId: customerRes.result.id,
                                 }
 
+                                // 税率の計算
                                 const taxRate = 税率 === `標準税率` ? 1.1 : 税率 === `軽減税率` ? 1.08 : 1
+                                // 税抜価格の計算（四捨五入）
                                 const price = Math.round(Number(価格) / Number(taxRate))
+                                // 売上レコード用のデータ作成
                                 const payload = {
-                                  baseSaleRecordId: [注文ID, 商品ID, 種類ID].join(`_`),
+                                  baseSaleRecordId: [注文ID, 商品ID, 種類ID].join(`_`), // ユニークID生成
                                   date: toUtc(注文日時),
                                   aqCustomerId: customerRes.result.id,
                                   quantity: Number(数量),
@@ -194,6 +214,7 @@ export default function Page(props) {
                               })
                             )
 
+                            // カートと売上レコードの登録
                             const res = await fetchUniversalAPI(`aqSaleCart`, `upsert`, {
                               where: cartData.where,
                               create: {
@@ -209,6 +230,7 @@ export default function Page(props) {
                           })
                         )
                       } else {
+                        // データがない場合はエラー表示
                         toast.error(`データ連携に失敗しました。`)
                       }
                     })

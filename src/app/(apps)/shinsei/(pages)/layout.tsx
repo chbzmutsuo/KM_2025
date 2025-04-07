@@ -1,4 +1,4 @@
-import {PageBuilder} from '@app/(apps)/applicationForms/(builders)/PageBuilder'
+import {PageBuilder} from '@app/(apps)/shinsei/(builders)/PageBuilder'
 import Admin from '@cm/components/layout/Admin'
 
 export default async function Layout(props) {
@@ -11,8 +11,8 @@ export default async function Layout(props) {
   //       method: `upsert`,
   //       queryObject: {
   //         where: {email: name},
-  //         create: {name, email: name, password: name, apps: [`applicationForms`]},
-  //         update: {name, email: name, password: name, apps: [`applicationForms`]},
+  //         create: {name, email: name, password: name, apps: [`shinsei`]},
+  //         update: {name, email: name, password: name, apps: [`shinsei`]},
   //       },
   //     }
   //   }),
@@ -22,7 +22,7 @@ export default async function Layout(props) {
     <Admin
       {...{
         AppName: 'TEST',
-        PagesMethod: 'applicationForms_PAGES',
+        PagesMethod: 'shinsei_PAGES',
         PageBuilderGetter: {class: PageBuilder, getter: 'getGlobalIdSelector'},
       }}
     >

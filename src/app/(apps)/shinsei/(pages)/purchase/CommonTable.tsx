@@ -1,6 +1,6 @@
 'use client'
 
-import {APPROVAL_STATUS_OPTIONS} from '@app/(apps)/applicationForms/(constants)/options'
+import {APPROVAL_STATUS_OPTIONS} from '@app/(apps)/shinsei/(constants)/options'
 import {ColoredText} from '@components/styles/common-components/colors'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
@@ -52,7 +52,7 @@ export default function CommonTable({dataFetchProps = {}}) {
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">My発注履歴</h1>
-        <Button onClick={() => (window.location.href = '/applicationForms/purchase/create')}>新規申請</Button>
+        <Button onClick={() => (window.location.href = '/shinsei/purchase/create')}>新規申請</Button>
       </div>
 
       <div className="overflow-x-auto">

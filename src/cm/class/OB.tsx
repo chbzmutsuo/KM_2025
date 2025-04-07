@@ -10,21 +10,30 @@ export class OB {
     return filteredObject as any
   }
 
-  static foo = (sourceObj, newKeyVal) => {
-    Object.keys(newKeyVal).forEach(key => {
-      const newValue = newKeyVal[key]
-      const oldValue = sourceObj?.[key]
-
-      const valueIsObject = typeof newValue === 'object' && newValue !== null && !Array.isArray(newValue)
-      const oldValueIsObject = typeof oldValue === 'object' && oldValue !== null && !Array.isArray(oldValue)
-
-      if (valueIsObject && oldValueIsObject) {
-        // 条件が変更されました
-        this.foo(newValue, oldValue) // 再帰的にマージします
-        newKeyVal[key] = {...oldValue, ...newValue} // マージ結果を保存します
-      } else {
-        newKeyVal[key] = newValue // 新しい値を設定します
+  static toArray = object => {
+    return Object.keys(object).map(key => {
+      return {
+        key,
+        ...object[key],
       }
     })
   }
+
+  // static foo = (sourceObj, newKeyVal) => {
+  //   Object.keys(newKeyVal).forEach(key => {
+  //     const newValue = newKeyVal[key]
+  //     const oldValue = sourceObj?.[key]
+
+  //     const valueIsObject = typeof newValue === 'object' && newValue !== null && !Array.isArray(newValue)
+  //     const oldValueIsObject = typeof oldValue === 'object' && oldValue !== null && !Array.isArray(oldValue)
+
+  //     if (valueIsObject && oldValueIsObject) {
+  //       // 条件が変更されました
+  //       this.foo(newValue, oldValue) // 再帰的にマージします
+  //       newKeyVal[key] = {...oldValue, ...newValue} // マージ結果を保存します
+  //     } else {
+  //       newKeyVal[key] = newValue // 新しい値を設定します
+  //     }
+  //   })
+  // }
 }

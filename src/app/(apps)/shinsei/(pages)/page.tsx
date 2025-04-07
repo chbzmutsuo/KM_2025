@@ -1,6 +1,6 @@
 'use client'
 
-import { CenterScreen} from '@components/styles/common-components/common-components'
+import {CenterScreen} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {HREF} from '@lib/methods/urls'
 import Link from 'next/link'
@@ -9,42 +9,42 @@ const navigationItems = [
   {
     title: '発注申請',
     description: '新規発注申請の作成',
-    href: '/applicationForms/purchase/create',
+    href: '/shinsei/purchase/create',
     color: 'bg-blue-500 hover:bg-blue-600',
   },
   {
     title: 'My発注履歴',
     description: '発注申請の履歴を確認',
-    href: '/applicationForms/purchase/history',
+    href: '/shinsei/purchase/history',
     color: 'bg-blue-500 hover:bg-blue-600',
   },
   {
     title: '発注結果入力',
     description: '発注申請の承認/却下',
-    href: '/applicationForms/purchase/result',
+    href: '/shinsei/purchase/result',
     color: 'bg-blue-500 hover:bg-blue-600',
   },
   {
     title: '有給申請',
     description: '新規有給申請の作成',
-    href: '/applicationForms/leave',
+    href: '/shinsei/leave',
     color: 'bg-green-500 hover:bg-green-600',
   },
   {
     title: 'My申請履歴',
     description: '有給申請の履歴を確認',
-    href: '/applicationForms/leave/history',
+    href: '/shinsei/leave/history',
     color: 'bg-green-500 hover:bg-green-600',
   },
   {
     title: '有給結果入力',
     description: '有給申請の承認/却下',
-    href: '/applicationForms/leave/result',
+    href: '/shinsei/leave/result',
     color: 'bg-green-500 hover:bg-green-600',
   },
 ]
 
-export default function ApplicationFormsPage() {
+export default function shinseiPage() {
   const {query} = useGlobal()
 
   return <CenterScreen className={` text-2xl font-bold`}>メニューを選択してください</CenterScreen>

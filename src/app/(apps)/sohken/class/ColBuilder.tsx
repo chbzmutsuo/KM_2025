@@ -16,6 +16,7 @@ import {addDays} from 'date-fns'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
+import {SOHKEN_CONST} from '@app/(apps)/sohken/(constants)/SOHKEN_CONST'
 
 const register = {required: `必須です`}
 export class ColBuilder {
@@ -291,19 +292,7 @@ export class ColBuilder {
           id: 'construction',
           label: '建築',
           forSelect: {
-            optionsOrOptionFetcher: [
-              `ライクス足立`,
-              `ライクス田無`,
-              `ライクス千葉`,
-              `ライクスときわ台`,
-              `千葉SHM`,
-              `常葉SHM`,
-              `城東SHM`,
-              `住友林業`,
-              `アミックス`,
-              `ｱｯﾌﾟﾙﾔｰﾄﾞﾃﾞｻﾞｲﾝ`,
-              `その他`,
-            ],
+            optionsOrOptionFetcher: SOHKEN_CONST.OPTIONS.CONSTRUCTION,
           },
           search: {},
         },

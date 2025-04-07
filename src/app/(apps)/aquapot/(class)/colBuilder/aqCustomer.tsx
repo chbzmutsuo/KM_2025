@@ -2,6 +2,7 @@
 
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 import {defaultMultipleSelectFormat} from '@class/Fields/lib/defaultFormat'
+import {OB} from '@class/OB'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType, forSelectConfig} from '@cm/types/types'
 
@@ -51,6 +52,17 @@ export const aqCustomer = (props: columnGetterType) => {
           label: '支払方法',
           forSelect: {
             optionsOrOptionFetcher: AQ_CONST.PAYMENT_METHOD_LIST,
+          },
+        },
+        {
+          id: 'furikomisakiCD',
+          label: '振込先',
+          forSelect: {
+            optionsOrOptionFetcher: OB.toArray(AQ_CONST.BANK_LIST).map(d => {
+              const op = {id: d.key, name: d.abbriviation}
+
+              return op
+            }),
           },
         },
         {id: `firstVisitDate`, label: `サービス利用開始日`, type: `date`, form: {}},

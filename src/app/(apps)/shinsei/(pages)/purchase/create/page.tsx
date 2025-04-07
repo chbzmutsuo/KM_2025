@@ -4,9 +4,9 @@ import {Fields} from '@class/Fields/Fields'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {PURCHASE_TYPE_OPTIONS} from '@app/(apps)/applicationForms/(constants)/options'
+import {PURCHASE_TYPE_OPTIONS} from '@app/(apps)/shinsei/(constants)/options'
 import {ControlContextType} from '@cm/types/form-control-type'
-import {ColBuilder} from '@app/(apps)/applicationForms/(builders)/ColBuilder'
+import {ColBuilder} from '@app/(apps)/shinsei/(builders)/ColBuilder'
 import {Button} from '@components/styles/common-components/Button'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
@@ -87,7 +87,7 @@ export default function PurchaseRequestPage() {
               })
 
               toastByResult(res)
-              router.push(`/applicationForms`)
+              router.push(`/shinsei`)
             })
           },
         }}

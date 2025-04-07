@@ -2,7 +2,7 @@ const ContentPlayer = dynamic(() => import('src/cm/components/utils/ContentPlaye
   loading: () => <></>,
 })
 
-import {TrashIcon} from '@heroicons/react/20/solid'
+import {PaperClipIcon, TrashIcon} from '@heroicons/react/20/solid'
 
 import {cl} from 'src/cm/lib/methods/common'
 import dynamic from 'next/dynamic'
@@ -12,6 +12,8 @@ import FileErrors from 'src/cm/hooks/useFileUpload/FileErrors'
 import {anyObject} from '@cm/types/types'
 import {acceptType} from '@cm/types/file-types'
 import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
+import {twMerge} from 'tailwind-merge'
+import {PaperclipIcon} from 'lucide-react'
 
 type props = {
   accept: acceptType
@@ -28,8 +30,6 @@ const FileUploader = (props: props) => {
     thumbnailStyle = {width: 160, height: 120},
     accept,
   } = props
-
-  const wrapperAlertClass = fileErrorState.length === 0 ? 't-alert-success' : 't-alert'
 
   const dropZonProps = useDropzone({
     // onDrop,
@@ -50,12 +50,14 @@ const FileUploader = (props: props) => {
   })
 
   const {fileRejections, getRootProps, getInputProps, isDragActive, open} = dropZonProps
-  const pillClass = `icon-btn  inline-block  p-[0.5px] text-[8px] text-white  pointer-events-none`
+  const pillClass = ` inline-block p-0.5 px-2 text-xs text-white pointer-events-none rounded-full shadow-md  bg-gray-500`
   const style = useMemo(() => {
     return {
       ...(isDragActive ? borderDragStyle : borderNormalStyle),
     }
   }, [isDragActive])
+
+  const wrapperAlertClass = twMerge(`shadow p-2 rounded`, fileErrorState.length > 0 && 't-alert-error')
 
   return (
     <div className={` mx-auto w-fit  ${wrapperAlertClass} `}>
@@ -68,14 +70,13 @@ const FileUploader = (props: props) => {
 
             open()
           }}
-          className="onHover bg-sub-light w-full items-center gap-2  py-1  text-center text-xs"
+          className="onHover  w-full items-center gap-2  py-1  text-center text-xs"
         >
-          {/* <R_Stack>
-            <span>ファイル</span>
-            <span className={`text-sub-main font-bold`}>(最大数: {maxFiles})</span>
-          </R_Stack> */}
           <R_Stack>
-            <span>ファイル</span>
+            <R_Stack className={`  text-gray-500`}>
+              <PaperclipIcon />
+              <div>ファイル</div>
+            </R_Stack>
             {Object.keys(accept).map((acceptStr, idx) => {
               const acceptExtentions = accept[acceptStr]
               if (acceptExtentions.length > 0) {
@@ -141,13 +142,12 @@ const FileUploader = (props: props) => {
 export default FileUploader
 
 const borderNormalStyle = {
-  border: '1px dotted #888',
+  // border: '1px dotted #888',
 }
 
 const borderDragStyle = {
   background: '#ACD7FF',
   border: '4px solid #ACD7FF',
-  transition: 'border .5s ease-in-out',
   backgroundColor: '#ACD7FF',
   opacity: '30%',
 }

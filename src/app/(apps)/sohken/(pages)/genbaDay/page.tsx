@@ -7,6 +7,7 @@ import {addDays} from 'date-fns'
 import {Days, toUtc} from '@class/Days'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import GenbadayListClient from '@app/(apps)/sohken/(pages)/genbaDay/GenbadayListClient'
+import {SOHKEN_CONST} from '@app/(apps)/sohken/(constants)/SOHKEN_CONST'
 export default async function DynamicMasterPage(props) {
   const query = await props.searchParams
   const params = await props.params
@@ -52,6 +53,32 @@ export default async function DynamicMasterPage(props) {
       date: today ? {gte: today, lt: addDays(today, 1)} : undefined,
     },
   }
+
+  records.sort((a, b) => {
+    if (a.date.getTime() === b.date.getTime()) {
+      // 第一順位: PrefCityのsortOrder
+      const aPrefCitySortOrder = a.Genba?.PrefCity?.sortOrder || 0
+      const bPrefCitySortOrder = b.Genba?.PrefCity?.sortOrder || 0
+
+      if (aPrefCitySortOrder !== bPrefCitySortOrder) {
+        return aPrefCitySortOrder - bPrefCitySortOrder
+      }
+
+      // 第二順位: SOHKEN_CONST.OPTIONS.CONSTRUCTIONのインデックスで並び替え
+      const aConstruction = a.Genba?.construction || ''
+      const bConstruction = b.Genba?.construction || ''
+      const constructionOptions = SOHKEN_CONST.OPTIONS.CONSTRUCTION
+      const aIndex = constructionOptions.indexOf(aConstruction)
+      const bIndex = constructionOptions.indexOf(bConstruction)
+
+      // リストに存在しない値は最後に配置
+      const aFinalIndex = aIndex === -1 ? Number.MAX_SAFE_INTEGER : aIndex
+      const bFinalIndex = bIndex === -1 ? Number.MAX_SAFE_INTEGER : bIndex
+
+      return aFinalIndex - bFinalIndex
+    }
+    return a.date.getTime() < b.date.getTime() ? -1 : 1
+  })
 
   const todayRecords = records.filter(record => Days.isSameDate(record.date, today))
   const tomorrowRecords = records.filter(record => {

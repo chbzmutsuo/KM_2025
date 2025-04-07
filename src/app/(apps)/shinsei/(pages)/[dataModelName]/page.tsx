@@ -7,11 +7,11 @@ import {getScopes} from 'src/non-common/scope-lib/getScopes'
 import {Conf} from '@components/DataLogic/TFs/Server/Conf'
 import PropAdjustor from '@components/DataLogic/TFs/PropAdjustor/PropAdjustor'
 import EasySearchAtomProvider from '@components/DataLogic/TFs/ClientConf/Providers/EasySearchAtomProvider'
-import {PageBuilder} from '@app/(apps)/applicationForms/(builders)/PageBuilder'
-import {ColBuilder} from '@app/(apps)/applicationForms/(builders)/ColBuilder'
-import {QueryBuilder} from '@app/(apps)/applicationForms/(builders)/QueryBuilder'
-import {EasySearchBuilder} from '@app/(apps)/applicationForms/(builders)/EasySearchBuilder'
-import {ViewParamBuilder} from '@app/(apps)/applicationForms/(builders)/ViewParamBuilder'
+import {PageBuilder} from '@app/(apps)/shinsei/(builders)/PageBuilder'
+import {ColBuilder} from '@app/(apps)/shinsei/(builders)/ColBuilder'
+import {QueryBuilder} from '@app/(apps)/shinsei/(builders)/QueryBuilder'
+import {EasySearchBuilder} from '@app/(apps)/shinsei/(builders)/EasySearchBuilder'
+import {ViewParamBuilder} from '@app/(apps)/shinsei/(builders)/ViewParamBuilder'
 const getBuilders = () => ({ColBuilder, ViewParamBuilder, PageBuilder, QueryBuilder, EasySearchBuilder})
 export default async function DynamicMasterPage(props) {
   const query = await props.searchParams
@@ -38,8 +38,8 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
         setParams: async () => {
           return {
             additional: {
-              payload: {apps: [`applicationForms`]},
-              where: {apps: {has: `applicationForms`}},
+              payload: {apps: [`shinsei`]},
+              where: {apps: {has: `shinsei`}},
             },
           }
         },

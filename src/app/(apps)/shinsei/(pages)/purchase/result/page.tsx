@@ -1,6 +1,6 @@
 'use client'
 
-import CommonTable from '@app/(apps)/applicationForms/(pages)/purchase/CommonTable'
+import CommonTable from '@app/(apps)/shinsei/(pages)/purchase/CommonTable'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 
 export default function PurchaseResultPage() {

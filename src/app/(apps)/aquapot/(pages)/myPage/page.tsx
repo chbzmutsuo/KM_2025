@@ -1,5 +1,4 @@
 'use client'
-
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {CenterScreen} from '@components/styles/common-components/common-components'
 
@@ -7,17 +6,16 @@ import Redirector from '@components/utils/Redirector'
 import LoginForm from '@app/(utils)/login/LoginForm'
 import {getAqLoginType} from 'src/non-common/scope-lib/getScopes'
 import {Fields} from '@class/Fields/Fields'
+import {HREF} from '@lib/methods/urls'
 
 export default function DynamicMasterPage(props) {
+  const {query} = useGlobal()
+
   const {session, accessScopes} = useGlobal()
   const {aqCustomerId} = accessScopes().getAquepotScopes()
 
-  const {asCustomer, asUser} = getAqLoginType({session})
-  if (asCustomer) return <Redirector redirectPath={`/aquapot/myPage/${session.id}`} />
-
-  if (!asUser) return <Redirector redirectPath={`/404`} />
   if (aqCustomerId) {
-    return <Redirector redirectPath={`/aquapot/myPage/${aqCustomerId}`} />
+    return <Redirector redirectPath={HREF(`/aquapot/myPage/${aqCustomerId}`, {}, query)} />
   }
 
   return (

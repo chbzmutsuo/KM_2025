@@ -6,9 +6,7 @@ const data = [
   {name: 'Group D', value: 200},
 ]
 
-import {
-  GoogleSheet_Read,
-} from '@app/api/google/actions/sheetAPI'
+import {GoogleSheet_Read} from '@app/api/google/actions/sheetAPI'
 import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, Center, FitMargin, R_Stack} from '@components/styles/common-components/common-components'
 import React, {Fragment, useEffect, useState} from 'react'
@@ -17,7 +15,7 @@ import {ChevronDoubleDownIcon} from '@heroicons/react/20/solid'
 import {Paper} from '@components/styles/common-components/paper'
 import ChartWrapper from '@app/(apps)/apex/(pages)/[simulationId]/ChartWrapper'
 import {useParams} from 'next/navigation'
-import { SPREADSHEET_URLS, SPREADSHEET_URLS_TYPE} from '@app/(apps)/apex/(constants)/SPREADSHEET_CONST'
+import {SPREADSHEET_URLS, SPREADSHEET_URLS_TYPE} from '@app/(apps)/apex/(constants)/SPREADSHEET_CONST'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import Link from 'next/link'
@@ -50,7 +48,6 @@ export default function Page() {
   const getCalculatedResultFormSS = async () => {
     toggleLoad(async () => {
       await handlePutHistory({SS_CONSTANTS, questions})
-
       await handleGetResult({SS_CONSTANTS, spreadsheetId, questions, setChartData})
     })
   }
