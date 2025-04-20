@@ -6,7 +6,7 @@ import prisma from '@cm/lib/prisma'
 const UserChatPage = async props => {
   const query = await props.searchParams
   const {session} = await initServerComopnent({query})
-  const include = QueryBuilder.getInclude({}).systemChatRoom?.include
+  const include: any = QueryBuilder.getInclude({}).systemChatRoom?.include
 
   let chatRoomId: any = undefined
   let chatRoom = await prisma.systemChatRoom.findFirst({

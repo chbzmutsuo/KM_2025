@@ -10,7 +10,7 @@ import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import {CODE_MASTER} from '@app/(apps)/shinsei/(constants)/CODE_MASTER'
 import {isDev} from '@lib/methods/common'
-import {chain_shinsei_kyuka_notifyWhenUpdate} from '@app/(apps)/shinsei/(pages)/purchase/chain_shinsei_kyuka_notifyWhenUpdate'
+import {chain_shinsei_kyuka_notifyWhenUpdate} from 'src/non-common/(chains)/shinsei/chain_shinsei_kyuka_notifyWhenUpdate'
 import {HREF} from '@lib/methods/urls'
 
 export default function PurchaseRequestPage() {

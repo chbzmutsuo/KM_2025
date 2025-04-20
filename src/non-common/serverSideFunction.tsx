@@ -43,7 +43,7 @@ export const fetchUserRole = async ({session}) => {
         },
       },
     },
-    where: {userId: typeof session?.id === `string` ? 0 : session?.id ?? 0},
+    where: {userId: typeof session?.id === `string` ? 0 : (session?.id ?? 0)},
   }
   let {result: roles} = await fetchUniversalAPI(`userRole`, `findMany`, args)
   roles = roles?.map(v => ({...v, name: v.RoleMaster.name, color: v.RoleMaster.color}))

@@ -115,7 +115,7 @@ const ProPlanVercelJson = {
   "src/app/**/*": {
    "memory": 2048,
    "maxDuration": 60
-  },
+  }
  },
  "crons": [
   {
@@ -130,6 +130,6 @@ const ProPlanVercelJson = {
    "path": "/aquapot/api/cron/createInventoryByMonth/",
    "schedule": "0 14 * * *"
   }
- ]
+ ],
+ "outputDirectory": ".next"
 }
-

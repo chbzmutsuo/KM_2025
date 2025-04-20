@@ -23,6 +23,7 @@ export const DSBM_Label = ({
 
   const router = useRouter()
   async function asignToGenbaDate() {
+    return
     if (GDS_DND.picked) {
       await generarlFetchUniversalAPI(RelationalModel, `update`, {
         where: {id: GDS_DND.picked.id},
@@ -36,6 +37,7 @@ export const DSBM_Label = ({
   return (
     <div
       {...{
+        className: editable ? 'onHover' : '',
         onClick: () => {
           if (editable) {
             ShiftEditFormModalGMF.setGMF_OPEN(globalFormStateCommonProps)

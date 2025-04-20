@@ -1,5 +1,4 @@
 'use client'
-import useSelectedBase from '@app/(apps)/tbm/(globalHooks)/useSelectedBase'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'

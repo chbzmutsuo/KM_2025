@@ -8,15 +8,15 @@ import useFileUploadProps from '@cm/hooks/useFileUpload/useFileUploadProps'
 
 import {toastByResult} from '@lib/methods/api-fetcher'
 
-
 import {useState} from 'react'
 
 import {CSVLink} from 'react-csv'
-import {ReactMarkdown} from 'react-markdown/lib/react-markdown'
+
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 import {CssString} from '@components/styles/cssString'
 import {Button} from '@components/styles/common-components/Button'
+import ReactMarkdown from 'react-markdown'
 
 const CsvFileUploader = () => {
   const {toggleLoad, session, query, accessScopes} = useGlobal()
@@ -87,7 +87,9 @@ const CsvFileUploader = () => {
               ダウンロード
             </CSVLink>{' '}
             した上で、CSVファイルを作成してください。
-            <ReactMarkdown className={`react-markdown text-sm `}>{md}</ReactMarkdown>
+            <div className={`react-markdown text-sm `}>
+              <ReactMarkdown>{md}</ReactMarkdown>
+            </div>
           </section>
 
           <section className={`w-[350px]`}>

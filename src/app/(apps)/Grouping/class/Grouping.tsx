@@ -1,12 +1,12 @@
 import {formatDate} from '@cm/class/Days'
 import {DH} from '@cm/class/DH'
-import {faker} from '@faker-js/faker'
+// import {faker} from '@faker-js/faker'
 
 import {fetchTransactionAPI, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 
 import {getUniqueColorById, ObjectMap} from '@cm/lib/methods/common'
 
-import {addHours, addMinutes} from 'date-fns'
+import {addMinutes} from 'date-fns'
 
 import {anyObject} from '@cm/types/types'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
@@ -66,11 +66,11 @@ export class Grouping {
     })
 
     await Grouping.switchGameStatus({Game, status: newStatus})
-    faker.locale = 'ja'
+    // faker.locale = 'ja'
 
     const transactionQueryList: transactionQuery[] = []
     players.map(async s => {
-      const forTestSeed = makeTestSeed(asSummary)
+      // const forTestSeed = makeTestSeed(asSummary)
       const studentId = s.id
 
       const query: transactionQuery = {
@@ -82,7 +82,7 @@ export class Grouping {
             studentId,
             questionPromptId,
 
-            ...(dev ? forTestSeed : {}),
+            // ...(dev ? forTestSeed : {}),
           },
         },
       }
@@ -552,24 +552,24 @@ export class RoomClass {
   }
 }
 
-export const makeTestSeed = asSummary => {
-  const result = {
-    curiocity1: Math.floor(Math.random() * 5) + 1,
-    curiocity2: Math.floor(Math.random() * 5) + 1,
-    curiocity3: Math.floor(Math.random() * 5) + 1,
-    curiocity4: Math.floor(Math.random() * 5) + 1,
-    curiocity5: Math.floor(Math.random() * 5) + 1,
-    efficacy1: Math.floor(Math.random() * 5) + 1,
-    efficacy2: Math.floor(Math.random() * 5) + 1,
-    efficacy3: Math.floor(Math.random() * 5) + 1,
-    efficacy4: Math.floor(Math.random() * 5) + 1,
-    efficacy5: Math.floor(Math.random() * 5) + 1,
-    impression: faker.commerce.productName(),
-    lessonSatisfaction: asSummary ? Math.floor(Math.random() * 5) + 1 : null,
-    lessonImpression: asSummary ? faker.commerce.productName() : null,
-    asSummary,
-    createdAt: faker.date.between(new Date(), addHours(new Date(), 2)),
-  }
+// export const makeTestSeed = asSummary => {
+//   const result = {
+//     curiocity1: Math.floor(Math.random() * 5) + 1,
+//     curiocity2: Math.floor(Math.random() * 5) + 1,
+//     curiocity3: Math.floor(Math.random() * 5) + 1,
+//     curiocity4: Math.floor(Math.random() * 5) + 1,
+//     curiocity5: Math.floor(Math.random() * 5) + 1,
+//     efficacy1: Math.floor(Math.random() * 5) + 1,
+//     efficacy2: Math.floor(Math.random() * 5) + 1,
+//     efficacy3: Math.floor(Math.random() * 5) + 1,
+//     efficacy4: Math.floor(Math.random() * 5) + 1,
+//     efficacy5: Math.floor(Math.random() * 5) + 1,
+//     impression: faker.commerce.productName(),
+//     lessonSatisfaction: asSummary ? Math.floor(Math.random() * 5) + 1 : null,
+//     lessonImpression: asSummary ? faker.commerce.productName() : null,
+//     asSummary,
+//     createdAt: faker.date.between(new Date(), addHours(new Date(), 2)),
+//   }
 
-  return result
-}
+//   return result
+// }

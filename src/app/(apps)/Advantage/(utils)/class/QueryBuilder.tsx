@@ -1,9 +1,8 @@
 import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@class/builders/QueryBuilderVariables'
-import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
   static getInclude = (includeProps: includeProps) => {
-    const systemChatRoom: Prisma.SystemChatRoomFindManyArgs = {
+    const systemChatRoom = {
       include: {
         SystemChat: {
           include: {
@@ -53,19 +52,6 @@ export class QueryBuilder {
       },
     }
 
-    const bigCategory: Prisma.BigCategoryFindManyArgs = {
-      include: {
-        MiddleCategory: {
-          orderBy: [{sortOrder: 'asc'}],
-          include: {
-            Lesson: {
-              orderBy: [{sortOrder: 'asc'}],
-            },
-          },
-        },
-      },
-    }
-
     const middleCategory = {
       include: {
         Lesson: {},
@@ -87,7 +73,18 @@ export class QueryBuilder {
     const include: getIncludeType = {
       systemChatRoom,
       user,
-      bigCategory,
+      bigCategory: {
+        include: {
+          MiddleCategory: {
+            orderBy: [{sortOrder: 'asc'}],
+            include: {
+              Lesson: {
+                orderBy: [{sortOrder: 'asc'}],
+              },
+            },
+          },
+        },
+      },
       middleCategory,
       lesson,
       lessonLog,

@@ -6,32 +6,26 @@ import {PencilSquareIcon} from '@heroicons/react/20/solid'
 import {cl} from 'src/cm/lib/methods/common'
 import Link from 'next/link'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-
-export const RouterLink = (
-  props: props & {
-    router
-    href
-    target?: '_blank'
-    milliSeconds?: number
-  }
-) => {
-  const {navigateRefresh} = useGlobal()
-  const {className, style, href = '#', target, router, milliSeconds = 200, ...rest} = props
-
-  return (
-    <div
-      onClick={() => {
-        navigateRefresh(href, milliSeconds)
-      }}
-      {...{target, href, className: cl(className), style, ...rest}}
-    ></div>
-  )
-}
+import useLoader from '@hooks/globalHooks/useLoader'
 
 export const T_LINK = (props: props & {href; target?: '_blank'}) => {
   const {className, style, href = '#', target, ...rest} = props
+  const {globalLoaderAtom, setglobalLoaderAtom} = useLoader()
 
-  return <Link {...{target, href, className: cl(className, 't-link'), style, ...rest}}></Link>
+  return (
+    <Link
+      {...{
+        // onNavigate: () => {
+        //   setglobalLoaderAtom(true)
+        // },
+        target,
+        href,
+        className: cl(className, 't-link'),
+        style,
+        ...rest,
+      }}
+    ></Link>
+  )
 }
 
 export const ShallowLink = (props: props & {href; target?: '_blank'; milliSeconds?: number}) => {

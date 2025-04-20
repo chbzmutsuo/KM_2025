@@ -194,10 +194,10 @@ export class ColBuilder {
               date: {gte: queryFrom, lte: queryTo},
             }
           : queryFrom
-          ? {
-              date: {gte: queryFrom, lt: addDays(queryFrom, 1)},
-            }
-          : {}
+            ? {
+                date: {gte: queryFrom, lt: addDays(queryFrom, 1)},
+              }
+            : {}
 
       const {result} = await fetchUniversalAPI(`genbaDayShift`, `findMany`, {
         include: {GenbaDay: {}},
@@ -325,6 +325,7 @@ export class ColBuilder {
           label: '注意事項',
           form: {},
           type: `textarea`,
+          // td: {style: {minWidth: 240}},
         },
         {id: 'archived', label: '非表示', type: `boolean`, form: {}},
       ])

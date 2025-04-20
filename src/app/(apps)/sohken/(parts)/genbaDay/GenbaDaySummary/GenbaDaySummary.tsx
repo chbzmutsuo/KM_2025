@@ -6,7 +6,7 @@ import useGlobal from '@hooks/globalHooks/useGlobal'
 import React from 'react'
 import {jotai_GDS_DND, useJotai} from '@hooks/useJotai'
 import {GENBA_DAY_STATUS} from 'src/non-common/(chains)/getGenbaScheduleStatus/GENBA_DAY_STATUS'
-import {Wrapper} from '@components/styles/common-components/paper'
+import {Paper, Wrapper} from '@components/styles/common-components/paper'
 import Basics from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/Main'
 import Sub from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/Sub'
 import {Button} from '@components/styles/common-components/Button'
@@ -148,15 +148,17 @@ const GenbaDaySummary = (props: {
         <div className={`${active ? '' : 'opacity-30'}`}>
           <C_Stack className={`gap-0.5`}>
             <Wrapper className={` !bg-transparent `}>
-              <Basics
-                {...{
-                  GenbaDayBasicEditor_HK,
-                  pathname,
-                  GenbaDayTaskMidTable,
-                  GenbaDay,
-                  editable,
-                }}
-              />
+              <Paper>
+                <Basics
+                  {...{
+                    GenbaDayBasicEditor_HK,
+                    pathname,
+                    GenbaDayTaskMidTable,
+                    GenbaDay,
+                    editable,
+                  }}
+                />
+              </Paper>
             </Wrapper>
 
             <Wrapper className={` !bg-transparent`}>

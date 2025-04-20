@@ -1,4 +1,3 @@
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 # dependencies
 /node_modules
@@ -40,29 +39,28 @@ latest.dump
 # styled-systemのフォルダは不要
 /styled-system/
 
-
+*.dump
 **dump
 .vercelignore
 
 
+
 #ignoreを選択
-src/app/**/tsukurunger
+src/app/**/shinsei
 src/app/**/demo
-src/app/**/sankosha
 src/app/**/gpt
 src/app/**/roken
 src/app/**/masterKey
-src/app/**/hanamaru
 src/app/**/achievement
-src/app/**/estimate
 src/app/**/tmp
 src/app/**/Grouping
 src/app/**/tbm
 src/app/**/yoshinari
 src/app/**/applicationForms
 src/app/**/Advantage
-src/app/**/sohken
 src/app/**/aquapot
-#src/app/**/apex
-#src/app/**/KM
-#src/app/**/kickswrap
+src/app/**/apex
+src/app/**/KM
+src/app/**/kickswrap
+#src/app/**/sohken
+

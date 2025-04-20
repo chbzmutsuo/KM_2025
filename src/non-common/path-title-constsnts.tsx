@@ -1,4 +1,5 @@
 import {anyObject} from '@cm/types/types'
+import {JSX} from 'react'
 import {getPathnameSplitArr} from '@hooks/globalHooks/useMyNavigation'
 
 import {getScopes} from 'src/non-common/scope-lib/getScopes'
@@ -248,7 +249,7 @@ export const CleansePathSource = (props: anyObject) => {
     const {CURRENT_ROOT} = props
     const {tabId, link = {query: {}}, label, children, ROOT} = item
 
-    const thisRoot = ROOT ? ROOT : CURRENT_ROOT ?? []
+    const thisRoot = ROOT ? ROOT : (CURRENT_ROOT ?? [])
     let href: string | undefined = item?.href ?? undefined
     if (href === undefined) {
       if (thisRoot?.join('/').length > 0) {

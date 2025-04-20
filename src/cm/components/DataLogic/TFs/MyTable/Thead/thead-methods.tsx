@@ -1,7 +1,6 @@
-import {Center} from '@components/styles/common-components/common-components'
+import {C_Stack, Center} from '@components/styles/common-components/common-components'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 import useElementRef from 'src/cm/hooks/useElementRef'
-import {cl} from 'src/cm/lib/methods/common'
 import {twMerge} from 'tailwind-merge'
 
 export const Kado = ({rowSpan, colSpan, children}) => {
@@ -18,14 +17,27 @@ export const ThDisplayJSX = ({col}) => {
 
   return (
     <Center>
-      <MarkDownDisplay
-        {...{
-          className: twMerge(!col?.th?.divider && 'h-fit'),
-          ref: TargetElementRef,
-        }}
-      >
-        {displayValue}
-      </MarkDownDisplay>
+      <C_Stack className={` items-center text-center`}>
+        {typeof displayValue === 'string' ? (
+          <MarkDownDisplay
+            {...{
+              className: twMerge(!col?.th?.divider && 'h-fit'),
+              ref: TargetElementRef,
+            }}
+          >
+            {displayValue}
+          </MarkDownDisplay>
+        ) : (
+          <div
+            {...{
+              className: twMerge(!col?.th?.divider && 'h-fit'),
+              ref: TargetElementRef,
+            }}
+          >
+            {displayValue}
+          </div>
+        )}
+      </C_Stack>
     </Center>
   )
 }

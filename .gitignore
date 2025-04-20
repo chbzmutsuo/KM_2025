@@ -22,10 +22,10 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-latest.dump
 *.dump
 
-
+# prisma
+/prisma/generated
 
 # PWA files
 **/public/sw.js

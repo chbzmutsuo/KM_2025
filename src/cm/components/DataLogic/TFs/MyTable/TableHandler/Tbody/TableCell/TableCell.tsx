@@ -41,7 +41,7 @@ const TableCell = React.memo(
       id: `${col.id}-${record.id}`,
       colSpan: col.td?.colSpan,
       rowSpan: col.td?.rowSpan,
-      className: `align-top tableCell text-responsive !p-1  `,
+      className: `align-top tableCell text-responsive    `,
       style: {...tdStyle},
     }
 

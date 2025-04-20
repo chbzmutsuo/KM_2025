@@ -1,4 +1,4 @@
-import {ReactMarkdown} from 'react-markdown/lib/react-markdown'
+import ReactMarkdown from 'react-markdown'
 
 const RoomMarkDown = () => {
   const introductionMD = `
@@ -19,7 +19,9 @@ const RoomMarkDown = () => {
 
   return (
     <section className={`t-paper  mx-auto w-[695px]`}>
-      <ReactMarkdown className={`react-markdown text-sm`}>{introductionMD}</ReactMarkdown>
+      <div className={`react-markdown text-sm`}>
+        <ReactMarkdown>{introductionMD}</ReactMarkdown>
+      </div>
     </section>
   )
 }

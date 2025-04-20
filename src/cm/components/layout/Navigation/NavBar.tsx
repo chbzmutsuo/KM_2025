@@ -3,8 +3,6 @@ import {pathItemType} from 'src/non-common/path-title-constsnts'
 import React from 'react'
 
 import {cl} from 'src/cm/lib/methods/common'
-import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
-import dynamic from 'next/dynamic'
 import useNavMenu from '@components/layout/Navigation/useNavMenu'
 
 import {UserConfig} from '@components/layout/UserConfig'

@@ -163,12 +163,12 @@ export default function LeaveHistoryTable({dataFetchProps = {}, deletable = fals
                           const buttonClass = hasSomeRejection
                             ? ''
                             : isNextApprover
-                            ? updateable
-                              ? 'bg-red-500 font-bold text-white'
-                              : 'bg-blue-500 font-bold text-white'
-                            : notMyTime
-                            ? 'bg-gray-300 text-gray-500 opacity-50'
-                            : 'bg-gray-300'
+                              ? updateable
+                                ? 'bg-red-500 font-bold text-white'
+                                : 'bg-blue-500 font-bold text-white'
+                              : notMyTime
+                                ? 'bg-gray-300 text-gray-500 opacity-50'
+                                : 'bg-gray-300'
 
                           return (
                             <R_Stack key={i} className={`flex-nowrap `}>
@@ -205,8 +205,8 @@ export default function LeaveHistoryTable({dataFetchProps = {}, deletable = fals
                                     data.status === '承認'
                                       ? 'bg-green-100 text-green-800'
                                       : data.status === '却下'
-                                      ? 'bg-red-100 text-red-800'
-                                      : 'bg-gray-100 text-gray-800'
+                                        ? 'bg-red-100 text-red-800'
+                                        : 'bg-gray-100 text-gray-800'
                                   )}
                                 >
                                   {data.status}
@@ -239,8 +239,8 @@ export default function LeaveHistoryTable({dataFetchProps = {}, deletable = fals
                           hasSomeRejection
                             ? 'bg-red-100 text-red-800'
                             : allApproved
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-blue-100 text-blue-800'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-blue-100 text-blue-800'
                         )}
                       >
                         {hasSomeRejection ? '却下' : allApproved ? '承認' : '進行中'}

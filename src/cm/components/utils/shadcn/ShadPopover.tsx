@@ -5,7 +5,7 @@ import * as Popover from '@radix-ui/react-popover'
 
 import React from 'react'
 import {Z_INDEX} from '@lib/constants/constants'
-
+import {JSX} from 'react'
 const ShadPopover = React.memo(
   (props: {
     PopoverTrigger?: JSX.Element | string

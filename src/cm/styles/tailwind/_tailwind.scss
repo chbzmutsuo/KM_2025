@@ -43,7 +43,7 @@
  }
 
  .t-paper {
-  @apply rounded-lg p-1 shadow-sm bg-white;
+  @apply rounded-lg p-1 shadow border border-gray-200 bg-white;
  }
 
  .col-stack {

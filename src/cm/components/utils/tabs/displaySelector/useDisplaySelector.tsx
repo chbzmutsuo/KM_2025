@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {JSX, useState} from 'react'
 
 export type displaySelectorProps = {
   items: {label: string; defaultOpen?: boolean; component: JSX.Element}[]

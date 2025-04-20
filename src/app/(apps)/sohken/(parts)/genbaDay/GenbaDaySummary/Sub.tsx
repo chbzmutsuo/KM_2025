@@ -29,11 +29,13 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
       })
 
     const cardDate = new Date(formatDate(GenbaDay.date) + ' ' + to)
-    const nextShift = shiftsOnOtherGembaOnSameDate.find(shift => {
-      const date2 = new Date(formatDate(shift.GenbaDay.date) + ' ' + shift.from)
+    const nextShift =
+      to &&
+      shiftsOnOtherGembaOnSameDate.find(shift => {
+        const date2 = new Date(formatDate(shift.GenbaDay.date) + ' ' + shift.from)
 
-      return cardDate <= date2 && shift.from
-    })
+        return cardDate <= date2 && shift.from
+      })
 
     const currentShiftDisplay = (
       <R_Stack className={`gap-[1px]`}>

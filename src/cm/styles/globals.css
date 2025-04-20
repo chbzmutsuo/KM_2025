@@ -45,7 +45,7 @@
     @apply fixed  min-h-screen bg-black opacity-80 [width:100vw] [height:100vh];
   }
   .t-paper {
-    @apply rounded-lg p-1 shadow-sm bg-white;
+    @apply rounded-lg p-1 shadow border border-gray-200 bg-white;
   }
   .col-stack {
     @apply flex flex-col gap-2;
@@ -274,7 +274,8 @@
 }
 .sticky-table-wrapper table thead th,
 .sticky-table-wrapper table thead td {
-  @apply bg-gray-300 text-gray-600 font-medium;
+  background-color: #ededed;
+  @apply text-gray-800 border-b border-gray-400 shadow-md;
 }
 .sticky-table-wrapper table tbody tr th:first-child {
   position: sticky;
@@ -282,13 +283,16 @@
   left: 0;
   z-index: 10;
 }
+.sticky-table-wrapper table tbody tr th,
+.sticky-table-wrapper table tbody tr td {
+  @apply border-b-[0.5px] border-gray-300 px-2 py-2.5;
+}
 .sticky-table-wrapper table tfoot {
   z-index: 100;
   position: sticky;
   bottom: 0;
 }
-.sticky-table-wrapper table th,
-.sticky-table-wrapper table td {
+.sticky-table-wrapper table th {
   @apply p-2;
 }
 .sticky-table-wrapper table th {

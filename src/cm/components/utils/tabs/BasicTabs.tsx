@@ -11,6 +11,7 @@ import {TitleDescription} from 'src/cm/components/styles/common-components/Notat
 import {anyObject} from '@cm/types/types'
 
 import {useJotaiByKey, atomTypes} from '@hooks/useJotai'
+import {JSX} from 'react'
 
 export type tabComponent = {
   style?: CSSProperties

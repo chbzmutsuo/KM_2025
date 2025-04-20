@@ -1,6 +1,6 @@
 'use server'
 
-import {sendEmailWrapper} from '@app/(apps)/shinsei/(lib)/sendEmailWrapper'
+import {sendEmailWrapper} from 'src/non-common/(chains)/shinsei/sendEmailWrapper'
 import prisma from '@lib/prisma'
 
 export const chain_shinsei_hacchu_notifyWhenUpdate = async ({purchaseRequestId}) => {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, ReactNode, CSSProperties} from 'react'
+import React, {useRef, useEffect, ReactNode, CSSProperties} from 'react'
 import {useSlate, useFocused} from 'slate-react'
 import ReactDOM from 'react-dom'
 import {Editor, Range} from 'slate'
@@ -13,7 +13,7 @@ import {Z_INDEX} from 'src/cm/lib/constants/constants'
 const HoveringToolbar = (props: any) => {
   const editor = useSlate()
   const {selection} = editor
-  const ref = useRef<any>()
+  const ref = useRef<any>(null)
   const inFocus = useFocused()
 
   const el = ref.current

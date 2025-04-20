@@ -1,18 +1,17 @@
 import {ApRequestCfAtom, ApRequestClass, apRequestStatusList, MappeadApRequest} from '@class/ApRequestClass/ApRequestClass'
 
 import {formatDate, toJst} from '@class/Days'
-import {Prisma} from '@prisma/client'
 import prisma from '@lib/prisma'
 
 import {basePath} from '@lib/methods/common'
 import {addQuerySentence} from '@lib/methods/urls'
-import {sendEmailWrapper} from '@app/(apps)/shinsei/(lib)/sendEmailWrapper'
+import {sendEmailWrapper} from 'src/non-common/(chains)/shinsei/sendEmailWrapper'
 
 export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
   let ApRequest: any = await prisma.apRequest.findUnique({
     where: {id: requestId},
     include: {
-      ...ApRequestClass.ApRequestGetInclude().apRequest.include,
+      ...(ApRequestClass.ApRequestGetInclude().apRequest.include as any),
       ApReceiver: {include: {User: {}}},
       ApSender: {
         include: {
@@ -42,7 +41,7 @@ export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
   const unAuthorizedMembers = ApReceiver.filter(d => d.status === null).map(d => d.User)
   const soumuMembers = await prisma.user.findMany({
     where: {UserRole: {some: {RoleMaster: {name: `総務管理者`}}}},
-  } as Prisma.UserFindManyArgs)
+  })
 
   let status: (typeof apRequestStatusList)[number]['label'] = undefined
 

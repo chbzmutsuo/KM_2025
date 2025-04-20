@@ -2,7 +2,7 @@ import {BaseEditor, BaseRange, Range, Element, Descendant} from 'slate'
 import {ReactEditor} from 'slate-react'
 import {HistoryEditor} from 'slate-history'
 import {elementcolTypeString, markString, slateOnKeyDownKeyStringType} from 'src/cm/components/SlateEditor/libs/slate-constants'
-
+import {JSX} from 'react'
 declare module 'slate' {
   interface CustomTypes {
     Editor: CustomEditor

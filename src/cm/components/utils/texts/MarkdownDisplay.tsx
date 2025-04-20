@@ -1,6 +1,5 @@
-import {cl} from 'src/cm/lib/methods/common'
-import {CSSProperties} from 'react'
 import ReactMarkdown from 'react-markdown'
+import {twMerge} from 'tailwind-merge'
 
 export const MarkDownDisplay = props => {
   const {className, ...rest} = props
@@ -9,47 +8,8 @@ export const MarkDownDisplay = props => {
   text = String(text).replace(/\n|\r/g, '\n\n')
 
   return (
-    <ReactMarkdown
-      {...{
-        className: cl('react-markdown  ', className),
-        ...rest,
-      }}
-    >
-      {text}
-    </ReactMarkdown>
-  )
-  return text.split('\n').map((line, i) => {
-    const style: CSSProperties = {
-      marginBottom: line === '' ? 20 : 0,
-    }
-
-    return (
-      <div>
-        <ReactMarkdown
-          {...{
-            className: cl('react-markdown ', className),
-            style: {...style, ...rest.style},
-            ...rest,
-          }}
-        >
-          {line}
-        </ReactMarkdown>
-      </div>
-    )
-  })
-
-  return text.split('<br/>').map((line, i) => {
-    return (
-      <ReactMarkdown className={cl('react-markdown pb-4', className)} {...rest}>
-        {line}
-      </ReactMarkdown>
-    )
-  })
-  return (
-    <div>
-      <ReactMarkdown className={cl('react-markdown', className)} {...rest}>
-        {text}
-      </ReactMarkdown>
+    <div {...{className: twMerge('react-markdown  ', className)}}>
+      <ReactMarkdown {...rest}>{text}</ReactMarkdown>
     </div>
   )
 }

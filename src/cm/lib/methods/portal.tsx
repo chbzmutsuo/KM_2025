@@ -1,4 +1,5 @@
 'use client'
+import {JSX} from 'react'
 import ReactDOM from 'react-dom'
 type usePortalProp = {
   JsxElement: JSX.Element

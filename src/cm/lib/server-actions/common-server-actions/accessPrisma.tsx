@@ -1,6 +1,6 @@
 'use server'
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
+import {prismaMethodType, PrismaModelNames} from '@cm/types/prisma-types'
 import prisma from '@lib/prisma'
 import {PrismaClient} from '@prisma/client'
 

@@ -7,8 +7,6 @@ import {breakLines} from 'src/cm/lib/value-handler'
 
 import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 
-import {IconBtn} from '@components/styles/common-components/IconBtn'
-
 export const SelectOption = (props: {contexts: contextsType; option: optionType; optionStyle: any}) => {
   const contexts = props.contexts
 

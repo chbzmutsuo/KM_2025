@@ -1,7 +1,6 @@
 import {TrashIcon} from '@heroicons/react/20/solid'
 
 import {cl} from 'src/cm/lib/methods/common'
-import dynamic from 'next/dynamic'
 import {useMemo} from 'react'
 import {FileRejection, useDropzone} from 'react-dropzone'
 import FileErrors from 'src/cm/hooks/useFileUpload/FileErrors'

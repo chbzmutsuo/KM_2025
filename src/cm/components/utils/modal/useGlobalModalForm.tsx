@@ -1,6 +1,6 @@
 import BasicModal from '@components/utils/modal/BasicModal'
 import {atomKey, useJotaiByKey} from '@hooks/useJotai'
-
+import {JSX} from 'react'
 export const useGlobalModalForm = <S,>(
   atomKey: atomKey,
   defaultValue: any,

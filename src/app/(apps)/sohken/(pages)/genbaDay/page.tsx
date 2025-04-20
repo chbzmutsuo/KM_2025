@@ -9,7 +9,7 @@ import prisma from '@lib/prisma'
 import {C_Stack} from '@components/styles/common-components/common-components'
 
 import {getHolidayCalendar} from '@app/(apps)/sohken/api/cron/refreshGoogleCalendar/getHolidayCalendar'
-const include = QueryBuilder.getInclude({}).genbaDay.include
+const include = QueryBuilder.getInclude({}).genbaDay.include as any
 
 export default async function DynamicMasterPage(props) {
   const query = await props.searchParams
@@ -147,8 +147,6 @@ export default async function DynamicMasterPage(props) {
     today: await prisma.sohkenGoogleCalendar.findMany({where: {date: today}}),
     tomorrow: await prisma.sohkenGoogleCalendar.findMany({where: {date: tomorrow}}),
   }
-
-  console.timeEnd(`serverFetch`)
 
   return (
     <div>

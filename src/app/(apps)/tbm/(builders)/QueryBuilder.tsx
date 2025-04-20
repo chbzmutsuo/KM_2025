@@ -1,5 +1,4 @@
 import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
-import {PrismaModelNames} from '@cm/types/prisma-types'
 import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {

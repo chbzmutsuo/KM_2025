@@ -10,7 +10,16 @@ export default async function LessonView(props) {
   const {isCoach} = scopes.getAdvantageProps()
   const include = QueryBuilder.getInclude({query}).bigCategory?.include
   const bigCategories = await prisma.bigCategory.findMany({
-    include,
+    include: {
+      MiddleCategory: {
+        orderBy: [{sortOrder: 'asc'}],
+        include: {
+          Lesson: {
+            orderBy: [{sortOrder: 'asc'}],
+          },
+        },
+      },
+    },
     orderBy: [{sortOrder: `asc`}],
   })
 

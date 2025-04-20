@@ -1,9 +1,7 @@
 'use client'
 import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 import Redirector from 'src/cm/components/utils/Redirector'
-import React, {useCallback, useEffect, useState} from 'react'
-import Loader from 'src/cm/components/utils/loader/Loader'
-import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
+import React, {JSX, useCallback, useEffect, useState} from 'react'
 
 import NavBar from 'src/cm/components/layout/Navigation/NavBar'
 
@@ -13,7 +11,6 @@ import {identifyPathItem, PAGES} from 'src/non-common/path-title-constsnts'
 import {HREF} from 'src/cm/lib/methods/urls'
 import {DH} from 'src/cm/class/DH'
 
-import dynamic from 'next/dynamic'
 import {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobalOrigin'
 import {rootPaths} from 'src/middleware'
 import {MetaData} from '@components/layout/MetaData'

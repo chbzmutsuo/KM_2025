@@ -8,14 +8,16 @@ export const IconBtn = (props: props & {color?: colorVariants; active?: boolean;
 
   const ClassName = twMerge(
     //
+    colorClassMaster.iconBtn[color ?? ''],
+    `shadow-sm border-[0.5px]  `,
     IconBtnBaseClass,
-    colorClassMaster.iconBtn[color ?? '']
+    className
   )
 
   return <div {...{className: ClassName, style, ...rest}} />
 }
 
-export const IconBtnBaseClass = ` rounded-full !px-2 py-0.5 text-center text-[15px]  shadow-sm`
+export const IconBtnBaseClass = ` rounded-full !px-2 py-0.5 text-center text-[15px]   `
 // export const IconBtn = (props: props & {color?: colorVariants; active?: boolean; inline?: boolean}) => {
 //   const {className, style, color, active, inline, ...rest} = props
 

@@ -5,7 +5,6 @@ import {RecoilEnv} from 'recoil'
 
 import useLoader from 'src/cm/hooks/globalHooks/useLoader'
 import useWindowSize from 'src/cm/hooks/useWindowSize'
-import {sleep} from '@lib/methods/common'
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false
 
@@ -26,14 +25,6 @@ export default function useGlobalOrigin(place?: any) {
     ...useMyNavigationHook,
     ...useMySessionHook,
     ...loading,
-    navigateRefresh: (href, sleepMilliSeconds = 500) => {
-      useMyNavigationHook.router.push(href)
-      useMyNavigationHook.router.refresh()
-
-      loading.toggleLoad(async () => {
-        await sleep(sleepMilliSeconds)
-      })
-    },
   }
 
   const {width, globalLoaderAtom, status, session, device} = result

@@ -6,7 +6,8 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder", "typedSql", "relationJoins"]
+  previewFeatures = ["prismaSchemaFolder", "relationJoins"]
+  // output          = "../generated/prisma"
 }
 
 model Department {
@@ -82,37 +83,36 @@ model User {
   UserRole     UserRole[]
   AppLog       AppLog[]
 
-  ApSender       ApSender[]
-  ApReceiver     ApReceiver[]
-  MidTsNippoUser MidTsNippoUser[]
+  ApSender   ApSender[]
+  ApReceiver ApReceiver[]
 
   AqSaleCart AqSaleCart[]
 
   PaidLeaveGrant PaidLeaveGrant[]
 
-  AqCustomerRecord                 AqCustomerRecord[]
-  UserWorkTimeHistoryMidTable      UserWorkTimeHistoryMidTable[]
-  UserPayedLeaveTypeMidTable       UserPayedLeaveTypeMidTable[]
-  AqSaleRecord                     AqSaleRecord[]
-  TsConstructionSubConUserMidTable TsConstructionSubConUserMidTable[]
+  AqCustomerRecord            AqCustomerRecord[]
+  UserWorkTimeHistoryMidTable UserWorkTimeHistoryMidTable[]
+  UserPayedLeaveTypeMidTable  UserPayedLeaveTypeMidTable[]
+  AqSaleRecord                AqSaleRecord[]
+
   // TbmOperation                     TbmOperation[]
   // TbmOperationGroup                TbmOperationGroup[]
-  AqCustomer                       AqCustomer[]
-  TbmBase                          TbmBase?                           @relation(fields: [tbmBaseId], references: [id])
-  tbmBaseId                        Int?
-  TbmDriveSchedule                 TbmDriveSchedule[]
-  UserWorkStatus                   UserWorkStatus[]
-  OdometerInput                    OdometerInput[]
-  TbmRefuelHistory                 TbmRefuelHistory[]
-  DayRemarksUser                   DayRemarksUser[]
-  TbmCarWashHistory                TbmCarWashHistory[]
-  PurchaseRequest                  PurchaseRequest[]
-  LeaveRequest                     LeaveRequest[]
-  Approval                         Approval[]
-  TbmVehicle                       TbmVehicle?
-  KyuyoTableRecord                 KyuyoTableRecord[]
-  Department                       Department?                        @relation(fields: [departmentId], references: [id])
-  departmentId                     Int?
+  AqCustomer        AqCustomer[]
+  TbmBase           TbmBase?            @relation(fields: [tbmBaseId], references: [id])
+  tbmBaseId         Int?
+  TbmDriveSchedule  TbmDriveSchedule[]
+  UserWorkStatus    UserWorkStatus[]
+  OdometerInput     OdometerInput[]
+  TbmRefuelHistory  TbmRefuelHistory[]
+  DayRemarksUser    DayRemarksUser[]
+  TbmCarWashHistory TbmCarWashHistory[]
+  PurchaseRequest   PurchaseRequest[]
+  LeaveRequest      LeaveRequest[]
+  Approval          Approval[]
+  TbmVehicle        TbmVehicle?
+  KyuyoTableRecord  KyuyoTableRecord[]
+  Department        Department?         @relation(fields: [departmentId], references: [id])
+  departmentId      Int?
 }
 
 model ReleaseNotes {

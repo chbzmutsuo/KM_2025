@@ -5,7 +5,7 @@ import {anyObject, colType} from '@cm/types/types'
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 import {Prisma} from '@prisma/client'
 import {toast} from 'react-toastify'
-import { fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import SimpleTable from '@cm/components/utils/SimpleTable'
 
 import NormalQuestions from '@app/(apps)/Grouping/components/Grouping/game/question/NormalQuestion'

@@ -6,7 +6,7 @@ import {autoCreateMonthConfig} from '@app/(apps)/tbm/(pages)/DriveSchedule/ auto
 import CalendarSetter from '@app/(apps)/tbm/(pages)/DriveSchedule/CalendarSetter'
 import HaishaTable from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/HaishaTable'
 import RouteDisplay from '@app/(apps)/tbm/(pages)/DriveSchedule/RouteDisplay'
-import {Days, getMidnight, toUtc} from '@class/Days'
+import {Days, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import {TextBlue, TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'

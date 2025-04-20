@@ -82,7 +82,7 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
             .map(entry => {
               const [id, {active, from, to, shiftOnOtherDate, directGo, directReturn, important, shokucho}] = entry as [
                 string,
-                selectedUserObjectType[string]
+                selectedUserObjectType[string],
               ]
 
               if (active) {

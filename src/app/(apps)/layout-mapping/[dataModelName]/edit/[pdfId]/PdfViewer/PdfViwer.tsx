@@ -3,7 +3,7 @@
 import {useEffect, useRef, useState} from 'react'
 import {fabric} from 'fabric'
 
-import { C_Stack, Center, Padding} from '@components/styles/common-components/common-components'
+import {C_Stack, Center, Padding} from '@components/styles/common-components/common-components'
 
 import {useInitPdf} from '@app/(apps)/layout-mapping/[dataModelName]/edit/[pdfId]/PdfViewer/useInitPdf'
 import {usePanAndZoomCanvas} from '@app/(apps)/layout-mapping/[dataModelName]/edit/[pdfId]/PdfViewer/usePanAndZoomCanvas'

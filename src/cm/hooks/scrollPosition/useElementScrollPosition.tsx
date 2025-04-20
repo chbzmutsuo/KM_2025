@@ -1,11 +1,11 @@
 'use client'
 
-import {useEffect, useCallback, RefObject} from 'react'
+import {useEffect, useCallback} from 'react'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {isServer} from '@lib/methods/common'
 
 interface UseElementScrollPositionProps {
-  elementRef: RefObject<HTMLElement>
+  elementRef: any
   scrollKey?: string // オプションで特定のキーを指定可能
 }
 

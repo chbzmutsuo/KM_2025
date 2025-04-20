@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 
 export const useInterval = (fn, interval, autostart = true) => {
   const [count, setcount] = useState(0)
-  const onUpdateRef = useRef<any>()
+  const onUpdateRef = useRef<any>(null)
   const [state, setState] = useState('STOPPED')
   const start = () => {
     setState('RUNNING')

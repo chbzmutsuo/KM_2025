@@ -4,7 +4,7 @@ import {dataMinimumCommonType, form_table_modal_config, anyObject, prismaDataTyp
 
 import {NoData} from 'src/cm/components/styles/common-components/common-components'
 import {PrismaModelNames} from '@cm/types/prisma-types'
-import React from 'react'
+import React, {JSX} from 'react'
 import TableForm from 'src/cm/components/DataLogic/TFs/PropAdjustor/TableForm'
 
 import useInitChildCreator from 'src/cm/components/DataLogic/RTs/ChildCreator/useInitChildCreator'
@@ -56,7 +56,7 @@ export const ChildCreator = (props: ChildCreatorProps) => {
   return (
     <div className={`w-fit`}>
       {!ParentData?.id ? (
-        NoDatawhenParentIsUndefined?.() ?? <NoData>データ作成後に登録可能</NoData>
+        (NoDatawhenParentIsUndefined?.() ?? <NoData>データ作成後に登録可能</NoData>)
       ) : (
         <TableForm
           {...{

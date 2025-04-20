@@ -55,6 +55,7 @@ export default function useLoader() {
   return {
     toastIfFailed,
     globalLoaderAtom,
+    setglobalLoaderAtom,
     toggleLoad,
     fullLoad,
     useLoaderDeps,

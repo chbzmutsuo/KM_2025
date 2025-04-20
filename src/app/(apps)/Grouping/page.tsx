@@ -9,7 +9,7 @@ import GameList from '@app/(apps)/Grouping/parts/GameList'
 import Redirector from '@components/utils/Redirector'
 
 const Page = async props => {
-  const query = await props.searchParams;
+  const query = await props.searchParams
   const {session, scopes} = await initServerComopnent({query})
   if (!session?.id) {
     return <Redirector redirectPath={`/login`} />
@@ -18,7 +18,7 @@ const Page = async props => {
   const myGame = await prisma.game.findMany({
     where: {teacherId: session.id},
     orderBy: [{date: `desc`}],
-    include: gameInclude,
+    include: gameInclude as any,
   })
 
   return (

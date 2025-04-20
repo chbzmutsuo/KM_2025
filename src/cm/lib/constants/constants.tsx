@@ -15,9 +15,9 @@ export const Z_INDEX = {
 }
 export const COLORS = {
   table: {
-    thead: '#ececec',
+    thead: '#EDEDED',
     oddNumberRow: '#FFFFFF',
-    evenNumberRow: '#ebebeb',
+    evenNumberRow: '#FFFFFF',
   },
 }
 

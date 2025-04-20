@@ -8,7 +8,7 @@ import {Prisma, PrismaClient} from '@prisma/client'
 
 export const SORT_ARGS = {orderBy: [{sortOrder: 'asc'}, {id: 'asc'}]}
 
-export type getIncludeType = {[key in PrismaModelNames]?: Prisma.Args<PrismaClient[key], 'findMany'>}
+export type getIncludeType = {[key in PrismaModelNames]?: Prisma.Args<PrismaClient, 'findMany'>}
 export type includeProps = {
   session?: anyObject
   query?: anyObject
@@ -46,13 +46,13 @@ export type EasySearchObjectExclusiveGroup<
   T extends string = string,
   CONDITION extends object = {
     [key: string]: any
-  }
+  },
 > = {[key in T]?: EasySearchObjectAtom<CONDITION>}
 
 export type EasySearchObjectAtom<
   CONDITION extends object = {
     [key: string]: any
-  }
+  },
 > = {
   label: string
   CONDITION?: CONDITION

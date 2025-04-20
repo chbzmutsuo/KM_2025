@@ -1,5 +1,5 @@
 import ffmpeg from 'fluent-ffmpeg'
-import AWS from 'aws-sdk'
+import {S3} from 'aws-sdk'
 import multer from 'multer'
 
 import {v4 as uuidv4} from 'uuid'
@@ -7,7 +7,7 @@ import {v4 as uuidv4} from 'uuid'
 import {getFileInfo} from 'src/non-common/serverSideFunction'
 import {requestResultType} from '@cm/types/types'
 
-const s3 = new AWS.S3({
+const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,

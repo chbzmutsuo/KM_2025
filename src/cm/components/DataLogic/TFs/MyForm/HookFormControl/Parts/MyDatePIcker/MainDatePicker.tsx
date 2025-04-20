@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import DatePicker, {registerLocale} from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import ja from 'date-fns/locale/ja' // import the Japanese locale
+import {ja} from 'date-fns/locale' // import the Japanese locale
 import {Days, formatDate, getMidnight} from 'src/cm/class/Days'
 import {anyObject} from '@cm/types/types'
 import {cl} from 'src/cm/lib/methods/common'

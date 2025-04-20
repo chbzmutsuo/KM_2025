@@ -5,6 +5,7 @@ import useWindowSize from 'src/cm/hooks/useWindowSize'
 import {Z_INDEX} from 'src/cm/lib/constants/constants'
 
 import React, {CSSProperties, useCallback, useMemo} from 'react'
+import {JSX} from 'react'
 
 import {v4 as uuidv4} from 'uuid'
 import useCursorPosition from 'src/cm/hooks/useCursorPosition'

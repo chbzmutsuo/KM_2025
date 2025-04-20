@@ -1,8 +1,16 @@
-import QRCode from 'qrcode.react'
+import {QRCodeSVG} from 'qrcode.react'
 
-function QRCodeComponent(props: {url: string; style?: React.CSSProperties}) {
-  const {url, style} = props
-  return <QRCode value={url} style={{textAlign: 'center', margin: 'auto', ...style}} />
+interface QRCodeComponentProps {
+  url: string
+  style?: React.CSSProperties
+}
+
+const QRCodeComponent: React.FC<QRCodeComponentProps> = ({url, style}) => {
+  return (
+    <div style={{textAlign: 'center', margin: 'auto', ...style}}>
+      <QRCodeSVG bgColor="#FFFFFF" fgColor="#000000" level="Q" style={{width: 128}} value={url} />
+    </div>
+  )
 }
 
 export default QRCodeComponent

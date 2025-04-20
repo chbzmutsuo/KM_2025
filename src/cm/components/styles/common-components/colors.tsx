@@ -1,4 +1,4 @@
-import {cl, getColorStyles} from 'src/cm/lib/methods/common'
+import {getColorStyles} from 'src/cm/lib/methods/common'
 import {IconBtn, IconBtnBaseClass} from 'src/cm/components/styles/common-components/IconBtn'
 import {props} from 'src/cm/components/styles/common-components/type'
 import {twMerge} from 'tailwind-merge'
@@ -10,7 +10,7 @@ export const ColorBlock = (props: props & {bgColor?: string}) => {
   return (
     <IconBtn
       {...{
-        className: cl(className),
+        className: twMerge(className, 'border-none'),
         style: {
           height: '100%',
           fontSize: 12,

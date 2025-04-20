@@ -3,7 +3,6 @@ import {Days, formatDate, getMidnight, toUtc} from '@class/Days'
 import Redirector from '@components/utils/Redirector'
 
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
-import {HREF} from '@lib/methods/urls'
 import prisma from '@lib/prisma'
 import {endOfMonth} from 'date-fns'
 

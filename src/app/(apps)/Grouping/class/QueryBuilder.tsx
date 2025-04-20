@@ -1,5 +1,4 @@
 import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
-import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
   static getInclude = (includeProps: includeProps) => {
@@ -29,16 +28,6 @@ export class QueryBuilder {
       include: {Teacher: teacher, Student: {}, Classroom: {}},
     }
 
-    const questionPrompt: Prisma.QuestionPromptFindManyArgs = {
-      orderBy: {id: 'asc'},
-      include: {
-        Game: {
-          include: {},
-        },
-        Group: {},
-      },
-    }
-
     const squad = {
       include: {
         StudentRole: {
@@ -56,7 +45,7 @@ export class QueryBuilder {
       },
     }
 
-    const game: Prisma.GameFindManyArgs = {
+    const game = {
       include: {
         GroupCreateConfig: {},
         GameStudent: {
@@ -69,38 +58,11 @@ export class QueryBuilder {
           },
         },
         SubjectNameMaster: {},
-        QuestionPrompt: questionPrompt,
+        QuestionPrompt: {
+          orderBy: {id: 'asc'},
+          include: {Game: {include: {}}, Group: {}},
+        },
         LearningRoleMasterOnGame: {},
-
-        // Room: {
-        //   include: {
-        //     RoomStudent: {
-        //       orderBy: [
-        //         {Student: {Classroom: {grade: 'asc'}}},
-        //         {Student: {Classroom: {class: 'asc'}}},
-        //         {Student: {attendanceNumber: 'asc'}},
-        //       ],
-        //       include: {
-        //         Student: {
-        //           include: student.include,
-        //         },
-        //       },
-        //     },
-
-        //     //⬇︎当該ルームの保存済みプロジェクトも引っ張ってくる
-        //     Game: {
-        //       include: {
-        //         Group: {
-        //           where: {isSaved: true},
-        //           include: {
-        //             Game: {},
-        //             Squad: squad,
-        //           },
-        //         },
-        //       },
-        //     },
-        //   },
-        // },
 
         Teacher: {},
         Group: {
@@ -122,12 +84,16 @@ export class QueryBuilder {
 
     const include: getIncludeType = {
       // room,
-      questionPrompt,
+
+      questionPrompt: {
+        orderBy: {id: 'asc'},
+        include: {Game: {include: {}}, Group: {}},
+      },
       classroom,
       student,
       school,
-      game,
-      group,
+      game: game as any,
+      group: group as any,
       teacher,
     }
 
