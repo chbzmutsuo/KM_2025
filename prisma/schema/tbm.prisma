@@ -126,8 +126,9 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code String @unique
- name String
+ code     String  @unique
+ name     String
+ routeKbn String? @default("規定")
 
  TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
@@ -169,9 +170,8 @@ model TbmMonthlyConfigForRouteGroup {
  pickupTime  String? //接車時間
  vehicleType String? //車種
 
- postalFee  Int? //通行量(郵便)
- generalFee Int? //通行量（一般）
- tollFee    Float?
+ generalFee        Int? //通行量（一般）
+ postalFee_untaxed Float? //通行料（税抜）
 
  numberOfTrips   Int?
  TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)

@@ -17,6 +17,9 @@ import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import GenbaDaySummary from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary/GenbaDaySummary'
 import {SOHKEN_CONST} from '@app/(apps)/sohken/(constants)/SOHKEN_CONST'
+import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
+import {chechIsHoliday} from '@app/(apps)/sohken/api/cron/refreshGoogleCalendar/chechIsHoliday'
+import {Center} from '@components/styles/common-components/common-components'
 
 const register = {required: `必須です`}
 export class ColBuilder {
@@ -258,19 +261,31 @@ export class ColBuilder {
             return isMyShift ? 'rgba(255, 235, 170, 0.664)' : ''
           },
         },
-        format: (value, row, col) => (
-          <div>
-            <GenbaDaySummary
-              {...{
-                GenbaDayBasicEditor_HK,
-                allShiftBetweenDays,
-                records: HK_USE_RECORDS?.records,
-                GenbaDay: row,
-                editable: true,
-              }}
-            />
-          </div>
-        ),
+        format: (value, row, col) => {
+          // const [holidays, setholidays] = useState<any[] | null>(null)
+          const {data: holidays = []} = usefetchUniversalAPI_SWR(`sohkenGoogleCalendar`, `findMany`, {
+            where: {calendarId: `ja.japanese#holiday@group.v.calendar.google.com`},
+          })
+
+          if (chechIsHoliday({holidays, date: row.date})) {
+            return <Center className={`text-gray-500`}>---日・祝---</Center>
+          }
+
+          return (
+            <div>
+              <GenbaDaySummary
+                {...{
+                  holidays,
+                  GenbaDayBasicEditor_HK,
+                  allShiftBetweenDays,
+                  records: HK_USE_RECORDS?.records,
+                  GenbaDay: row,
+                  editable: true,
+                }}
+              />
+            </div>
+          )
+        },
       },
     ]).transposeColumns()
     return data

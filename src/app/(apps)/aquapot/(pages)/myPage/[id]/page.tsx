@@ -9,7 +9,6 @@ import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
 
 import React from 'react'
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
-import {getAqLoginType} from 'src/non-common/scope-lib/getScopes'
 
 export default async function page(props: {searchParams: any; params: any}) {
   const query = await props.searchParams
@@ -17,9 +16,8 @@ export default async function page(props: {searchParams: any; params: any}) {
 
   const {session, scopes} = await initServerComopnent({query})
   const {aqCustomerId} = scopes.getAquepotScopes()
-  const {asCustomer} = getAqLoginType({session})
 
-  const isValidUser = asCustomer && session.id === Number(params.id)
+  const isValidUser = aqCustomerId && session.id === Number(params.id)
 
   const {whereQuery, redirectPath} = await dateSwitcherTemplate({query})
 

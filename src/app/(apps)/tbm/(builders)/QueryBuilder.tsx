@@ -1,4 +1,4 @@
-import {includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
+import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {Prisma} from '@prisma/client'
 
@@ -26,7 +26,7 @@ export class QueryBuilder {
       },
     }
 
-    const include: {[key in PrismaModelNames]?: any} = {
+    const include: getIncludeType = {
       tbmRouteGroup,
       tbmBase,
       user: {include: {TbmBase: {}, TbmVehicle: {}}} as Prisma.UserFindManyArgs,

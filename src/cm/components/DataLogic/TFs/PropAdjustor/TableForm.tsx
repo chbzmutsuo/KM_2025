@@ -10,6 +10,7 @@ import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
 
 const TableForm = (props: ClientPropsType2) => {
   const ClientProps2 = convertProps(props)
+
   const {EditForm, myForm, myModal, setformData} = props
 
   return (
@@ -40,5 +41,5 @@ const convertProps = props => {
     myTable: {...myTableDefault, ...props.myTable, style: {...myTableDefault?.style, ...props.myTable?.style}},
     myModal: {...myModalDefault, ...props.myModal},
   }
-  return props
+  return props as ClientPropsType2
 }

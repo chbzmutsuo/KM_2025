@@ -89,7 +89,7 @@ export default function GameInformation({GameCtxValue, useGroupReturnObj, groupC
 
       const {result: updatedPrompt} = await fetchUniversalAPI('questionPrompt', 'update', {
         where: {id: activePrompt?.id ?? 0},
-        include: QueryBuilder.getInclude({session, query}).questionPrompt.include,
+        include: QueryBuilder.getInclude({session, query}).questionPrompt?.include,
         data: {active: false},
       })
 

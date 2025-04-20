@@ -2,7 +2,7 @@
 import React from 'react'
 
 import {Days, formatDate} from '@class/Days'
-import {Center, R_Stack} from '@components/styles/common-components/common-components'
+import {Center} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
 
 import {Cell} from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/Cell'
@@ -10,7 +10,7 @@ import {TbmDriveSchedule} from '@prisma/client'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import UserTh from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/UserTh'
 import {haishaListData} from '@app/(apps)/tbm/(pages)/DriveSchedule/HaishaTable/getListData'
-import {createUpdate, fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {createUpdate} from '@lib/methods/api-fetcher'
 import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 
 export default function TableContent({mode, listDataState, days, tbmBase, fetchData, setModalOpen}) {
@@ -137,7 +137,6 @@ export default function TableContent({mode, listDataState, days, tbmBase, fetchD
                                       date,
                                     }
 
-                                    console.log(unique_userId_date) //logs
                                     return {
                                       model: `userWorkStatus`,
                                       method: `upsert`,

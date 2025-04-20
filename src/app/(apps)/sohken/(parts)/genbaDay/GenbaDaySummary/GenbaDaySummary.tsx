@@ -16,6 +16,7 @@ import {Genba, GenbaDay, GenbaDayTaskMidTable} from '@prisma/client'
 import {toast} from 'react-toastify'
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import {calcGenbaDayStatus} from 'src/non-common/(chains)/getGenbaScheduleStatus/calcGenbaDayStatus'
+import {chechIsHoliday} from '@app/(apps)/sohken/api/cron/refreshGoogleCalendar/chechIsHoliday'
 
 const GenbaDaySummary = (props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
@@ -23,11 +24,11 @@ const GenbaDaySummary = (props: {
   records?: any
   GenbaDay
   allShiftBetweenDays: any
+  holidays
 }) => {
-  const {GenbaDayBasicEditor_HK, editable = true, records, GenbaDay, allShiftBetweenDays} = props
+  const {GenbaDayBasicEditor_HK, editable = true, records, GenbaDay, allShiftBetweenDays, holidays} = props
 
-  const {accessScopes} = useGlobal()
-  const admin = accessScopes()
+  const isHoliday = chechIsHoliday({holidays, date: GenbaDay.date})
 
   const {Genba, GenbaDayTaskMidTable, active} = GenbaDay as GenbaDay & {
     Genba: Genba
@@ -70,9 +71,9 @@ const GenbaDaySummary = (props: {
       ? '完了確定を実施すると、完了日以降のスタッフ・車両配置が削除されます。よろしいですか？'
       : '完了入力を取り消します。すでに自動削除されたスタッフ・車両配置は復元されません。よろしいですか？'
 
-    toggleLoad(
-      async () => {
-        if (confirm(message)) {
+    if (confirm(message)) {
+      toggleLoad(
+        async () => {
           await fetchUniversalAPI(`genbaDay`, `update`, {where: {id: finishDate?.id}, data: {finished: !finishDate?.finished}})
 
           const allDeallocateGenbaDayShift = genbadays.filter(item => {
@@ -94,15 +95,14 @@ const GenbaDaySummary = (props: {
           if (genbaDaySoukenCarDelete?.result?.count > 0) {
             toast.warn(`完了日の翌日以降の${genbaDaySoukenCarDelete?.result?.count}件の車両配置を削除しました。`)
           }
-        }
-      },
-      {refresh: true, mutate: true}
-    )
+        },
+        {refresh: true, mutate: true}
+      )
+    }
   }
 
   const confirmFinishedByGenbaDay = async e => {
     e.preventDefault()
-
     confirmFinished({GenbaDay})
   }
 
@@ -137,31 +137,33 @@ const GenbaDaySummary = (props: {
   }
 
   return (
-    <div style={{width: 420, maxWidth: '90vw'}} className={`relative w-full `}>
-      {editable && (
-        <div className={`  absolute right-4 top-4  z-[10] w-fit rotate-6 text-lg font-bold `}>
-          <ButtonDisplay />
+    <div className={isHoliday ? 'bg-black/50' : ''}>
+      <div style={{width: 420, maxWidth: '90vw'}} className={`relative w-full `}>
+        {editable && (
+          <div className={`  absolute right-4 top-4  z-[10] w-fit rotate-6 text-lg font-bold `}>
+            <ButtonDisplay />
+          </div>
+        )}
+
+        <div className={`${active ? '' : 'opacity-30'}`}>
+          <C_Stack className={`gap-0.5`}>
+            <Wrapper className={` !bg-transparent `}>
+              <Basics
+                {...{
+                  GenbaDayBasicEditor_HK,
+                  pathname,
+                  GenbaDayTaskMidTable,
+                  GenbaDay,
+                  editable,
+                }}
+              />
+            </Wrapper>
+
+            <Wrapper className={` !bg-transparent`}>
+              <Sub {...{records, GenbaDay, editable, commonProps, PC, allShiftBetweenDays}} />
+            </Wrapper>
+          </C_Stack>
         </div>
-      )}
-
-      <div className={`${active ? '' : 'opacity-30'}`}>
-        <C_Stack className={`gap-0.5`}>
-          <Wrapper className={` !bg-transparent `}>
-            <Basics
-              {...{
-                GenbaDayBasicEditor_HK,
-                pathname,
-                GenbaDayTaskMidTable,
-                GenbaDay,
-                editable,
-              }}
-            />
-          </Wrapper>
-
-          <Wrapper className={` !bg-transparent`}>
-            <Sub {...{records, GenbaDay, editable, commonProps, PC, allShiftBetweenDays}} />
-          </Wrapper>
-        </C_Stack>
       </div>
     </div>
   )

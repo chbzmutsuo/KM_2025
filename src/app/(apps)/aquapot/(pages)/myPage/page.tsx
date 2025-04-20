@@ -4,7 +4,6 @@ import {CenterScreen} from '@components/styles/common-components/common-componen
 
 import Redirector from '@components/utils/Redirector'
 import LoginForm from '@app/(utils)/login/LoginForm'
-import {getAqLoginType} from 'src/non-common/scope-lib/getScopes'
 import {Fields} from '@class/Fields/Fields'
 import {HREF} from '@lib/methods/urls'
 

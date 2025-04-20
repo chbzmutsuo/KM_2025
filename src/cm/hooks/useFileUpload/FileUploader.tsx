@@ -1,8 +1,4 @@
-const ContentPlayer = dynamic(() => import('src/cm/components/utils/ContentPlayer'), {
-  loading: () => <></>,
-})
-
-import {PaperClipIcon, TrashIcon} from '@heroicons/react/20/solid'
+import {TrashIcon} from '@heroicons/react/20/solid'
 
 import {cl} from 'src/cm/lib/methods/common'
 import dynamic from 'next/dynamic'

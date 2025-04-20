@@ -4,103 +4,209 @@ import {Fields} from '@class/Fields/Fields'
 import useBasicFormProps from '@hooks/useBasicForm/useBasicFormProps'
 import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {PURCHASE_TYPE_OPTIONS} from '@app/(apps)/shinsei/(constants)/options'
-import {ControlContextType} from '@cm/types/form-control-type'
-import {ColBuilder} from '@app/(apps)/shinsei/(builders)/ColBuilder'
+
 import {Button} from '@components/styles/common-components/Button'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import {CODE_MASTER} from '@app/(apps)/shinsei/(constants)/CODE_MASTER'
+import {isDev} from '@lib/methods/common'
+import {chain_shinsei_hacchu_notifyWhenUpdate} from '@app/(apps)/shinsei/(pages)/purchase/chain_shinsei_hacchu_notifyWhenUpdate'
+import {HREF} from '@lib/methods/urls'
 
 export default function PurchaseRequestPage() {
   const useGlobalProps = useGlobal()
-  const {session, toggleLoad, accessScopes, router} = useGlobalProps
+  const {session, toggleLoad, accessScopes, router, query} = useGlobalProps
 
   const {admin} = accessScopes()
   const userId = session.id
 
-  const {BasicForm, latestFormData} = useBasicFormProps({
-    columns: new Fields([
-      //
-      {id: `userId`, label: `申請者`, forSelect: {}, form: {defaultValue: userId, disabled: admin ? false : userId}},
-      {id: `purchaseType`, label: `購入区分`, forSelect: {optionsOrOptionFetcher: PURCHASE_TYPE_OPTIONS}},
-      {
-        id: `productId`,
-        label: `商品`,
-        forSelect: {
-          allowCreateOptions: {
-            creator: () => {
-              return {
-                getCreatFormProps: (props: ControlContextType & {searchFormData}) => {
-                  return {columns: ColBuilder.product({useGlobalProps}), formData: {}}
-                },
-              }
-            },
+  const columns = new Fields([
+    //
+    {
+      id: `userId`,
+      label: `申請者`,
+      forSelect: {},
+      form: {defaultValue: userId, disabled: admin ? false : userId},
+    },
+    {
+      id: `purchaseType`,
+      label: `購入区分`,
+      form: {defaultValue: isDev ? `新規` : undefined},
+      forSelect: {optionsOrOptionFetcher: CODE_MASTER.PURCHASE_TYPE_OPTIONS},
+    },
+    {
+      id: `productId`,
+      label: `商品`,
+      form: {defaultValue: isDev ? 1 : undefined},
+      forSelect: {
+        // allowCreateOptions: {
+        //   creator: () => {
+        //     return {
+        //       getCreatFormProps: (props: ControlContextType & {searchFormData}) => {
+        //         return {columns: ColBuilder.product({useGlobalProps}), formData: {}}
+        //       },
+        //     }
+        //   },
+        // },
+        option: {style: {width: 400, padding: 6}},
+        config: {
+          select: {
+            id: 'number',
+            code: 'text',
+            name: 'text',
           },
-          config: {},
+          nameChanger: op => {
+            const name = op && [op.code, op.name].join(' - ')
+
+            return {...op, name}
+          },
         },
       },
-      {id: `quantity`, label: `数量`, type: `float`},
-      {id: `reason`, label: `理由`, type: `textarea`},
-    ])
-      .customAttributes(({col}) => {
-        return {
-          ...col,
-          form: {
-            ...defaultRegister,
-            ...col.form,
-            style: {width: 400},
-          },
-        }
-      })
-      .transposeColumns(),
+    },
+    {id: `quantity`, label: `数量`, type: `float`, form: {defaultValue: isDev ? 1 : undefined}},
+    {id: `reason`, label: `理由`, type: `textarea`, form: {defaultValue: isDev ? `test` : undefined}},
+  ])
+    .customAttributes(({col}) => {
+      return {
+        ...col,
+        form: {
+          ...col.form,
+          style: {width: 400},
+          ...defaultRegister,
+        },
+      }
+    })
+    .transposeColumns()
+
+  const {BasicForm, latestFormData} = useBasicFormProps({
+    columns: columns,
   })
+
   return (
     <FitMargin>
-      <BasicForm
-        {...{
-          latestFormData,
-          onSubmit: async data => {
-            toggleLoad(async item => {
+      <C_Stack className={`items-center gap-8 p-4`}>
+        <BasicForm
+          {...{
+            latestFormData,
+            onSubmit: async data => {
               const {purchaseType, productId, quantity, reason, userId} = data
-              const approverRoleList = [`新規`, `折損`].some(item => item === purchaseType) ? [`工場長`] : [`営業担当者`]
 
-              const {result: approveUser} = await fetchUniversalAPI(`user`, `findFirst`, {
-                where: {
-                  UserRole: {some: {RoleMaster: {name: {in: approverRoleList}}}},
-                },
+              // const approverRoleList = [`新規`, `折損`].some(item => item === purchaseType) ? [`工場長`] : [`発注担当者`]
+
+              const nextApproverRole = CODE_MASTER.PURCHASE_TYPE_OPTIONS.find(item => item.value === purchaseType)?.nextApprover
+
+              const {result: approveUser} = await fetchUniversalAPI(`user`, `findMany`, {
+                where: {UserRole: {some: {RoleMaster: {name: {in: nextApproverRole}}}}},
+                include: {UserRole: {include: {RoleMaster: true}}},
               })
 
-              const res = await fetchUniversalAPI(`purchaseRequest`, `create`, {
-                data: {
-                  purchaseType,
-                  quantity,
-                  reason,
-                  User: {connect: {id: userId}},
-                  Product: {connect: {id: productId}},
-                  Approval: {
-                    create: {
-                      User: {connect: {id: approveUser.id}},
-                      status: `未回答`,
+              approveUser.sort((a, b) => {
+                const aIndex = nextApproverRole?.findIndex(role => a.UserRole.find(item => item.RoleMaster.name === role)) ?? 0
+                const bIndex = nextApproverRole?.findIndex(role => b.UserRole.find(item => item.RoleMaster.name === role)) ?? 0
+
+                return aIndex - bIndex
+                // return aIndex - bIndex
+              })
+
+              toggleLoad(async item => {
+                const res = await fetchUniversalAPI(`purchaseRequest`, `create`, {
+                  data: {
+                    purchaseType,
+                    quantity,
+                    reason,
+                    User: {connect: {id: userId}},
+                    Product: {connect: {id: productId}},
+                    ...(approveUser.length === 0
+                      ? undefined
+                      : {
+                          Approval: {
+                            createMany: {
+                              data: approveUser.map((user, index) => {
+                                return {
+                                  type: `発注`,
+                                  status: `未回答`,
+                                  userId: user.id,
+                                  index,
+                                }
+                              }),
+                            },
+                          },
+                        }),
+                  },
+                  include: {
+                    Approval: {
+                      include: {User: {}},
                     },
                   },
-                },
-              })
+                })
 
-              toastByResult(res)
-              router.push(`/shinsei`)
-            })
-          },
-        }}
-      >
-        <C_Stack className={`items-center gap-2`}>
-          <div>
-            <small>担当者にメールが送信されます。</small>
+                await chain_shinsei_hacchu_notifyWhenUpdate({purchaseRequestId: res.result.id})
+                toastByResult(res)
+                router.push(HREF(`/shinsei`, {}, query))
+              })
+            },
+          }}
+        >
+          <C_Stack className={`items-center gap-2`}>
+            <div>
+              <small>担当者にメールが送信されます。</small>
+            </div>
+            <div>
+              <Button>発注する</Button>
+            </div>
+          </C_Stack>
+        </BasicForm>
+
+        <section>
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+            <h2 className="mb-4 border-b pb-2 text-xl font-bold text-gray-800">承認フロー</h2>
+            <C_Stack className="gap-4">
+              <C_Stack className="gap-8">
+                <div className="flex items-center">
+                  <span className="mr-2 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">リピート</span>
+                  <span className="text-gray-700">
+                    現場スタッフが申請 → 発注担当者に通知 → <span className="font-semibold text-blue-600">発注担当者が承認</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center">
+                  <span className="mr-2 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">新規</span>
+                  <span className="text-gray-700">
+                    現場スタッフが申請 → 工場長が承認 → 発注担当に通知 →{' '}
+                    <span className="font-semibold text-blue-600">発注担当者が承認</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center">
+                  <span className="mr-2 rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-800">再研磨</span>
+                  <span className="text-gray-700">
+                    工場長が申請 → 発注担当に通知 → <span className="font-semibold text-blue-600">発注担当者が承認</span>
+                  </span>
+                  <div className="ml-24 text-xs text-red-500">※現場スタッフは申請不可</div>
+                </div>
+
+                <div className="flex items-center">
+                  <span className="mr-2 rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800">
+                    折損・トラブル
+                  </span>
+                  <span className="text-gray-700">
+                    現場スタッフが申請 → 工場長が承認 → 発注担当者に通知 →{' '}
+                    <span className="font-semibold text-blue-600">発注担当者が承認</span>
+                  </span>
+                </div>
+              </C_Stack>
+
+              <div className="mt-4">
+                <h2 className="mb-4 border-b pb-2 text-xl font-bold text-gray-800">仕入れ先への注文メール</h2>
+                <p className=" border-gray-300 pl-2 text-gray-700">
+                  発注担当者が承認時に上記<span className="mx-1 text-lg font-bold text-blue-600">承認</span>
+                  後、自動で仕入先に注文メールを送る。
+                </p>
+              </div>
+            </C_Stack>
           </div>
-          <div>
-            <Button>発注する</Button>
-          </div>
-        </C_Stack>
-      </BasicForm>
+        </section>
+      </C_Stack>
     </FitMargin>
   )
 

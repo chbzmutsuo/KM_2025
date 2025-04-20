@@ -5,8 +5,6 @@ import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
 
 export const tbmOperationBuilder = (props: columnGetterType) => {
-  const {selectedBase, setselectedBase, setselectedRouteGroup} = useSelectedBase()
-
   return new Fields([
     {id: 'date', label: '日付', type: `date`},
     {id: 'userId', label: 'ユーザー', forSelect: {}},

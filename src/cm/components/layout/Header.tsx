@@ -33,6 +33,7 @@ const Header = React.memo((props: {adminContext: adminContext}) => {
   }, [PageBuilderGetter, useGlobalProps])
 
   // return <div></div>
+
   return (
     <div
       style={{width: `100%`, zIndex: Z_INDEX.appBar, position: `fixed`, top: 0}}

@@ -1,8 +1,11 @@
 import DriveScheduleCC from '@app/(apps)/tbm/(pages)/DriveSchedule/DriveScheduleCC'
-import {Days, getMidnight} from '@class/Days'
+import {Days, formatDate, getMidnight, toUtc} from '@class/Days'
 import Redirector from '@components/utils/Redirector'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+
 import {dateSwitcherTemplate} from '@lib/methods/redirect-method'
+import {HREF} from '@lib/methods/urls'
+import prisma from '@lib/prisma'
+import {endOfMonth} from 'date-fns'
 
 import {initServerComopnent} from 'src/non-common/serverSideFunction'
 
@@ -10,18 +13,34 @@ export default async function DynamicMasterPage(props) {
   const query = await props.searchParams
   const {session, scopes} = await initServerComopnent({query})
   const {tbmBaseId} = scopes.getTbmScopes()
+  const {firstDayOfMonth} = Days.getMonthDatum(new Date())
+  const {redirectPath, whereQuery} = await dateSwitcherTemplate({
+    query,
+    defaultWhere: {
+      mode: 'DRIVER',
+      month: formatDate(firstDayOfMonth),
+    },
+  })
 
-  const {redirectPath, whereQuery} = await dateSwitcherTemplate({query})
   if (redirectPath) return <Redirector {...{redirectPath}} />
 
   const theDate = whereQuery?.gte ?? getMidnight()
   const MONTH = Days.getMonthDatum(theDate)
 
-  const {result: tbmBase} = await fetchUniversalAPI(`tbmBase`, `findUnique`, {where: {id: tbmBaseId}})
+  const tbmBase = await prisma.tbmBase.findUnique({where: {id: tbmBaseId}})
+  const theMonth = toUtc(query.from || query.month)
+  const dateWhere = {
+    gte: theMonth,
+    lte: getMidnight(endOfMonth(theMonth)),
+  }
+  const calendar = await prisma.tbmCalendar.findMany({
+    where: {tbmBaseId: tbmBase?.id, date: dateWhere},
+    orderBy: {date: 'asc'},
+  })
 
   return (
     <>
-      <DriveScheduleCC {...{tbmBase, days: MONTH.days, tbmBaseId, whereQuery}} />
+      <DriveScheduleCC {...{tbmBase, days: MONTH.days, tbmBaseId, whereQuery, calendar}} />
     </>
   )
 }

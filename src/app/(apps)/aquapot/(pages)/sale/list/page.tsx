@@ -83,7 +83,9 @@ LEFT JOIN
   "AqSupportGroupMaster" "sgm" ON "csgmt"."aqSupportGroupMasterId" = "sgm"."id"
 LEFT JOIN "User" "U" ON "sc"."userId" = "U"."id"
 LEFT JOIN "AqPriceOption" "po" ON "sr"."aqPriceOptionId" = "po"."id"
-WHERE ${where}
+WHERE  1=1
+    --AND  "paymentMethod"='BASE'
+    AND  ${where}
 order by
   "sc"."date" desc,
   "sc"."id" desc

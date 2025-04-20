@@ -1248,6 +1248,16 @@ export interface P_SankoShaEstimatePriceMasterTable {
   sankoshaPriceMasterId: number;
 }
 
+export interface P_Department {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  code: string;
+  name: string;
+  User: P_User[];
+}
+
 export interface P_User {
   id: number;
   code: string;
@@ -1302,6 +1312,7 @@ export interface P_User {
   PurchaseRequest: P_PurchaseRequest[];
   Approval: P_Approval[];
   KyuyoTableRecord: P_KyuyoTableRecord[];
+  departmentId: number;
 }
 
 export interface P_ReleaseNotes {
@@ -1321,8 +1332,11 @@ export interface P_GoogleAccessToken {
   sortOrder: number;
   email: string;
   access_token: string;
+  refresh_token: string;
   scope: string;
+  token_type: string;
   id_token: string;
+  expiry_date: Date;
   tokenJSON: string;
 }
 
@@ -1368,11 +1382,20 @@ export interface P_Product {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  productCode: string;
+  code: string;
   name: string;
-  maker: string;
-  unit: string;
   PurchaseRequest: P_PurchaseRequest[];
+  shiireSakiId: number;
+}
+
+export interface P_ShiireSaki {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  code: string;
+  name: string;
+  Product: P_Product[];
 }
 
 export interface P_PurchaseRequest {
@@ -1395,7 +1418,7 @@ export interface P_LeaveRequest {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
-  startDate: Date;
+  from: Date;
   leaveType: string;
   reason: string;
   Approval: P_Approval[];
@@ -1407,7 +1430,9 @@ export interface P_Approval {
   createdAt: Date;
   updatedAt: Date;
   sortOrder: number;
+  index: number;
   status: string;
+  notifiedAt: Date;
   comment: string;
   PurchaseRequest: P_PurchaseRequest;
   purchaseRequestId: number;
@@ -1575,6 +1600,17 @@ export interface P_DayRemarks {
   DayRemarksUser: P_DayRemarksUser[];
 }
 
+export interface P_SohkenGoogleCalendar {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sortOrder: number;
+  calendarId: string;
+  date: Date;
+  endAt: Date;
+  summary: string;
+}
+
 export interface P_TbmBase {
   id: number;
   createdAt: Date;
@@ -1667,6 +1703,7 @@ export interface P_TbmRouteGroup {
   sortOrder: number;
   code: string;
   name: string;
+  TbmBase: P_TbmBase;
   tbmBaseId: number;
   TbmMonthlyConfigForRouteGroup: P_TbmMonthlyConfigForRouteGroup[];
   Mid_TbmRouteGroup_TbmCustomer: P_Mid_TbmRouteGroup_TbmCustomer;
@@ -1690,9 +1727,8 @@ export interface P_TbmMonthlyConfigForRouteGroup {
   sortOrder: number;
   yearMonth: Date;
   vehicleType: string;
-  postalFee: number;
   generalFee: number;
-  tollFee: number;
+  postalFee_untaxed: number;
   numberOfTrips: number;
   TbmRouteGroup: P_TbmRouteGroup;
   tbmRouteGroupId: number;

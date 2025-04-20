@@ -30,7 +30,7 @@ const asyncFunction = async appName => {
 
  let targetAppNames = [appName]
  if (appName === `KM`) {
-  targetAppNames = [`KM`, `kickswrap`, `layout-mapping`, `apex`]
+  targetAppNames = [`KM`, `kickswrap`, `layout-mapping`, `apex`, 'shinsei']
  } else if (appName === `roken`) {
   targetAppNames = [`roken`, `reserve`]
  }
@@ -116,15 +116,19 @@ const ProPlanVercelJson = {
    "memory": 2048,
    "maxDuration": 60
   },
-  "src/pages/**/*": {
-   "memory": 2048,
-   "maxDuration": 60
-  }
  },
  "crons": [
   {
    "path": "/yoshinari/api/cron/yukyu/grantPayedLeave",
    "schedule": "0 16 * * *"
+  },
+  {
+   "path": "/sohken/api/cron/refreshGoogleCalendar",
+   "schedule": "0 */3 * * *"
+  },
+  {
+   "path": "/aquapot/api/cron/createInventoryByMonth/",
+   "schedule": "0 14 * * *"
   }
  ]
 }

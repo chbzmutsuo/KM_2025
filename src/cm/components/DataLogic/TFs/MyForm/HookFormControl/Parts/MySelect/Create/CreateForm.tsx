@@ -11,7 +11,7 @@ import {Button} from 'src/cm/components/styles/common-components/Button'
 
 import useBasicFormProps from 'src/cm/hooks/useBasicForm/useBasicFormProps'
 
-import { generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import {generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import React, {useEffect} from 'react'
 
 export default function CreateForm(props: {SearchFormHook: SearchFormHookType; contexts: contextsType}) {
@@ -61,7 +61,7 @@ export default function CreateForm(props: {SearchFormHook: SearchFormHookType; c
           await createSeldctItem(res)
         }}
       >
-        <Button color={`blue`}>新規作成</Button>
+        <Button>新規作成</Button>
       </useCreateForm.BasicForm>
     </div>
   )

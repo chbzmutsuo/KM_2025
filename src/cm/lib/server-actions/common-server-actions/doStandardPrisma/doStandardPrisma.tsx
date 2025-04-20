@@ -41,6 +41,7 @@ export const doStandardPrisma: doStandardPrismaType = async (model, method, quer
 
       default: {
         res = await doDefaultPrismaMethod({prismaModel, method, queryObject: newQueryObject, model})
+
         break
       }
     }

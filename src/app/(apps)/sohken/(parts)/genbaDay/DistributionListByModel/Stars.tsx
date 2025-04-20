@@ -9,3 +9,6 @@ export const IsInKyukaTodoke = ({DayRemark}) => {
 export const IsInKyuka = ({DayRemark}) => {
   return DayRemark?.kyuka ? <div className={`text-blue-600`}>■</div> : <></>
 }
+
+export const isRed = ({shiftsOnOtherGembaOnSameDate, DayRemark}) =>
+  shiftsOnOtherGembaOnSameDate.length === 0 || DayRemark?.kyukaTodoke || DayRemark?.kyuka

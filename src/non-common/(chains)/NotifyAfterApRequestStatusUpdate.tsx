@@ -3,9 +3,10 @@ import {ApRequestCfAtom, ApRequestClass, apRequestStatusList, MappeadApRequest} 
 import {formatDate, toJst} from '@class/Days'
 import {Prisma} from '@prisma/client'
 import prisma from '@lib/prisma'
-import {knockEmailApi} from '@lib/methods/mails'
+
 import {basePath} from '@lib/methods/common'
 import {addQuerySentence} from '@lib/methods/urls'
+import {sendEmailWrapper} from '@app/(apps)/shinsei/(lib)/sendEmailWrapper'
 
 export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
   let ApRequest: any = await prisma.apRequest.findUnique({
@@ -64,7 +65,7 @@ export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
   // メール送信
   const getEmailProps = apRequestStatusList.find(d => d.label === status)?.getEmailProps
   if (getEmailProps) {
-    const {to, subject} = getEmailProps?.({Sender, AllReceiver, unAuthorizedMembers, soumuMembers}) ?? {}
+    const {to = [], subject} = getEmailProps?.({Sender, AllReceiver, unAuthorizedMembers, soumuMembers}) ?? {}
 
     const cfKeyValList = Object.keys(ApRequest?.cf ?? {})
       .map(key => {
@@ -99,6 +100,6 @@ export const NotifyAfterApRequestStatusUpdate = async ({requestId}) => {
       textArr.push(authUrl)
     }
     const text = textArr.join(`\n`)
-    await knockEmailApi({to, subject, text})
+    await sendEmailWrapper({to, subject, text})
   }
 }

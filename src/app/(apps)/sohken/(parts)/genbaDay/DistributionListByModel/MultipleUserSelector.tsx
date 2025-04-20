@@ -1,4 +1,4 @@
-import {IsInKyuka, IsInKyukaTodoke} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
+import {IsInKyuka, IsInKyukaTodoke, isRed} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
 import {IsInShift} from '@app/(apps)/sohken/(parts)/genbaDay/DistributionListByModel/Stars'
 import {userForSelect} from '@app/(apps)/sohken/class/sohken-constants'
 import {Days} from '@class/Days'
@@ -182,21 +182,10 @@ export default function MultipleUserSelector({currentRelationalModelRecords, Gen
                   const {shiftsOnOtherGembaOnSameDate, DayRemark} = user
 
                   const UserNameDisplay = () => {
-                    // const IsInShift = () => {
-                    //   return shiftsOnOtherGembaOnSameDate.length > 0 ? <div className={`text-error-main`}>★</div> : <></>
-                    // }
-
-                    // const IsInKyukaTodoke = () => {
-                    //   return DayRemark?.kyukaTodoke ? <div className={`text-yellow-600`}>⚫︎</div> : <></>
-                    // }
-
-                    // const IsInKyuka = () => {
-                    //   return DayRemark?.kyuka ? <div className={`text-blue-600`}>■</div> : <></>
-                    // }
-
+                    const red = isRed({shiftsOnOtherGembaOnSameDate, DayRemark})
                     return (
                       <R_Stack className={`items-start gap-0.5 leading-3`}>
-                        <div>{user.name}</div>
+                        <div className={red ? 'text-red-500' : ''}>{user.name}</div>
                         <IsInShift {...{hasShift: shiftsOnOtherGembaOnSameDate.length}} />
                         <IsInKyukaTodoke {...{DayRemark}} />
                         <IsInKyuka {...{DayRemark}} />

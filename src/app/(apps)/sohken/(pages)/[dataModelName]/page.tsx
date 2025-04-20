@@ -131,6 +131,7 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
         modelNames: [`genbaTaskMaster`],
         setParams: async () => ({
           myTable: {
+            drag: {},
             pagination: {countPerPage: 999999},
           },
         }),

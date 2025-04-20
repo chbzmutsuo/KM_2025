@@ -83,6 +83,17 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
           }
         },
       },
+      {
+        modelNames: [`aqInventoryRegister`],
+        setParams: async () => {
+          const customerRecordFilterWhere = AqCustomerCl.Filter.aqCustomerRecord.getPrismaWhereByQuery({query})
+          return {
+            additional: {
+              orderBy: [{createdAt: 'desc'}],
+            },
+          }
+        },
+      },
       // {
       //   modelNames: [`aqSaleRecord`],
       //   setParams: async () => {

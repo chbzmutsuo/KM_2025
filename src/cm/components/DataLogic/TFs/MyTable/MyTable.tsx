@@ -1,7 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic'
 import React, {useRef} from 'react'
-const Thead = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/Thead/Thead'))
 
 import useMyTableParams from 'src/cm/components/DataLogic/TFs/MyTable/useMyTableParams'
 
@@ -25,6 +24,7 @@ import {TableWrapper} from '@components/styles/common-components/Table'
 import {useElementScrollPosition} from '@hooks/scrollPosition/useElementScrollPosition'
 import Tbody from '@components/DataLogic/TFs/MyTable/TableHandler/Tbody/Tbody'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
+import Thead from '@components/DataLogic/TFs/MyTable/Thead/Thead'
 
 const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
   let ClientProps2 = props.ClientProps2
@@ -51,7 +51,7 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
     ...{records, setrecords, deleteRecord, setformData},
     ...{columns, editType, myTable, dataModelName, useGlobalProps},
   })
-  const recordCount = records.length
+  const recordCount = records?.length ?? 0
 
   const {configPosition = `top`} = myTable ?? {}
 
@@ -86,57 +86,59 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
 
   return (
     <div>
-      {records.length === 0 ? (
-        <Padding {...{style: myTable?.style}}>
+      <Padding {...{style: myTable?.style}}>
+        {records === null ? (
+          <PlaceHolder>Loading...</PlaceHolder>
+        ) : records.length === 0 ? (
           <PlaceHolder>データが見つかりません</PlaceHolder>
-        </Padding>
-      ) : (
-        <>
-          <MainTable
-            {...{
-              myTable,
-              columns,
-              elementRef,
-              tableStyleRef,
-              tableStyle,
-              sensors,
-              handleDragEndMemo,
-              items,
-              showHeader,
-              TableConfigProps,
-              useGlobalProps,
-              ClientProps2,
-              rows,
-              getPaginationProps,
-              RowActionButtonComponent,
-            }}
-          />
-        </>
-      )}
-
-      <section
-        className={`sticky bottom-2 mx-auto mt-4   px-1 pb-2   md:scale-[1.25]`}
-        style={{
-          maxWidth: `80%`,
-          zIndex: Z_INDEX.thead,
-        }}
-      >
-        <div className={cl(`rounded bg-white/70`, ` mx-auto  w-fit   px-1  py-0.5  `)}>
-          <R_Stack className={`  w-fit  justify-center gap-y-0`}>
-            <TableConfig {...{TableConfigProps, ClientProps2}} />
-            <MyPagination
+        ) : (
+          <>
+            <MainTable
               {...{
-                totalCount: ClientProps2.totalCount,
-                recordCount,
                 myTable,
-                getPaginationProps,
+                columns,
+                elementRef,
+                tableStyleRef,
+                tableStyle,
+                sensors,
+                handleDragEndMemo,
+                items,
+                showHeader,
+                TableConfigProps,
                 useGlobalProps,
-                records,
+                ClientProps2,
+                rows,
+                getPaginationProps,
+                RowActionButtonComponent,
               }}
             />
-          </R_Stack>
-        </div>
-      </section>
+          </>
+        )}
+
+        <section
+          className={`sticky bottom-2 mx-auto mt-4   px-1 pb-2   md:scale-[1.25]`}
+          style={{
+            maxWidth: `80%`,
+            zIndex: Z_INDEX.thead,
+          }}
+        >
+          <div className={cl(`rounded bg-white/70`, ` mx-auto  w-fit   px-1  py-0.5  `)}>
+            <R_Stack className={`  w-fit  justify-center gap-y-0`}>
+              <TableConfig {...{TableConfigProps, ClientProps2}} />
+              <MyPagination
+                {...{
+                  totalCount: ClientProps2.totalCount,
+                  recordCount,
+                  myTable,
+                  getPaginationProps,
+                  useGlobalProps,
+                  records,
+                }}
+              />
+            </R_Stack>
+          </div>
+        </section>
+      </Padding>
     </div>
   )
 })

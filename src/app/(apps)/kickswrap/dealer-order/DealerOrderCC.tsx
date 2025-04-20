@@ -4,7 +4,7 @@ import ItemOrderForm from '@app/(apps)/kickswrap/components/ItemOrderForm'
 import LoginForm from '@app/(apps)/kickswrap/components/LoginForm'
 import {OrderedItemTable} from '@app/(apps)/kickswrap/components/OrderedItemTable'
 
-import {knockEmailApi} from '@cm/lib/methods/mails'
+import {knockEmailApi} from '@lib/methods/knockEmailApi'
 
 import {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
@@ -48,7 +48,6 @@ const DealerOrderCC = () => {
   useEffect(() => {
     const getData = async () => {
       const {items, users} = await getItems(spreadApiPath)
-      console.log(users) //logs
 
       setitems(items)
       setusers(users)

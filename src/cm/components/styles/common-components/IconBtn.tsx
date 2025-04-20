@@ -1,29 +1,42 @@
-
 import {colorClassMaster, colorVariants} from 'src/cm/components/styles/common-components/colorVariants'
 import {props} from 'src/cm/components/styles/common-components/type'
 import {cl} from 'src/cm/lib/methods/common'
+import {twMerge} from 'tailwind-merge'
 
 export const IconBtn = (props: props & {color?: colorVariants; active?: boolean; inline?: boolean}) => {
-  const {className, style, color, active, inline, ...rest} = props
+  const {className, style, color = `gray`, active, inline, ...rest} = props
 
-  const ClassName = cl(
-    `icon-btn `,
-    inline ? 'inline' : '',
-    className,
-    colorClassMaster.btn[color ?? ''],
-    active === false ? 'opacity-40 ' : ''
+  const ClassName = twMerge(
+    //
+    IconBtnBaseClass,
+    colorClassMaster.iconBtn[color ?? '']
   )
 
-  return (
-    <div
-      {...{
-        className: ClassName,
-        style,
-        ...rest,
-      }}
-    />
-  )
+  return <div {...{className: ClassName, style, ...rest}} />
 }
+
+export const IconBtnBaseClass = ` rounded-full !px-2 py-0.5 text-center text-[15px]  shadow-sm`
+// export const IconBtn = (props: props & {color?: colorVariants; active?: boolean; inline?: boolean}) => {
+//   const {className, style, color, active, inline, ...rest} = props
+
+//   const ClassName = cl(
+//     `icon-btn `,
+//     inline ? 'inline' : '',
+//     className,
+//     colorClassMaster.btn[color ?? ''],
+//     active === false ? 'opacity-40 ' : ''
+//   )
+
+//   return (
+//     <div
+//       {...{
+//         className: ClassName,
+//         style,
+//         ...rest,
+//       }}
+//     />
+//   )
+// }
 
 export const CircledIcon = (
   props: props & {

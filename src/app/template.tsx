@@ -4,7 +4,7 @@ import React from 'react'
 
 import DynamicLoader from '@components/utils/loader/Loader'
 import {R_Stack} from '@components/styles/common-components/common-components'
-import {cl, isDev} from '@cm/lib/methods/common'
+import {cl, isDev, sleep} from '@cm/lib/methods/common'
 
 import ColOptionModal from '@components/DataLogic/TFs/MyTable/Thead/ColOption/ColOptionModal'
 import useInitGlobalHooks from '@hooks/globalHooks/useInitGlobalHooks'
@@ -18,13 +18,14 @@ import {useScrollPosition} from '@hooks/scrollPosition/useScrollPosition'
 
 import {usePageTracking} from '@hooks/usePageTracking'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {chain_sohken_genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/chain_sohken_genbaDayUpdateChain'
+import {RefreshCwIcon} from 'lucide-react'
 
 export default function Global_Template(props) {
   const {globalHooks, globalPropsReady} = useInitGlobalHooks()
-  if (!globalHooks) return <Loader />
-  const {router, waitRendering, appbarHeight, headerMargin, pathname} = globalHooks
+  if (!globalHooks || globalPropsReady === false || globalHooks?.waitRendering === true) return <Loader />
+  const {router, pathname} = globalHooks
 
-  if (waitRendering || globalPropsReady === false) return <Loader />
   if (pathname === `/` && process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_PATH) {
     return <Redirector {...{redirectPath: `/${process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_PATH}`}} />
   }
@@ -33,7 +34,8 @@ export default function Global_Template(props) {
 }
 
 const Main = ({children, router}) => {
-  const {headerMargin, showLoader, appbarHeight, rootPath} = useGlobal()
+  const {headerMargin, showLoader, appbarHeight, rootPath, toggleLoad, accessScopes} = useGlobal()
+  const {admin} = accessScopes()
   useScrollPosition()
   usePageTracking()
   return (
@@ -58,26 +60,36 @@ const Main = ({children, router}) => {
 
       <R_Stack id="portal-root-bottom-fixed" className={cl(` fixed bottom-0 w-full  `)}></R_Stack>
 
-      {isDev && (
-        <div>
-          <div className={`fixed bottom-1 right-1`}>
-            <R_Stack>
-              <button
-                className={` t-btn`}
-                {...{onClick: () => router.refresh()}}
-                onClick={async () => {
-                  // const res = await fetchUniversalAPI(``)
-                }}
-              >
-                PLAY
-              </button>
-              <button className={` t-btn`} {...{onClick: () => router.refresh()}}>
-                更新
-              </button>
-            </R_Stack>
-          </div>
-        </div>
-      )}
+      <div className={`fixed bottom-1 right-1`}>
+        <R_Stack>
+          {isDev && (
+            <button
+              className={` t-btn`}
+              onClick={async () => {
+                toggleLoad(async () => {
+                  const {result: genbaList} = await fetchUniversalAPI(`genba`, 'findMany', {})
+
+                  for (const genba of genbaList) {
+                    const res = await fetchUniversalAPI(`genbaDay`, `updateMany`, {
+                      where: {genbaId: genba.id},
+                      data: {finished: false, active: true, status: null},
+                    })
+
+                    await chain_sohken_genbaDayUpdateChain({genbaId: genba.id})
+
+                    await sleep(300)
+                  }
+                })
+              }}
+            >
+              PLAY
+            </button>
+          )}
+          <button className={`w-7`} {...{onClick: () => router.refresh()}}>
+            <RefreshCwIcon />
+          </button>
+        </R_Stack>
+      </div>
     </div>
   )
 }

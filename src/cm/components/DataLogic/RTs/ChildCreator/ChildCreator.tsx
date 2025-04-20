@@ -44,18 +44,11 @@ export const ChildCreator = (props: ChildCreatorProps) => {
     setformData,
     tunedAdditional,
     prismaDataExtractionQuery,
-    // prismaData,
-    // mutateThicChildCreator,
     initFetchTableRecords,
   } = useInitChildCreator({...props})
 
-  // const mutateAll = useMatchMutate()
-
   const defaultToggleLoadFunc = async cb => {
     const result = await cb()
-
-    // initFetchTableRecords()
-    // await mutateThicChildCreator()
     return result
   }
   const toggleLoadFunc = props.additional?.toggleLoadFunc ?? defaultToggleLoadFunc

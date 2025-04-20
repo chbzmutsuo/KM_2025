@@ -26,7 +26,6 @@ import {
 } from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
-import {useRouter} from 'next/navigation'
 import {HREF} from '@lib/methods/urls'
 
 // インライン編集コンポーネント

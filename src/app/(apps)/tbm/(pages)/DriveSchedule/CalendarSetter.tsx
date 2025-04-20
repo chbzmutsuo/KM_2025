@@ -1,6 +1,5 @@
 'use client'
 import {Days, formatDate} from '@class/Days'
-import {TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
 import {C_Stack, Center, R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
@@ -54,7 +53,6 @@ export default function CalendarSetter({days, defaultSelectedDays, onConfirm}) {
         <div className={``}>
           <Button
             size="lg"
-            color="green"
             className={` !p-2 !text-[24px]  font-bold`}
             {...{
               onClick: async () => await onConfirm({selectedDays}),
@@ -127,46 +125,48 @@ export default function CalendarSetter({days, defaultSelectedDays, onConfirm}) {
             {/* 日付選択 */}
             {CsvTable({
               records: [
-                ...days.map(day => ({
-                  csvTableRow: [
-                    {
-                      style: {fontSize: 18, width: 160},
-                      cellValue: <Center>{formatDate(day, 'YYYY/M/D(ddd)')}</Center>,
-                    },
-                    {
-                      style: {fontSize: 18, width: 20},
-                      cellValue: (
-                        <Center>
-                          <input
-                            {...{
-                              type: 'checkbox',
-                              className: `h-[24px] w-[24px] onHover`,
-                              checked: selectedDays.some(d => Days.isSameDate(d, day)),
-                              onChange: e => {
-                                setselectedDays(prev => {
-                                  const nextData = [...prev]
-                                  if (nextData.some(d => Days.isSameDate(d, day))) {
-                                    nextData.splice(
-                                      nextData.findIndex(d => Days.isSameDate(d, day)),
-                                      1
-                                    )
-                                  } else {
-                                    nextData.push(day)
-                                  }
-                                  return nextData
-                                })
-                              },
-                            }}
-                          />
-                        </Center>
-                      ),
-                    },
-                    // {
-                    //   style: {fontSize: 20},
-                    //   cellValue: <textarea {...{className: `h-6 w-6  w-full`}} />,
-                    // },
-                  ],
-                })),
+                ...days.map(day => {
+                  return {
+                    csvTableRow: [
+                      {
+                        style: {fontSize: 18, width: 160},
+                        cellValue: <Center>{formatDate(day, 'YYYY/M/D(ddd)')}</Center>,
+                      },
+                      {
+                        style: {fontSize: 18, width: 20},
+                        cellValue: (
+                          <Center>
+                            <input
+                              {...{
+                                type: 'checkbox',
+                                className: `h-[24px] w-[24px] onHover`,
+                                checked: selectedDays.some(d => Days.isSameDate(d, day)),
+                                onChange: e => {
+                                  setselectedDays(prev => {
+                                    const nextData = [...prev]
+                                    if (nextData.some(d => Days.isSameDate(d, day))) {
+                                      nextData.splice(
+                                        nextData.findIndex(d => Days.isSameDate(d, day)),
+                                        1
+                                      )
+                                    } else {
+                                      nextData.push(day)
+                                    }
+                                    return nextData
+                                  })
+                                },
+                              }}
+                            />
+                          </Center>
+                        ),
+                      },
+                      // {
+                      //   style: {fontSize: 20},
+                      //   cellValue: <textarea {...{className: `h-6 w-6  w-full`}} />,
+                      // },
+                    ],
+                  }
+                }),
               ],
             }).WithWrapper({className: `  min-w-[300px] t-paper border-2  max-h-[650px]`})}
           </div>

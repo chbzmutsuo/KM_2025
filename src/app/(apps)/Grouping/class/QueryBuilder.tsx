@@ -1,4 +1,4 @@
-import {includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
+import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
 import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
@@ -120,20 +120,7 @@ export class QueryBuilder {
       },
     }
 
-    // const room = {
-    //   include: {
-    //     RoomStudent: {
-    //       include: {
-    //         Student: student,
-    //         Room: {},
-    //       },
-    //     },
-    //     Teacher: teacher,
-    //     Game: game,
-    //   },
-    // }
-
-    const include = {
+    const include: getIncludeType = {
       // room,
       questionPrompt,
       classroom,

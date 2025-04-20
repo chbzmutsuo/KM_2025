@@ -1,12 +1,4 @@
-const Sorter = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/Thead/ColOption/Sorter'), {
-  loading: () => <PlaceHolder>Loading...</PlaceHolder>,
-})
-
-const Searcher = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/Thead/ColOption/Searcher'), {
-  loading: () => <PlaceHolder>Loading...</PlaceHolder>,
-})
-
-import {SortIcon} from 'src/cm/components/DataLogic/TFs/MyTable/Thead/ColOption/Sorter'
+import Sorter, {SortIcon} from 'src/cm/components/DataLogic/TFs/MyTable/Thead/ColOption/Sorter'
 import {MagnifyingGlassIcon} from '@heroicons/react/20/solid'
 import {R_Stack} from 'src/cm/components/styles/common-components/common-components'
 import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
@@ -15,6 +7,7 @@ import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 
 import dynamic from 'next/dynamic'
 import React from 'react'
+import Searcher from '@components/DataLogic/TFs/MyTable/Thead/ColOption/Searcher'
 
 export default function ColOption({col, dataModelName, children}) {
   const useGlobalProps = useGlobal()

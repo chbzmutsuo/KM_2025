@@ -1,3 +1,4 @@
+import {aqCustomerForSelectConfig} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
 import {getMidnight} from '@class/Days'
 import {Fields} from '@class/Fields/Fields'
@@ -35,7 +36,10 @@ export const aqInventoryRegister = (props: columnGetterType) => {
       id: 'aqCustomerId',
       label: `仕入れ先顧客`,
       form: {...defaultRegister},
-      forSelect: {},
+
+      forSelect: {
+        config: aqCustomerForSelectConfig,
+      },
     },
     {id: 'quantity', label: `数量`, form: {...defaultRegister}, type: `number`},
     {id: 'remarks', label: `備考`, form: {}, type: `textarea`, td: {style: {width: 300}}},

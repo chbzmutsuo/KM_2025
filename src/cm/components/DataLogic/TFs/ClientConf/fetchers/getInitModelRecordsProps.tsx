@@ -87,6 +87,7 @@ export const getInitModelRecordsProps = async (props: serverFetchProps & {query}
   const {records, totalCount} = await searchModels(dataModelName, prismaDataExtractionQuery)
 
   const easySearchPrismaDataOnServer = await EasySearchDataSwrFetcher(EasySearcherQuery)
+
   return {
     queries: {
       EasySearcherQuery,

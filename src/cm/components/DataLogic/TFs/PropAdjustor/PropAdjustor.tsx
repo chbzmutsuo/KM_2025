@@ -25,45 +25,28 @@ import useMyTable from '@components/DataLogic/TFs/PropAdjustor/useMyTable'
 import useAdditional from '@components/DataLogic/TFs/PropAdjustor/useAdditional'
 
 import DetailedPageCC from '@components/DataLogic/TFs/PropAdjustor/DetailedPageCC'
-import {serverFetchProps} from '@components/DataLogic/TFs/ClientConf/fetchers/getInitModelRecordsProps'
-import useLogOnRender from '@hooks/useLogOnRender'
+import {getInitModelRecordsProps, serverFetchProps} from '@components/DataLogic/TFs/ClientConf/fetchers/getInitModelRecordsProps'
 
 export type PropAdjustorPropsType = {
   ClientProps: ClientPropsType
-  // serverFetchihngData: serverFetchihngDataType
   serverFetchProps: serverFetchProps
+  initialModelRecords: Awaited<ReturnType<typeof getInitModelRecordsProps>>
+  fetchTime: Date
 }
 
 const PropAdjustor = (props: PropAdjustorPropsType) => {
-  useLogOnRender(`records`)
-
   const useGlobalProps = useGlobal()
   const {router, pathname} = useGlobalProps
-  const {
-    ClientProps,
-    serverFetchProps,
-    // serverFetchihngData
-  } = props
-
-  // const {
-  //   EasySearcherQuery,
-  //   prismaDataExtractionQuery,
-  //   // easySearchObject,
-  //   // easySearchWhereAnd,
-  //   // prismaData,
-  //   // easySearchPrismaDataOnServer,
-  // } = serverFetchihngData
+  const {ClientProps, serverFetchProps, initialModelRecords, fetchTime} = props
 
   const HK_USE_RECORDS: HK_USE_RECORDS_TYPE = useRecords({
-    // recordSource: [],
-    // EasySearcherQuery,
-    // prismaDataExtractionQuery,
-    // modelName: ClientProps.dataModelName,
     serverFetchProps,
+    initialModelRecords,
+    fetchTime,
   })
 
   const {prismaDataExtractionQuery, easySearchPrismaDataOnServer} = HK_USE_RECORDS
-  const modelData = HK_USE_RECORDS.records[0]
+  const modelData = HK_USE_RECORDS?.records?.[0]
 
   const {formData, setformData} = useInitFormState(null, [modelData])
 

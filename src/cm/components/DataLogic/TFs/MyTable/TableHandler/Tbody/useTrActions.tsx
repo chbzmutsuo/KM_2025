@@ -1,13 +1,13 @@
 import {FileHandler} from 'src/cm/class/FileHandler'
 import {PencilSquareIcon, TrashIcon} from '@heroicons/react/20/solid'
 
-import { generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
+import {generarlFetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import {cl} from 'src/cm/lib/methods/common'
 
 import {HREF} from 'src/cm/lib/methods/urls'
 import useDataUpdated from 'src/cm/components/DataLogic/TFs/ClientConf/useDataUpdated'
 import {useGlobalPropType} from '@hooks/globalHooks/useGlobalOrigin'
-import {LoadingLink} from '@components/styles/common-components/links'
+import {T_LINK} from '@components/styles/common-components/links'
 import {useCallback} from 'react'
 
 export const TrActionIconClassName = ` onHover  scaleOnHover `
@@ -119,9 +119,9 @@ const useTrActions = props => {
         const href = editType?.type === 'page' ? redirectPath : HREF(`${pathname}/${record.id}`, {}, query)
 
         return (
-          <LoadingLink {...{className, href}}>
+          <T_LINK {...{className, href}}>
             <PencilSquareIcon className={`w-6`} />
-          </LoadingLink>
+          </T_LINK>
         )
       }
     }

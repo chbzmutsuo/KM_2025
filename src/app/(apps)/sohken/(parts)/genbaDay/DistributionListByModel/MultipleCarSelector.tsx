@@ -6,11 +6,11 @@ import {TableBordered, TableWrapper} from '@components/styles/common-components/
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
 
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
-import {fetchTransactionAPI} from '@lib/methods/api-fetcher'
+import {fetchTransactionAPI, fetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {transactionQuery} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
 import {Prisma} from '@prisma/client'
 import React, {useState} from 'react'
-import {genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
+import {chain_sohken_genbaDayUpdateChain} from 'src/non-common/(chains)/getGenbaScheduleStatus/chain_sohken_genbaDayUpdateChain'
 
 type selectedCarObjectType = {[key: string]: {active: boolean}}
 
@@ -104,7 +104,7 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
       toggleLoad(
         async () => {
           await fetchTransactionAPI({transactionQueryList})
-          await genbaDayUpdateChain({genbaId: GenbaDay.genbaId})
+          await chain_sohken_genbaDayUpdateChain({genbaId: GenbaDay.genbaId})
           handleClose()
         },
         {refresh: true, mutate: true}
@@ -176,6 +176,53 @@ export default function MultipleCarSelector({currentRelationalModelRecords, Genb
             </TableBordered>
           </TableWrapper>
           <R_Stack className={` justify-end`}>
+            <Button
+              color={`green`}
+              onClick={async () => {
+                const {result: pastGenbaDayList} = await fetchUniversalAPI(`genbaDay`, `findMany`, {
+                  where: {
+                    genbaId: GenbaDay.genbaId,
+                    date: {
+                      lt: GenbaDay.date,
+                    },
+                  },
+                  include: {GenbaDaySoukenCar: {include: {SohkenCar: {}}}},
+                  orderBy: {date: 'desc'},
+                  take: 1,
+                })
+
+                const prevGenbaDay = pastGenbaDayList[0]
+
+                const carList =
+                  prevGenbaDay?.GenbaDaySoukenCar?.map(v => {
+                    return v.SohkenCar
+                  }) ?? []
+
+                const message = [
+                  `この現場の直前の車両配置は、次の通りです。`,
+                  ...carList.map(v => {
+                    return `・${v.name}`
+                  }),
+                  `上記配置車両をコピーしますか？`,
+                ]
+
+                if (carList.length === 0) {
+                  return alert(`直前の車両配置データが見つかりませんでした。`)
+                }
+
+                if (confirm(message.join(`\n`))) {
+                  const {result: getCurrentSetCarList} = await fetchUniversalAPI(`genbaDaySoukenCar`, `findMany`, {
+                    where: {genbaDayId: GenbaDay.id},
+                    include: {SohkenCar: {}},
+                  })
+
+                  const currentSetCarList = []
+                  const addCarList = []
+                }
+              }}
+            >
+              引き継ぎ
+            </Button>
             <Button color={`blue`} onClick={bulkUpdate}>
               更新する
             </Button>

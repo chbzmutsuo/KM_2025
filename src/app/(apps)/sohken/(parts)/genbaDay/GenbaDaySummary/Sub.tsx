@@ -115,7 +115,10 @@ export default function Sub({records, GenbaDay, editable, commonProps, PC, allSh
           ...commonProps,
           baseModelName: `sohkenCar`,
           RelationalModel: `genbaDaySoukenCar`,
-          iconBtn: {text: `車両`, color: `blue`},
+          iconBtn: {
+            text: <>車両</>,
+            color: `blue`,
+          },
           ArrayData: GenbaDaySoukenCar.map(v => ({...v, name: v?.SohkenCar?.name})),
         }}
       />

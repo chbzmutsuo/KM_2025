@@ -31,25 +31,9 @@ export const RouterLink = (
 export const T_LINK = (props: props & {href; target?: '_blank'}) => {
   const {className, style, href = '#', target, ...rest} = props
 
-  return <LoadingLink {...{target, href, className: cl(className, 't-link'), style, ...rest}}></LoadingLink>
+  return <Link {...{target, href, className: cl(className, 't-link'), style, ...rest}}></Link>
 }
-export const LoadingLink = (props: props & {href; target?: '_blank'; milliSeconds?: number}) => {
-  const {navigateRefresh} = useGlobal()
 
-  const {className, style, href = '#', target, milliSeconds = 100, ...rest} = props
-
-  return (
-    <span
-      onClick={async e => {
-        if (e.metaKey || target === '_blank') return
-
-        navigateRefresh(href, milliSeconds)
-      }}
-    >
-      <Link {...{target, href, className: cl(className), style, ...rest}}></Link>
-    </span>
-  )
-}
 export const ShallowLink = (props: props & {href; target?: '_blank'; milliSeconds?: number}) => {
   const {shallowPush} = useGlobal()
 

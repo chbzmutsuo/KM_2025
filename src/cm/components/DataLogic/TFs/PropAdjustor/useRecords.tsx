@@ -9,11 +9,11 @@ export type tableRecord = {
 
 const useRecords = (props: {
   serverFetchProps: serverFetchProps
-  // modelName
-  //  EasySearcherQuery; prismaDataExtractionQuery
+  initialModelRecords?: Awaited<ReturnType<typeof getInitModelRecordsProps>>
+  fetchTime?: Date
 }) => {
-  const {serverFetchProps} = props
-  const {asPath, query} = useGlobal()
+  const {serverFetchProps, initialModelRecords, fetchTime} = props
+  const {asPath, query, showLoader} = useGlobal()
 
   const [easySearchPrismaDataOnServer, seteasySearchPrismaDataOnServer] = useState<easySearchDataSwrType>({
     dataCountObject: {},
@@ -23,7 +23,7 @@ const useRecords = (props: {
     beforeLoad: true,
   })
 
-  const [records, setrecords] = useState<tableRecord[]>([])
+  const [records, setrecords] = useState<tableRecord[] | null>(null)
   const [totalCount, settotalCount] = useState<number>(0)
   const [prismaDataExtractionQuery, setprismaDataExtractionQuery] = useState({})
   const [EasySearcherQuery, setEasySearcherQuery] = useState({})
@@ -34,7 +34,6 @@ const useRecords = (props: {
       ...serverFetchProps,
       query,
     })
-
     setEasySearcherQuery(queries.EasySearcherQuery)
     setprismaDataExtractionQuery(queries.prismaDataExtractionQuery)
     seteasySearchPrismaDataOnServer(data.easySearchPrismaDataOnServer)
@@ -44,6 +43,7 @@ const useRecords = (props: {
 
   const mutateRecords = ({record}) => {
     setrecords(prev => {
+      if (prev === null) return prev
       const index = prev.findIndex(r => r.id === record?.id)
       if (index !== -1) {
         prev[index] = {...prev[index], ...record}
@@ -56,6 +56,7 @@ const useRecords = (props: {
 
   const deleteRecord = ({record}) => {
     setrecords(prev => {
+      if (prev === null) return prev
       const index = prev.findIndex(r => r.id === record?.id)
       if (index !== -1) {
         prev.splice(index, 1)
@@ -67,7 +68,28 @@ const useRecords = (props: {
   }
 
   useEffect(() => {
-    initFetchTableRecords()
+    if (fetchTime && initialModelRecords) {
+      const {data: InitialData, queries: InitialQueries} = initialModelRecords ?? {}
+      const diff = new Date().getTime() - fetchTime.getTime()
+
+      const mounted = diff > 1000
+      console.info({diff})
+
+      //初回のみサーバーから取得
+      if (mounted) {
+        initFetchTableRecords()
+      } else {
+        console.log(`fetchOnMount`)
+        //2回目はクライアントで更新
+        setrecords(InitialData.records)
+        settotalCount(InitialData.totalCount)
+        seteasySearchPrismaDataOnServer(InitialData.easySearchPrismaDataOnServer)
+        setEasySearcherQuery(InitialQueries.EasySearcherQuery)
+        setprismaDataExtractionQuery(InitialQueries.prismaDataExtractionQuery)
+      }
+    } else {
+      initFetchTableRecords()
+    }
   }, [query])
 
   return {

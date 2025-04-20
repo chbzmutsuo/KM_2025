@@ -13,6 +13,8 @@ import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicE
 import {Alert} from '@components/styles/common-components/Alert'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
 import Link from 'next/link'
+import {HREF} from '@lib/methods/urls'
+import useMyNavigation from '@hooks/globalHooks/useMyNavigation'
 export default function Main(props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
   pathname: string
@@ -20,6 +22,7 @@ export default function Main(props: {
   GenbaDay: any
   editable: boolean
 }) {
+  const {query} = useMyNavigation()
   const {GenbaDayBasicEditor_HK, pathname, GenbaDayTaskMidTable, GenbaDay, editable} = props
   const GenbaDayCardEditModal_HK = useGenbaDayCardEditorModalGMF()
   const isDetailPage = pathname.includes(`/genba/`)
@@ -47,7 +50,7 @@ export default function Main(props: {
       <section>
         {isDetailPage && (
           <LabelValue {...{label: `日付`}}>
-            <Link className={` t-link`} href={`/sohken/genbaDay?genbaId=${Genba.id}&from=${GenbaDay.date} `}>
+            <Link className={` t-link`} href={HREF(`/sohken/genbaDay`, {from: formatDate(GenbaDay.date)}, query)}>
               {formatDate(GenbaDay.date, `MM月DD日(ddd)`)}
             </Link>
           </LabelValue>

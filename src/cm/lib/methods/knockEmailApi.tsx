@@ -1,13 +1,25 @@
-import {isDev} from '@lib/methods/common'
-import nodemailer from 'nodemailer'
+'use server'
 
-export default async function sendEmail(req, res) {
-  const {body} = req
-  let {to} = body
-  const {subject, text, attachments = [], html} = body
+import nodemailer from 'nodemailer'
+import {isDev, systemEmailTo} from 'src/cm/lib/methods/common'
+
+export type attachment = {
+  filename: string
+  content: string
+}
+export const knockEmailApi = async (props: {
+  subject: string
+  text: string
+  to: string[]
+  cc?: string[]
+  html?: string
+  attachments?: attachment[]
+}) => {
+  let {to} = props
+  const {subject, text, attachments = [], html} = props
 
   const originalTo = to
-  to = isDev ? [`411.mutsuo@gmail.com`] : [...to]
+  to = isDev ? [systemEmailTo] : [...to]
   if (isDev) {
     const result = {
       to: originalTo.join(`,`),
@@ -19,11 +31,7 @@ export default async function sendEmail(req, res) {
 
     console.debug(result)
 
-    return res.json({
-      success: true,
-      message: '開発環境メール',
-      result,
-    })
+    return {success: true, message: '開発環境メール', result}
   }
 
   // const host = process.env.SMTP_HOST
@@ -56,7 +64,7 @@ export default async function sendEmail(req, res) {
       subject,
     })
     transporter.close()
-    return res.json({
+    return {
       success: true,
       message: 'メールを送信しました',
       result: {
@@ -65,14 +73,14 @@ export default async function sendEmail(req, res) {
         messageSize: result.messageSize,
         envelope: result.envelope,
       },
-    })
+    }
   } catch (error) {
     transporter.close()
     console.error(error.stack)
-    return res.json({
+    return {
       success: false,
       message: error.message,
       result: error,
-    })
+    }
   }
 }

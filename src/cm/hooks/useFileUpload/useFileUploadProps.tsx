@@ -40,7 +40,7 @@ const useFileUploadProps = (props: FileUploadFormProps) => {
                 const hasValue = str.replace(/,|\r/g, '')
                 // if (hasValue) {
                 const row = str.split(',')
-                table.push(row)
+                table.push(row.map(item => item.replace(/,|\r|"/g, '')))
                 // }
               })
 

@@ -8,38 +8,25 @@ import useGlobal from '@hooks/globalHooks/useGlobal'
 
 import React from 'react'
 import {TextGray} from '@components/styles/common-components/Alert'
-import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {showPdf} from '@app/(apps)/aquapot/(pages)/myPage/[id]/pdf/[month]/showPdf'
-import Loader from '@components/utils/loader/Loader'
 
 export default function MyPageCC(props: {customer: any; salesByMonth: any}) {
   const {toggleLoad} = useGlobal()
   const {customer, salesByMonth} = props
 
-  const {data: customerList} = usefetchUniversalAPI_SWR(`aqCustomer`, `findMany`, {
-    where: {
-      name: {contains: '今村'},
-      // id: customer.id
-    },
-  })
-
-  const customerData = customerList?.[0]
-
-  const {data: payment} = usefetchUniversalAPI_SWR(`aqCustomer`, `findMany`, {distinct: [`defaultPaymentMethod`]})
-
-  const {defaultPaymentMethod, furikomisakiCD} = customerData ?? {}
-
-  if (!customerList) return <Loader />
+  const {defaultPaymentMethod, furikomisakiCD} = customer ?? {}
 
   return (
     <C_Stack>
-      <div>{customerData?.name}</div>
-      <div>{customerData?.defaultPaymentMethod}</div>
+      <h1>マイページ</h1>
+      <div>{[customer?.company, customer?.name].join(` `)} 様 </div>
+      {/* <div>{customerData?.defaultPaymentMethod}</div> */}
       {!!Object.keys(salesByMonth).length &&
         CsvTable({
           records: Object.keys(salesByMonth).map((monthStr, idx) => {
             const sales = salesByMonth[monthStr]
             const total = sales.reduce((acc, sale) => acc + sale.taxedPrice, 0)
+
             const show = true
 
             const monthData = Days.getMonthDatum(new Date(monthStr + `-01`))
@@ -76,7 +63,9 @@ export default function MyPageCC(props: {customer: any; salesByMonth: any}) {
                     <button
                       className={`t-link`}
                       onClick={async () => {
-                        toggleLoad(async () => await showPdf({customer, monthStr, data, defaultPaymentMethod, furikomisakiCD}))
+                        toggleLoad(async () => {
+                          await showPdf({customer, monthStr, data, defaultPaymentMethod, furikomisakiCD})
+                        })
                       }}
                     >
                       PDF

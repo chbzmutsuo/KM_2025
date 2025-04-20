@@ -22,7 +22,7 @@ export type GenbaDayProps = {
 }
 export type groupByTaskType = {[key: string]: ({taskName: string} & GenbaDayProps)[]}
 
-export const genbaDayUpdateChain = async ({genbaId}) => {
+export const chain_sohken_genbaDayUpdateChain = async ({genbaId}) => {
   const allGenbaDay = await calcGenbaDayStatus({genbaId})
 
   const groupByTask = allGenbaDay.reduce((acc, curr) => {

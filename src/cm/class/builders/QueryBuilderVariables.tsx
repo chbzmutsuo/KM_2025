@@ -4,8 +4,11 @@ import {getRelationalModels, getSchema} from 'src/cm/lib/methods/prisma-schema'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {anyObject} from '@cm/types/types'
 import {CSSProperties} from 'react'
+import {Prisma, PrismaClient} from '@prisma/client'
 
 export const SORT_ARGS = {orderBy: [{sortOrder: 'asc'}, {id: 'asc'}]}
+
+export type getIncludeType = {[key in PrismaModelNames]?: Prisma.Args<PrismaClient[key], 'findMany'>}
 export type includeProps = {
   session?: anyObject
   query?: anyObject

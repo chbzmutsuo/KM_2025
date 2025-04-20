@@ -1,5 +1,3 @@
-export const iconBtnClass = `t-btn  p-1 text-xl font-bold `
-
 import React from 'react'
 
 import {R_Stack} from 'src/cm/components/styles/common-components/common-components'

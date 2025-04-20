@@ -40,6 +40,20 @@ const parameters = async (props: {params; query; session; scopes: ReturnType<typ
             additional: {
               payload: {apps: [`shinsei`]},
               where: {apps: {has: `shinsei`}},
+              orderBy: [{departmentId: 'asc'}],
+            },
+          }
+        },
+      },
+      {
+        modelNames: [`product`, 'shiireSaki'],
+        setParams: async () => {
+          return {
+            myTable: {
+              pagination: {countPerPage: 100},
+            },
+            additional: {
+              orderBy: [{code: 'asc'}],
             },
           }
         },

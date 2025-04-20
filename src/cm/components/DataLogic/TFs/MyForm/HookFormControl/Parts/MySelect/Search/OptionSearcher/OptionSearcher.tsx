@@ -28,15 +28,6 @@ export const OptionSearcher = (props: {
 
   return (
     <C_Stack>
-      {/* {!optionsISFromArray && options?.length >= optionTakeCount && (
-        <div className={`text-error-main   `}>
-          <div>
-            <span>最初の{optionTakeCount}件を表示。</span>
-            <span>{allowCreateOptions ? '▼検索/新規作成' : '▼検索'}</span>
-          </div>
-        </div>
-      )} */}
-
       {col.forSelect?.allowCreateOptions || col.forSelect?.searcher ? (
         <ComplexSearchForm {...{contexts, SearchFormHook}} />
       ) : (

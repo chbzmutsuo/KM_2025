@@ -4,7 +4,7 @@ import {Fields} from '@cm/class/Fields/Fields'
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 import {ChevronDoubleLeftIcon, ChevronDoubleRightIcon} from '@heroicons/react/20/solid'
 
-import React from 'react'
+import React, {useCallback} from 'react'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {Days, formatDate, toUtc} from '@class/Days'
 import {addMonths, addDays} from 'date-fns'
@@ -12,20 +12,97 @@ import {addMonths, addDays} from 'date-fns'
 export default function useDateSwitcherFunc(props) {
   const {query, addQuery, toggleLoad, width} = useGlobal()
 
+  const getAdditionalPayload = useCallback(
+    data => Object.fromEntries(props.additionalCols?.map(col => [col.id, data[col.id]]) ?? []),
+    [props.additionalCols]
+  )
+
+  const switchFromTo = useCallback(
+    data => {
+      toggleLoad(
+        async () => {
+          const newQuery = {}
+          Object.keys(data).forEach(key => {
+            const value = data[key]
+            if (value && Days.isDate(value)) {
+              newQuery[key] = formatDate(value)
+            } else {
+              newQuery[key] = undefined
+            }
+          })
+
+          addQuery({...newQuery, ...getAdditionalPayload(data)})
+        },
+        {refresh: false, mutate: false}
+      )
+    },
+    [addQuery]
+  )
+
+  const switchMonth = useCallback(
+    data => {
+      toggleLoad(
+        async () => {
+          const month = data.month
+          if (!month) {
+            addQuery({month: undefined, ...getAdditionalPayload(data)})
+            return
+          }
+
+          const {firstDayOfMonth, lastDayOfMonth} = Days.getMonthDatum(toUtc(month))
+          ReactHookForm.setValue('from', firstDayOfMonth)
+          ReactHookForm.setValue('to', lastDayOfMonth)
+          ReactHookForm.setValue('month', null)
+          const newQuery = {}
+          newQuery['from'] = formatDate(firstDayOfMonth)
+          newQuery['to'] = formatDate(lastDayOfMonth)
+          newQuery['month'] = formatDate(month)
+          addQuery({...newQuery, ...getAdditionalPayload(data)})
+        },
+        {refresh: false, mutate: false}
+      )
+    },
+    [addQuery]
+  )
+
+  const switchDate = useCallback(
+    data => {
+      toggleLoad(
+        async () => {
+          const date = data.date
+          if (!date) {
+            addQuery({date: undefined, ...getAdditionalPayload(data)})
+            return
+          }
+
+          ReactHookForm.setValue('from', date)
+          ReactHookForm.setValue('to', date)
+          const newQuery = {}
+          newQuery['from'] = formatDate(date)
+          newQuery['to'] = formatDate(date)
+
+          addQuery({...newQuery, ...getAdditionalPayload(data)})
+        },
+        {refresh: false, mutate: false}
+      )
+    },
+    [addQuery]
+  )
+
   const additionalDefaultValue = Object.fromEntries(props?.additionalCols?.map(col => [col.id, query[col.id]]) ?? [])
 
-  const addMinusMonth = async (plus = 1) => {
+  const addMinusMonth = (plus = 1) => {
     const currentMonth = new Date(latestFormData[`from`])
     const month = addMonths(currentMonth, plus)
     if (Days.isDate(month)) {
-      await switchMonth({month, ...additionalDefaultValue})
+      switchMonth({month, ...additionalDefaultValue})
     }
   }
-  const addMinusDate = async (plus = 1) => {
+  const addMinusDate = (plus = 1) => {
     const currentDate = new Date(latestFormData[`from`])
     const date = addDays(currentDate, plus)
     if (Days.isDate(date)) {
-      await switchDate({date, ...additionalDefaultValue})
+      switchDate({date, ...additionalDefaultValue})
     }
   }
 
@@ -45,63 +122,13 @@ export default function useDateSwitcherFunc(props) {
       })
 
       if (isEqual === false) {
-        toggleLoad(() => {
-          name === 'month' ? switchMonth(data) : switchFromTo(data)
-        })
+        name === 'month' ? switchMonth(data) : switchFromTo(data)
       }
     },
   })
 
   const {latestFormData, ReactHookForm} = FormHook
 
-  const getAdditionalPayload = data => Object.fromEntries(props.additionalCols?.map(col => [col.id, data[col.id]]) ?? [])
-
-  const switchMonth = data => {
-    const month = data.month
-    if (!month) {
-      addQuery({month: undefined, ...getAdditionalPayload(data)})
-      return
-    }
-
-    const {firstDayOfMonth, lastDayOfMonth} = Days.getMonthDatum(toUtc(month))
-    ReactHookForm.setValue('from', firstDayOfMonth)
-    ReactHookForm.setValue('to', lastDayOfMonth)
-    ReactHookForm.setValue('month', null)
-    const newQuery = {}
-    newQuery['from'] = formatDate(firstDayOfMonth)
-    newQuery['to'] = formatDate(lastDayOfMonth)
-    newQuery['month'] = formatDate(month)
-    addQuery({...newQuery, ...getAdditionalPayload(data)})
-  }
-  const switchDate = data => {
-    const date = data.date
-    if (!date) {
-      addQuery({date: undefined, ...getAdditionalPayload(data)})
-      return
-    }
-
-    ReactHookForm.setValue('from', date)
-    ReactHookForm.setValue('to', date)
-    const newQuery = {}
-    newQuery['from'] = formatDate(date)
-    newQuery['to'] = formatDate(date)
-
-    addQuery({...newQuery, ...getAdditionalPayload(data)})
-  }
-
-  const switchFromTo = data => {
-    const newQuery = {}
-    Object.keys(data).forEach(key => {
-      const value = data[key]
-      if (value && Days.isDate(value)) {
-        newQuery[key] = formatDate(value)
-      } else {
-        newQuery[key] = undefined
-      }
-    })
-
-    addQuery({...newQuery, ...getAdditionalPayload(data)})
-  }
   return {
     noValue,
     FormHook,
@@ -171,8 +198,8 @@ const getColumnBase = ({
     columnsBase.from.label = '基準日'
     columnsBase.from.surroundings = {
       form: {
-        left: <ChevronDoubleLeftIcon className={`text-primary-main w-7`} onClick={() => addMinusDate(-1)} />,
-        right: <ChevronDoubleRightIcon className={`text-primary-main w-7`} onClick={() => addMinusDate(1)} />,
+        left: <ChevronDoubleLeftIcon className={`text-primary-main onHover w-7`} onClick={() => addMinusDate(-1)} />,
+        right: <ChevronDoubleRightIcon className={`text-primary-main onHover w-7`} onClick={() => addMinusDate(1)} />,
       },
     }
   }
@@ -184,8 +211,8 @@ const getColumnBase = ({
     columnsBase.from.label = ''
     columnsBase.from.surroundings = {
       form: {
-        left: <ChevronDoubleLeftIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(-1)} />,
-        right: <ChevronDoubleRightIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(1)} />,
+        left: <ChevronDoubleLeftIcon className={`text-primary-main onHover w-7`} onClick={() => addMinusMonth(-1)} />,
+        right: <ChevronDoubleRightIcon className={`text-primary-main onHover w-7`} onClick={() => addMinusMonth(1)} />,
       },
     }
 
@@ -196,12 +223,12 @@ const getColumnBase = ({
 
   if (yearOnly) {
     columnsBase.from.label = ''
-    // columnsBase.from.surroundings = {
-    //   form: {
-    //     left: <ChevronDoubleLeftIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(-1)} />,
-    //     right: <ChevronDoubleRightIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(1)} />,
-    //   },
-    // }
+    columnsBase.from.surroundings = {
+      form: {
+        left: <ChevronDoubleLeftIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(-12)} />,
+        right: <ChevronDoubleRightIcon className={`text-primary-main w-7`} onClick={() => addMinusMonth(12)} />,
+      },
+    }
 
     columnsBase.from.type = 'year'
     columnsBase.from.form.showResetBtn = false

@@ -5,6 +5,7 @@ import {toast} from 'react-toastify'
 export const basePath = typeof window === `undefined` ? process.env.NEXT_PUBLIC_BASEPATH ?? '' : window.location.origin
 export const isDev = process.env.NODE_ENV === 'development'
 export const apiPath = `${basePath}/api`
+export const systemEmailTo = process.env.SYSTEM_EMAIL_TO ?? ''
 
 export const routePath = `${basePath}/api/prisma`
 export const routeEndpoint = {
@@ -199,7 +200,7 @@ export function getColorStyles(backgroundColor: string, options?: any) {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000
 
   // Choose white or black text color based on YIQ value
-  const color = yiq >= 100 ? 'black' : 'white'
+  const color = yiq >= 100 ? `#454545` : 'white'
 
   const border = withBorder ? `2px solid ${backgroundColor}80` : undefined
 
@@ -238,6 +239,15 @@ export const responsiveClass = (className: string, size?: 'xs' | 'sm' | 'md' | '
       .map(value => `${size}:${value}`)
       .join(' ')
   )
+}
+export const mapper = (key: string, classNameList: string[]) => {
+  const result = classNameList
+    .map(className => {
+      return `${key}:!${className}`
+    })
+    .join(` `)
+
+  return result
 }
 export const cl = (...classNames) => {
   return String(classNames?.join(' '))

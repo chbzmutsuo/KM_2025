@@ -45,7 +45,7 @@ const RoleAllocationTable = ({PageBuilderExtraProps}) => {
     const {result: users = []} = await fetchUniversalAPI(`user`, `findMany`, {
       where: {...PageBuilderExtraProps?.where, apps},
       include: {UserRole: {include: {RoleMaster: {}}}},
-      orderBy: [{sortOrder: `asc`}, {code: `asc`}, {name: `asc`}],
+      orderBy: [{code: `asc`}, {sortOrder: `asc`}, {name: `asc`}],
     })
     setusers(users)
   }

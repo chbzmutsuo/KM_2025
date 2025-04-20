@@ -1,5 +1,5 @@
 import {IconBtn} from '@components/styles/common-components/IconBtn'
-import { generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {generarlFetchUniversalAPI} from '@lib/methods/api-fetcher'
 import {PlusIcon} from 'lucide-react'
 import {useRouter} from 'next/navigation'
 
@@ -51,7 +51,7 @@ export const DSBM_Label = ({
           color: isSelectedType ? `green` : iconBtn.color,
         }}
       >
-        <span>{iconBtn.text}</span>
+        <>{iconBtn.text}</>
         {editable && (
           <PlusIcon
             {...{

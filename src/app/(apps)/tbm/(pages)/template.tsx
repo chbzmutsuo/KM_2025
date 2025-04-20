@@ -7,6 +7,7 @@ import useCarWashGMF from '@app/(apps)/tbm/(globalHooks)/useCarWashGMF'
 import React from 'react'
 import {createUpdate, fetchTransactionAPI} from '@lib/methods/api-fetcher'
 import useUnchinChildCreator from '@app/(apps)/tbm/(globalHooks)/useUnchinChildCreator'
+import useGlobal from '@hooks/globalHooks/useGlobal'
 export default function Template({children}) {
   const HK_OdometerInputGMF = useOdometerInputGMF()
   const HK_GasolineGMF = useGasolineGMF()
@@ -14,12 +15,19 @@ export default function Template({children}) {
   const HK_CarWashGMF = useCarWashGMF()
   const HK_UnchinChildCreator = useUnchinChildCreator()
 
+  const {
+    query: {g_tbmBaseId},
+  } = useGlobal()
+
   const batch = async () => {
     await seedDriver()
     await seedRouteGroup()
     await seedProduct()
     await seedCar()
     await seedCustomer()
+  }
+  if (!g_tbmBaseId) {
+    return <div>営業所が設定されていません。</div>
   }
 
   return (

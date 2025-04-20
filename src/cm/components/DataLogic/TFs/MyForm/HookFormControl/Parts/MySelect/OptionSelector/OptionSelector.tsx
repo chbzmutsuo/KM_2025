@@ -5,7 +5,7 @@ import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/commo
 import {optionType} from 'src/cm/class/Fields/col-operator-types'
 
 import {contextsType} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/my-select-types'
-import {SelectOption} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/OptionSelector/Option'
+import {SelectOption} from '@components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/OptionSelector/SelectOption'
 import {useSearchForm} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/Search/OptionSearcher/useSearchForm'
 // import Accordion from 'src/cm/components/utils/Accordions/Accordion'
 import CreateForm from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/Create/CreateForm'
@@ -34,7 +34,7 @@ const OptionSelector = (props: {contexts: contextsType}) => {
 
   const optionsISFromArray = Array.isArray(col?.forSelect?.optionsOrOptionFetcher)
 
-  const optionWidth = (col?.forSelect?.option?.style.width ?? 160) as number
+  const optionWidth = (col?.forSelect?.option?.style.width ?? 220) as number
 
   const nohit = filteredOptions?.length === 0
   const creatable = !!allowCreateOptions
@@ -44,7 +44,7 @@ const OptionSelector = (props: {contexts: contextsType}) => {
     setFilteredOptions(options ?? [])
   }, [options, isOptionsVisible])
 
-  const accordionTriggerClass = `rounded bg-primary-main px-2 py-0 text-white`
+  const accordionTriggerClass = `rounded bg-primary-main/80 px-2 py-1 text-white`
 
   const [openAccodionIndex, setOpenAccodionIndex] = useState<string>(`1`)
   useEffect(() => {
@@ -69,7 +69,7 @@ const OptionSelector = (props: {contexts: contextsType}) => {
             <section className={`p-2 `}>
               <OptionSearcher {...{SearchFormHook, contexts, optionsISFromArray, allowCreateOptions}} />
               {nohit && <small>{messageWhenNoHit}</small>}
-              <C_Stack className={`max-h-[35vh] items-center overflow-y-scroll p-2 `}>
+              <C_Stack className={`max-h-[35vh] items-center  overflow-auto p-2 `}>
                 {/* {!isNaN(currentValue) && currentValue && ( */}
                 <button
                   className={`onHover text-gray-500`}
@@ -82,15 +82,17 @@ const OptionSelector = (props: {contexts: contextsType}) => {
                 </button>
                 {/* )} */}
 
-                {filteredOptions?.map((option: optionType, i) => {
-                  const optionStyle = col?.forSelect?.option?.style ?? {width: optionWidth}
+                <C_Stack className={` gap-3`}>
+                  {filteredOptions?.map((option: optionType, i) => {
+                    const optionStyle = col?.forSelect?.option?.style ?? {width: optionWidth}
 
-                  return (
-                    <div key={i}>
-                      <SelectOption {...{option, contexts, optionStyle}} />
-                    </div>
-                  )
-                })}
+                    return (
+                      <div key={i}>
+                        <SelectOption {...{option, contexts, optionStyle}} />
+                      </div>
+                    )
+                  })}
+                </C_Stack>
                 {!optionsISFromArray && options?.length >= optionTakeCount && (
                   <div className=" text-sm text-gray-500">
                     <C_Stack className={`gap-0`}>

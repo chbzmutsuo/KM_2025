@@ -16,18 +16,18 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
       id: 'pickupTime',
       label: '接車時間',
       type: 'time',
-      td: {style: {width: 110}},
+      td: {style: {width: 80}},
     },
     {
       id: 'vehicleType',
       label: '車種',
       type: 'text',
-      td: {style: {width: 110}},
+      td: {style: {width: 80}},
     },
 
     {
       id: `fee-history`,
-      label: `運賃/請求運賃(最新)`,
+      label: `運賃/請求運賃\n(最新)`,
       form: {hidden: true},
       format: (value, row) => {
         const latestTbmRouteGroupFee = row.TbmRouteGroupFee[0]
@@ -51,22 +51,34 @@ export const tbmMonthlyConfigForRouteGroupBuilder = (props: columnGetterType) =>
     },
     {
       id: 'postalFee',
-      label: '通行量(郵便)',
+      label: '通行料\n(郵便)',
       type: 'number',
-      td: {style: {width: 110}},
+
+      form: {hidden: true},
+      format: (value, row) => {
+        const monthConfig = row?.TbmMonthlyConfigForRouteGroup?.[0]
+
+        return (
+          <div style={{width: 80}}>
+            {monthConfig?.postalFee_untaxed && (
+              <div {...{label: '通行料(一般)'}}>{DH.toPrice(monthConfig.postalFee_untaxed * 1.1)}</div>
+            )}
+          </div>
+        )
+      },
     },
     {
       id: 'generalFee',
-      label: '通行量(一般)',
+      label: '通行料\n(一般)',
       type: 'number',
-      td: {style: {width: 110}},
+      td: {style: {width: 80}},
     },
 
     {
-      id: 'tollFee',
-      label: '通行料（税抜）',
+      id: 'postalFee_untaxed',
+      label: '通行料\n（税抜）',
       type: 'number',
-      td: {style: {width: 110}},
+      td: {style: {width: 80}},
     },
   ])
     .customAttributes(({col}) => ({...col, form: {...defaultRegister}}))

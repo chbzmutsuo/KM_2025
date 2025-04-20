@@ -10,7 +10,6 @@ import {TextBlue} from '@components/styles/common-components/Alert'
 import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
 import {createUpdate, toastByResult} from '@lib/methods/api-fetcher'
 import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
-import {Prisma} from '@prisma/client'
 
 export default function TbmUserDetail(props: DetailPagePropType) {
   const {useGlobalProps} = props
@@ -44,7 +43,6 @@ export default function TbmUserDetail(props: DetailPagePropType) {
               onConfirm: async ({selectedDays}) => {
                 if (!confirm('変更を反映しますか？')) return
 
-                // toggleLoad(async () => {
                 const res = await doTransaction({
                   transactionQueryList: days.map(day => {
                     const isSelected = selectedDays.some(d => Days.isSameDate(d, day))

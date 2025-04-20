@@ -9,6 +9,7 @@ export const getTbm_PAGES = (props: PageGetterType) => {
   const {roles = []} = props
 
   const {session, rootPath, pathname, query} = props
+
   const scopes = getScopes(session, {query, roles})
 
   const publicPaths = []

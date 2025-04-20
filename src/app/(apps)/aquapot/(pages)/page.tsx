@@ -1,11 +1,29 @@
 import {TextRed} from '@components/styles/common-components/Alert'
-import {C_Stack, CenterScreen, R_Stack} from '@components/styles/common-components/common-components'
+import {Absolute, C_Stack, CenterScreen, R_Stack} from '@components/styles/common-components/common-components'
+import {T_LINK} from '@components/styles/common-components/links'
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import {addQuerySentence} from '@lib/methods/urls'
+import {addQuerySentence, HREF} from '@lib/methods/urls'
 import Link from 'next/link'
 import React from 'react'
 
-export default async function Page() {
+import {initServerComopnent} from 'src/non-common/serverSideFunction'
+
+export default async function Page(props) {
+  const query = await props.searchParams
+  const params = await props.params
+  const {session, scopes} = await initServerComopnent({query})
+  const {aqCustomerId, isUser} = scopes.getAquepotScopes()
+
+  if (!isUser) {
+    return (
+      <Absolute>
+        <T_LINK className={` text-2xl`} href={HREF(`/aquapot/myPage`, {}, query)}>
+          お客様マイページへ
+        </T_LINK>
+      </Absolute>
+    )
+  }
+
   const {result} = await fetchUniversalAPI(`aqCustomerRecord`, `aggregate`, {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

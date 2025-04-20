@@ -30,7 +30,7 @@ export const DSBM_List = ({
     })
   }
   return (
-    <C_Stack className={` gap-0.5 leading-4`}>
+    <C_Stack className={` gap-0.5 leading-5`}>
       {ArrayData?.map((v, i) => {
         const bgColor = v.status === `完了` ? `#caffd1` : v.status === `未完了` ? `#ffc0c0` : undefined
         const selected = itemType === RelationalModel && id === v.id

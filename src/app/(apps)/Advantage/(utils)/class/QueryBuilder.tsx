@@ -1,4 +1,4 @@
-import {includeProps, roopMakeRelationalInclude} from '@class/builders/QueryBuilderVariables'
+import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@class/builders/QueryBuilderVariables'
 import {Prisma} from '@prisma/client'
 
 export class QueryBuilder {
@@ -84,7 +84,7 @@ export class QueryBuilder {
       },
     }
 
-    const include = {
+    const include: getIncludeType = {
       systemChatRoom,
       user,
       bigCategory,

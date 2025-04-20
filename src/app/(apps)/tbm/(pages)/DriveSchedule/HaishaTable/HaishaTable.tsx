@@ -22,7 +22,7 @@ export default function HaishaTable({whereQuery, days, tbmBase}) {
   const [itemsPerPage, setItemsPerPage] = useState(15)
   const [maxRecord, setMaxRecord] = useState(0)
 
-  const tbmBaseId = tbmBase?.id
+  const tbmBaseId = tbmBase?.id ?? 0
   const mode: haishaTableMode = query.mode
   const fetchData = async () => {
     const takeSkip = {take: itemsPerPage, skip: (currentPage - 1) * itemsPerPage}

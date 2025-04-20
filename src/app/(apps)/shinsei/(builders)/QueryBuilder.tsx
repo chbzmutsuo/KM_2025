@@ -1,9 +1,15 @@
-import {includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
-import {PrismaModelNames} from '@cm/types/prisma-types'
+import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
 
 export class QueryBuilder {
   static getInclude = (includeProps: includeProps) => {
-    const include: {[key in PrismaModelNames]?: any} = {}
+    const include: getIncludeType = {
+      product: {
+        include: {ShiireSaki: true},
+      },
+      user: {
+        include: {UserRole: {include: {RoleMaster: {}}}, Department: true},
+      },
+    }
 
     Object.keys(include).forEach(key => {
       roopMakeRelationalInclude({

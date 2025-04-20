@@ -177,7 +177,10 @@ const TaskAndSchedule = ({genba, allTasks}) => {
                       // style: {maxHeight: 1000},
                     },
                     additional: {
-                      where: {...additionalWhere, OR: [{status: {not: `不要`}}, {status: null}]},
+                      where: {
+                        ...additionalWhere,
+                        OR: [{status: {not: `不要`}}, {status: null}],
+                      },
                       include: {...include},
                       orderBy: [{date: `asc`}],
                     },
@@ -206,7 +209,7 @@ const HiddenToggler = ({showPast, addQuery, toggleLoad, genba}) => {
             toggleLoad(async () => {
               const res = await fetchUniversalAPI(`genbaDay`, `updateMany`, {
                 where: {genbaId: genba.id},
-                data: {finished: false, active: true},
+                data: {finished: false, active: true, status: null},
               })
             })
           },

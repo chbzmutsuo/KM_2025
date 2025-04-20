@@ -4,6 +4,7 @@ import {ColBuilder} from '@app/(apps)/aquapot/(class)/colBuilder/ColBuilder'
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
 
 import {defaultRegister} from '@class/builders/ColBuilderVariables'
+import {formatDate} from '@class/Days'
 
 import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
@@ -110,8 +111,15 @@ export const getAqProduct = (props: columnGetterType) => {
       td: {style: {minWidth: 220}},
       format: (value, aqProduct) => {
         const {AqInventoryRegister, AqSaleRecord} = aqProduct
+
         const totalPurchaseQuantity = AqInventoryRegister.reduce((acc, curr) => acc + curr.quantity, 0)
         const totalSaleQuantity = AqSaleRecord.reduce((acc, curr) => acc + curr.quantity, 0)
+
+        const saleRecords = AqSaleRecord.map(d => {
+          const {quantity, AqCustomer, date} = d
+          const name = [AqCustomer?.companyName, AqCustomer?.name].join(`/`)
+          return [formatDate(date, 'short'), quantity, name].join(`    `)
+        })
 
         //
         return (

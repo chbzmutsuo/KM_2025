@@ -5,8 +5,6 @@ import {Fields} from '@cm/class/Fields/Fields'
 import {columnGetterType} from '@cm/types/types'
 
 export const TbmBaseColBuilder = (props: columnGetterType) => {
-  const {selectedBase, setselectedBase, setselectedRouteGroup} = useSelectedBase()
-
   return new Fields([
     {id: 'code', label: 'コード', form: {...defaultRegister}},
     {id: 'name', label: '名称', form: {...defaultRegister}},

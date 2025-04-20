@@ -10,19 +10,18 @@ import {Days, getMidnight, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import {TextBlue, TextRed} from '@components/styles/common-components/Alert'
 import {Button} from '@components/styles/common-components/Button'
-import {C_Stack, FitMargin} from '@components/styles/common-components/common-components'
+import {C_Stack} from '@components/styles/common-components/common-components'
 import NewDateSwitcher from '@components/utils/dates/DateSwitcher/NewDateSwitcher'
 import PlaceHolder from '@components/utils/loader/PlaceHolder'
-import Redirector from '@components/utils/Redirector'
+
 import BasicTabs from '@components/utils/tabs/BasicTabs'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import usefetchUniversalAPI_SWR from '@hooks/usefetchUniversalAPI_SWR'
-import {createUpdate, toastByResult} from '@lib/methods/api-fetcher'
-import {HREF} from '@lib/methods/urls'
-import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
-import {endOfMonth} from 'date-fns'
 
-export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
+import {createUpdate, toastByResult} from '@lib/methods/api-fetcher'
+
+import {doTransaction} from '@lib/server-actions/common-server-actions/doTransaction/doTransaction'
+
+export default function DriveScheduleCC({days, tbmBase, whereQuery, calendar}) {
   const useGlobalProps = useGlobal()
 
   const {pathname, width, query, toggleLoad, PC} = useGlobalProps
@@ -47,23 +46,9 @@ export default function DriveScheduleCC({days, tbmBase, whereQuery}) {
     return <div>このページは、PC専用です。</div>
   }
   const theMonth = toUtc(query.from || query.month)
-
-  const dateWhere = {
-    gte: theMonth,
-    lte: getMidnight(endOfMonth(theMonth)),
-  }
-
-  const {data: calendar = [], isLoading} = usefetchUniversalAPI_SWR(`tbmCalendar`, `findMany`, {
-    where: {tbmBaseId: tbmBase?.id, date: dateWhere},
-    orderBy: {date: 'asc'},
-  })
   const defaultSelectedDays = calendar.filter(c => c.holidayType === '稼働').map(c => c.date)
 
-  if (!query.mode) {
-    return <Redirector {...{redirectPath: HREF(pathname, {mode: 'DRIVER'}, query)}} />
-  }
-
-  if (!width || isLoading) return <PlaceHolder></PlaceHolder>
+  if (!width) return <PlaceHolder></PlaceHolder>
   return (
     <div className={`pt-2`}>
       <NewDateSwitcher {...{monthOnly: true}} />

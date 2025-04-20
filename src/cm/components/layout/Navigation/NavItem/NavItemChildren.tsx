@@ -28,14 +28,17 @@ const NavItemChildren = React.memo((props: navItemProps) => {
           style={menuStyle}
         >
           <C_Stack className={`gap-0 `}>
-            {item?.children?.map((child, i) => {
-              const nextLevel = nestLevel + 1
-              return (
-                <div key={i} className="border-b  py-2 hover:bg-gray-50">
-                  <NavItemWrapper {...{...props, item: child, nestLevel: nextLevel}} />
-                </div>
-              )
-            })}
+            {item?.children
+              ?.filter(child => child.exclusiveTo !== false)
+              .map((child, i) => {
+                const nextLevel = nestLevel + 1
+
+                return (
+                  <div key={i} className="border-b  py-2 hover:bg-gray-50">
+                    <NavItemWrapper {...{...props, item: child, nestLevel: nextLevel}} />
+                  </div>
+                )
+              })}
           </C_Stack>
         </div>
       </div>

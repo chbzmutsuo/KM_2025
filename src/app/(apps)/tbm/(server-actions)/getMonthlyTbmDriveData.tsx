@@ -86,7 +86,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
 
     const S_driverFee = 99999
 
-    const N_postalFee = ConfigForRoute?.postalFee ?? 0
+    const N_postalFee = (ConfigForRoute?.postalFee_untaxed ?? 0) * 1.1
     const O_postalHighwayFee = schedule.O_postalHighwayFee ?? 0
 
     const P_generalFee = ConfigForRoute?.generalFee ?? 0
@@ -190,7 +190,7 @@ export const getMonthlyTbmDriveData = async ({whereQuery, tbmBaseId}) => {
           style: {backgroundColor: '#defceb'},
         },
         U_jomuinFutan: {
-          label: ['乗務員負担', '高速代-(通行量+30％)'].join(`\n`),
+          label: ['乗務員負担', '高速代-(通行料+30％)'].join(`\n`),
           cellValue: U_jomuinFutan,
           style: {backgroundColor: '#defceb'},
         },

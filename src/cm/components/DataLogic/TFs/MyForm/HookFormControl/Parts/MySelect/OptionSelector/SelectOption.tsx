@@ -7,6 +7,8 @@ import {breakLines} from 'src/cm/lib/value-handler'
 
 import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 
+import {IconBtn} from '@components/styles/common-components/IconBtn'
+
 export const SelectOption = (props: {contexts: contextsType; option: optionType; optionStyle: any}) => {
   const contexts = props.contexts
 
@@ -23,29 +25,27 @@ export const SelectOption = (props: {contexts: contextsType; option: optionType;
 
   if (typeof label === `object`) return <></>
   return (
-    <button
-      type="button"
+    <span
+      // type="button"
       id={`option-${option.id}`}
       onClick={() => {
         setTimeout(async () => {
           await handleOptionClick(option, filteredOptions)
         }, 50)
       }}
+      className={'onHover '}
     >
-      <div className={`rounded border`}>
-        <ColoredText
-          style={{maxWidth: `80vw`, ...optionStyle}}
-          bgColor={option.color ?? '#dcdcdc'}
-          className={cl(
-            `onHover px-2 text-sm font-bold   `,
-            unselect ? 'bg-sub-main text-white' : '',
-            isActiveOption ? 'bg-primary-main animate-pulse  text-white' : '',
-            rootPath === 'estimate' ? tabitakuColor : ''
-          )}
-        >
-          {breakLines(label)}
-        </ColoredText>
-      </div>
-    </button>
+      <ColoredText
+        style={{maxWidth: `80vw`, ...optionStyle}}
+        bgColor={option.color ?? '#d1d1d1'}
+        className={cl(
+          unselect ? 'bg-sub-main text-white' : '',
+          isActiveOption ? '!bg-sub-main  !text-white   ' : '',
+          rootPath === 'estimate' ? tabitakuColor : ''
+        )}
+      >
+        {breakLines(label)}
+      </ColoredText>
+    </span>
   )
 }

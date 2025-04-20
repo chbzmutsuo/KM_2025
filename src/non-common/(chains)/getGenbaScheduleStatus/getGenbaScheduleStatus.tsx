@@ -1,4 +1,4 @@
-import {GenbaDayProps, genbaStatusType} from 'src/non-common/(chains)/getGenbaScheduleStatus/genbaDayUpdateChain'
+import {GenbaDayProps, genbaStatusType} from 'src/non-common/(chains)/getGenbaScheduleStatus/chain_sohken_genbaDayUpdateChain'
 
 // =====================statusの取得====================
 export const getGenbaScheduleStatus = (props: {GenbaDay: GenbaDayProps}) => {

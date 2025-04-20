@@ -1,7 +1,9 @@
 import {useEffect} from 'react'
 
-export default function useLogOnRender(key?: any) {
+const useLogOnRender = (key?: any) => {
   useEffect(() => {
     console.info(`===Log:${key}===`)
   }, [])
 }
+
+export default useLogOnRender

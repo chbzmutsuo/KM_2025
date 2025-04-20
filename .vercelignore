@@ -46,8 +46,6 @@ latest.dump
 
 
 #ignoreを選択
-src/app/**/sohken
-src/app/**/aquapot
 src/app/**/tsukurunger
 src/app/**/demo
 src/app/**/sankosha
@@ -62,7 +60,9 @@ src/app/**/Grouping
 src/app/**/tbm
 src/app/**/yoshinari
 src/app/**/applicationForms
-src/app/**/kickswrap
-src/app/**/KM
 src/app/**/Advantage
+src/app/**/sohken
+src/app/**/aquapot
 #src/app/**/apex
+#src/app/**/KM
+#src/app/**/kickswrap

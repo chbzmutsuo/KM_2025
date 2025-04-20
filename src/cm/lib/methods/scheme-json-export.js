@@ -1595,7 +1595,20 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder", "typedSql"]
+  previewFeatures = ["prismaSchemaFolder", "typedSql", "relationJoins"]
+}
+
+model Department {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+  sortOrder Float     @default(0)
+
+  code  String? @unique
+  name  String
+  color String?
+
+  User User[]
 }
 
 model User {
@@ -1687,6 +1700,8 @@ model User {
   Approval                         Approval[]
   TbmVehicle                       TbmVehicle?
   KyuyoTableRecord                 KyuyoTableRecord[]
+  Department                       Department?                        @relation(fields: [departmentId], references: [id])
+  departmentId                     Int?
 }
 
 model ReleaseNotes {
@@ -1708,13 +1723,13 @@ model GoogleAccessToken {
   updatedAt DateTime? @default(now()) @updatedAt()
   sortOrder Float     @default(0)
 
-  email         String  @unique
-  access_token  String
-  refresh_token String
-  scope         String
-  token_type    String
-  id_token      String
-  expiry_date   BigInt
+  email         String    @unique
+  access_token  String?
+  refresh_token String?
+  scope         String?
+  token_type    String?
+  id_token      String?
+  expiry_date   DateTime?
   tokenJSON     String?
 }
 
@@ -1766,17 +1781,33 @@ model Calendar {
  
 // 商品マスターテーブル
 model Product {
- id          Int       @id @default(autoincrement())
- createdAt   DateTime  @default(now())
- updatedAt   DateTime? @default(now()) @updatedAt()
- sortOrder   Float     @default(0)
- productCode String?   @unique
- name        String?
- maker       String?
- unit        String?
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+ code      String?   @unique
+ name      String?
+ // maker     String?
+ // unit      String?
 
  // リレーション
  PurchaseRequest PurchaseRequest[]
+ ShiireSaki      ShiireSaki        @relation(fields: [shiireSakiId], references: [id], onDelete: Cascade)
+ shiireSakiId    Int
+}
+
+model ShiireSaki {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ code String @unique
+ name String
+
+ email String?
+
+ Product Product[]
 }
 
 // 発注履歴テーブル
@@ -1795,9 +1826,9 @@ model PurchaseRequest {
 
  // リレーション
  Approval  Approval[]
- User      User       @relation(fields: [userId], references: [id])
+ User      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId    Int
- Product   Product    @relation(fields: [productId], references: [id])
+ Product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
  productId Int
 }
 
@@ -1808,14 +1839,14 @@ model LeaveRequest {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- startDate DateTime
- endDate   DateTime
+ from      DateTime
+ to        DateTime
  leaveType String // 1日/年休休/午後休/特別休暇/慶弔休暇/産前産後休暇/代休/欠勤/早退/遅刻
  reason    String
 
  // リレーション
  Approval Approval[]
- User     User       @relation(fields: [userId], references: [id])
+ User     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId   Int
 }
 
@@ -1826,19 +1857,25 @@ model Approval {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- status  String // 承認/却下
- comment String?
+ index      Int
+ type       String // 発注/休暇
+ status     String // 承認/却下
+ notifiedAt DateTime?
+ comment    String?
 
  // 発注申請の承認
- PurchaseRequest   PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+ PurchaseRequest   PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
  purchaseRequestId Int?
 
  // 休暇申請の承認
- LeaveRequest   LeaveRequest? @relation(fields: [leaveRequestId], references: [id])
+ LeaveRequest   LeaveRequest? @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
  leaveRequestId Int?
 
- User   User @relation(fields: [userId], references: [id])
+ User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
  userId Int
+
+ @@unique([purchaseRequestId, index, userId], name: "purchaseRequestApproval")
+ @@unique([leaveRequestId, index, userId], name: "leaveRequestApproval")
 }
 
  
@@ -2066,6 +2103,21 @@ model DayRemarks {
  DayRemarksUser DayRemarksUser[]
 }
 
+model SohkenGoogleCalendar {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ calendarId String
+ eventId    String? @unique
+
+ date    DateTime
+ startAt DateTime?
+ endAt   DateTime?
+ summary String?
+}
+
  
 model TbmBase {
  id        Int       @id @default(autoincrement())
@@ -2195,8 +2247,9 @@ model TbmRouteGroup {
  updatedAt DateTime? @default(now()) @updatedAt()
  sortOrder Float     @default(0)
 
- code String @unique
- name String
+ code     String  @unique
+ name     String
+ routeKbn String? @default("規定")
 
  TbmBase   TbmBase @relation(fields: [tbmBaseId], references: [id], onDelete: Cascade)
  tbmBaseId Int
@@ -2238,9 +2291,8 @@ model TbmMonthlyConfigForRouteGroup {
  pickupTime  String? //接車時間
  vehicleType String? //車種
 
- postalFee  Int? //通行量(郵便)
- generalFee Int? //通行量（一般）
- tollFee    Float?
+ generalFee        Int? //通行量（一般）
+ postalFee_untaxed Float? //通行料（税抜）
 
  numberOfTrips   Int?
  TbmRouteGroup   TbmRouteGroup @relation(fields: [tbmRouteGroupId], references: [id], onDelete: Cascade)

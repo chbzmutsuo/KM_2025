@@ -4,12 +4,10 @@ import {GoogleDrive_GeneratePdf} from '@app/api/google/actions/driveAPI'
 import {GoogleSheet_BatchUpdate, GoogleSheet_copy} from '@app/api/google/actions/sheetAPI'
 import {SheetRequests} from '@app/api/google/actions/SheetRequests'
 
-import {Days, formatDate, getMidnight} from '@class/Days'
+import {Days, formatDate} from '@class/Days'
 
-import React from 'react'
 import {sheets_v4} from 'googleapis'
 import {AQ_CONST} from '@app/(apps)/aquapot/(constants)/options'
-import {aqCustomer} from '@app/(apps)/aquapot/(class)/colBuilder/aqCustomer'
 
 export const showPdf = async ({customer, monthStr, data, defaultPaymentMethod, furikomisakiCD}) => {
   const furikomisaki = AQ_CONST.BANK_LIST[furikomisakiCD]
@@ -24,8 +22,6 @@ export const showPdf = async ({customer, monthStr, data, defaultPaymentMethod, f
 
   if (defaultPaymentMethod === '自動口座引落') {
     remarks = '口座振替は毎月27日（当日が金融機関休業日の場合は翌営業日）にご指定の口座より振替させて頂きます。'
-  } else if (defaultPaymentMethod === '銀行振込') {
-    remarks = '銀行振込'
   }
 
   const newFileName = [
@@ -65,8 +61,6 @@ export const showPdf = async ({customer, monthStr, data, defaultPaymentMethod, f
         })
         .flat()
     }),
-
-    SheetRequests.updateCell(0, 40, 2, remarks),
   ].flat()
 
   if (furikomisaki) {
@@ -87,7 +81,7 @@ export const showPdf = async ({customer, monthStr, data, defaultPaymentMethod, f
     )
   }
 
-  requests.push(SheetRequests.updateCell(0, 40, 2, remarks))
+  requests.push(SheetRequests.updateCell(0, 40, 0, remarks))
 
   const copiedSpreadSheet = await GoogleSheet_copy({
     fromSSId: SS_URL,
@@ -104,7 +98,7 @@ export const showPdf = async ({customer, monthStr, data, defaultPaymentMethod, f
   await GoogleSheet_BatchUpdate({spreadsheetId: copiedSpreadSheet.id ?? '', requests})
 
   // PDF化して取得
-  const res = await GoogleDrive_GeneratePdf({spreadsheetId: template.SS_URL})
+  const res = await GoogleDrive_GeneratePdf({spreadsheetId: copiedSpreadSheet.id ?? ''})
   const blob = new Blob([Uint8Array.from(atob(res.pdfData ?? ''), c => c.charCodeAt(0))], {
     type: 'application/pdf',
   })

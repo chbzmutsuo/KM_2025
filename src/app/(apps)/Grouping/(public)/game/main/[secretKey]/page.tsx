@@ -23,10 +23,11 @@ export default async function Page(props) {
   })
   const {session, scopes} = await initServerComopnent({query})
 
-  const {include} = QueryBuilder.getInclude({
-    session,
-    query,
-  })[dataModelName]
+  const {include} =
+    QueryBuilder.getInclude({
+      session,
+      query,
+    })[dataModelName] ?? {}
 
   const {teacherId} = scopes.getGroupieScopes()
 

@@ -1,4 +1,4 @@
-const PAYMENT_METHOD_LIST = [`現金`, `クレジットカード`, `銀行振込`, `自動口座引落`, `その他`]
+const PAYMENT_METHOD_LIST = [`現金`, `クレジットカード`, `銀行振込`, `自動口座引落`, `その他`, `BASE`]
 const AQCUSTOMER_STATUS_LIST = [`継続`, `単発`, `解約`]
 
 /**

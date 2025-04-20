@@ -2,24 +2,17 @@ import {google} from 'googleapis'
 import {NextRequest, NextResponse} from 'next/server'
 import {serialize} from 'cookie'
 import {basePath} from 'src/cm/lib/methods/common'
-import {redirectUri} from '@app/api/google/lib/constants'
-import {getClientConfig} from '@app/api/google/lib/server-actions'
-import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import { fetchUniversalAPI} from '@lib/methods/api-fetcher'
+import {getOauthClient} from '@app/api/auth/google/getAuth'
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url)
   const code = url.searchParams.get('code') ?? ``
-
-  const clientConfig = await getClientConfig()
-
-  if (clientConfig === undefined) {
-    return NextResponse.json({error: 'Invalid client_id'}, {status: 400})
-  }
-
-  const oAuth2Client = new google.auth.OAuth2(clientConfig.clientId, clientConfig.clientSecret, redirectUri)
+  const oAuth2Client = await getOauthClient()
 
   try {
     const {tokens} = await oAuth2Client.getToken(code)
+    const {access_token, refresh_token, scope, token_type, expiry_date, id_token} = tokens
 
     oAuth2Client.setCredentials(tokens)
 
@@ -28,24 +21,28 @@ export async function GET(req: NextRequest) {
       .userinfo.get({auth: oAuth2Client})
       .then(res => res.data)
 
-    if (googleUser.email) {
+    if (googleUser?.email) {
       const data = {
         email: googleUser.email,
-        tokenJSON: JSON.stringify(tokens),
+        access_token: access_token ?? '',
+        refresh_token: refresh_token ?? '',
+        scope: scope ?? '',
+        token_type: token_type ?? '',
+        id_token: id_token ?? '',
         expiry_date: new Date(Number(tokens.expiry_date)),
+        tokenJSON: JSON.stringify(tokens),
       }
 
       const {result} = await fetchUniversalAPI(`googleAccessToken`, `upsert`, {
         where: {email: googleUser.email},
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         create: data,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         update: data,
       })
 
-      console.info(`accessToken of${result.email} was refreshed`)
+      console.info({
+        email: result.email,
+        expiry_date: result.expiry_date,
+      })
     }
 
     const response = NextResponse.redirect(basePath)

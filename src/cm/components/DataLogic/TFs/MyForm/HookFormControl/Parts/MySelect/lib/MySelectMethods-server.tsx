@@ -31,7 +31,7 @@ export const convertColIdToModelName = ({col}) => {
 }
 
 export const mapAdjustOptionValue = (optionObjArr: optionType[]) => {
-  if (Array.isArray(optionObjArr)) {
+  if (Array.isArray(optionObjArr ?? [])) {
     const result = (optionObjArr ?? [])?.map(optionObj => adjustOptionValue({optionObj})) ?? []
     return [...result]
   } else {

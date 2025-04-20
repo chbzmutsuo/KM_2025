@@ -7,18 +7,11 @@ import {Days, getMidnight, toUtc} from '@class/Days'
 import ChildCreator from '@components/DataLogic/RTs/ChildCreator/ChildCreator'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {Prisma} from '@prisma/client'
-import {orderBy} from 'lodash'
 import React, {useEffect} from 'react'
 
 export default function RouteDisplay({tbmBase, whereQuery}) {
   const useGlobalProps = useGlobal()
   const {query} = useGlobalProps
-  const {selectedBase, setselectedBase, selectedRouteGroup, setselectedRouteGroup} = useSelectedBase()
-  useEffect(() => {
-    setselectedBase(tbmBase)
-  }, [tbmBase])
-
   const {firstDayOfMonth: yearMonth} = Days.getMonthDatum(query.from ? toUtc(query.from) : getMidnight())
 
   return (
@@ -34,15 +27,12 @@ export default function RouteDisplay({tbmBase, whereQuery}) {
               Mid_TbmRouteGroup_TbmCustomer: {include: {TbmCustomer: true}},
               Mid_TbmRouteGroup_TbmProduct: {include: {TbmProduct: true}},
               TbmMonthlyConfigForRouteGroup: {where: {yearMonth: {equals: yearMonth}}},
-              TbmRouteGroupFee: {
-                orderBy: {startDate: `desc`},
-                take: 1,
-              },
+              TbmRouteGroupFee: {orderBy: {startDate: `desc`}, take: 1},
             },
             orderBy: [{code: `asc`}],
           },
           myForm: {create: TbmRouteGroupUpsertController},
-          myTable: {style: {width: `90vw`, maxHeight: `80vh`}},
+          myTable: {style: {width: `90vw`, maxHeight: `70vh`}},
           columns: ColBuilder.tbmRouteGroup({
             useGlobalProps,
             ColBuilderExtraProps: {

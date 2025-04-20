@@ -179,7 +179,7 @@ export const apRequestStatusList: apRequestStatusListType[] = [
         subject: `【勤怠システム通知】総務確定待ちの申請があります。`,
         to: [
           //総務のみ
-          ...props.soumuMembers.map(d => d.email),
+          ...props.soumuMembers.map(d => d.email ?? ''),
         ],
       }
     },
@@ -194,7 +194,7 @@ export const apRequestStatusList: apRequestStatusListType[] = [
         subject: '【勤怠システム通知】承認者にあなたが含まれた申請が進行中です。',
         to: [
           //まだ承認をしていないメンバーに送信
-          ...props.unAuthorizedMembers.map(d => d.email),
+          ...props.unAuthorizedMembers.map(d => d.email ?? ''),
         ],
       }
     },
@@ -209,7 +209,7 @@ export const apRequestStatusList: apRequestStatusListType[] = [
         subject: `【勤怠システム通知】稟議が総務によって「確定」されました。`,
         to: [
           //発議者にのみ送信
-          props.Sender.email,
+          props.Sender.email ?? '',
         ],
       }
     },
@@ -225,7 +225,7 @@ export const apRequestStatusList: apRequestStatusListType[] = [
         subject: `【勤怠システム通知】稟議が却下されました。`,
         to: [
           //総務も含めて関連のもの全員に送信
-          props.Sender.email,
+          props.Sender.email ?? '',
         ],
       }
     },
@@ -240,9 +240,9 @@ export const apRequestStatusList: apRequestStatusListType[] = [
         subject: `【勤怠システム通知】取り下げられた稟議があります。`,
         to: [
           //総務も含めて関連のもの全員に送信
-          props.Sender.email,
-          ...props.AllReceiver.map(d => d.email),
-          ...props.soumuMembers.map(d => d.email),
+          props.Sender.email ?? '',
+          ...props.AllReceiver.map(d => d.email ?? ''),
+          ...props.soumuMembers.map(d => d.email ?? ''),
         ],
       }
     },

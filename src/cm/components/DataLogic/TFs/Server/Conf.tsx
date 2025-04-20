@@ -1,4 +1,5 @@
 import {ClientPropsType} from '@cm/types/types'
+import {getInitModelRecordsProps} from '@components/DataLogic/TFs/ClientConf/fetchers/getInitModelRecordsProps'
 
 export type prismaDataExtractionQueryType = {
   where?: any
@@ -34,7 +35,16 @@ export const Conf = async props => {
     useSql: undefined,
   }
 
+  const initialModelRecords = await getInitModelRecordsProps({
+    ...serverFetchProps,
+    query,
+  })
+
+  const fetchTime = new Date()
+
   return {
+    fetchTime,
+    initialModelRecords,
     ClientProps,
     serverFetchProps,
   }

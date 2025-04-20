@@ -5,9 +5,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import Loader from 'src/cm/components/utils/loader/Loader'
 import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
 
-const NavBar = dynamic(() => import('src/cm/components/layout/Navigation/NavBar'), {loading: () => <PlaceHolder />})
-const Header = dynamic(() => import('src/cm/components/layout/Header'), {loading: () => <PlaceHolder />})
-const Drawer = dynamic(() => import('src/cm/components/layout/Navigation/Drawer'), {loading: () => <PlaceHolder />})
+import NavBar from 'src/cm/components/layout/Navigation/NavBar'
 
 import {PageBuilderGetterType} from '@cm/types/types'
 import {MenuButton} from 'src/cm/components/layout/MenuButton'
@@ -19,6 +17,8 @@ import dynamic from 'next/dynamic'
 import {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobalOrigin'
 import {rootPaths} from 'src/middleware'
 import {MetaData} from '@components/layout/MetaData'
+import Drawer from '@components/layout/Navigation/Drawer'
+import Header from '@components/layout/Header'
 
 export type adminProps = {
   AppName: string | JSX.Element
@@ -76,9 +76,9 @@ const Admin = (props: adminProps) => {
     )
   }, [children, pathItemObject, AppName])
 
-  if (waitRendering || status === `loading` || useGlobalProps.waitRendering) {
-    return <Loader />
-  }
+  // if (waitRendering || status === `loading` || useGlobalProps.waitRendering) {
+  //   return <Loader />
+  // }
 
   const {invalidCheck} = getInvalidCheck()
 

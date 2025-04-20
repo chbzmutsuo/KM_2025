@@ -1,4 +1,4 @@
-import {includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
+import {getIncludeType, includeProps, roopMakeRelationalInclude} from '@cm/class/builders/QueryBuilderVariables'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 import {Prisma} from '@prisma/client'
 
@@ -11,7 +11,11 @@ export class QueryBuilder {
         AqProductCategoryMaster: {},
         AqPriceOption: {},
         AqInventoryRegister: {},
-        AqSaleRecord: {},
+        AqSaleRecord: {
+          include: {
+            AqCustomer: {},
+          },
+        },
       },
     }
     const aqCustomerPriceOption: Prisma.AqCustomerPriceOptionFindManyArgs = {
@@ -60,7 +64,7 @@ export class QueryBuilder {
         AqPriceOption: {},
       },
     }
-    const include: {[key in PrismaModelNames]?: any} = {
+    const include: getIncludeType = {
       aqSaleRecord,
       user,
       aqProduct,

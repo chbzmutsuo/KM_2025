@@ -12,12 +12,14 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
   const {yearMonth, showMonthConfig = false, tbmBaseId} = props.ColBuilderExtraProps ?? {}
   const {useGlobalProps} = props
 
+  const regularStyle = {minWidth: 100, color: `#43639a`, fontSize: 12}
+
   let colsource: colType[] = [
     {
       id: 'code',
-      label: 'コード',
+      label: 'CD',
       form: {...defaultRegister, defaultValue: null},
-      td: {style: {minWidth: 60, color: `blue`}},
+      td: {style: {...regularStyle, minWidth: 60}},
     },
     {
       id: 'tbmBaseId',
@@ -28,18 +30,25 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
         defaultValue: tbmBaseId,
         disabled: tbmBaseId,
       },
-      td: {style: {minWidth: 100, color: `blue`}},
+      td: {style: {...regularStyle}},
+    },
+    {
+      id: 'routeKbn',
+      label: '区分',
+      td: {style: {...regularStyle}},
+
+      form: {...defaultRegister, defaultValue: ``},
     },
     {
       id: 'name',
       label: '名称',
-      td: {style: {minWidth: 200, color: `blue`}},
+      td: {style: {...regularStyle, minWidth: 160}},
       form: {...defaultRegister},
     },
     {
       id: `tbmCustomerId`,
       label: `取引先`,
-      td: {style: {minWidth: 200, color: `blue`}},
+      td: {style: {...regularStyle, minWidth: 160}},
       form: {
         defaultValue: (alreadyRegisteredFormData, formData, col) => {
           return formData?.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.id
@@ -54,34 +63,17 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
     {
       id: `tbmProductId`,
       label: `商品`,
-      td: {style: {minWidth: 150, color: `blue`}},
+      td: {style: {...regularStyle, minWidth: 150}},
       form: {
         defaultValue: (alreadyRegisteredFormData, formData, col) => {
           return formData?.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.id
         },
       },
       forSelect: {},
-      // td: {editable: {upsertController: TbmRouteGroupUpsertController as any}},
       format: (val, routeGroup) => {
         return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
       },
     },
-    // {
-    //   id: `tbmCustomerId`,
-    //   label: `取引先`,
-    //   td: {style: {minWidth: 200, color: `blue`}},
-    //   format: (val, routeGroup) => {
-    //     return <div>{routeGroup.Mid_TbmRouteGroup_TbmCustomer?.TbmCustomer?.name}</div>
-    //   },
-    // },
-    // {
-    //   id: `tbmProductId`,
-    //   label: `商品`,
-    //   td: {style: {minWidth: 150, color: `blue`}},
-    //   format: (val, routeGroup) => {
-    //     return <div>{routeGroup.Mid_TbmRouteGroup_TbmProduct?.TbmProduct?.name}</div>
-    //   },
-    // },
   ]
 
   if (showMonthConfig) {
@@ -134,11 +126,11 @@ export const TbmRouteGroupColBuilder = (props: columnGetterType) => {
 
       {
         id: `運行回数`,
-        label: `運行回数`,
-        td: {style: {minWidth: 80}},
+        label: `運行\n回数`,
+        td: {style: {minWidth: 50}},
         format: (val, row) => {
           const {TbmDriveSchedule} = row
-          return <div>{TbmDriveSchedule.length}回数</div>
+          return <div>{TbmDriveSchedule.length}</div>
         },
       },
     ]

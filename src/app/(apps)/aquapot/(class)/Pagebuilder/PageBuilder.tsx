@@ -63,7 +63,7 @@ export class PageBuilder {
                 },
                 columns: ColBuilder.aqCustomerPriceOption(props),
                 additional: {
-                  include: QueryBuilder.getInclude({}).aqCustomerPriceOption.include,
+                  include: QueryBuilder.getInclude({}).aqCustomerPriceOption?.include,
                   payload: {aqCustomerId: undefined},
                 },
                 useGlobalProps: props.useGlobalProps,
@@ -82,7 +82,7 @@ export class PageBuilder {
                 columns: ColBuilder.aqCustomerSupportGroupMidTable(props),
                 useGlobalProps: props.useGlobalProps,
                 additional: {
-                  include: QueryBuilder.getInclude({}).aqCustomerSupportGroupMidTable.include,
+                  include: QueryBuilder.getInclude({}).aqCustomerSupportGroupMidTable?.include,
                 },
               }}
             />
@@ -110,7 +110,7 @@ export class PageBuilder {
                 }),
                 useGlobalProps: props.useGlobalProps,
                 additional: {
-                  include: QueryBuilder.getInclude({}).aqCustomerRecord.include,
+                  include: QueryBuilder.getInclude({}).aqCustomerRecord?.include,
                 },
               }}
             />
@@ -129,7 +129,7 @@ export class PageBuilder {
                 useGlobalProps: props.useGlobalProps,
                 additional: {
                   orderBy: [{createdAt: `desc`}],
-                  include: QueryBuilder.getInclude({}).aqSaleRecord.include,
+                  include: QueryBuilder.getInclude({}).aqSaleRecord?.include,
                 },
               }}
             />

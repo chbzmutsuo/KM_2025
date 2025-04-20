@@ -27,7 +27,6 @@ const NavItemParent = React.memo((props: navItemProps) => {
 
   const selectedClass = [`bg-sub-main/20`, `rounded`, `px-1.5`]
 
-  if (item.exclusiveTo === false) return <></>
   if (isParent && hasChildren) {
     const someChildrenIsActive = item?.children?.some(child => {
       const childrenCount = getChildrenCount(child)

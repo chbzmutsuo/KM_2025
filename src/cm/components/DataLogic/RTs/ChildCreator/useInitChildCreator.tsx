@@ -67,12 +67,7 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
     useSql: false,
   }
 
-  const {initFetchTableRecords, records, setrecords, mutateRecords, deleteRecord, totalCount} = useRecords({
-    serverFetchProps,
-    // modelName: models.children,
-    // EasySearcherQuery: {},
-    // prismaDataExtractionQuery,
-  })
+  const {initFetchTableRecords, records, setrecords, mutateRecords, deleteRecord, totalCount} = useRecords({serverFetchProps})
 
   const {formData, setformData} = useInitFormState(null, [])
 
@@ -109,23 +104,4 @@ export default function useInitChildCreator(props: ChildCreatorProps) {
     })
     return columns
   }
-
-  // function getPrismaData() {
-  //   let prismaData = forcedPirsmaData ?? {records: [], totalCount: 0}
-
-  //   if (!forcedPirsmaData) {
-  //     const {data} = usefetchUniversalAPI_SWR(models.children, 'findMany', {
-  //       where: {
-  //         [parentModelIdStr]: ParentData?.id,
-  //         ...tunedAdditional?.where,
-  //       },
-  //       include: additional?.include ? additional?.include : undefined,
-  //       orderBy,
-  //     })
-
-  //     prismaData = {records: data ?? [], totalCount: data?.length ?? 0}
-  //   }
-  //   const recordSource = prismaData?.records ?? []
-  //   return {prismaData, recordSource}
-  // }
 }

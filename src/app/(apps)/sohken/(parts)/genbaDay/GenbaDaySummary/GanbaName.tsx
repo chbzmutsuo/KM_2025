@@ -7,18 +7,25 @@ import {GenbaCl} from '@app/(apps)/sohken/class/GenbaCl'
 import React from 'react'
 import useModal from '@components/utils/modal/useModal'
 import {useGenbaDetailModal} from '@app/(apps)/sohken/hooks/useGenbaDetailModal'
+import {formatDate} from '@class/Days'
+import {HREF} from '@lib/methods/urls'
+import useMyNavigation from '@hooks/globalHooks/useMyNavigation'
 
 export default function GanbaName({GenbaDay, editable}) {
+  const {query} = useMyNavigation()
   const {Modal, setopen} = useModal()
   const allShift = GenbaDay.GenbaDayShift
 
   const {Genba} = GenbaDay
   const {floorThisPlay} = new GenbaCl(GenbaDay.Genba)
-  const defaultStartTime = Genba.defaultStartTime
+  const defaultStartTime =
+    formatDate(GenbaDay.date, 'ddd') === '土' && Genba.defaultStartTime === '早出' ? '通常' : Genba.defaultStartTime
 
-  const forceNormal = allShift.some(s => {
+  const forceNormalCon1 = allShift.some(s => {
     return !s.from
   })
+
+  const forceNormal = forceNormalCon1
   const {setGMF_OPEN} = useGenbaDetailModal()
 
   const LinkComponent = editable
@@ -28,7 +35,6 @@ export default function GanbaName({GenbaDay, editable}) {
           {children}
         </div>
       )
-  const displayNormal = forceNormal || Genba.defaultStartTime === `通常`
 
   return (
     <div>
@@ -45,7 +51,7 @@ export default function GanbaName({GenbaDay, editable}) {
         </span>
         <span>{Genba?.PrefCity?.city}</span>
 
-        <LinkComponent {...{href: `/sohken/genba/${Genba.id}`}}>
+        <LinkComponent {...{href: HREF(`/sohken/genba/${Genba.id}`, {from: formatDate(GenbaDay.date)}, query)}}>
           <span>{Genba.name}</span>
           <span>{`(${floorThisPlay})`}</span>
         </LinkComponent>

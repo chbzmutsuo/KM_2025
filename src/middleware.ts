@@ -27,8 +27,7 @@ export const rootPaths: rootPath[] = [
   {paths: [{matcher: getFreePathsMathcer(`marutoyo`, []), ...defaultPathValidateConfig}], rootPath: `marutoyo`},
   {paths: [{matcher: getFreePathsMathcer(`sankosha`, []), ...defaultPathValidateConfig}], rootPath: `sankosha`},
   {paths: [{matcher: getFreePathsMathcer(`tsukurunger`, []), ...defaultPathValidateConfig}], rootPath: 'tsukurunger'},
-  {paths: [{matcher: getFreePathsMathcer(`yoshinari`, []), ...defaultPathValidateConfig}], rootPath: `yoshinari`},
-  {paths: [{matcher: getFreePathsMathcer(`aquapot`, []), ...defaultPathValidateConfig}], rootPath: `aquapot`},
+  {paths: [{matcher: getFreePathsMathcer(`aquapot`, [`/myPage`]), ...defaultPathValidateConfig}], rootPath: `aquapot`},
   {paths: [{matcher: getFreePathsMathcer(`sohken`, []), ...defaultPathValidateConfig}], rootPath: `sohken`},
 ]
 

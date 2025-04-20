@@ -2,13 +2,13 @@
 import {pathItemType} from 'src/non-common/path-title-constsnts'
 import React from 'react'
 
-const NavItemWrapper = dynamic(() => import('./NavItem/NavItemWrapper'), {loading: () => <PlaceHolder />})
 import {cl} from 'src/cm/lib/methods/common'
 import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
 import dynamic from 'next/dynamic'
 import useNavMenu from '@components/layout/Navigation/useNavMenu'
 
 import {UserConfig} from '@components/layout/UserConfig'
+import NavItemWrapper from '@components/layout/Navigation/NavItem/NavItemWrapper'
 
 const NavBar = React.memo((props: {useGlobalProps; horizontalMenu; navItems}) => {
   const {useGlobalProps, horizontalMenu, navItems} = props

@@ -60,7 +60,6 @@ const useHaishaTableEditorGMF = (props: {
           {...{
             latestFormData,
             onSubmit: async (data: formData) => {
-              // useGlobalProps.toggleLoad(async () => {
               const queryObject: Prisma.TbmDriveScheduleUpsertArgs = {
                 where: {id: tbmDriveSchedule?.id ?? 0},
                 create: data,
@@ -80,8 +79,6 @@ const useHaishaTableEditorGMF = (props: {
               // 配車テーブルの時の処理
 
               setGMF_OPEN(null)
-              //
-
               //
             },
           }}

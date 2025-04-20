@@ -2,7 +2,7 @@ import {anyObject} from '@cm/types/types'
 import {getPathnameSplitArr} from '@hooks/globalHooks/useMyNavigation'
 
 import {getScopes} from 'src/non-common/scope-lib/getScopes'
-import {getYoshinari_PAGES} from 'src/non-common/getPages/getYoshinari_PAGES'
+
 import {getAdvantage_PAGES} from 'src/non-common/getPages/getAdvantagePages'
 import {aquapot_PAGES} from 'src/non-common/getPages/aquapot_PAGES'
 import {getTbm_PAGES} from 'src/non-common/getPages/getTbm_PAGES'
@@ -203,7 +203,7 @@ export const PAGES: any = {
   KM_PAGES,
   sohken_PAGES: sohken_PAGES,
   MasterKey_Pages,
-  yoshinari_PAGES: getYoshinari_PAGES,
+
   aquapot_PAGES: aquapot_PAGES,
   shinsei_PAGES: shinsei_PAGES,
 }

@@ -305,7 +305,7 @@ export type additionalPropsType =
       orderBy?: any[]
       payload?: anyObject
       where?: anyObject
-      include?: anyObject
+      include?: anyObject | null
       toggleLoadFunc?: any
     }
   | undefined

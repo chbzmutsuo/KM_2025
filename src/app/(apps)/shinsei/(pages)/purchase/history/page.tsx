@@ -1,6 +1,6 @@
 'use client'
 
-import CommonTable from '@app/(apps)/shinsei/(pages)/purchase/CommonTable'
+import PurchaseHistoryTable from '@app/(apps)/shinsei/(pages)/purchase/PurchaseHistoryTable'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 
 export default function PurchaseHistoryPage() {
@@ -8,5 +8,5 @@ export default function PurchaseHistoryPage() {
   const {session} = useGlobalProps
   const userId = session.id
 
-  return <CommonTable {...{dataFetchProps: {where: {userId}}}} />
+  return <PurchaseHistoryTable {...{dataFetchProps: {where: {userId}}}} />
 }

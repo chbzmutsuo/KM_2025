@@ -61,6 +61,7 @@ export default function Page(props) {
     fileErrorState,
     component: {FileUploaderMemo},
   } = useFileUploadProps({
+    charset: 'shift-jis',
     accept: {'text/csv': ['.csv']}, // CSVファイルのみ受け付ける
     readAs: 'readAsText', // テキストとして読み込む
   })
@@ -116,117 +117,123 @@ export default function Page(props) {
 
                             // 各商品行に対して処理を実行
                             const payloadArray = await Promise.all(
-                              rows.map(async row => {
-                                // 行データの分割代入
-                                const {
-                                  注文ID,
-                                  注文日時,
-                                  氏_請求先,
-                                  名_請求先,
-                                  郵便番号_請求先,
-                                  都道府県_請求先,
-                                  住所_請求先,
-                                  住所2_請求先,
-                                  電話番号_請求先,
-                                  メールアドレス_請求先,
-                                  氏_配送先,
-                                  名_配送先,
-                                  郵便番号_配送先,
-                                  都道府県_配送先,
-                                  住所_配送先,
-                                  住所2_配送先,
-                                  電話番号_配送先,
-                                  備考,
-                                  商品名,
-                                  バリエーション,
-                                  価格,
-                                  税率,
-                                  数量,
-                                  合計金額,
-                                  送料,
-                                  支払い方法,
-                                  代引き手数料,
-                                  発送状況,
-                                  商品ID,
-                                  種類ID,
-                                  購入元,
-                                  配送日,
-                                  配送時間帯,
-                                  注文メモ,
-                                  調整金額,
-                                } = row
+                              rows
+                                .filter(row => row.注文ID)
+                                .map(async row => {
+                                  // 行データの分割代入
+                                  const {
+                                    注文ID,
+                                    注文日時,
+                                    氏_請求先,
+                                    名_請求先,
+                                    郵便番号_請求先,
+                                    都道府県_請求先,
+                                    住所_請求先,
+                                    住所2_請求先,
+                                    電話番号_請求先,
+                                    メールアドレス_請求先,
+                                    氏_配送先,
+                                    名_配送先,
+                                    郵便番号_配送先,
+                                    都道府県_配送先,
+                                    住所_配送先,
+                                    住所2_配送先,
+                                    電話番号_配送先,
+                                    備考,
+                                    商品名,
+                                    バリエーション,
+                                    価格,
+                                    税率,
+                                    数量,
+                                    合計金額,
+                                    送料,
+                                    支払い方法,
+                                    代引き手数料,
+                                    発送状況,
+                                    商品ID,
+                                    種類ID,
+                                    購入元,
+                                    配送日,
+                                    配送時間帯,
+                                    注文メモ,
+                                    調整金額,
+                                  } = row
 
-                                // 顧客名の生成
-                                const name = 氏_請求先 + ' ' + 名_請求先
+                                  // 顧客名の生成
+                                  const name = (氏_請求先 || 名_請求先) && [氏_請求先, 名_請求先].join(' ')
 
-                                // 顧客情報の登録または更新
-                                const customerRes = await fetchUniversalAPI(`aqCustomer`, `upsert`, {
-                                  where: {name},
-                                  ...createUpdate({
-                                    name,
-                                    postal: 郵便番号_請求先,
-                                    state: 都道府県_請求先,
-                                    city: 住所_請求先,
-                                    street: 住所2_請求先,
-                                    tel: 電話番号_請求先,
-                                    email: メールアドレス_請求先,
-                                    fromBase: true, // BASEからのデータであることを示す
-                                  }),
+                                  // 顧客情報の登録または更新
+                                  const customerRes = await fetchUniversalAPI(`aqCustomer`, `upsert`, {
+                                    where: {email: メールアドレス_請求先},
+                                    ...createUpdate({
+                                      name,
+                                      postal: 郵便番号_請求先,
+                                      state: 都道府県_請求先,
+                                      city: 住所_請求先,
+                                      street: 住所2_請求先,
+                                      tel: 電話番号_請求先,
+                                      email: メールアドレス_請求先,
+                                      fromBase: true, // BASEからのデータであることを示す
+                                    }),
+                                  })
+
+                                  // 商品情報の登録または更新
+                                  const productRes = await fetchUniversalAPI(`aqProduct`, `upsert`, {
+                                    where: {name: 商品名},
+                                    ...createUpdate({name: 商品名, cost: 0, fromBase: true}),
+                                  })
+
+                                  // カートデータの顧客ID更新
+                                  cartData.create = {
+                                    baseOrderId: 注文ID,
+                                    date: toUtc(注文日時),
+                                    paymentMethod: 'BASE',
+                                    aqCustomerId: customerRes.result.id,
+                                  }
+                                  cartData.update = {
+                                    baseOrderId: 注文ID,
+                                    date: toUtc(注文日時),
+                                    paymentMethod: 'BASE',
+                                    aqCustomerId: customerRes.result.id,
+                                  }
+
+                                  // 税率の計算
+                                  const taxRate = 税率 === `標準税率` ? 1.1 : 税率 === `軽減税率` ? 1.08 : 1
+                                  // 税抜価格の計算（四捨五入）
+                                  const price = Math.round(Number(価格) / Number(taxRate))
+                                  // 売上レコード用のデータ作成
+                                  const payload = {
+                                    baseSaleRecordId: [注文ID, 商品ID, 種類ID].join(`_`), // ユニークID生成
+                                    date: toUtc(注文日時),
+                                    aqCustomerId: customerRes.result.id,
+                                    quantity: Number(数量),
+                                    price: price,
+                                    taxRate: taxRate,
+                                    taxedPrice: Number(合計金額),
+                                    remarks: [`BASE売上`, 備考].join(`\n`),
+                                    aqProductId: productRes.result.id,
+                                  }
+                                  return payload
                                 })
-
-                                // 商品情報の登録または更新
-                                const productRes = await fetchUniversalAPI(`aqProduct`, `upsert`, {
-                                  where: {name: 商品名},
-                                  ...createUpdate({name: 商品名, cost: 0, fromBase: true}),
-                                })
-
-                                // カートデータの顧客ID更新
-                                cartData.create = {
-                                  baseOrderId: 注文ID,
-                                  date: toUtc(注文日時),
-                                  paymentMethod: 'BASE',
-                                  aqCustomerId: customerRes.result.id,
-                                }
-                                cartData.update = {
-                                  baseOrderId: 注文ID,
-                                  date: toUtc(注文日時),
-                                  paymentMethod: 'BASE',
-                                  aqCustomerId: customerRes.result.id,
-                                }
-
-                                // 税率の計算
-                                const taxRate = 税率 === `標準税率` ? 1.1 : 税率 === `軽減税率` ? 1.08 : 1
-                                // 税抜価格の計算（四捨五入）
-                                const price = Math.round(Number(価格) / Number(taxRate))
-                                // 売上レコード用のデータ作成
-                                const payload = {
-                                  baseSaleRecordId: [注文ID, 商品ID, 種類ID].join(`_`), // ユニークID生成
-                                  date: toUtc(注文日時),
-                                  aqCustomerId: customerRes.result.id,
-                                  quantity: Number(数量),
-                                  price: price,
-                                  taxRate: taxRate,
-                                  taxedPrice: Number(合計金額),
-                                  remarks: [`BASE売上`, 備考].join(`\n`),
-                                  aqProductId: productRes.result.id,
-                                }
-                                return payload
-                              })
                             )
 
-                            // カートと売上レコードの登録
-                            const res = await fetchUniversalAPI(`aqSaleCart`, `upsert`, {
-                              where: cartData.where,
-                              create: {
-                                ...cartData.create,
-                                AqSaleRecord: {
-                                  createMany: {
-                                    data: payloadArray,
+                            const payment = cartData.create.paymentMethod
+
+                            if (payment) {
+                              // カートと売上レコードの登録
+                              const res = await fetchUniversalAPI(`aqSaleCart`, `upsert`, {
+                                where: cartData.where,
+                                create: {
+                                  ...cartData.create,
+                                  AqSaleRecord: {
+                                    createMany: {
+                                      data: payloadArray,
+                                    },
                                   },
                                 },
-                              },
-                              update: {...cartData.update},
-                            })
+                                update: {...cartData.update},
+                              })
+                            }
                           })
                         )
                       } else {

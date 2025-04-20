@@ -43,9 +43,18 @@ export const GetNinkuList = ({
 
   const ninkuList = Object.keys(PreviousShiftByDateObj).map(dateKey => {
     const shifts = PreviousShiftByDateObj[dateKey]
-    return shifts.length
+    let count = 0
+
+    count = shifts.reduce((acc, curr) => {
+      const {from, to} = curr
+      const add = !!to || !!from ? 0.5 : 1
+      return acc + add
+    }, 0)
+    // count = shifts.length
+    return count
   })
-  let ninkuListSum = ninkuList.reduce((acc, curr) => acc + curr, 0) ?? 3
+
+  let ninkuListSum = ninkuList.reduce((acc, curr) => acc + curr, 0)
 
   const result: any = Object.fromEntries(
     GenbaDayTaskMidTable.map(d => {

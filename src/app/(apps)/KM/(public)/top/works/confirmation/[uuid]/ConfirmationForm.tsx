@@ -4,7 +4,7 @@ import {Fields} from '@cm/class/Fields/Fields'
 import useBasicFormProps from '@cm/hooks/useBasicForm/useBasicFormProps'
 
 import {fetchUniversalAPI} from '@lib/methods/api-fetcher'
-import {knockEmailApi} from '@cm/lib/methods/mails'
+import {knockEmailApi} from '@lib/methods/knockEmailApi'
 import {Button} from '@components/styles/common-components/Button'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {toast} from 'react-toastify'

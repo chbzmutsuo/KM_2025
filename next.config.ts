@@ -2,7 +2,6 @@ import type {NextConfig} from 'next'
 
 const isProd = process.env.NODE_ENV === 'production'
 
- 
 const withPWA = require('next-pwa')({
   disable: !isProd,
   skipWaiting: true,
@@ -26,7 +25,6 @@ const withPWA = require('next-pwa')({
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   experimental: {
-    turbo: {},
     serverActions: {bodySizeLimit: '10mb'},
   },
   images: {

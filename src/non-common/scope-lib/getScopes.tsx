@@ -18,6 +18,7 @@ type getScopeOptionsProps = {query?: anyObject; roles?: any[]}
 
 export const getScopes = (session: anyObject, options: getScopeOptionsProps) => {
   const {query, roles} = options ?? {}
+  const roleNames = (roles ?? []).map(d => d.name)
 
   const login = session?.id ? true : false
   const id = session?.id
@@ -39,16 +40,7 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
     return result
   }
 
-  const getYoshinariScopes = () => {
-    const roleNames = (roles ?? []).map(d => d.name)
-
-    const isSuperUser = !!Arr.findCommonValues([`総務管理者`], roleNames) || admin
-    const isApprover = !!Arr.findCommonValues([`一般承認者`], roleNames)
-    return {isSuperUser, isApprover}
-  }
   const getTsukurungerScopes = () => {
-    const roleNames = (roles ?? []).map(d => d.name)
-
     const adminRole = !!Arr.findCommonValues([`管理者`], roleNames) || admin
     const subConRole = !!Arr.findCommonValues([`下請`], roleNames)
 
@@ -82,12 +74,32 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
     getGlobalUserId,
     getGroupieScopes,
     getAdvantageProps,
-    getAquepotScopes: () => ({
-      aqCustomerId: !admin ? session?.aqCustomerId : Number(query?.g_aqCustomerId ?? 0),
-    }),
+    getAquepotScopes: () => {
+      const isCustomer = session.customerNumber && session.email
+
+      const isUser = session.apps
+
+      return {
+        isUser,
+        aqCustomerId: admin ? Number(query?.g_aqCustomerId ?? 0) : isCustomer ? session?.id : undefined,
+      }
+    },
     getTbmScopes,
-    getYoshinariScopes,
+
     getTsukurungerScopes,
+    getShinseiScopes: () => {
+      const data = {
+        isKanrisha: !!Arr.findCommonValues([`管理者`], roleNames) || admin,
+        isKojocho: !!Arr.findCommonValues([`工場長`], roleNames),
+        isHacchuTanto: !!Arr.findCommonValues([`発注担当者`], roleNames),
+        isTokatsu: !!Arr.findCommonValues([`統括`], roleNames),
+        isBucho: !!Arr.findCommonValues([`部長`], roleNames),
+        isYakuin: !!Arr.findCommonValues([`役員`], roleNames),
+      }
+      const isNormalUser = !Object.values(data).some(data => data)
+
+      return {...data, isNormalUser}
+    },
   }
   addAdminToRoles
   return result
@@ -107,9 +119,9 @@ const addAdminToRoles: (targetObject: any, session: anyObject) => anyObject = (t
   return targetObject
 }
 
-export const getAqLoginType = ({session}) => {
-  const {customerNumber, email} = session
-  const asCustomer = customerNumber && email
-  const asUser = session && !asCustomer
-  return {asCustomer, asUser}
-}
+// export const getAqLoginType = ({session}) => {
+//   const {customerNumber, email} = session
+//   const asCustomer = customerNumber && email
+//   const asUser = session && !asCustomer
+//   return {asCustomer, asUser}
+// }

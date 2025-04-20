@@ -1,8 +1,7 @@
- 
-
 import {cl, getColorStyles} from 'src/cm/lib/methods/common'
-import {IconBtn} from 'src/cm/components/styles/common-components/IconBtn'
+import {IconBtn, IconBtnBaseClass} from 'src/cm/components/styles/common-components/IconBtn'
 import {props} from 'src/cm/components/styles/common-components/type'
+import {twMerge} from 'tailwind-merge'
 
 export const ColorBlock = (props: props & {bgColor?: string}) => {
   const {className, style, bgColor, children, ...rest} = props
@@ -29,13 +28,21 @@ export const ColorBlock = (props: props & {bgColor?: string}) => {
 }
 export const ColoredText = (props: props & {bgColor?: string}) => {
   const {className, style, bgColor, children, ...rest} = props
-
   return (
     <div
-      {...rest}
       {...{
-        style: {...getColorStyles(bgColor ?? ''), padding: `2px 6px`, ...style},
-        className: cl(`  rounded text-center p-0.5  `, className),
+        ...rest,
+        style: {
+          backgroundColor: bgColor + '90',
+          color: getColorStyles(bgColor ?? '').color,
+          padding: `2px 6px`,
+          ...style,
+        },
+        className: twMerge(
+          //
+          IconBtnBaseClass,
+          className
+        ),
       }}
     >
       {children}

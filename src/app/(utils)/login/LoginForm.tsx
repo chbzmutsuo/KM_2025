@@ -13,24 +13,26 @@ import {Button} from '@components/styles/common-components/Button'
 export default function LoginForm(props) {
   const {error} = props
   const {toggleLoad, router} = useGlobal()
-  const columns = Fields.transposeColumns([
-    {
-      id: 'email',
-      label: 'メールアドレス',
-      form: {
-        register: {
-          required: '必須項目です',
+  const columns =
+    props.columns ??
+    Fields.transposeColumns([
+      {
+        id: 'email',
+        label: 'メールアドレス',
+        form: {
+          register: {
+            required: '必須項目です',
+          },
         },
       },
-    },
-    {
-      id: 'password',
-      label: 'パスワード',
-      form: {
-        register: {required: '必須項目です'},
+      {
+        id: 'password',
+        label: 'パスワード',
+        form: {
+          register: {required: '必須項目です'},
+        },
       },
-    },
-  ])
+    ])
   const {BasicForm, latestFormData} = useBasicFormProps({columns, focusOnMount: false})
 
   return (
@@ -45,31 +47,32 @@ export default function LoginForm(props) {
                 ControlStyle: {width: 250},
               },
               onSubmit: async data => {
-                const apiPath = `${basePath}/api/prisma/login`
-                const user = await fetchAlt(apiPath, {
-                  email: data.email,
-                  password: data.password,
-                })
-                if (!user) {
-                  toast.error(`正しい認証情報を入力してください。`)
-                  return
-                }
+                toggleLoad(async () => {
+                  const apiPath = `${basePath}/api/prisma/login`
+                  const user = await fetchAlt(apiPath, {
+                    email: data.email,
+                    password: data.password,
+                  })
+                  if (!user) {
+                    toast.error(`正しい認証情報を入力してください。`)
+                    return
+                  }
 
-                // const result = await toggleLoad(async () => {
-                const result = await signIn('credentials', {
-                  email: data.email,
-                  password: data.password,
-                  redirect: false,
-                })
+                  // const result = await toggleLoad(async () => {
+                  const result = await signIn('credentials', {
+                    email: data.email,
+                    password: data.password,
+                    redirect: false,
+                  })
 
-                if (result?.ok) {
-                  const session = await getSession()
-                  toast.success(`ログインしました。`)
-                  router.refresh()
-                } else if (result?.error) {
-                  toast.error(`ログインに失敗しました。:${result.error}`)
-                }
-                // })
+                  if (result?.ok) {
+                    const session = await getSession()
+                    toast.success(`ログインしました。`)
+                  } else if (result?.error) {
+                    toast.error(`ログインに失敗しました。:${result.error}`)
+                  }
+                  // })
+                })
               },
             }}
           >

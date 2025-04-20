@@ -221,3 +221,18 @@ model DayRemarks {
 
  DayRemarksUser DayRemarksUser[]
 }
+
+model SohkenGoogleCalendar {
+ id        Int       @id @default(autoincrement())
+ createdAt DateTime  @default(now())
+ updatedAt DateTime? @default(now()) @updatedAt()
+ sortOrder Float     @default(0)
+
+ calendarId String
+ eventId    String? @unique
+
+ date    DateTime
+ startAt DateTime?
+ endAt   DateTime?
+ summary String?
+}

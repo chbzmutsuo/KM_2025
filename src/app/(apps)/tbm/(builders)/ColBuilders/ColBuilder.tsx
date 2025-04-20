@@ -18,7 +18,7 @@ import {tbmProductColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmPr
 import {odometerInputColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/odometerInputColBuilder'
 import {tbmCustomerColBuilder} from '@app/(apps)/tbm/(builders)/ColBuilders/tbmCustomerColBuilder'
 import {getMidnight} from '@class/Days'
-import {TBM_OPTIONS} from '@app/(apps)/tbm/(constants)/TBM_OPTIONS'
+import {TBM_CODE_MASTER} from '@app/(apps)/tbm/(constants)/TBM_CODE_MASTER'
 
 export class ColBuilder {
   static user = UserColBuilder
@@ -59,7 +59,7 @@ export class ColBuilder {
         label: '区分',
         form: {...defaultRegister},
         type: 'select',
-        forSelect: {optionsOrOptionFetcher: TBM_OPTIONS.TBM_VEHICLE_MAINTENANCE_RECORD_TYPE},
+        forSelect: {optionsOrOptionFetcher: TBM_CODE_MASTER.VEHICLE_MAINTENANCE_RECORD_TYPE},
       },
     ]).transposeColumns()
   }

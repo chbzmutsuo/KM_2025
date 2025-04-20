@@ -1,5 +1,5 @@
 import {PageGetterType, CleansePathSource} from 'src/non-common/path-title-constsnts'
-import {getAqLoginType, getScopes} from 'src/non-common/scope-lib/getScopes'
+import {getScopes} from 'src/non-common/scope-lib/getScopes'
 import {Arr} from '@class/Arr'
 
 export const aquapot_PAGES = (props: PageGetterType) => {
@@ -12,17 +12,18 @@ export const aquapot_PAGES = (props: PageGetterType) => {
 
   const {session, rootPath, pathname, query} = props
   const scopes = getScopes(session, {query, roles})
-  const {admin} = scopes
+  const {admin, login} = scopes
+
+  const {isUser, aqCustomerId} = scopes.getAquepotScopes()
 
   const publicPaths = [
     {
       tabId: 'myPage',
       label: 'お客様ページ',
       ROOT: [rootPath],
-      // exclusiveTo: !!getAqLoginType({session}).asCustomer
+      exclusiveTo: true,
     },
   ]
-  const isCustomer = !!getAqLoginType({session}).asCustomer
 
   const adminPaths = [
     {
@@ -73,7 +74,7 @@ export const aquapot_PAGES = (props: PageGetterType) => {
     {tabId: `batch`, label: 'バッチ', exclusiveTo: admin},
 
     // {tabId: 'inventory', label: '在庫一覧'},
-  ].map(item => ({...item, exclusiveTo: !isCustomer, ROOT: [rootPath]}))
+  ].map(item => ({...item, exclusiveTo: !!isUser, ROOT: [rootPath]}))
 
   const systemAdminPaths = [{tabId: 'roleMaster', label: '権限管理'}].map(item => ({
     ...item,

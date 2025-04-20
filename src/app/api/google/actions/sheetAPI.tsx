@@ -1,12 +1,12 @@
 'use server'
 
 import {convert_GoogleURL_to_ID} from '@app/api/google/actions/convert_GoogleURL_to_ID'
-import {getAuth} from '@app/api/google/actions/getAuth'
+import {getAuth} from '@app/api/auth/google/getAuth'
 import {google, sheets_v4} from 'googleapis'
 
 export const GoogleSheet_Get = async (props: {spreadsheetId: string}) => {
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
-  const auth = getAuth()
+  const auth = await getAuth()
   const sheets = google.sheets({version: 'v4', auth})
   const res = await sheets.spreadsheets.get({spreadsheetId})
   const {data, config} = res
@@ -30,7 +30,7 @@ export const GoogleSheet_getSheetByNameOrCreate = async (props: {spreadsheetId: 
   if (sheet) {
     return sheet
   } else {
-    const auth = getAuth()
+    const auth = await getAuth()
     const sheets = google.sheets({version: 'v4', auth})
     const res = await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
@@ -55,7 +55,7 @@ export const GoogleSheet_getSheetByNameOrCreate = async (props: {spreadsheetId: 
 export const GoogleSheet_Read = async (props: {range: string; spreadsheetId: string}) => {
   const {range} = props
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
-  const auth = getAuth()
+  const auth = await getAuth()
   const sheets = google.sheets({version: 'v4', auth})
 
   const res = await sheets.spreadsheets.values.get({spreadsheetId, range})
@@ -66,7 +66,7 @@ export const GoogleSheet_Read = async (props: {range: string; spreadsheetId: str
 export const GoogleSheet_Update = async (props: {range: string; spreadsheetId: string; values: string[][]}) => {
   const {range, values} = props
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
-  const auth = getAuth()
+  const auth = await getAuth()
   const sheets = google.sheets({version: 'v4', auth})
 
   const res = await sheets.spreadsheets.values.update({
@@ -82,7 +82,7 @@ export const GoogleSheet_Update = async (props: {range: string; spreadsheetId: s
 export const GoogleSheet_Append = async (props: {range: string; spreadsheetId: string; values: string[][]}) => {
   const {range, values} = props
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
-  const auth = getAuth()
+  const auth = await getAuth()
   const sheets = google.sheets({version: 'v4', auth})
   const res = await sheets.spreadsheets.values.append({
     spreadsheetId,
@@ -98,7 +98,7 @@ export const GoogleSheet_Append = async (props: {range: string; spreadsheetId: s
 export const GoogleSheet_BatchUpdate = async (props: {spreadsheetId: string; requests: sheets_v4.Schema$Request[]}) => {
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
 
-  const auth = getAuth()
+  const auth = await getAuth()
   const sheets = google.sheets({version: 'v4', auth})
 
   const res = await sheets.spreadsheets.batchUpdate({
@@ -115,7 +115,7 @@ export const GoogleSheet_copy = async (props: {fromSSId: string; destinationFold
   const fromSpreadsheetId = convert_GoogleURL_to_ID(props.fromSSId)
   const destinationFolderId = convert_GoogleURL_to_ID(props.destinationFolderId)
 
-  const auth = getAuth()
+  const auth = await getAuth()
 
   const drive = google.drive({version: 'v3', auth})
 

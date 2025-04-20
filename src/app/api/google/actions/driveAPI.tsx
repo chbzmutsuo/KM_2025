@@ -1,7 +1,7 @@
 'use server'
 
 import {convert_GoogleURL_to_ID} from '@app/api/google/actions/convert_GoogleURL_to_ID'
-import {getAuth} from '@app/api/google/actions/getAuth'
+import {getAuth} from '@app/api/auth/google/getAuth'
 import {google} from 'googleapis'
 import {Readable} from 'stream'
 
@@ -9,7 +9,7 @@ export const GoogleDrive_GeneratePdf = async (props: {spreadsheetId: string; par
   const {pdfName = 'created by system', parentFolderIds = []} = props
   const spreadsheetId = convert_GoogleURL_to_ID(props.spreadsheetId)
 
-  const auth = getAuth()
+  const auth = await getAuth()
   const drive = google.drive({version: 'v3', auth})
 
   const res = await drive.files.export(
@@ -64,7 +64,7 @@ export const GoogleDrive_CopyFile = async (props: {fileId: string; newName: stri
 
   const parentFolderId = convert_GoogleURL_to_ID(props.parentFolderId)
   const {newName} = props
-  const auth = getAuth()
+  const auth = await getAuth()
   const drive = google.drive({version: 'v3', auth})
 
   const res = await drive.files.copy({
@@ -89,7 +89,7 @@ export const GoogleDrive_GetFilesInFolder = async (props: {
   const folderId = convert_GoogleURL_to_ID(props.folderId)
   const {pageSize = 100, orderBy = 'modifiedTime desc', q = ''} = props
 
-  const auth = getAuth()
+  const auth = await getAuth()
   const drive = google.drive({version: 'v3', auth})
 
   try {
@@ -119,7 +119,7 @@ export const GoogleDrive_GetFilesInFolder = async (props: {
 export const GoogleDrive_DownloadCSV = async (props: {fileId: string; parentFolderId: string}) => {
   const fileId = convert_GoogleURL_to_ID(props.fileId)
 
-  const auth = getAuth()
+  const auth = await getAuth()
   const drive = google.drive({version: 'v3', auth})
 
   const res = await drive.files.get({
@@ -143,7 +143,7 @@ export const GoogleDrive_DownloadCSV = async (props: {fileId: string; parentFold
 export const GoogleDrive_UpsertFolder = async (props: {parentFolderId: string; folderNameToFind?: string}) => {
   const {folderNameToFind} = props
   const parentFolderId = convert_GoogleURL_to_ID(props.parentFolderId)
-  const auth = getAuth()
+  const auth = await getAuth()
   const drive = google.drive({version: 'v3', auth})
 
   const theFolder = await drive.files.list({

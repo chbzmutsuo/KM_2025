@@ -27,6 +27,7 @@ export const POST = async (req: NextRequest) => {
       body.queryObject,
       body.transactionPrisma
     )
+
     return NextResponse.json(result)
   } else {
     return NextResponse.json({success: false, message: 'アクセスが禁止されています', result: null}, {status: 200})

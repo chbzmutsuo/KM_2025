@@ -1,3 +1,5 @@
+import {chechIsHoliday} from '@app/(apps)/sohken/api/cron/refreshGoogleCalendar/chechIsHoliday'
+import {getHolidayCalendar} from '@app/(apps)/sohken/api/cron/refreshGoogleCalendar/getHolidayCalendar'
 import {Days, formatDate, getMidnight, toUtc} from '@class/Days'
 import {Center, C_Stack, R_Stack} from '@components/styles/common-components/common-components'
 import {CsvTable} from '@components/styles/common-components/CsvTable/CsvTable'
@@ -27,12 +29,17 @@ export default async function CalendarPage(props) {
 
   const from = toUtc(query.from)
   const to = addDays(from, 14)
+
   const {days} = Days.getIntervalDatum(from, to)
+
+  const {holidays} = await getHolidayCalendar({whereQuery: {gte: from, lte: to}})
+
   const prev_next_Query = {
     from: addDays(from, -15),
     to: addDays(from, 15),
   }
 
+  console.time(`calendar`)
   const {result: allGenbaTasks} = await fetchUniversalAPI(`genbaTask`, `findMany`, {
     include: {Genba: {include: {PrefCity: true}}},
     where: {from: {gte: from, lte: to}},
@@ -49,64 +56,7 @@ export default async function CalendarPage(props) {
     },
   })
   const userCount = userList.length
-  const Table = () => {
-    return (
-      <TableWrapper>
-        <TableBordered>
-          {CsvTable({
-            headerRecords: [
-              {
-                csvTableRow: [
-                  //
-                  {cellValue: `日付`},
-                  {cellValue: `人工`},
-                  {cellValue: `余力`},
-                  {cellValue: `＃`},
-                ],
-              },
-            ],
-            bodyRecords: days.map((d, dayIdx) => {
-              const ninkuCount = dayRemarks.find(dayRemark => Days.isSameDate(dayRemark.date, d))?.ninkuCount
-
-              const GenbaTaskStartingToday = allGenbaTasks.filter(task => Days.isSameDate(task.from, d))
-              const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => {
-                return acc + task.requiredNinku
-              }, 0)
-
-              const genbaNameList = GenbaTaskStartingToday.map(t => t.Genba.name).join(`, `)
-
-              const href = HREF(`/sohken/genbaDay`, {from: formatDate(d)}, query)
-              return {
-                csvTableRow: [
-                  //
-                  {cellValue: <T_LINK href={href}>{formatDate(d)}</T_LINK>},
-                  {
-                    cellValue: (
-                      <MyPopover
-                        {...{
-                          mode: `click`,
-                          button: requiredNinkuSum,
-                        }}
-                      >
-                        <Paper>{genbaNameList}</Paper>
-                      </MyPopover>
-                    ),
-                  },
-
-                  {cellValue: userCount - requiredNinkuSum},
-                  {
-                    cellValue:
-                      ninkuCount === undefined ? '' : ninkuCount === 0 ? '0' : ninkuCount >= 0 ? ninkuCount : `▲${ninkuCount}`,
-                    style: {width: 100, textAlign: 'right'},
-                  },
-                ],
-              }
-            }),
-          }).ALL()}
-        </TableBordered>
-      </TableWrapper>
-    )
-  }
+  console.timeEnd(`calendar`)
 
   return (
     <Center>
@@ -132,7 +82,7 @@ export default async function CalendarPage(props) {
           </section>
 
           <section>
-            <Table />
+            <Table {...{holidays, days, dayRemarks, allGenbaTasks, userCount, query}} />
           </section>
           <section>
             <R_Stack className={`w-[200px] justify-between`}>
@@ -143,5 +93,84 @@ export default async function CalendarPage(props) {
         </C_Stack>
       </Paper>
     </Center>
+  )
+}
+
+const Table = ({holidays, days, dayRemarks, allGenbaTasks, userCount, query}) => {
+  return (
+    <TableWrapper>
+      <TableBordered>
+        {CsvTable({
+          headerRecords: [
+            {
+              csvTableRow: [
+                //
+                {cellValue: `日付`},
+                {cellValue: `祝日`},
+                {cellValue: `人工`},
+                {cellValue: `余力`},
+                {cellValue: `＃`},
+              ],
+            },
+          ],
+          bodyRecords: days
+            .filter(d => {
+              return chechIsHoliday({holidays, date: d}) === false
+            })
+            .map((d, dayIdx) => {
+              const isHoliday = holidays.find(h => {
+                return Days.isSameDate(h.date, d)
+              })
+
+              const ninkuCount = dayRemarks.find(dayRemark => Days.isSameDate(dayRemark.date, d))?.ninkuCount
+
+              const GenbaTaskStartingToday = allGenbaTasks.filter(task => Days.isSameDate(task.from, d))
+              const requiredNinkuSum = GenbaTaskStartingToday.reduce((acc, task) => {
+                return acc + task.requiredNinku
+              }, 0)
+
+              const genbaNameList = GenbaTaskStartingToday.map(t => t.Genba.name).join(`, `)
+
+              const href = HREF(`/sohken/genbaDay`, {from: formatDate(d)}, query)
+
+              return {
+                csvTableRow: [
+                  //
+                  {
+                    cellValue: (
+                      <T_LINK href={href} className={`t-link`}>
+                        {formatDate(d, 'YYYY-MM-DD(ddd)')}
+                      </T_LINK>
+                    ),
+                  },
+
+                  {
+                    cellValue: isHoliday?.summary,
+                  },
+                  {
+                    cellValue: (
+                      <MyPopover
+                        {...{
+                          mode: `click`,
+                          button: requiredNinkuSum,
+                        }}
+                      >
+                        <Paper>{genbaNameList}</Paper>
+                      </MyPopover>
+                    ),
+                  },
+
+                  {cellValue: userCount - requiredNinkuSum},
+                  {
+                    cellValue:
+                      ninkuCount === undefined ? '' : ninkuCount === 0 ? '0' : ninkuCount >= 0 ? ninkuCount : `▲${ninkuCount}`,
+                    style: {width: 100, textAlign: 'right'},
+                  },
+                ],
+              }
+            }),
+        }).ALL()}
+      </TableBordered>
+    </TableWrapper>
   )
 }
