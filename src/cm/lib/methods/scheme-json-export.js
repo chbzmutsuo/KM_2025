@@ -1596,7 +1596,6 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder", "relationJoins"]
-  output          = "../generated/prisma"
 }
 
 model Department {

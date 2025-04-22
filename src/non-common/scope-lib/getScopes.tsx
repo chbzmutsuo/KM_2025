@@ -97,7 +97,6 @@ export const getScopes = (session: anyObject, options: getScopeOptionsProps) => 
         isYakuin: !!Arr.findCommonValues([`役員`], roleNames),
       }
       const isNormalUser = !Object.values(data).some(data => data)
-
       return {...data, isNormalUser}
     },
   }

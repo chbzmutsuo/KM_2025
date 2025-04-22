@@ -11,7 +11,6 @@ import {cl} from '@cm/lib/methods/common'
 import {Button} from '@components/styles/common-components/Button'
 import {IconBtn} from '@components/styles/common-components/IconBtn'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import {Prisma} from '@prisma/client'
 
 import {useState} from 'react'
 
@@ -71,7 +70,7 @@ const BulkNotificationClient = ({students}) => {
             update: {userId: student.id},
           })
 
-          const payload: Prisma.SystemChatCreateArgs = {
+          const payload = {
             data: {
               message: latestFormData.message,
               url: url,

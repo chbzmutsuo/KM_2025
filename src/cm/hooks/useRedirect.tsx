@@ -1,15 +1,16 @@
+'use client'
 import {useEffect} from 'react'
-import {useRouter} from 'next/navigation'
-import useMyNavigation from '@hooks/globalHooks/useMyNavigation'
+import {redirect as nextRedirect, useRouter} from 'next/navigation'
 
-export default function useRedirect(mustRedirect, redirectUrl = '/404', redirect = true) {
+export default function useRedirect(mustRedirect, redirectUrl = '/404', shouldRedirect = true) {
   const router = useRouter()
-  const {query} = useMyNavigation()
+
+  const doRedirect = mustRedirect && shouldRedirect && redirectUrl
   useEffect(() => {
-    if (mustRedirect && redirect && redirectUrl) {
-      router.replace(redirectUrl)
+    if (doRedirect) {
+      nextRedirect(redirectUrl)
     }
-  }, [])
+  }, [doRedirect, redirectUrl, router])
 
   return {
     isValidUser: !mustRedirect,

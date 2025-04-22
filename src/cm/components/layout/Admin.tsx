@@ -2,9 +2,6 @@
 import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 import Redirector from 'src/cm/components/utils/Redirector'
 import React, {JSX, useCallback, useEffect, useState} from 'react'
-
-import NavBar from 'src/cm/components/layout/Navigation/NavBar'
-
 import {PageBuilderGetterType} from '@cm/types/types'
 import {MenuButton} from 'src/cm/components/layout/MenuButton'
 import {identifyPathItem, PAGES} from 'src/non-common/path-title-constsnts'
@@ -14,8 +11,12 @@ import {DH} from 'src/cm/class/DH'
 import {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobalOrigin'
 import {rootPaths} from 'src/middleware'
 import {MetaData} from '@components/layout/MetaData'
-import Drawer from '@components/layout/Navigation/Drawer'
-import Header from '@components/layout/Header'
+
+import dynamic from 'next/dynamic'
+import PlaceHolder from '@components/utils/loader/PlaceHolder'
+const NavBar = dynamic(() => import('src/cm/components/layout/Navigation/NavBar'), {loading: () => <PlaceHolder />})
+const Header = dynamic(() => import('src/cm/components/layout/Header'), {loading: () => <PlaceHolder />})
+const Drawer = dynamic(() => import('src/cm/components/layout/Navigation/Drawer'), {loading: () => <PlaceHolder />})
 
 export type adminProps = {
   AppName: string | JSX.Element
@@ -72,10 +73,6 @@ const Admin = (props: adminProps) => {
       </div>
     )
   }, [children, pathItemObject, AppName])
-
-  // if (waitRendering || status === `loading` || useGlobalProps.waitRendering) {
-  //   return <Loader />
-  // }
 
   const {invalidCheck} = getInvalidCheck()
 

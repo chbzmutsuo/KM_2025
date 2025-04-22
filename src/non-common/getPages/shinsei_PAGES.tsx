@@ -3,7 +3,8 @@ import {CleansePathSource, PageGetterType, pathItemType} from 'src/non-common/pa
 export const shinsei_PAGES = (props: PageGetterType) => {
   const {session, query, rootPath, pathname, roles} = props
   const {login, admin, getShinseiScopes} = getScopes(session, {query, roles})
-  const {isKanrisha, isHacchuTanto, isKojocho, isYakuin, isNormalUser} = getShinseiScopes()
+  const {isKanrisha, isHacchuTanto, isKojocho, isTokatsu, isBucho, isYakuin, isNormalUser} = getShinseiScopes()
+
   const pathSource: pathItemType[] = [
     {tabId: rootPath, label: 'TOP', ROOT: [], hide: true},
     {
@@ -22,13 +23,13 @@ export const shinsei_PAGES = (props: PageGetterType) => {
         },
         {
           tabId: 'purchase/result',
-          label: '発注承認',
+          label: '承認',
           exclusiveTo: isHacchuTanto || isKojocho,
         },
         {
           tabId: 'purchase/admin-history',
           label: '管理者閲覧用',
-          exclusiveTo: isKanrisha,
+          exclusiveTo: isKanrisha || isYakuin,
         },
       ],
     },
@@ -39,15 +40,16 @@ export const shinsei_PAGES = (props: PageGetterType) => {
       children: [
         {
           tabId: 'leave/create',
-          label: '新規休暇申請',
+          label: '新規申請',
         },
         {
           tabId: 'leave/history',
-          label: '休暇申請履歴',
+          label: '申請履歴',
         },
         {
           tabId: 'leave/result',
-          label: '休暇申請承認',
+          label: '承認',
+          exclusiveTo: isTokatsu || isBucho,
         },
         {
           tabId: 'leave/admin-history',
@@ -60,6 +62,7 @@ export const shinsei_PAGES = (props: PageGetterType) => {
       tabId: '',
       label: '管理',
       ROOT: [rootPath],
+      exclusiveTo: !!isKanrisha,
       children: [
         {tabId: 'department', label: '部署'},
         {tabId: 'user', label: 'ユーザー一覧'},
@@ -68,7 +71,7 @@ export const shinsei_PAGES = (props: PageGetterType) => {
         {tabId: `product`, label: '部品マスタ'},
       ],
     },
-  ].map(data => ({...data, exclusiveTo: !!login}))
+  ]
 
   return {
     ...CleansePathSource({

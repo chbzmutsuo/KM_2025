@@ -9,8 +9,8 @@ import SystemChat from '@app/(apps)/Advantage/(utils)/components/chat/systemChat
 import {DetailPagePropType} from '@cm/types/types'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {Fields} from '@class/Fields/Fields'
-import dynamic from 'next/dynamic'
-import PlaceHolder from '@components/utils/loader/PlaceHolder'
+
+import GlobalIdSelector from '@components/GlobalIdSelector/GlobalIdSelector'
 
 export class PageBuilder {
   static systemChatRoom = {
@@ -75,6 +75,3 @@ export class PageBuilder {
     }
   }
 }
-const GlobalIdSelector = dynamic(() => import('@cm/components/GlobalIdSelector/GlobalIdSelector'), {
-  loading: () => <PlaceHolder />,
-})

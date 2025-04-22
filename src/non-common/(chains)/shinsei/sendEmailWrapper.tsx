@@ -11,5 +11,6 @@ export const sendEmailWrapper = async (props: {
   await knockEmailApi({
     ...props,
     to: [`info.ishidaseiko@gmail.com`],
+    cc: [`info@ishidaseiko.com`],
   })
 }

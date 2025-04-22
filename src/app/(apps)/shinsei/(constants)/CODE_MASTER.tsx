@@ -54,6 +54,7 @@ const LEAVE_TYPE_OPTION: {value: string; label: string; color?: string}[] = [
   {value: `欠勤`, label: `欠勤`},
   {value: `早退`, label: `早退`},
   {value: `遅刻`, label: `遅刻`},
+  {value: `キャンセル`, label: `キャンセル`},
 ]
 
 export const CODE_MASTER = {

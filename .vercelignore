@@ -46,21 +46,20 @@ latest.dump
 
 
 #ignoreを選択
-src/app/**/shinsei
-src/app/**/demo
-src/app/**/gpt
-src/app/**/roken
-src/app/**/masterKey
-src/app/**/achievement
-src/app/**/tmp
-src/app/**/Grouping
-src/app/**/tbm
-src/app/**/yoshinari
-src/app/**/applicationForms
-src/app/**/Advantage
+src/app/**/sohken
 src/app/**/aquapot
-src/app/**/apex
-src/app/**/KM
-src/app/**/kickswrap
-#src/app/**/sohken
-
+src/app/**/Advantage
+src/app/**/applicationForms
+src/app/**/yoshinari
+src/app/**/tbm
+src/app/**/Grouping
+src/app/**/tmp
+src/app/**/achievement
+src/app/**/masterKey
+src/app/**/roken
+src/app/**/gpt
+src/app/**/demo
+#src/app/**/shinsei
+#src/app/**/apex
+#src/app/**/KM
+#src/app/**/kickswrap

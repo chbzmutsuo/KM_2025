@@ -1,11 +1,11 @@
 'use client'
-import React, {useCallback, useMemo, useRef} from 'react'
+import React, {JSX, useCallback, useMemo, useRef} from 'react'
 import {Dialog} from '@headlessui/react'
 import {anyObject} from '@cm/types/types'
 import {myModalDefault} from 'src/cm/constants/defaults'
 import {XMarkIcon} from '@heroicons/react/20/solid'
 import {Z_INDEX} from 'src/cm/lib/constants/constants'
-import {JSX} from 'react'
+
 import {Center} from '@components/styles/common-components/common-components'
 export type basicModalPropType = {
   closeBtn?: boolean | JSX.Element

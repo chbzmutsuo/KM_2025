@@ -2,7 +2,7 @@
 
 import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
 import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
-
+import {JSX} from 'react'
 import useWindowSize from 'src/cm/hooks/useWindowSize'
 import {cl} from 'src/cm/lib/methods/common'
 import {CSSProperties, useEffect} from 'react'
@@ -11,7 +11,6 @@ import {TitleDescription} from 'src/cm/components/styles/common-components/Notat
 import {anyObject} from '@cm/types/types'
 
 import {useJotaiByKey, atomTypes} from '@hooks/useJotai'
-import {JSX} from 'react'
 
 export type tabComponent = {
   style?: CSSProperties

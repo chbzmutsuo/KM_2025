@@ -1,5 +1,3 @@
-import {anyObject} from '@cm/types/types'
-
 import {Downloader} from '@components/styles/common-components/CsvTable/CsvDownloader'
 import {CsvTableBody} from '@components/styles/common-components/CsvTable/CsvTableBody'
 import {CsvTableHead} from '@components/styles/common-components/CsvTable/CsvTableHead'
@@ -18,7 +16,7 @@ export type CsvTableProps = {
   SP?: boolean
   csvOutput?: {
     fileTitle: string
-    dataArranger?: (props: recordsType) => anyObject[]
+    dataArranger?: (props: recordsType) => Promise<any[]>
   }
 } & recordsType
 

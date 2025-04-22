@@ -1,12 +1,9 @@
 'use client'
 import useMySession from '@hooks/globalHooks/useMySession'
 import useMyNavigation from 'src/cm/hooks/globalHooks/useMyNavigation'
-import {RecoilEnv} from 'recoil'
 
 import useLoader from 'src/cm/hooks/globalHooks/useLoader'
 import useWindowSize from 'src/cm/hooks/useWindowSize'
-
-RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false
 
 export type useGlobalPropType = ReturnType<typeof useGlobalOrigin>
 

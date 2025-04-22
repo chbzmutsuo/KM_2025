@@ -154,19 +154,23 @@ export default function PurchaseHistoryTable({dataFetchProps = {}, deletable = f
                         {ApprovalList.map((approve, i) => {
                           const passed = approve.status === '承認' && i < lastApprovedIdx
 
+                          const allPassed = ApprovalList.every(data => data.status === '承認')
+
                           const isNextApprover = i === nextApproverIdx
                           const notMyTime = nextApproverIdx < i
-                          const updateable = session.id === approve.userId && !notMyTime
+                          const hasAnswered = approve.status !== '未回答'
+                          const updateable = session.id === approve.userId && !notMyTime && !allPassed && !hasAnswered
 
-                          const buttonClass = hasSomeRejection
-                            ? ''
-                            : isNextApprover
-                              ? updateable
-                                ? 'bg-red-500 font-bold text-white'
-                                : 'bg-blue-500 font-bold text-white'
-                              : notMyTime
-                                ? 'bg-gray-300 text-gray-500 opacity-50'
-                                : 'bg-gray-300'
+                          const buttonClass =
+                            hasSomeRejection || allPassed
+                              ? ''
+                              : isNextApprover
+                                ? updateable
+                                  ? 'bg-red-500 font-bold text-white'
+                                  : 'bg-blue-500 font-bold text-white'
+                                : notMyTime
+                                  ? 'bg-gray-300 text-gray-500 opacity-50'
+                                  : 'bg-gray-300'
 
                           return (
                             <R_Stack key={i} className={`flex-nowrap `}>

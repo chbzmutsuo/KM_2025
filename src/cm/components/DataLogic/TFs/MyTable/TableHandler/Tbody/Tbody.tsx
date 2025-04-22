@@ -3,8 +3,9 @@ import {Fragment} from 'react'
 
 import {ClientPropsType2} from 'src/cm/components/DataLogic/TFs/PropAdjustor/PropAdjustor'
 import {OB} from 'src/cm/class/OB'
-import DnDTableRow, {DnDTableRowPropsType} from 'src/cm/components/DataLogic/TFs/MyTable/DndTableRow'
-
+import {DnDTableRowPropsType} from 'src/cm/components/DataLogic/TFs/MyTable/DndTableRow'
+import dynamic from 'next/dynamic'
+const DnDTableRow = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/DndTableRow'))
 export type tbodyParamsType = {
   getPaginationProps: any
   RowActionButtonComponent: any

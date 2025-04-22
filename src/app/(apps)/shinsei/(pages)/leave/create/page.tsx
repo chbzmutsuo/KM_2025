@@ -156,7 +156,7 @@ export default function PurchaseRequestPage() {
               <small>担当者にメールが送信されます。</small>
             </div>
             <div>
-              <Button>発注する</Button>
+              <Button>申請する</Button>
             </div>
           </C_Stack>
         </BasicForm>

@@ -1,5 +1,6 @@
 'use client'
 
+import TopPage from '@components/layout/Navigation/TopPage'
 import {CenterScreen} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {HREF} from '@lib/methods/urls'
@@ -47,7 +48,8 @@ const navigationItems = [
 export default function shinseiPage() {
   const {query} = useGlobal()
 
-  return <CenterScreen className={` text-2xl font-bold`}>メニューを選択してください</CenterScreen>
+  return <TopPage />
+  // return <CenterScreen className={` text-2xl font-bold`}>メニューを選択してください</CenterScreen>
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-8 text-3xl font-bold">申請フォーム</h1>

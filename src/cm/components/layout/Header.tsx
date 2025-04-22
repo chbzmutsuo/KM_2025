@@ -1,3 +1,5 @@
+'use client'
+
 import AppLogo from 'src/cm/components/layout/Navigation/AppLogo'
 import NavBar from 'src/cm/components/layout/Navigation/NavBar'
 import {R_Stack} from 'src/cm/components/styles/common-components/common-components'
@@ -33,6 +35,7 @@ const Header = React.memo((props: {adminContext: adminContext}) => {
   }, [PageBuilderGetter, useGlobalProps])
 
   // return <div></div>
+  const topLink = HREF(`/${rootPath}`, {}, query)
 
   return (
     <div
@@ -44,7 +47,7 @@ const Header = React.memo((props: {adminContext: adminContext}) => {
           <R_Stack>
             {horizontalMenu === false && PC && MenuButton}
             <R_Stack className={`  gap-x-10`}>
-              <Link href={HREF(`/${rootPath}`, {}, query)}>
+              <Link href={topLink}>
                 <AppLogo {...{showLogoOnly, AppName, Logo}} />
               </Link>
               {PC && <Breadcrumbs {...{breads: pages?.breads ?? [], ModelBuilder}} />}

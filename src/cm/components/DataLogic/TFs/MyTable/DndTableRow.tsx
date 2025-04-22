@@ -2,14 +2,15 @@ import React, {useCallback} from 'react'
 
 import {CSS} from '@dnd-kit/utilities'
 import {useSortable} from '@dnd-kit/sortable'
-
 import {tbodyParamsType} from 'src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/Tbody'
-
 import {createRowColor, createTrClassName} from 'src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/Tbody-methods'
-
 import {cl} from 'src/cm/lib/methods/common'
 import {BodyLeftTh} from 'src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/BodyLeftTh'
-import TableCell from 'src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/TableCell/TableCell'
+import dynamic from 'next/dynamic'
+const TableCell = dynamic(() => import('src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/TableCell/TableCell'), {
+  loading: () => <></>,
+  ssr: false,
+})
 import {MyTableType} from '@cm/types/types'
 
 export type DnDTableRowPropsType = {

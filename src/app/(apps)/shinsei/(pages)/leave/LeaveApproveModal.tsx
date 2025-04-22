@@ -59,7 +59,6 @@ export default function PurchaseApproveModal(props: {
               latestFormData,
               onSubmit: async data => {
                 const {status, comment} = data
-
                 if (status === '未回答') {
                   return alert('「未回答」は入力できません。')
                 }
@@ -69,50 +68,10 @@ export default function PurchaseApproveModal(props: {
                   include: {RoleMaster: {}},
                 })
 
-                let message = '一度変更したデータはもとに戻せません。よろしいですか？'
+                const message = '一度変更したデータはもとに戻せません。よろしいですか？'
 
-                const isHacchusha = userRole.find(userRole => userRole.RoleMaster.name === '発注担当者')
-
-                if (status !== '承認') {
-                  if (confirm(message)) {
-                    await doUpdateStatus(data)
-                  }
-                } else {
-                  //発注者処理
-                  if (isHacchusha) {
-                    const {result: requestData} = await fetchUniversalAPI(`purchaseRequest`, `findUnique`, {
-                      where: {id: request.id},
-                      include: {Product: {include: {ShiireSaki: true}}},
-                    })
-
-                    const shiiresaki = requestData?.Product?.ShiireSaki
-
-                    if (shiiresaki) {
-                      message = [
-                        //
-                        `発注を確定すると、仕入れ先に自動でメール通知が実施されます。`,
-                        `仕入れ先: ${shiiresaki.name}`,
-                      ].join(`\n`)
-
-                      const subject = `発注確定のお知らせ`
-                      const text = [`仕入れ先へのメール本文です。`].join(`\n`)
-
-                      if (confirm(message)) {
-                        await sendEmailWrapper({to: [shiiresaki.email], subject, text})
-
-                        await doUpdateStatus(data)
-                      }
-                    } else {
-                      message = '仕入れ先のメールアドレスが見つからないため、処理を実行できません。'
-                      return alert(message)
-                    }
-                  } else {
-                    //承認者処理
-
-                    if (confirm(message)) {
-                      await doUpdateStatus(data)
-                    }
-                  }
+                if (confirm(message)) {
+                  await doUpdateStatus(data)
                 }
               },
             }}

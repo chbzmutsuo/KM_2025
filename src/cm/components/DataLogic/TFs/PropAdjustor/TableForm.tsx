@@ -5,8 +5,12 @@ import {myFormDefault, myModalDefault, myTableDefault} from 'src/cm/constants/de
 
 import {ClientPropsType2} from 'src/cm/components/DataLogic/TFs/PropAdjustor/PropAdjustor'
 import BasicModal from '@components/utils/modal/BasicModal'
-import MyTable from '@components/DataLogic/TFs/MyTable/MyTable'
-import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
+// import MyTable from '@components/DataLogic/TFs/MyTable/MyTable'
+// import MyForm from '@components/DataLogic/TFs/MyForm/MyForm'
+import dynamic from 'next/dynamic'
+import PlaceHolder from '@components/utils/loader/PlaceHolder'
+const MyTable = dynamic(() => import('@components/DataLogic/TFs/MyTable/MyTable'), {loading: () => <PlaceHolder />})
+const MyForm = dynamic(() => import('@components/DataLogic/TFs/MyForm/MyForm'), {loading: () => <PlaceHolder />})
 
 const TableForm = (props: ClientPropsType2) => {
   const ClientProps2 = convertProps(props)

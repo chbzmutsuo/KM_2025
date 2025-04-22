@@ -15,9 +15,6 @@ export const T_LINK = (props: props & {href; target?: '_blank'}) => {
   return (
     <Link
       {...{
-        // onNavigate: () => {
-        //   setglobalLoaderAtom(true)
-        // },
         target,
         href,
         className: cl(className, 't-link'),

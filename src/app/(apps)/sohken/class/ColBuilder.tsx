@@ -38,7 +38,7 @@ export class ColBuilder {
     const {toggleLoad, router} = props.useGlobalProps
 
     return new Fields([
-      {id: 'name', label: 'タスク名', form: {...defaultRegister}},
+      {id: 'name', label: 'タスク名', form: {...defaultRegister}, td: {style: {width: 200}}},
       {id: 'color', label: '色', type: `color`, form: {}},
       ...new Fields([
         {

@@ -23,7 +23,7 @@ type dayRemarksType = DayRemarks & {
   DayRemarksUser: (DayRemarksUser & {User: User})[]
 }
 
-export const TopDayRemarkComponent = (props: {date; editable; dayRemarksState}) => {
+export const TopDayRemarkComponent = React.memo((props: {date; editable; dayRemarksState}) => {
   const router = useRouter()
   const [dayRemarksState, setdayRemarksState] = useState<any | null>(props.dayRemarksState)
   const {date} = props
@@ -48,9 +48,9 @@ export const TopDayRemarkComponent = (props: {date; editable; dayRemarksState}) 
       </label>
     </div>
   )
-}
+})
 
-export const DayRemarkComponent = (props: {calendar; users; date; editable; dayRemarksState}) => {
+export const DayRemarkComponent = React.memo((props: {calendar; users; date; editable; dayRemarksState}) => {
   const {calendar, users, date, editable} = props
 
   const [dayRemarksState, setdayRemarksState] = useState<dayRemarksType | null>(props.dayRemarksState)
@@ -249,9 +249,10 @@ export const DayRemarkComponent = (props: {calendar; users; date; editable; dayR
       </C_Stack>
     </div>
   )
-}
+})
 
-const UserListSelector = ({users, date, dayRemarksState, dataKey, initState, handleClose}) => {
+const UserListSelector = React.memo((props: {users; date; dayRemarksState; dataKey; initState; handleClose}) => {
+  const {users, date, dayRemarksState, dataKey, initState, handleClose} = props
   const {router} = useGlobal()
   const [list, setList] = useState(
     users.map(data => {
@@ -356,9 +357,10 @@ const UserListSelector = ({users, date, dayRemarksState, dataKey, initState, han
       </Button>
     </C_Stack>
   )
-}
+})
 
-const TextArea = ({label, dataKey, dayRemarksState, setdayRemarksState, defaultValue, editable, date}) => {
+const TextArea = React.memo((props: {label; dataKey; dayRemarksState; setdayRemarksState; defaultValue; editable; date}) => {
+  const {label, dataKey, dayRemarksState, setdayRemarksState, defaultValue, editable, date} = props
   const [value, setvalue] = useState(dayRemarksState?.[dataKey] ?? defaultValue)
 
   return (
@@ -382,4 +384,4 @@ const TextArea = ({label, dataKey, dayRemarksState, setdayRemarksState, defaultV
       ></textarea>
     </Paper>
   )
-}
+})

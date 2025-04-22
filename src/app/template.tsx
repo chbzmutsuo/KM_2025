@@ -23,7 +23,8 @@ import {RefreshCwIcon} from 'lucide-react'
 
 export default function Global_Template(props) {
   const {globalHooks, globalPropsReady} = useInitGlobalHooks()
-  if (!globalHooks || globalPropsReady === false || globalHooks?.waitRendering === true) return <Loader />
+  if (!globalHooks || globalPropsReady === false || globalHooks?.waitRendering === true)
+    return <Loader>Setting Up Initial State...</Loader>
   const {router, pathname} = globalHooks
 
   if (pathname === `/` && process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_PATH) {

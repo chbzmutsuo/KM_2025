@@ -39,7 +39,6 @@ export default async function CalendarPage(props) {
     to: addDays(from, 15),
   }
 
-  console.time(`calendar`)
   const {result: allGenbaTasks} = await fetchUniversalAPI(`genbaTask`, `findMany`, {
     include: {Genba: {include: {PrefCity: true}}},
     where: {from: {gte: from, lte: to}},
@@ -56,7 +55,6 @@ export default async function CalendarPage(props) {
     },
   })
   const userCount = userList.length
-  console.timeEnd(`calendar`)
 
   return (
     <Center>

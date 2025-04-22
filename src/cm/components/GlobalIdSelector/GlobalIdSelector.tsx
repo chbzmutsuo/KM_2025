@@ -28,7 +28,7 @@ const GlobalIdSelector = React.memo((props: GlobalIdSelectorProps) => {
     formData: defaultValues,
     autoApplyProps: {form: {}},
     onFormItemBlur: ({newlatestFormData}) => {
-      addQuery(newlatestFormData, 'push')
+      addQuery(newlatestFormData)
     },
   })
 

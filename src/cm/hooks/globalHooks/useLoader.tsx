@@ -1,4 +1,3 @@
-import {RecoilEnv} from 'recoil'
 import {handleDB} from 'src/cm/lib/methods/common'
 
 import useMyNavigation from 'src/cm/hooks/globalHooks/useMyNavigation'
@@ -8,7 +7,6 @@ import {atomTypes, useJotaiByKey} from '@hooks/useJotai'
 import {requestResultType} from '@cm/types/types'
 import {toast} from 'react-toastify'
 
-RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false
 export type toggleLoadType = (
   callback: any,
   options?: {

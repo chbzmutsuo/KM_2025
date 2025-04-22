@@ -85,9 +85,9 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
 
   return (
     <div>
-      <Padding {...{style: myTable?.style}}>
+      <div>
         {records === null ? (
-          <PlaceHolder>Loading...</PlaceHolder>
+          <PlaceHolder>Loading Table Records...</PlaceHolder>
         ) : records.length === 0 ? (
           <PlaceHolder>データが見つかりません</PlaceHolder>
         ) : (
@@ -137,7 +137,7 @@ const MyTable = React.memo((props: {ClientProps2: ClientPropsType2}) => {
             </R_Stack>
           </div>
         </section>
-      </Padding>
+      </div>
     </div>
   )
 })
