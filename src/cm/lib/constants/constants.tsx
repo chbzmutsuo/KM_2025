@@ -17,7 +17,7 @@ export const COLORS = {
   table: {
     thead: '#EDEDED',
     oddNumberRow: '#FFFFFF',
-    evenNumberRow: '#FFFFFF',
+    evenNumberRow: '#f8f6f6',
   },
 }
 

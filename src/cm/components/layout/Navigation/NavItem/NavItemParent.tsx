@@ -5,7 +5,8 @@ import {HREF} from 'src/cm/lib/methods/urls'
 
 import {cl} from '@lib/methods/common'
 import React from 'react'
-import Link from 'next/link'
+import {T_LINK} from '@components/styles/common-components/links'
+import {twMerge} from 'tailwind-merge'
 const NavItemParent = React.memo((props: navItemProps) => {
   const {item, nestLevel = 1, navWrapperIdx, useGlobalProps, HK_NAV, horizontalMenu} = props
 
@@ -66,11 +67,12 @@ const NavItemParent = React.memo((props: navItemProps) => {
       // )
       return (
         <>
-          <Link
+          <T_LINK
             {...{
               target: item?.target,
               href,
-              className: cl(
+              simple: true,
+              className: twMerge(
                 //
                 `p-1 `,
                 isActive ? selectedClass.join(' ') : '',
@@ -81,7 +83,7 @@ const NavItemParent = React.memo((props: navItemProps) => {
             }}
           >
             {label}
-          </Link>
+          </T_LINK>
         </>
       )
     }

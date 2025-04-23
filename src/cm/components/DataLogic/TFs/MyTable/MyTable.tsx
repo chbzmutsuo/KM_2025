@@ -9,7 +9,7 @@ import {DndContext, closestCenter} from '@dnd-kit/core'
 import {myTableDefault} from 'src/cm/constants/defaults'
 
 import {cl} from 'src/cm/lib/methods/common'
-import {Padding, R_Stack} from 'src/cm/components/styles/common-components/common-components'
+import {R_Stack} from 'src/cm/components/styles/common-components/common-components'
 
 import useTrActions from 'src/cm/components/DataLogic/TFs/MyTable/TableHandler/Tbody/useTrActions'
 
@@ -165,14 +165,18 @@ const MainTable = ({
     <>
       {typeof myTable?.header === 'function' && myTable?.header()}
       <section className={` bg-error-man  bg-inherit  `}>
-        <div className={` t-paper  ${myTable?.showHeader ? '!p-0' : `!p-3`} relative  `}>
+        <div className={` t-paper  ${myTable?.showHeader ? '!p-0' : `!p-2.5`} relative  `}>
           <TableWrapper ref={elementRef} style={{...tableStyle}}>
             {myTable?.caption && <div>{myTable?.caption}</div>}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndMemo}>
               <SortableContext items={items} strategy={verticalListSortingStrategy}>
                 <div>
                   <table
-                    style={showHeader ? {} : {borderCollapse: `separate`, borderSpacing: `0px  6px`}}
+                    style={
+                      showHeader
+                        ? {borderCollapse: `separate`, borderSpacing: `0px`}
+                        : {borderCollapse: `separate`, borderSpacing: `0px  6px`}
+                    }
                     ref={tableStyleRef}
                     className={cl(myTable?.className)}
                   >

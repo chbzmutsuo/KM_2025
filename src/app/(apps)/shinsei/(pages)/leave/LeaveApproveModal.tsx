@@ -8,7 +8,6 @@ import {fetchUniversalAPI, toastByResult} from '@lib/methods/api-fetcher'
 import {TextRed} from '@components/styles/common-components/Alert'
 import {C_Stack} from '@components/styles/common-components/common-components'
 import {isDev} from '@lib/methods/common'
-import {sendEmailWrapper} from 'src/non-common/(chains)/shinsei/sendEmailWrapper'
 
 export default function PurchaseApproveModal(props: {
   Approval: Approval

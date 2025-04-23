@@ -11,9 +11,9 @@ export class CssString {
     cell: 'text-[16px]',
   }
   static table = {
-    paddingTd: ` [&_td]:!p-1 `,
-    paddingTh: ` [&_th]:!p-1 `,
-    noBorder: ` [&_td]:!border-0 [&_th]:!border-0 `,
+    paddingTd: `[&_td]:!p-1 `,
+    paddingTh: `[&_th]:!p-1 `,
+    noBorder: `[&_td]:!border-0 [&_th]:!border-0 `,
     borderCerlls: `[&_td:not(.noEffect)]:!border-[1px] [&_th]:!border-[1px] `,
     borderCerllsY: ` [&_td]:!border-y-[1px] [&_th]:!border-y-[1px] `,
     getCellHeight: (height = 45) => {

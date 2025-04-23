@@ -1,11 +1,11 @@
 import {useSlateStatic, useReadOnly, ReactEditor, useSelected} from 'slate-react'
 
-import { Transforms, Element as SlateElement} from 'slate'
+import {Transforms, Element as SlateElement} from 'slate'
 import {cl} from 'src/cm/lib/methods/common'
 
-import Link from 'next/link'
 
 import {slateStylesOnMark} from 'src/cm/components/SlateEditor/libs/slate-constants'
+import {T_LINK} from '@components/styles/common-components/links'
 
 export const getSlateElements = () => {
   return {
@@ -59,7 +59,7 @@ export const getSlateElements = () => {
       )
       const selected = useSelected()
       return (
-        <Link
+        <T_LINK
           onClick={e => {
             e.preventDefault()
             if (!element.url) return alert('urlがありません')
@@ -73,7 +73,7 @@ export const getSlateElements = () => {
           {/* <InlineChromiumBugfix /> */}
           {children}
           {/* <InlineChromiumBugfix /> */}
-        </Link>
+        </T_LINK>
       )
     },
   }

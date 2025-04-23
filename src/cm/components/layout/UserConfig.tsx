@@ -1,11 +1,11 @@
 import {R_Stack} from '@components/styles/common-components/common-components'
+import {T_LINK} from '@components/styles/common-components/links'
 import {Paper} from '@components/styles/common-components/paper'
 import {LabelValue} from '@components/styles/common-components/ParameterCard'
 import MyPopover from '@components/utils/popover/MyPopover'
 import {UserCircleIcon} from '@heroicons/react/20/solid'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {HREF} from '@lib/methods/urls'
-import Link from 'next/link'
 import React from 'react'
 
 export const UserConfig = () => {
@@ -37,9 +37,7 @@ export const UserConfig = () => {
               <LabelValue {...{styling, label: `Email`, value: session?.email}} />
 
               <R_Stack className={`w-full justify-end`}>
-                <Link className={`t-link`} href={HREF(`/logout`, {rootPath}, query)}>
-                  ログアウト
-                </Link>
+                <T_LINK href={HREF(`/logout`, {rootPath}, query)}>ログアウト</T_LINK>
               </R_Stack>
             </R_Stack>
           </Paper>
@@ -47,6 +45,10 @@ export const UserConfig = () => {
       </div>
     )
   } else {
-    return <Link href={HREF(`/login`, {rootPath}, query)}>ログイン</Link>
+    return (
+      <T_LINK simple href={HREF(`/login`, {rootPath}, query)}>
+        ログイン
+      </T_LINK>
+    )
   }
 }

@@ -2,8 +2,8 @@
 import {getAuthUrl} from '@app/api/auth/google/getAuthUrl'
 
 import {Absolute} from '@components/styles/common-components/common-components'
+import {T_LINK} from '@components/styles/common-components/links'
 import useGlobal from '@hooks/globalHooks/useGlobal'
-import Link from 'next/link'
 
 import React from 'react'
 import useSWR from 'swr'
@@ -17,9 +17,7 @@ export default function login() {
   if (authUrl) {
     return (
       <Absolute>
-        <Link href={authUrl ?? ''} className={` t-link`}>
-          Google認証
-        </Link>
+        <T_LINK href={authUrl ?? ''}>Google認証</T_LINK>
       </Absolute>
     )
   }

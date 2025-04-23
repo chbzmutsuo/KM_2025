@@ -56,7 +56,7 @@ export const ChildCreator = (props: ChildCreatorProps) => {
   return (
     <div className={`w-fit`}>
       {!ParentData?.id ? (
-        (NoDatawhenParentIsUndefined?.() ?? <NoData>データ作成後に登録可能</NoData>)
+        NoDatawhenParentIsUndefined?.() ?? <NoData>データ作成後に登録可能</NoData>
       ) : (
         <TableForm
           {...{

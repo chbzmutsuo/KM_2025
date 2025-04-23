@@ -1,4 +1,6 @@
 'use client'
+import {T_LINK} from '@components/styles/common-components/links'
+import {HREF} from '@lib/methods/urls'
 import {Absolute, Center, C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
 import useMyNavigation from 'src/cm/hooks/globalHooks/useMyNavigation'
 
@@ -27,16 +29,9 @@ const UnAuthorizedPage = () => {
             >
               戻る
             </div>
-            <div
-              className={`t-link `}
-              onClick={async () => {
-                // await signOut({callbackUrl: `/login?rootPath=${rootPath}`})
-                router.push(`/login?rootPath=${rootPath}`)
-                // router.push(``)
-              }}
-            >
+            <T_LINK href={HREF(`/login?rootPath=${rootPath}`, {}, query)} simple>
               ログイン
-            </div>
+            </T_LINK>
           </R_Stack>
         </C_Stack>
       </Center>

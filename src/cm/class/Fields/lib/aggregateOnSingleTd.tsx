@@ -60,10 +60,7 @@ export const aggregateOnSingleTd = (
 
   const {C_StackClassName = `items-start justify-start w-full  `} = mainTd
 
-  const stackClassName = useMemo(
-    () => cl(`stretching-in-td justify-start gap-0 leading-[16px]`, C_StackClassName),
-    [C_StackClassName]
-  )
+  const stackClassName = useMemo(() => cl(`h-full justify-start gap-0 leading-[16px]`, C_StackClassName), [C_StackClassName])
 
   const thStackClassName = useMemo(() => cl(`mx-auto items-start justify-start gap-0 leading-4`), [])
 

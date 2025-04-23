@@ -13,7 +13,8 @@ import useGlobal from 'src/cm/hooks/globalHooks/useGlobal'
 import {R_Stack} from '@components/styles/common-components/common-components'
 import {ChevronDoubleRightIcon} from '@heroicons/react/20/solid'
 import {useParams} from 'next/navigation'
-import Link from 'next/link'
+
+import {T_LINK} from '@components/styles/common-components/links'
 
 const Breadcrumbs = React.memo((props: {breads: breadType[]; ModelBuilder}) => {
   const {breads, ModelBuilder} = props
@@ -27,7 +28,7 @@ const Breadcrumbs = React.memo((props: {breads: breadType[]; ModelBuilder}) => {
     const {isActive, bread} = props
     return (
       <div className={cl(isActive ? 't-link onHover' : ' pointer-events-none opacity-75')}>
-        {isActive ? <Link href={HREF(bread.href, {}, query)}>{bread.label}</Link> : <strong>{bread.label}</strong>}
+        {isActive ? <T_LINK href={HREF(bread.href, {}, query)}>{bread.label}</T_LINK> : <strong>{bread.label}</strong>}
       </div>
     )
   })

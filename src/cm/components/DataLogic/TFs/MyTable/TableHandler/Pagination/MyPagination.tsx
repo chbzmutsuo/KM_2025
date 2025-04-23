@@ -36,7 +36,7 @@ export default MyPagination
 const Main = (props: PaginationPropType) => {
   const {useGlobalProps, getPaginationProps, totalCount} = props
 
-  const {query, addQuery} = useGlobalProps
+  const {query, shallowAddQuery} = useGlobalProps
 
   const {tableId, page, skip, take, pageCount, from, to, pageKey, skipKey, takeKey, changePage} = getPaginationProps({
     totalCount,
@@ -59,7 +59,7 @@ const Main = (props: PaginationPropType) => {
 
   useEffect(() => {
     if (noData) {
-      addQuery({
+      shallowAddQuery({
         ...query,
         [pageKey]: '',
         [skipKey]: '',
@@ -78,7 +78,7 @@ const Main = (props: PaginationPropType) => {
 
   return (
     <div className={` items-end   gap-0.5  `}>
-      <R_Stack className={` justify-center  gap-x-1 gap-y-0 rounded-lg bg-gray-100 px-0.5 `}>
+      <R_Stack className={` justify-center  gap-x-1 gap-y-0 rounded bg-gray-100 px-1 `}>
         <section className={` w-fit   p-0.5 font-normal`}>
           <DataCountViewer {...{from, to, totalCount, partClasses}} />
         </section>

@@ -53,6 +53,7 @@ const OptionSelector = (props: {contexts: contextsType}) => {
     }
   }, [nohit])
 
+  return <></>
   return (
     <>
       <Accordion

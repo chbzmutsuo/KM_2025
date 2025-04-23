@@ -12,9 +12,9 @@ import {TaskWithNinku} from '@app/(apps)/sohken/(parts)/genbaDay/GenbaDaySummary
 import {useGenbaDayBasicEditor} from '@app/(apps)/sohken/hooks/useGenbaDayBasicEditor'
 import {Alert} from '@components/styles/common-components/Alert'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
-import Link from 'next/link'
 import {HREF} from '@lib/methods/urls'
 import useMyNavigation from '@hooks/globalHooks/useMyNavigation'
+import {T_LINK} from '@components/styles/common-components/links'
 export default function Main(props: {
   GenbaDayBasicEditor_HK: ReturnType<typeof useGenbaDayBasicEditor>
   pathname: string
@@ -50,9 +50,9 @@ export default function Main(props: {
       <section>
         {isDetailPage && (
           <LabelValue {...{label: `日付`}}>
-            <Link className={` t-link`} href={HREF(`/sohken/genbaDay`, {from: formatDate(GenbaDay.date)}, query)}>
+            <T_LINK href={HREF(`/sohken/genbaDay`, {from: formatDate(GenbaDay.date)}, query)}>
               {formatDate(GenbaDay.date, `MM月DD日(ddd)`)}
-            </Link>
+            </T_LINK>
           </LabelValue>
         )}
         {!isDetailPage && (

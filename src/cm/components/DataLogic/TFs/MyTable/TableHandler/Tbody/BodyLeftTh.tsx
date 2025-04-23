@@ -7,20 +7,22 @@ import {ArrowsUpDownIcon} from '@heroicons/react/20/solid'
 import useWindowSize from '@hooks/useWindowSize'
 
 export const BodyLeftTh = ({showHeader, rowColor, dndProps, rowSpan, colSpan, recordIndex, children}) => {
-  const {SP} = useWindowSize()
+  const {SP, PC} = useWindowSize()
 
   const className = cl(`p-0.5  items-center  gap-0.5 flex-nowrap`, showHeader && !SP ? `row-stack` : `col-stack gap-2`)
   return (
     <Fragment>
       <th
-        style={{background: getColorStyles(rowColor).backgroundColor}}
-        {...{rowSpan, colSpan, className: ' !p-0 '}}
+        style={{
+          background: getColorStyles(rowColor).backgroundColor,
+        }}
+        {...{rowSpan, colSpan, className: ' !p-0.5    '}}
         {...dndProps}
       >
-        <R_Stack className={`flex-nowrap  gap-0`}>
+        <R_Stack className={`mx-auto w-fit  flex-nowrap justify-around  gap-0`}>
           <Circle width={24}>{recordIndex}</Circle>
           <div className={className}>
-            {dndProps && <ArrowsUpDownIcon className={`w-4`} />}
+            {dndProps && PC && <ArrowsUpDownIcon className={`w-4`} />}
             {children}
           </div>
         </R_Stack>

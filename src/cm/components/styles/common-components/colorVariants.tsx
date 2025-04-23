@@ -13,11 +13,12 @@ export const colorClassMaster = {
   iconBtn: {
     gray: 'bg-gray-200 text-gray-700 shadow-gray-400 border-gray-400',
     red: 'bg-red-100 text-red-700 shadow-red-400 border-red-400',
-    blue: 'bg-blue-100 text-blue-700 shadow-blue-400 border-blue-400',
-    green: 'bg-green-100 text-green-700 shadow-green-400 border-green-400',
+    blue: 'bg-sky-50 text-sky-700 shadow-sky-400 border-sky-400',
+    green: 'bg-green-50 text-green-800 shadow-green-400 border-green-600',
     orange: 'bg-orange-100 text-orange-700 shadow-orange-400 border-orange-400',
-    yellow: 'bg-yellow-100 text-yellow-700 shadow-yellow-400 border-yellow-400',
+    yellow: 'bg-amber-100 text-amber-800 shadow-amber-400 border-amber-400',
     sub: 'bg-gray-600 text-gray-100 shadow-gray-400 border-gray-400',
+
     primary: 'bg-primary-light text-sub-main shadow-primary-main border-primary-main',
   },
   btn: {

@@ -5,7 +5,6 @@ import {cl, toJson} from 'src/cm/lib/methods/common'
 import React from 'react'
 
 import SlateEditor from 'src/cm/components/SlateEditor/SlateEditor'
-import {NodataPlaceHolder} from 'src/cm/components/styles/common-components/common-components'
 import {MarkDownDisplay} from 'src/cm/components/utils/texts/MarkdownDisplay'
 import {CssString} from 'src/cm/components/styles/cssString'
 import JsonFormatter from 'react-json-formatter'
@@ -16,7 +15,7 @@ export const getValue = ({col, record, dataModelName, mutateRecords, tdStyle}) =
     const timeFormat = Days.getTimeFormt(col?.type ?? '').timeFormatForDaysJs as TimeFormatType
     let value = drillDownNestedValue(col, record)
 
-    value = value ?? <NodataPlaceHolder />
+    value = value ?? ''
 
     if (col?.format) {
       value = col?.format(value, record, col)

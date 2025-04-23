@@ -65,7 +65,7 @@ export const updateOptionsOrigin = async ({input, options, isStaticOptions, cont
 
       // //fetchuniversalApiを使うと、なぜかサイレンダリングが起き、モーダルが閉じる
       const res = await fetchAlt(`${basePath}/api/prisma/universal`, payload)
-      console.debug({getHitsByFetchRes: res})
+
       const {result = [], message} = res
 
       let newOptions: optionType[] = result

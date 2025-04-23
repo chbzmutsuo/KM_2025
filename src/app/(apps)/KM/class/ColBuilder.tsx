@@ -8,7 +8,6 @@ import Image from 'next/image'
 
 import {colType, columnGetterType} from '@cm/types/types'
 import {tailProps} from 'tail_const'
-import {IconBtnFormat} from '@class/Fields/lib/defaultFormat'
 
 import {T_LINK} from '@components/styles/common-components/links'
 
@@ -140,9 +139,9 @@ export class ColBuilder {
       ...Fields.mod.aggregateOnSingleTd({
         mainTd: {id: 'jobCategory'},
         cols: [
-          {id: 'jobCategory', label: 'jobCategory', format: IconBtnFormat},
-          {id: 'systemCategory', label: 'systemCategory', format: IconBtnFormat},
-          {id: 'collaborationTool', label: 'collaborationTool', format: IconBtnFormat},
+          {id: 'jobCategory', label: 'jobCategory'},
+          {id: 'systemCategory', label: 'systemCategory'},
+          {id: 'collaborationTool', label: 'collaborationTool'},
         ],
       }),
 

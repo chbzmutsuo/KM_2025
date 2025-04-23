@@ -1,44 +1,42 @@
+import {CSSProperties} from 'react'
 import {colorClassMaster, colorVariants} from 'src/cm/components/styles/common-components/colorVariants'
 import {props} from 'src/cm/components/styles/common-components/type'
 import {cl} from 'src/cm/lib/methods/common'
 import {twMerge} from 'tailwind-merge'
 
-export const IconBtn = (props: props & {color?: colorVariants; active?: boolean; inline?: boolean}) => {
-  const {className, style, color = `gray`, active, inline, ...rest} = props
+export const IconBtn = (props: props & {color?: colorVariants | string; active?: boolean; inline?: boolean}) => {
+  const {className, style, color, active, inline, ...rest} = props
 
+  const hitTwColor = colorClassMaster.iconBtn[color ?? '']
   const ClassName = twMerge(
     //
-    colorClassMaster.iconBtn[color ?? ''],
-    `shadow-sm border-[0.5px]  `,
+    hitTwColor,
+    color ? `shadow-xs border-[0.5px]  ` : '',
     IconBtnBaseClass,
     className
   )
 
-  return <div {...{className: ClassName, style, ...rest}} />
+  const customeStyle =
+    !color || hitTwColor
+      ? undefined
+      : {
+          background: color + '40',
+          borderColor: color,
+          color: color,
+        }
+
+  return (
+    <div
+      {...{
+        className: ClassName,
+        style: {...style, ...customeStyle},
+        ...rest,
+      }}
+    />
+  )
 }
 
 export const IconBtnBaseClass = ` rounded-full !px-2 py-0.5 text-center text-[15px]   `
-// export const IconBtn = (props: props & {color?: colorVariants; active?: boolean; inline?: boolean}) => {
-//   const {className, style, color, active, inline, ...rest} = props
-
-//   const ClassName = cl(
-//     `icon-btn `,
-//     inline ? 'inline' : '',
-//     className,
-//     colorClassMaster.btn[color ?? ''],
-//     active === false ? 'opacity-40 ' : ''
-//   )
-
-//   return (
-//     <div
-//       {...{
-//         className: ClassName,
-//         style,
-//         ...rest,
-//       }}
-//     />
-//   )
-// }
 
 export const CircledIcon = (
   props: props & {
@@ -61,5 +59,20 @@ export const CircledIcon = (
     >
       {icon ?? props.children}
     </button>
+  )
+}
+
+export const IconBtnForSelect = (props: {
+  children: React.ReactNode
+  color?: colorVariants
+  className?: string
+  style?: CSSProperties
+}) => {
+  const {children, color, className, style} = props
+
+  return (
+    <IconBtn color={color} style={style} className={twMerge(`rounded !text-gray-700`, className)}>
+      {children}
+    </IconBtn>
   )
 }

@@ -1,11 +1,10 @@
 'use client'
 
-import React from 'react'
+import React, {useCallback} from 'react'
 
-import {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobal'
+import useGlobal, {useGlobalPropType} from 'src/cm/hooks/globalHooks/useGlobal'
 import {Center, C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
 
-import {prismaDataExtractionQueryType} from '@components/DataLogic/TFs/Server/Conf'
 import {PrismaModelNames} from '@cm/types/prisma-types'
 
 import {HK_USE_RECORDS_TYPE} from '@components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
@@ -25,18 +24,66 @@ export default function EasySearcher(props: {
   easySearchPrismaDataOnServer: easySearchDataSwrType
   useGlobalProps: useGlobalPropType
   dataModelName: PrismaModelNames
-  prismaDataExtractionQuery: prismaDataExtractionQueryType
   HK_USE_RECORDS?: HK_USE_RECORDS_TYPE
+  // prismaDataExtractionQuery: prismaDataExtractionQueryType
 }) {
   const {dataModelName, useGlobalProps, easySearchPrismaDataOnServer} = props
   const {dataCountObject, availableEasySearchObj} = easySearchPrismaDataOnServer
 
-  const {activeExGroup, nonActiveExGroup, RowGroups, handleEasySearch} = useInitEasySearcher({
+  const {activeExGroup, nonActiveExGroup, RowGroups} = useInitEasySearcher({
     availableEasySearchObj,
     easySearchPrismaDataOnServer,
     dataCountObject,
     useGlobalProps,
   })
+
+  const {query, shallowAddQuery, toggleLoad} = useGlobal()
+
+  const handleEasySearch = useCallback(
+    async ({dataSource}) => {
+      const {exclusiveGroup, keyValueList, refresh} = dataSource
+      const friends = Object.keys(availableEasySearchObj).filter(key => {
+        const obj = availableEasySearchObj[key]
+
+        return exclusiveGroup?.groupIndex === obj.exclusiveGroup?.groupIndex && obj.refresh !== true
+      })
+
+      const others = Object.keys(availableEasySearchObj).filter(key => {
+        const obj = availableEasySearchObj[key]
+
+        return exclusiveGroup?.groupIndex !== obj.exclusiveGroup?.groupIndex && obj.refresh !== true
+      })
+
+      const refreshes = Object.keys(availableEasySearchObj).filter(key => {
+        const {refresh} = availableEasySearchObj[key]
+        return refresh === true
+      })
+      let newQuery = {}
+      if (refresh) {
+        const resetQuery = Object.fromEntries(Object.keys(availableEasySearchObj).map(key => [key, undefined]))
+        newQuery = {...resetQuery}
+      } else {
+        friends.forEach(key => (newQuery[key] = ''))
+        others.forEach(key => (newQuery[key] = query[key]))
+      }
+
+      refreshes.forEach(key => (newQuery[key] = undefined))
+
+      //関連のあるキーを挿入
+      keyValueList.forEach(obj => {
+        const {key, value} = obj
+
+        const isSet = query[key] ?? '' === String(value)
+        const newValue = isSet ? '' : String(value)
+        newQuery[key] = newValue
+      })
+      newQuery['P'] = 1
+      newQuery['S'] = undefined
+
+      await shallowAddQuery(newQuery)
+    },
+    [query, shallowAddQuery, toggleLoad, availableEasySearchObj]
+  )
 
   if (activeExGroup.length === 0) return <PlaceHolder />
 

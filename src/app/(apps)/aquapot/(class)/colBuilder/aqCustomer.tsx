@@ -93,7 +93,7 @@ export const aqCustomer = (props: columnGetterType) => {
           label: `ステータス`,
           form: {defaultValue: `継続`},
           forSelect: {
-            optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_RECORD_STATUS_LIST,
+            optionsOrOptionFetcher: AQ_CONST.CUSTOMER.AQCUSTOMER_STATUS_LIST,
           },
         },
       ])

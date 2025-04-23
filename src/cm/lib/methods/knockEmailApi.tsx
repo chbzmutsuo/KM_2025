@@ -16,7 +16,7 @@ export const knockEmailApi = async (props: {
   attachments?: attachment[]
 }) => {
   let {to} = props
-  const {subject, text, attachments = [], html, cc} = props
+  const {subject, text, attachments = [], html} = props
 
   const originalTo = to
   to = isDev ? [systemEmailTo] : [...to]
@@ -52,7 +52,6 @@ export const knockEmailApi = async (props: {
   try {
     const result = await transporter.sendMail({
       to,
-      cc,
       subject,
       text,
       html,

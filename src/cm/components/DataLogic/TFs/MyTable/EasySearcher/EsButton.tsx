@@ -7,6 +7,7 @@ import {IconBtn} from 'src/cm/components/styles/common-components/IconBtn'
 import {EasySearchObject} from '@class/builders/QueryBuilderVariables'
 import {tail_color} from 'tailwind.config'
 import {MarkDownDisplay} from '@components/utils/texts/MarkdownDisplay'
+import {twMerge} from 'tailwind-merge'
 
 export type EsButtonProps = {
   IsSingleItemGroup: boolean
@@ -14,10 +15,10 @@ export type EsButtonProps = {
   count: number
   isActive: boolean
   conditionMatched: boolean
-  handleEasySearch
+  handleEasySearch: (props: {dataSource: any}) => void
 }
 export const EsButton = (props: EsButtonProps) => {
-  const {IsSingleItemGroup, dataSource, count, isActive, conditionMatched, handleEasySearch} = props
+  const {IsSingleItemGroup, dataSource, count, isActive, handleEasySearch} = props
   const {label, notify} = dataSource ?? {}
 
   const notZero = count > 0
@@ -27,15 +28,29 @@ export const EsButton = (props: EsButtonProps) => {
   //   count: cl(`px-1 rounded-r-sm`),
   // }
 
-  let countBtnStyle: CSSProperties = {
-    background: tail_color.sub.main,
-    color: `white`,
+  // let countBtnStyle: CSSProperties = {
+  //   background: tail_color.sub.main,
+  //   color: `white`,
+  // }
+  // if (notZero && notify) {
+  //   countBtnStyle.background = `#fd6969`
+  //   if (typeof notify === `object`) {
+  //     countBtnStyle = {...countBtnStyle, ...notify}
+  //   }
+  // }
+  const countBtnStyle: CSSProperties = {
+    ...(notZero && notify
+      ? typeof notify === 'object'
+        ? notify
+        : {}
+      : // ? {...{background: '#fd6969'}, ...notify}
+        // : {background: '#fd6969'}
+        {background: tail_color.sub.main}),
   }
-  if (notZero && notify) {
-    countBtnStyle.background = `#fd6969`
-    if (typeof notify === `object`) {
-      countBtnStyle = {...countBtnStyle, ...notify}
-    }
+
+  let iconBtnColor = !notZero ? '' : notZero && notify ? 'red' : `gray`
+  if (typeof notify === 'object') {
+    iconBtnColor = 'yellow'
   }
 
   const activeClass = isActive ? 'bg-white ring-2  text-gray-900 shadow' : ' text-gray-500 hover:text-gray-900'
@@ -46,21 +61,22 @@ export const EsButton = (props: EsButtonProps) => {
       }}
       className={cl(
         //
-        `flex h-[26px] items-center  gap-1`,
-        `rounded-md   p-1 text-sm transition-colors `,
+        ` flex h-[26px] items-center gap-1   hover:bg-gray-300 `,
+        `rounded   p-1 text-sm transition-colors `,
         activeClass
       )}
     >
       <MarkDownDisplay className={` text-xs leading-3`}>{label}</MarkDownDisplay>
       {/* } */}
-      <span
+      <IconBtn
         {...{
-          className: cl('rounded-full  px-[5px] py-[1px] text-xs font-medium'),
-          style: countBtnStyle,
+          className: twMerge('  !px-[4px] !py-[0px] text-xs font-medium', notZero ? '' : 'opacity-50'),
+          color: iconBtnColor,
+          // style: countBtnStyle,
         }}
       >
         <div>{count}</div>
-      </span>
+      </IconBtn>
     </button>
   )
   return (

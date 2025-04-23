@@ -145,9 +145,9 @@ const useTrActions = props => {
 
   const RowActionButtonComponent = useCallback(
     ({record, myTable}) => {
-      const {showHeader} = myTable
+      // const {showHeader} = myTable
 
-      const className = cl(`p-0.5    gap-1 ${showHeader ? `row-stack` : `col-stack`}`)
+      // const className = cl(`p-0.5    gap-1 ${showHeader ? `row-stack` : `col-stack`}`)
 
       if (Object?.keys(ActionButtonObject)?.length === 0) return null
 

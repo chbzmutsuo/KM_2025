@@ -1,13 +1,3 @@
-// .table-border-style {
-//  @apply border-[1px] border-solid border-gray-400;
-// }
-// .simple-table {
-//  td,
-//  th {
-//   @apply p-0.5  align-top table-border-style;
-//  }
-// }
-
 .sticky-table-wrapper {
  @apply p-0 rounded-lg;
 
@@ -15,76 +5,53 @@
  overflow: auto;
  white-space: normal;
 
- @mixin sticky-style {
-  position: sticky;
- }
-
- @mixin theadIndex {
-  @include sticky-style();
-  z-index: 100;
- }
  @mixin kadoIndex {
-  @include sticky-style();
+  position: sticky;
   z-index: 140;
  }
 
  table {
-  height: 100%;
-  td {
-   height: 100%;
-   // 最初のdiv
-   .stretching-in-td {
-    height: 100%;
-   }
-  }
-
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
   font-size: 15px;
 
-  //z-index / leftの設定
-  thead,
-  tfoot {
-   @include theadIndex();
-   top: 0;
-   //最初のtrの最初のth
-   // tr:first-child {
-   //  th:first-child {
-   //   @include kadoIndex;
-   //   left: 0;
-   //  }
-   // }
-   tr {
-    z-index: 0;
-   }
+  // thead,
+  // tfoot {
+  //  @include theadIndex();
+  //  // top: 0;
+
+  //  // }
+  //  tr {
+  //   z-index: 0;
+  //  }
+  // }
+
+  td {
+   @apply border-b-[0.5px]  border-x-0 border-gray-400 px-2 py-2.5;
+  }
+
+  th {
+   @apply border-b-[0.5px]  border-x-0 border-gray-400 px-2 py-2.5;
+   @apply text-gray-600 font-normal text-start;
   }
 
   thead {
    th,
    td {
     background-color: #ededed;
-    @apply text-gray-800 border-b border-gray-400 shadow-md;
+    @apply text-gray-800  border-gray-500 border-b-[1px] border-x-0;
    }
   }
 
   tbody {
    tr {
-    // 気数行目はグレー
-    // &:nth-child(odd) {
-    //  @apply bg-gray-100;
-    // }
-
-    // 最初のtd
-
     th:first-child {
-     @include theadIndex;
+     padding-right: 0 !important;
+     position: sticky;
+     z-index: 100;
      left: 0;
      z-index: 10;
-    }
-
-    th,
-    td {
-     @apply border-b-[0.5px] border-gray-300 px-2 py-2.5;
+     border-right: 1px dotted #c8c8c8;
     }
    }
   }
@@ -94,30 +61,8 @@
    position: sticky;
    bottom: 0;
   }
-
-  th {
-   @apply p-2;
-  }
-
-  th {
-   @apply text-gray-600 font-normal text-start;
-  }
  }
 }
-
-// .borderedTable {
-//  td,
-//  th {
-//   border-width: 1.5px;
-//   border-style: solid dashed;
-//  }
-// }
-
-// .no-border {
-//  * {
-//   border: none;
-//  }
-// }
 
 .vertical {
  writing-mode: vertical-lr;

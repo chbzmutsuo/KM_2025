@@ -89,7 +89,6 @@ export const myTableDefault: MyTableType = {
 export const myFormDefault: MyFormType = {
   create: {},
   delete: {},
-  className: '',
   style: {
     padding: '5px 5px 0 5px',
     overflow: 'auto', //必須
@@ -98,6 +97,7 @@ export const myFormDefault: MyFormType = {
 
     margin: 'auto',
     background: '#ffffff',
+
     ...stylesByDevice?.[GetDevice(getWindow().width)]?.Form,
   },
   customActions: undefined,

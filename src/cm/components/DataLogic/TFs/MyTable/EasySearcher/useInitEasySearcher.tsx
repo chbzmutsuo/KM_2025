@@ -1,12 +1,10 @@
 'use client'
 
-import { useCallback} from 'react'
 
 import {DH} from 'src/cm/class/DH'
 import {useState, useEffect} from 'react'
-import {EasySearchObject, makeEasySearchGroupsProp} from 'src/cm/class/builders/QueryBuilderVariables'
+import { makeEasySearchGroupsProp} from 'src/cm/class/builders/QueryBuilderVariables'
 
-import {sleep} from '@lib/methods/common'
 
 import {EsGroupClientPropType} from '@components/DataLogic/TFs/MyTable/EasySearcher/EsGroupClient'
 
@@ -99,58 +97,9 @@ export default function useInitEasySearcher({
     })
   })
 
-  const handleEasySearch = useCallback(
-    async (props: {dataSource: EasySearchObject}) => {
-      const {exclusiveGroup, keyValueList, refresh} = props.dataSource
-      const friends = Object.keys(availableEasySearchObj).filter(key => {
-        const obj = availableEasySearchObj[key]
-
-        return exclusiveGroup?.groupIndex === obj.exclusiveGroup?.groupIndex && obj.refresh !== true
-      })
-
-      const others = Object.keys(availableEasySearchObj).filter(key => {
-        const obj = availableEasySearchObj[key]
-
-        return exclusiveGroup?.groupIndex !== obj.exclusiveGroup?.groupIndex && obj.refresh !== true
-      })
-
-      const refreshes = Object.keys(availableEasySearchObj).filter(key => {
-        const {refresh} = availableEasySearchObj[key]
-        return refresh === true
-      })
-      let newQuery = {}
-      if (refresh) {
-        const resetQuery = Object.fromEntries(Object.keys(availableEasySearchObj).map(key => [key, undefined]))
-        newQuery = {...resetQuery}
-      } else {
-        friends.forEach(key => (newQuery[key] = ''))
-        others.forEach(key => (newQuery[key] = query[key]))
-      }
-
-      refreshes.forEach(key => (newQuery[key] = undefined))
-
-      //関連のあるキーを挿入
-      keyValueList.forEach(obj => {
-        const {key, value} = obj
-
-        const isSet = query[key] ?? '' === String(value)
-        const newValue = isSet ? '' : String(value)
-        newQuery[key] = newValue
-      })
-      newQuery['P'] = 1
-      newQuery['S'] = undefined
-      toggleLoad(async () => {
-        await sleep(100)
-        await addQuery(newQuery)
-      })
-    },
-    [query, addQuery, toggleLoad]
-  )
-
   return {
     nonActiveExGroup,
     activeExGroup,
     RowGroups,
-    handleEasySearch,
   }
 }

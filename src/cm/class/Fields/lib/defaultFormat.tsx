@@ -2,14 +2,12 @@
 
 import {Circle, NodataPlaceHolder, R_Stack} from 'src/cm/components/styles/common-components/common-components'
 import {T_LINK} from 'src/cm/components/styles/common-components/links'
-import {ColoredText} from 'src/cm/components/styles/common-components/colors'
 import {NestHandler} from 'src/cm/class/NestHandler'
 
 import {optionType} from 'src/cm/class/Fields/col-operator-types'
 import {formatDate} from 'src/cm/class/Days'
 
-import {IconBtn} from 'src/cm/components/styles/common-components/IconBtn'
-IconBtn
+import {IconBtn, IconBtnForSelect} from 'src/cm/components/styles/common-components/IconBtn'
 import {
   convertColIdToModelName,
   getNameFromSelectOption,
@@ -21,20 +19,21 @@ import ContentPlayer from 'src/cm/components/utils/ContentPlayer'
 import {DH} from '@class/DH'
 import {colType} from '@cm/types/types'
 
+const getColor = (col, row, value) => {
+  let optionObjArr: optionType[] = []
+  if (Array.isArray(col?.forSelect?.optionsOrOptionFetcher)) {
+    optionObjArr = mapAdjustOptionValue(col?.forSelect?.optionsOrOptionFetcher)
+  }
+
+  let capitalizedModelName = convertColIdToModelName({col})
+  capitalizedModelName = capitalizedModelName?.charAt(0).toUpperCase() + capitalizedModelName?.slice(1)
+
+  return row?.[capitalizedModelName]?.color ?? optionObjArr?.find(op => op?.id === value)?.color
+}
+
 export const defaultFormat = (value, row, col) => {
   try {
-    const color = (() => {
-      let optionObjArr: optionType[] = []
-      if (Array.isArray(col?.forSelect?.optionsOrOptionFetcher)) {
-        optionObjArr = mapAdjustOptionValue(col?.forSelect?.optionsOrOptionFetcher)
-      }
-
-      let capitalizedModelName = convertColIdToModelName({col})
-      capitalizedModelName = capitalizedModelName?.charAt(0).toUpperCase() + capitalizedModelName?.slice(1)
-
-      const color = row?.[capitalizedModelName]?.color ?? optionObjArr?.find(op => op?.id === value)?.color
-      return color
-    })()
+    const color = getColor(col, row, value)
 
     value = NestHandler.GetNestedValue(col.id, row)
 
@@ -85,11 +84,13 @@ export const defaultFormat = (value, row, col) => {
 
     /**リンクに変換 */
 
-    const textAlignMent = color ? `text-center` : `: text-start`
     let result = (
-      <ColoredText bgColor={color ?? ''}>
-        <div className={cl(textAlignMent)}>{displayValue ?? <NodataPlaceHolder />}</div>
-      </ColoredText>
+      <>
+        <IconBtnForSelect color={color}>{displayValue ?? <NodataPlaceHolder />}</IconBtnForSelect>
+        {/* <ColoredText bgColor={color ?? ''}>
+          <div className={cl(textAlignMent)}>{displayValue ?? <NodataPlaceHolder />}</div>
+        </ColoredText> */}
+      </>
     )
 
     const linkHref = col?.td?.linkTo?.href?.(row)
@@ -103,9 +104,6 @@ export const defaultFormat = (value, row, col) => {
   }
 }
 
-export const IconBtnFormat = (value, row, col) => {
-  return <IconBtn className=" inline-block  w-fit  p-0.5 ">{defaultFormat(value, row, col)}</IconBtn>
-}
 export const defaultMultipleSelectFormat = (value, row, col: colType) => {
   if (col?.multipleSelect) {
     const {mid = `aqCustomerDealerMidTable`, option = `aqDealerMaster`} = col.multipleSelect.models

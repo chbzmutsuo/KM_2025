@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import React, {Fragment, useEffect, useState} from 'react'
 import {NestHandler} from 'src/cm/class/NestHandler'
-import { R_Stack} from 'src/cm/components/styles/common-components/common-components'
+import {R_Stack} from 'src/cm/components/styles/common-components/common-components'
 import {MagnifyingGlassCircleIcon} from '@heroicons/react/20/solid'
 import {cl} from 'src/cm/lib/methods/common'
 import {Arr} from 'src/cm/class/Arr'
+import {T_LINK} from '@components/styles/common-components/links'
 
 const MidTableRowGroup = ({
   listForGroup,
@@ -108,9 +108,9 @@ const MidTableRowGroup = ({
 
               <td>
                 {href ? (
-                  <Link className={linkClass} href={href}>
+                  <T_LINK className={linkClass} href={href}>
                     {value}
-                  </Link>
+                  </T_LINK>
                 ) : (
                   <span>{value}</span>
                 )}

@@ -251,52 +251,34 @@
   white-space: normal;
 }
 .sticky-table-wrapper table {
-  height: 100%;
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
   font-size: 15px;
 }
 .sticky-table-wrapper table td {
-  height: 100%;
+  @apply border-b-[0.5px]  border-x-0 border-gray-400 px-2 py-2.5;
 }
-.sticky-table-wrapper table td .stretching-in-td {
-  height: 100%;
-}
-.sticky-table-wrapper table thead,
-.sticky-table-wrapper table tfoot {
-  position: sticky;
-  z-index: 100;
-  top: 0;
-}
-.sticky-table-wrapper table thead tr,
-.sticky-table-wrapper table tfoot tr {
-  z-index: 0;
+.sticky-table-wrapper table th {
+  @apply border-b-[0.5px]  border-x-0 border-gray-400 px-2 py-2.5;
+  @apply text-gray-600 font-normal text-start;
 }
 .sticky-table-wrapper table thead th,
 .sticky-table-wrapper table thead td {
   background-color: #ededed;
-  @apply text-gray-800 border-b border-gray-400 shadow-md;
+  @apply text-gray-800  border-gray-500 border-b-[1px] border-x-0;
 }
 .sticky-table-wrapper table tbody tr th:first-child {
+  padding-right: 0 !important;
   position: sticky;
   z-index: 100;
   left: 0;
   z-index: 10;
-}
-.sticky-table-wrapper table tbody tr th,
-.sticky-table-wrapper table tbody tr td {
-  @apply border-b-[0.5px] border-gray-300 px-2 py-2.5;
+  border-right: 1px dotted #c8c8c8;
 }
 .sticky-table-wrapper table tfoot {
   z-index: 100;
   position: sticky;
   bottom: 0;
-}
-.sticky-table-wrapper table th {
-  @apply p-2;
-}
-.sticky-table-wrapper table th {
-  @apply text-gray-600 font-normal text-start;
 }
 
 .vertical {
@@ -382,27 +364,12 @@ input[type=number].withSpin {
   .print-target * {
     @apply shadow-none;
     visibility: visible;
-    -moz-column-break-before: avoid;
-         break-before: avoid;
-    -moz-column-break-after: avoid;
-         break-after: avoid;
-    -moz-column-break-inside: avoid;
-         break-inside: avoid;
+    page-break-inside: avoid;
   }
   .print-target {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
-@media print {
-  @page {
-    margin: 0; /* ページ余白をゼロに設定 */
-  }
-  body {
-    margin: 0; /* コンテンツの余白も調整 */
   }
 }
 canvas {

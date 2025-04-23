@@ -8,7 +8,7 @@ import {adminContext} from 'src/cm/components/layout/Admin'
 import {Z_INDEX} from '@cm/lib/constants/constants'
 import {HREF} from '@lib/methods/urls'
 import React, {Fragment, useMemo} from 'react'
-import Link from 'next/link'
+import {T_LINK} from '@components/styles/common-components/links'
 
 export type HeaderProps = any
 
@@ -47,9 +47,9 @@ const Header = React.memo((props: {adminContext: adminContext}) => {
           <R_Stack>
             {horizontalMenu === false && PC && MenuButton}
             <R_Stack className={`  gap-x-10`}>
-              <Link href={topLink}>
+              <T_LINK href={topLink} simple>
                 <AppLogo {...{showLogoOnly, AppName, Logo}} />
-              </Link>
+              </T_LINK>
               {PC && <Breadcrumbs {...{breads: pages?.breads ?? [], ModelBuilder}} />}
             </R_Stack>
             {/* {isDev && <Alert color={`red`}>開発中</Alert>} */}

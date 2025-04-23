@@ -22,8 +22,8 @@ export const OptionSearcher = (props: {
 }) => {
   const {SearchFormHook, contexts, optionsISFromArray, allowCreateOptions} = props
 
-  const {MySelectContextValue, controlContextValue} = contexts
-  const {options} = MySelectContextValue
+  const {controlContextValue} = contexts
+
   const col: colType = controlContextValue?.col
 
   return (

@@ -2,7 +2,7 @@ import {cl} from '@lib/methods/common'
 import {props} from 'src/cm/components/styles/common-components/type'
 export const Wrapper = (props: props) => {
   const {className, ...rest} = props
-  return <div className={cl('h-fii   bg-white p-0.5 shadow-sm ', className)}>{props.children}</div>
+  return <div className={cl('h-fii   shadow-xs bg-white p-0.5 ', className)}>{props.children}</div>
 }
 export const WrapperRounded = (props: props) => {
   const {className, ...rest} = props

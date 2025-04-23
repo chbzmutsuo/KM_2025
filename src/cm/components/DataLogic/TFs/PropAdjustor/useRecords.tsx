@@ -72,14 +72,15 @@ const useRecords = (props: {
       const {data: InitialData, queries: InitialQueries} = initialModelRecords ?? {}
       const diff = new Date().getTime() - fetchTime.getTime()
 
-      const mounted = diff > 1000
-      console.info({diff})
+      const mounted = diff > 1 * 1000
 
       //初回のみサーバーから取得
       if (mounted) {
+        console.log(`initFetchTableRecords`)
         initFetchTableRecords()
       } else {
         console.log(`fetchOnMount`)
+
         //2回目はクライアントで更新
         setrecords(InitialData.records)
         settotalCount(InitialData.totalCount)

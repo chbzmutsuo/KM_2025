@@ -9,7 +9,6 @@ import TableForm from 'src/cm/components/DataLogic/TFs/PropAdjustor/TableForm'
 import {C_Stack, R_Stack} from 'src/cm/components/styles/common-components/common-components'
 
 import {HK_USE_RECORDS_TYPE} from 'src/cm/components/DataLogic/TFs/PropAdjustor/usePropAdjustorProps'
-import {prismaDataExtractionQueryType} from 'src/cm/components/DataLogic/TFs/Server/Conf'
 
 import EasySearcher from '@components/DataLogic/TFs/MyTable/EasySearcher/EasySearcher'
 import {Z_INDEX} from '@lib/constants/constants'
@@ -129,7 +128,7 @@ const PropAdjustor = (props: PropAdjustorPropsType) => {
                 <EasySearcher
                   {...{
                     dataModelName: ClientProps2.dataModelName,
-                    prismaDataExtractionQuery: ClientProps2.prismaDataExtractionQuery,
+                    // prismaDataExtractionQuery: ClientProps2.prismaDataExtractionQuery,
                     easySearchPrismaDataOnServer,
                     useGlobalProps,
                     HK_USE_RECORDS: ClientProps2.HK_USE_RECORDS,
@@ -174,10 +173,10 @@ export type ClientPropsType2 = ClientPropsType & {
   totalCount
   mutateRecords
   deleteRecord
+  // prismaDataExtractionQuery: prismaDataExtractionQueryType
   // prismaData: prismaDataType
-  prismaDataExtractionQuery: prismaDataExtractionQueryType
-  easySearchObject?
-  easySearchWhereAnd?
+  // easySearchObject?
+  // easySearchWhereAnd?
 }
 
 const SurroundingComponent = ({type, ClientProps2}) => {

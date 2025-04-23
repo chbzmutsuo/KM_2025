@@ -1,7 +1,6 @@
 'use client'
 
 import TopPage from '@components/layout/Navigation/TopPage'
-import {CenterScreen} from '@components/styles/common-components/common-components'
 import useGlobal from '@hooks/globalHooks/useGlobal'
 import {HREF} from '@lib/methods/urls'
 import Link from 'next/link'

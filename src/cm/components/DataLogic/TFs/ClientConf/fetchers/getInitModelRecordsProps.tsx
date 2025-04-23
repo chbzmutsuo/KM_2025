@@ -24,6 +24,18 @@ export type serverFetchProps = {
   useSql
   prismaDataExtractionQuery?: prismaDataExtractionQueryType
 }
+type getInitModelRecordsPropsReturn = {
+  queries: {
+    easySearchObject: any
+    EasySearcherQuery: any[]
+    prismaDataExtractionQuery: any
+  }
+  data: {
+    records: any[]
+    totalCount: number
+    easySearchPrismaDataOnServer: any[]
+  }
+}
 export const getInitModelRecordsProps = async (props: serverFetchProps & {query}) => {
   const {
     DetailePageId,
@@ -90,6 +102,7 @@ export const getInitModelRecordsProps = async (props: serverFetchProps & {query}
 
   return {
     queries: {
+      easySearchObject,
       EasySearcherQuery,
       prismaDataExtractionQuery,
     },

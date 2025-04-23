@@ -1,5 +1,4 @@
 import {R_Stack} from 'src/cm/components/styles/common-components/common-components'
-import {ColoredText} from 'src/cm/components/styles/common-components/colors'
 import PlaceHolder from 'src/cm/components/utils/loader/PlaceHolder'
 import {MarkDownDisplay} from 'src/cm/components/utils/texts/MarkdownDisplay'
 import {contextsType} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/MySelect/my-select-types'
@@ -7,6 +6,8 @@ import {CssString} from 'src/cm/components/styles/cssString'
 import {cl} from 'src/cm/lib/methods/common'
 
 import React from 'react'
+import { IconBtnForSelect} from '@components/styles/common-components/IconBtn'
+import {twMerge} from 'tailwind-merge'
 
 const BaseDisplay = React.memo((props: {contexts: contextsType}) => {
   const {MySelectContextValue, controlContextValue} = props.contexts
@@ -36,9 +37,13 @@ const BaseDisplay = React.memo((props: {contexts: contextsType}) => {
       tabIndex={0}
       onClick={showSelector}
       onKeyDown={showSelector}
-      className={` flex-nowrap ${formProps.className}  h-full items-center`}
+      className={twMerge(
+        //
+        ` flex-nowrap h-full items-center`,
+        formProps.className
+      )}
     >
-      <ColoredText bgColor={COLOR} className={`w-full truncate rounded !py-[1.5px] px-1  text-[16px] ${textAlignMent}`}>
+      <IconBtnForSelect color={COLOR} className={twMerge(`w-full truncate rounded !py-[1.5px] px-1  text-[16px]`, textAlignMent)}>
         <div>
           {displayValue ? (
             <MarkDownDisplay className={currentValueToReadableStr.length > 10 ? `` : ``}>
@@ -48,7 +53,18 @@ const BaseDisplay = React.memo((props: {contexts: contextsType}) => {
             <div className={cl(CssString.fontSize.cell, `text-[#9DA3AE]`)}>{col.form?.placerHolder ?? '選択'}</div>
           )}
         </div>
-      </ColoredText>
+      </IconBtnForSelect>
+      {/* <ColoredText bgColor={COLOR} className={`w-full truncate rounded !py-[1.5px] px-1  text-[16px] ${textAlignMent}`}>
+        <div>
+          {displayValue ? (
+            <MarkDownDisplay className={currentValueToReadableStr.length > 10 ? `` : ``}>
+              {currentValueToReadableStr}
+            </MarkDownDisplay>
+          ) : (
+            <div className={cl(CssString.fontSize.cell, `text-[#9DA3AE]`)}>{col.form?.placerHolder ?? '選択'}</div>
+          )}
+        </div>
+      </ColoredText> */}
     </R_Stack>
   )
 })

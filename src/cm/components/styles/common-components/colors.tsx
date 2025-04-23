@@ -33,7 +33,7 @@ export const ColoredText = (props: props & {bgColor?: string}) => {
       {...{
         ...rest,
         style: {
-          backgroundColor: bgColor + '90',
+          backgroundColor: bgColor + 'CC',
           color: getColorStyles(bgColor ?? '').color,
           padding: `2px 6px`,
           ...style,
@@ -41,7 +41,8 @@ export const ColoredText = (props: props & {bgColor?: string}) => {
         className: twMerge(
           //
           IconBtnBaseClass,
-          className
+          className,
+          `rounded-md `
         ),
       }}
     >

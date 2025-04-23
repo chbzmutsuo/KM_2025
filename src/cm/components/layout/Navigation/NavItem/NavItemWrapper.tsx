@@ -1,7 +1,6 @@
 'use client'
 import {pathItemType} from 'src/non-common/path-title-constsnts'
 
-
 import useNavMenu from '@components/layout/Navigation/useNavMenu'
 import React from 'react'
 import NavItemParent from '@components/layout/Navigation/NavItem/NavItemParent'
@@ -22,7 +21,7 @@ const NavItemWrapper = React.memo((props: navItemProps) => {
 
   if (isValid) {
     return (
-      <div className={`  relative cursor-pointer   border-opacity-50  `}>
+      <div className={`  relative    border-opacity-50  `}>
         <NavItemParent {...props} />
         <NavItemChildren {...props} />
       </div>

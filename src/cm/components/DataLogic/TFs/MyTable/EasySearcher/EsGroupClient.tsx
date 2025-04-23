@@ -26,7 +26,7 @@ export default function EsGroupClient(props: {
       <div className={` ${stackClass}   `}>
         <small className={`text-start leading-3`}>{groupName}</small>
         {/* {searchBtnDataSources.length >= 2 && <small className={`leading-3`}>{groupName}</small>} */}
-        <R_Stack className={`items-stretch gap-2   rounded-md bg-gray-100 p-0.5 px-1  text-sm text-gray-700`}>
+        <R_Stack className={`items-stretch gap-2   rounded-md  p-0.5 px-1.5  text-sm text-gray-700`}>
           {searchBtnDataSources.map((d, j) => {
             const {count, isUrgend, isActive, dataSource, conditionMatched} = d
 

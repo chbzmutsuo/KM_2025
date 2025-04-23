@@ -15,8 +15,8 @@ const usePropAdjustorProps = (props: {
   useGlobalProps: useGlobalPropType
   prismaData: prismaDataType
   prismaDataExtractionQuery
-  easySearchObject
-  easySearchWhereAnd
+  // easySearchObject
+  // easySearchWhereAnd
   columns
   HK_USE_RECORDS
 }) => {
@@ -25,8 +25,8 @@ const usePropAdjustorProps = (props: {
     useGlobalProps,
     prismaData,
     prismaDataExtractionQuery,
-    easySearchObject,
-    easySearchWhereAnd,
+    // easySearchObject,
+    // easySearchWhereAnd,
     columns,
     HK_USE_RECORDS,
   } = props
@@ -58,8 +58,8 @@ const usePropAdjustorProps = (props: {
     deleteRecord,
     // prismaData,
     prismaDataExtractionQuery,
-    easySearchObject,
-    easySearchWhereAnd,
+    // easySearchObject,
+    // easySearchWhereAnd,
   }
 
   updateClientProps2({ClientProps, ClientProps2})

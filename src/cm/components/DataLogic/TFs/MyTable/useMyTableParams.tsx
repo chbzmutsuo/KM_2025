@@ -127,7 +127,7 @@ const useMyTableParams = ({columns, dataModelName, useGlobalProps, myTable, reco
     const takeKey = `${tableId}_T`
 
     const calcSkip = (page, take) => (page - 1) * take
-    const changePage = async (pageNumber: number) => {
+    const changePage = (pageNumber: number) => {
       // toggleLoad(
       // async () => {
       const newPage = pageNumber

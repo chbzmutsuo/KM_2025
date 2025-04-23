@@ -13,7 +13,7 @@ import {Absolute, Center} from 'src/cm/components/styles/common-components/commo
 import {cl} from 'src/cm/lib/methods/common'
 import {pathToNoImage} from 'src/cm/components/DataLogic/TFs/MyForm/HookFormControl/Parts/Control/MyFileControl/MyFileControl'
 import {ArrowDownTrayIcon} from '@heroicons/react/20/solid'
-import Link from 'next/link'
+import {T_LINK} from '@components/styles/common-components/links'
 
 export type filecolTypeString = 'image' | 'video' | 'audio' | 'text' | 'application' | undefined
 type ContentPlayerProps = {
@@ -79,12 +79,9 @@ export default function ContentPlayer(props: ContentPlayerProps) {
         break
       }
       default: {
-         
         thumbnail = <img src={src} alt="" style={{...thumbnailStyle}} />
 
-         
         main = (
-           
           <img
             src={src}
             alt=""
@@ -129,9 +126,9 @@ export default function ContentPlayer(props: ContentPlayerProps) {
         }
 
         {options?.download && !String(src).includes('data:') && (
-          <Link href={src} target="_blank">
+          <T_LINK href={src} target="_blank" simple>
             <ArrowDownTrayIcon className={`${btnClass} bg-sub-light right-10 top-1  `} />
-          </Link>
+          </T_LINK>
         )}
 
         <Absolute className={`position-center  h-full w-full `}>
